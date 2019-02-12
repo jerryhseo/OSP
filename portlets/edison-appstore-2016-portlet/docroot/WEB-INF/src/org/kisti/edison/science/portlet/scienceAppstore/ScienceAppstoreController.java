@@ -234,6 +234,8 @@ public class ScienceAppstoreController {
 			
 			//SciemceApp EntryId and categoryInfo
 			AssetEntry scienceAppAssetEntry = AssetEntryLocalServiceUtil.fetchEntry(ScienceApp.class.getName(), GetterUtil.getLong(solver.get("scienceAppId"))); //	fetchEntry(String className, long classPK)
+			List<Long> hasParentsCategoryList = new ArrayList<Long>();
+			List<Map<String, Object>> parentsCategoryList = new ArrayList<Map<String, Object>>();
 			List<Map<String, Object>> childrenCategoryList = new ArrayList<Map<String, Object>>();
 			List<AssetCategory> assetCategoryList = AssetCategoryLocalServiceUtil.getAssetEntryAssetCategories(scienceAppAssetEntry.getEntryId());
 			
@@ -254,9 +256,10 @@ public class ScienceAppstoreController {
 			if(rootCategoryCnt!=0){
 				List<AssetCategory> rootCategoryList = AssetCategoryLocalServiceUtil.getVocabularyRootCategories(aVocabulary.getVocabularyId(), -1, -1,null);
 				int i = 0;
-				for(AssetCategory rootCatogory : rootCategoryList){
+				for(AssetCategory rootCategory : rootCategoryList){
 					if(assetCategoryList != null){
 						for(AssetCategory assetCategory : assetCategoryList){
+							Map<String,Object> parentsCategoryMap = new HashMap<String,Object>();
 							Map<String,Object> childrenCategoryMap = new HashMap<String,Object>();
 							if(i == 0){
 								if(parentGroupId == 0){//포탈
@@ -288,9 +291,20 @@ public class ScienceAppstoreController {
 								i++;
 							}
 							
-							if(rootCatogory.getCategoryId() == assetCategory.getParentCategoryId()){
+							if(rootCategory.getCategoryId() == assetCategory.getParentCategoryId()){
+								if(!hasParentsCategoryList.contains(rootCategory.getCategoryId())){
+									hasParentsCategoryList.add(rootCategory.getCategoryId());
+									
+									parentsCategoryMap.put("value", rootCategory.getCategoryId());
+									parentsCategoryMap.put("name", rootCategory.getTitle(themeDisplay.getLocale()));
+									parentsCategoryList.add(parentsCategoryMap);
+									childrenCategoryList.add(parentsCategoryMap);
+								}
+								
 								childrenCategoryMap.put("value", assetCategory.getCategoryId());
 								childrenCategoryMap.put("name", assetCategory.getTitle(themeDisplay.getLocale()));
+								childrenCategoryMap.put("parentId", rootCategory.getCategoryId());
+								childrenCategoryMap.put("parentName", rootCategory.getTitle(themeDisplay.getLocale()));
 								childrenCategoryList.add(childrenCategoryMap);
 							}
 						}
@@ -299,6 +313,7 @@ public class ScienceAppstoreController {
 			}
 			
 			model.addAttribute("scienceAppEntryId", scienceAppAssetEntry.getEntryId());
+			model.addAttribute("parentsCategoryList", parentsCategoryList);
 			model.addAttribute("childrenCategoryList", childrenCategoryList);
 			model.addAttribute("solverGroupId", appGroupId);
 			

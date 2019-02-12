@@ -73,6 +73,8 @@
 
 <liferay-portlet:resourceURL var="getScienceAppHistoryListURL"	id="getScienceAppHistoryList"	escapeXml="false" copyCurrentRenderParameters="false"/>
 
+<liferay-portlet:resourceURL var="contentfiledownloadURL" escapeXml="false" id="contentfiledownload" copyCurrentRenderParameters="false" portletName="edisoncontent_WAR_edisoncontent2016portlet" />
+
 <liferay-portlet:renderURL var="projectDetailUrl" portletName="edisonsimulationproject_WAR_edisonsimulationproject2017portlet" 
 	windowState="<%=LiferayWindowState.MAXIMIZED.toString() %>" >
 	<liferay-portlet:param name="myRender" value="detailView" />
@@ -177,6 +179,11 @@
 		.wrapper, .main-sidebar, .content-wrapper{
 			min-height: 900px !important;
 			height: 100%;
+		}
+		
+		.<portlet:namespace/>content-wrapper{
+			background-color: #f7f7f7;
+			border-top: 1px solid #e7e7e7;
 		}
 		
 		/* Bootstrap Padding Setting */
@@ -385,14 +392,24 @@
 			}
 			
 			.<portlet:namespace/>relate-info-body{
-				padding: 10px !important;
+				padding: 0px !important;
 				font-size: 14px;
 				white-space: nowrap;
 				text-overflow: ellipsis;
 				overflow: hidden;
 			}
 			
-			.<portlet:namespace/>relate-info-body:HOVER{
+			.<portlet:namespace/>relate-info-content,
+			.<portlet:namespace/>relate-info-content-btn{
+				padding: 17px !important;
+			}
+			
+			.<portlet:namespace/>relate-info-content-btn i{
+				min-width: 117px !important;
+				display: block !important;
+			}
+			
+			.<portlet:namespace/>relate-info-content:HOVER{
 				background-color: #d2d6de;
 				cursor: pointer;
 			}
@@ -480,7 +497,7 @@
 			}
 			
 			.<portlet:namespace/>review-text-area{
-				resize: none;
+				resize: vertical;
 			}
 			
 		/* End - Rating Popup Setting */
@@ -731,6 +748,17 @@
 	.<portlet:namespace/>science-app-relate-data-table{
 		border-top : 2px solid #327bb9 !important;
 	}
+	
+	li.list-group-item a.<portlet:namespace/>non-decoration,
+	li.list-group-item a.<portlet:namespace/>non-decoration:hover{
+		text-decoration: none;
+		cursor: default;
+	}
+	
+	.<portlet:namespace/>app-statistics,
+	.<portlet:namespace/>app-relation-info{
+		cursor: pointer;
+	}
 	</style>
 	
 	<!-- 2018. 11. 06 CSS 변경 -->
@@ -767,7 +795,7 @@
 	</form>
 	
 	<div class=" skin-blue sidebar-menu sidebar-mini">
-		<div class="content-wrapper" style="margin-left: 0px;">
+		<div class="content-wrapper <portlet:namespace/>content-wrapper" style="margin-left: 0px;">
 			
 			<section id="<portlet:namespace/>scienceAppContent" class="content <portlet:namespace/>science-app-content" style="max-width: 1200px;">
 				<div class="row">
@@ -817,20 +845,20 @@
 									
 									<li class="list-group-item">
 										<b><liferay-ui:message key='edison-appstore-solver-name' /></b> 
-										<a class="pull-right">${solver.name}</a>
+										<a class="pull-right <portlet:namespace/>non-decoration">${solver.name}</a>
 									</li>
 									
 									<li class="list-group-item">
 										<b><liferay-ui:message key='version' /></b> 
-										<a class="pull-right">${solver.version}</a>
+										<a class="pull-right <portlet:namespace/>non-decoration">${solver.version}</a>
 									</li>
 									<li class="list-group-item">
 										<b><liferay-ui:message key='edison-science-appstore-view-app-type' /></b> 
-										<a class="pull-right">${solver.appType}</a>
+										<a class="pull-right <portlet:namespace/>non-decoration">${solver.appType}</a>
 									</li>
 									<li class="list-group-item" style="display: inline-block; width: 100%;">
 										<b><liferay-ui:message key='developer' /></b> 
-										<a class="pull-right">
+										<a class="pull-right <portlet:namespace/>non-decoration">
 											<c:forEach var="developer" items="${solver.developers }" varStatus="status">
 												<c:if test="${not status.last}"><p style="margin: 0 0 12px 22px;">${developer}</p></c:if>
 												<c:if test="${status.last}"><p style="margin: 0 0 0 22px;">${developer}</p></c:if>
@@ -839,11 +867,14 @@
 									</li>
 									<li class="list-group-item">
 										<b><liferay-ui:message key='edison-table-list-header-date' /></b> 
-										<a class="pull-right">${solver.statusDate}</a>
+										<a class="pull-right <portlet:namespace/>non-decoration">${solver.statusDate}</a>
 									</li>
 									
 									<li class="list-group-item" onclick="<portlet:namespace/>myScienceAppRating();" style="cursor:pointer;">
-										<b><liferay-ui:message key='edison-science-appstore-view-tab-rating' /></b> 
+										<b>
+											<liferay-ui:message key='edison-science-appstore-view-tab-rating' />
+											<liferay-ui:icon-help message="edison-science-appstore-view-tab-rating-help"/>
+										</b> 
 										<a class="pull-right">${averageScore} (${totalEntries} vote)</a>
 									</li>
 									
@@ -876,20 +907,20 @@
 									<liferay-ui:message key='edison-science-appstore-view-tab-category' />
 								</strong>
 								
-								<p style="margin-left: 10px; margin-top: 5px; line-height: 1.7em;">
+								<p id="<portlet:namespace/>scienceAppCategories" style="margin-left: 10px; margin-top: 5px; line-height: 1.7em;">
 									<c:if test="${childrenCategoryList ne null}">
 										<c:forEach var="childrenCategory" items="${childrenCategoryList}" varStatus="status">
-											<span class="label <portlet:namespace/>scienceAppCategoryList">${childrenCategory.name}</span>
+											<span class="label <portlet:namespace/>scienceAppCategoryList" category-id="${childrenCategory.value}" parent-category-id="${childrenCategory.parentId}">${childrenCategory.name}</span>
 										</c:forEach>
 									</c:if>
 								</p>
 								
 								<hr>
-								<strong>
+								<strong class="<portlet:namespace/>app-statistics">
 									<i class="fa fa-book margin-r-5"></i> 
 									<liferay-ui:message key='statistics' />
 								</strong>
-								<p class="text-muted" style="margin-left: 10px; margin-top: 5px; line-height: 1.7em;">
+								<p class="text-muted <portlet:namespace/>app-statistics" style="margin-left: 10px; margin-top: 5px; line-height: 1.7em;">
 									<i class="icon-user"></i>&nbsp;&nbsp;
 									Simulation Users : <fmt:formatNumber value="${simulationUsersCnt}" pattern="#,###" /> <br>
 									
@@ -898,13 +929,12 @@
 								</p>
 								
 								<hr>
-								
-								<strong>
+								<strong class="<portlet:namespace/>app-relation-info">
 									<i class="fa fa-map-marker margin-r-5"></i> 
 									<liferay-ui:message key='related-content' />
 								</strong>
 								
-								<p class="text-muted" style="margin-left: 10px; margin-top: 5px; line-height: 1.7em;">
+								<p class="text-muted <portlet:namespace/>app-relation-info" style="margin-left: 10px; margin-top: 5px; line-height: 1.7em;">
 									<img src="${contextPath}/images/comm_proj/icon01.png" width="13" height="12">&nbsp;
 									<liferay-ui:message key="org.kisti.edison.science.model.ScienceApp" /> : 
 									<span id="<portlet:namespace/>appInfoScienceAppCnt"></span>
@@ -932,10 +962,31 @@
 					<div id="<portlet:namespace/>contentArea" class="col-md-9">
 						<div class="nav-tabs-custom edison">
 							<ul id="<portlet:namespace/>contentTabMenu" class="nav nav-tabs">
-								<li tab-type="detailInfo"><a href="#<portlet:namespace/>contentDetailInfo" data-toggle="tab">상세정보</a></li>
-								<li tab-type="review"><a href="#<portlet:namespace/>contentReview" data-toggle="tab">리뷰</a></li>
-								<li tab-type="relatedData"><a href="#<portlet:namespace/>contentRelatedData" data-toggle="tab">관련 자료</a></li>
-								<li tab-type="statistics"><a href="#<portlet:namespace/>contentStatistics" data-toggle="tab">통계</a></li>
+								<li tab-type="detailInfo">
+									<a href="#<portlet:namespace/>contentDetailInfo" data-toggle="tab">
+										<liferay-ui:message key='edison-science-appstore-view-tab-detail-view' />
+									</a>
+								</li>
+								<li tab-type="relatedData">
+									<a href="#<portlet:namespace/>contentRelatedData" data-toggle="tab">
+										<liferay-ui:message key='edison-science-appstore-view-relate-data' />
+									</a>
+								</li>
+								<li tab-type="relatedInfo">
+									<a href="#<portlet:namespace/>contentRelatedInfo" data-toggle="tab">
+										<liferay-ui:message key='edison-science-appstore-view-relate-info' />
+									</a>
+								</li>
+								<li tab-type="review">
+									<a href="#<portlet:namespace/>contentReview" data-toggle="tab">
+										<liferay-ui:message key='edison-science-appstore-review' />
+									</a>
+								</li>
+								<li tab-type="statistics">
+									<a href="#<portlet:namespace/>contentStatistics" data-toggle="tab">
+										<liferay-ui:message key='statistics' />
+									</a>
+								</li>
 							</ul>
 							
 							<div class="tab-content">
@@ -1040,10 +1091,6 @@
 								</div>
 								
 								<div id="<portlet:namespace/>contentReview" class="tab-pane" style="padding: 10px">
-									<div id="<portlet:namespace/>contentReviewList">
-									</div>
-									
-									<hr>
 									<% if(isLogin) {%>
 									<div id="<portlet:namespace/>contentReviewWrite">
 										<div class="form-group" id="<portlet:namespace/>reviewRegistTitle">
@@ -1069,6 +1116,11 @@
 										</div>
 									</div>
 									<% }%>
+									
+									<hr>
+									
+									<div id="<portlet:namespace/>contentReviewList">
+									</div>
 								</div>
 								
 								<div id="<portlet:namespace/>contentRelatedData" class="tab-pane" style="padding: 10px">
@@ -1076,10 +1128,6 @@
 									
 									<div id="<portlet:namespace/>scienceAppDataSetList" class="post">
 										<div class="box-solid edison-panel">
-											<strong>
-												<liferay-ui:message key='edison-science-appstore-view-relate-data' />
-											</strong>
-											
 											<div class="box-body" style="margin-top: 15px;">
 												<liferay-portlet:runtime portletName="datasetlistforedison_WAR_SDR_baseportlet" defaultPreferences="" 
 													queryString="&solverName=${solver.name}&solverVersion=${solver.version}"/>
@@ -1087,30 +1135,31 @@
 										</div>
 									</div>
 									
+								</div>
+								
+								<div id="<portlet:namespace/>contentRelatedInfo" class="tab-pane" style="padding: 10px">
+								
 									<!-- Relate Data List -->
 									<div id="<portlet:namespace/>scienceAppRelateInfo" class="post">
 										<div class="box-solid edison-panel">
-											<strong>
-												<liferay-ui:message key='edison-science-appstore-view-relate-info' />
-											</strong>
 											<div class="box-body" style="margin-top: 15px;">
 												
 												<div>
-													<div id="<portlet:namespace/>relateInfoScienceApp" class="box collapsed-box" style="display: none;">
+													<div id="<portlet:namespace/>relateInfoScienceApp" class="box " style="display: none;">
 														<div class="box-header with-border <portlet:namespace/>relate-info-header" data-widget="collapse">
 															<liferay-ui:message key="org.kisti.edison.science.model.ScienceApp" /> 
 															<span id="<portlet:namespace/>relateInfoScienceAppCnt"></span>
 														</div>
 													</div>
 													
-													<div id="<portlet:namespace/>relateInfoContent" class="box collapsed-box" style="display: none;">
+													<div id="<portlet:namespace/>relateInfoContent" class="box " style="display: none;">
 														<div class="box-header with-border <portlet:namespace/>relate-info-header" data-widget="collapse">
 															<liferay-ui:message key="org.kisti.edison.content.model.Content" /> 
 															<span id="<portlet:namespace/>relateInfoContentCnt"></span>
 														</div>
 													</div>
 													
-													<div id="<portlet:namespace/>relateInfoOpenData" class="box collapsed-box" style="display: none;">
+													<div id="<portlet:namespace/>relateInfoOpenData" class="box " style="display: none;">
 														<div class="box-header with-border <portlet:namespace/>relate-info-header" data-widget="collapse">
 															<liferay-ui:message key="com.kisti.osp.icecap.model.DataCollection" /> 
 															<span id="<portlet:namespace/>relateInfoOpenDataCnt"></span>
@@ -1118,7 +1167,7 @@
 														</div>
 													</div>
 													
-													<div id="<portlet:namespace/>relateInfoSimulation" class="box collapsed-box" style="display: none;">
+													<div id="<portlet:namespace/>relateInfoSimulation" class="box " style="display: none;">
 														<div class="box-header with-border <portlet:namespace/>relate-info-header" data-widget="collapse">
 															<liferay-ui:message key="org.kisti.edison.model.SimulationProject" />
 															<span id="<portlet:namespace/>relateInfoSimulationCnt"></span>
@@ -1335,6 +1384,17 @@ $(document).ready(function(){
 	changeLocale("${solver.selectLocaleId}");
 	
 	// <portlet:namespace/>getScienceAppHistory();
+	
+	/* $("#<portlet:namespace/>scienceAppCategories > span.<portlet:namespace/>scienceAppCategoryList").css("max-width", $("#<portlet:namespace/>scienceAppCategories").width()); */
+	
+	$("span.<portlet:namespace/>scienceAppCategoryList").each(function(){
+		var thisWidth = $(this).width();
+		var parentWidth = $("#<portlet:namespace/>scienceAppCategories").width();
+		
+		if(parentWidth < thisWidth){
+			$(this).css("display", "block").css("text-overflow", "ellipsis").css("overflow", "hidden").css("margin", "4px 0px");
+		}
+	});
 });
 
 /* Tab Click Event For Statistics */
@@ -1558,7 +1618,8 @@ function <portlet:namespace/>viewScienceAppReview(getScienceAppReviewList, group
 	if(boardType == "review"){
 		newReview = $("#<portlet:namespace/>contentReviewList");
 	} else if(boardType == "reply"){
-		replyPostCss = "background-color: #f1f1f1; border-radius: 10px; padding: 5px 10px;";
+		/* replyPostCss = "background-color: #f1f1f1; border-radius: 10px; padding: 5px 10px;"; */
+		replyPostCss = "border-left: 3px solid #f1f1f1; padding: 5px 10px;";
 		
 		newReview = $("#<portlet:namespace/>replyList_" + groupBoardSeq);
 		if(newReview.hasClass("active")){
@@ -2451,14 +2512,14 @@ function <portlet:namespace/>moveWorkflow(targetWorkflowId){
 							dataTypeClass = "primary";
 						}
 						
-						var boxBody = $("<div/>").addClass("box-body").addClass("<portlet:namespace/>relate-info-body")
-												 .css("display", "none").css("margin", "0% 2%")
+						var boxBody = $("<div/>").addClass("<portlet:namespace/>relate-info-body")
+												 .css("margin", "0% 2%")
 												 .css("border-top", "1px solid #f4f4f4")
 												 .css("padding-top", "10px !important")
 												 .css("padding-bottom", "10px !important");
 						
 						var relationInfoContent = $("<div/>").addClass("<portlet:namespace/>relate-info-content")
-															.attr("onclick", "<portlet:namespace/>shortcuts(" + moveParameter + ");");
+															.attr("onclick", "<portlet:namespace/>shortcuts(" + moveParameter + ");")
 						$("<i/>").addClass("icon-angle-right").appendTo(relationInfoContent);
 						
 						$("<span/>").addClass("label label-"+dataTypeClass)
@@ -2468,11 +2529,20 @@ function <portlet:namespace/>moveWorkflow(targetWorkflowId){
 						
 						relationInfoContent.appendTo(boxBody);
 						
-						/* 논문 URL이 있는 경우 */
-						if(hasContentUrl){
+						if(selectType === "SCIENCE_APP"){
 							relationInfoContent.css("width", "80%").css("float", "left");
-							contentLink = $("<div/>").css("width", "20%").css("float", "left");
-							$("<i/>").addClass("icon-link").append($("<a/>").attr("href", contentUrl).attr("target", "_blank").text(" Citation Link")).appendTo(contentLink);
+							contentLink = $("<div/>").addClass("<portlet:namespace/>relate-info-content-btn").css("width", "20%").css("float", "left");
+							$("<i/>").addClass("icon-play-circle btn btn-default").text(" RUN").attr("onclick", "<portlet:namespace/>moveWorkflow('"+ dataList[i].modelSeq +"');").appendTo(contentLink);
+							contentLink.appendTo(boxBody);
+						} else if (selectType === "CONTENT"){
+							/* 논문 URL이 있는 경우 */
+							relationInfoContent.css("width", "80%").css("float", "left");
+							contentLink = $("<div/>").addClass("<portlet:namespace/>relate-info-content-btn").css("width", "20%").css("float", "left");
+							if(hasContentUrl){
+								$("<i/>").addClass("icon-link btn btn-default").text(" Citation Link").attr("onclick", "window.open('" + contentUrl + "', '_blank')").appendTo(contentLink);
+							} else {
+								$("<i/>").addClass("icon-download-alt btn btn-default").text(" Download").attr("onclick", "<portlet:namespace/>contentFileDownload('" + dataList[i].modelSeq + "','" + dataList[i].modelDiv +"')").appendTo(contentLink);
+							}
 							contentLink.appendTo(boxBody);
 						}
 						
@@ -3072,11 +3142,40 @@ function <portlet:namespace/>moveWorkflow(targetWorkflowId){
 	
 	/* 2018.10.25 Close Review-Reply List */
 	function <portlet:namespace/>closeReplyList(boardSeq){
-	$("#<portlet:namespace/>replyList_" + boardSeq + " ul.timeline.reply").html("");
-	$("#<portlet:namespace/>replyList_" + boardSeq).hide();
-	$("a[viewReply=" + boardSeq +"]").show();
-	$("a[closeReply=" + boardSeq +"]").hide();
-}
+		$("#<portlet:namespace/>replyList_" + boardSeq + " ul.timeline.reply").html("");
+		$("#<portlet:namespace/>replyList_" + boardSeq).hide();
+		$("a[viewReply=" + boardSeq +"]").show();
+		$("a[closeReply=" + boardSeq +"]").hide();
+	}
+	
+	/* 2019.02.12 Add data click event in left pannel */
+	$(".<portlet:namespace/>app-statistics").click(function(){
+		$("li[tab-type='statistics'] > a").click();
+	});
+	
+	$(".<portlet:namespace/>app-relation-info").click(function(){
+		$("li[tab-type='relatedInfo'] > a").click();
+	});
+	
+	/* 2019.02.12 Add contentFileDownload */
+	function <portlet:namespace/>contentFileDownload(contentSeq, contentDiv){
+		var URL = "<%=contentfiledownloadURL%>";
+		URL += "&_edisoncontent_WAR_edisoncontent2016portlet_contentSeq="+contentSeq;
+		
+		if(contentDiv == 2001002){
+			<%
+			for(Locale aLocale : locales){
+				String languageId = LocaleUtil.toLanguageId(aLocale);
+		%>	
+				var languageId = "<%=languageId%>";   
+		<%	
+			}
+		%>
+			
+			URL += "&_edisoncontent_WAR_edisoncontent2016portlet_languageId="+languageId;
+		}
+		location.href = URL.toString();
+	}
 	
 </script>
 
