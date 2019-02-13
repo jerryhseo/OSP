@@ -57,6 +57,8 @@
 	<div class="mprightcont">
 		<liferay-portlet:runtime portletName="<%=jspFile %>" />
 	</div>
+	
+	<div class="h30"></div>
 </div>
 <script type="text/javascript">
 function tabAction(tabValue){
