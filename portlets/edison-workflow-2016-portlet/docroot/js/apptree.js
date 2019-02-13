@@ -218,7 +218,7 @@ var AppTree = (function(namespace, $, designer){
                 }
             }
         });
-        dArr.push({
+        /*dArr.push({
             "text": "Group",
             "parent": "componet_category",
             "type": "app",
@@ -229,7 +229,7 @@ var AppTree = (function(namespace, $, designer){
                 "text": "Group Component",
                 "parent": "componet_category"
             }
-        });
+        });*/
         
         return dArr;
     }
@@ -238,7 +238,8 @@ var AppTree = (function(namespace, $, designer){
         var nodes = componet();
         $(appTreeSelector).jstree().create_node("#", nodes[0], "first");
         $(appTreeSelector).jstree().create_node("componet_category", nodes[1], "first");
-        $(appTreeSelector).jstree().create_node("componet_category", nodes[2], "first");
+        /* Group */
+        /*$(appTreeSelector).jstree().create_node("componet_category", nodes[2], "first");*/
     }
 
 
