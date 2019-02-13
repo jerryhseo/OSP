@@ -89,6 +89,7 @@
 									<option value="<%=ScienceAppConstants.APP_TYPE_EDITOR%>" <c:if test="${searchAppType == 'Editor' }"> selected</c:if> ><liferay-ui:message key='edison-appstore-type-editor' /></option>
 									<option value="<%=ScienceAppConstants.APP_TYPE_ANALYZER %>" <c:if test="${searchAppType == 'Analyzer' }"> selected</c:if> ><liferay-ui:message key='edison-appstore-type-analyzer' /></option>
 									<option value="<%=ScienceAppConstants.APP_TYPE_CONVERTER  %>" <c:if test="${searchAppType == 'Converter' }"> selected</c:if> ><liferay-ui:message key='edison-appstore-type-converter' /></option>
+									<option value="<%=ScienceAppConstants.APP_TYPE_WORKFLOW  %>" <c:if test="${searchAppType == 'Workflow' }"> selected</c:if> ><liferay-ui:message key='edison-appstore-type-workflow' /></option>
 								</select>
 							</th>
 							<th width="*">
