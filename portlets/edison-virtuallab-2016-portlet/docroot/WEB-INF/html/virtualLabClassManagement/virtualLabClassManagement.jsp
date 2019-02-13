@@ -662,7 +662,8 @@ function <portlet:namespace/>virtualLabCalssCreate(){
 			</table>
 			<div align="right" style="margin-bottom: 10px; padding-right: 20px;">
 				<c:if test="${empty virtualLabClassInfo}">
-					<input id="<portlet:namespace/>virtualLabCalssSaveButton" name="<portlet:namespace/>virtualLabCalssSaveButton" class="btn btn-default" onclick="<portlet:namespace/>virtualLabCalssCreate()" type="button" value="<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-create' />" />
+					<input id="<portlet:namespace/>virtualLabCalssSaveBtn" name="<portlet:namespace/>virtualLabCalssSaveBtn" class="btn btn-default" onclick="<portlet:namespace/>virtualLabCalssCreate()" type="button" value="<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-create' />" />
+					<input id="<portlet:namespace/>virtualLabCalssSaveButton" name="<portlet:namespace/>virtualLabCalssSaveButton" class="btn btn-default" style="display: none;" type="submit" value="<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-create' />" />
 				</c:if>
 				<c:if test="${!empty virtualLabClassInfo}">
 					<input id="<portlet:namespace/>virtualLabCalssSaveBtn" name="<portlet:namespace/>virtualLabCalssSaveBtn" class="btn btn-default" onclick="<portlet:namespace/>virtualLabCalssCreate()" type="button" value="<liferay-ui:message key='edison-button-board-modify' />" />
