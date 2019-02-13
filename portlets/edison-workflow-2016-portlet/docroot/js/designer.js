@@ -38,10 +38,11 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
 
             var sourcePortName = source.getNode()["data"]["outputPorts"][source.id][OSP.Constants.NAME];
             var targetPortName = target.getNode()["data"]["inputPorts"][target.id][OSP.Constants.NAME];
-            /*Port Connect Bug fix*/
-            if (sourcePortName != source.id) {
+            
+            /* Port Connect Bug fix - Change target port name of first connected node */
+            /*if (sourcePortName != source.id) {
                 source.getNode()["data"]["outputPorts"][source.id][OSP.Constants.NAME] = source.id;
-            }
+            }*/
 
             if (targetPortName != target.id) {
                 target.getNode()["data"]["inputPorts"][target.id][OSP.Constants.NAME] = target.id;
@@ -75,9 +76,15 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                             if (sourceData.outputPorts[source.id][OSP.Constants.WF_SAMPLE]) {
                                 sourceData.outputPorts[source.id][OSP.Constants.WF_SAMPLE] = {};
                             }
+                            
+                            console.log(sourceData);
+                            console.log(targetData);
 
                             isEqualsPortType = true;
                         } else {
+                        	console.log("====================");
+                        	console.log(sourceData);
+                        	console.log(targetData);
                             isEqualsPortType = checkPortTypeForConnection(source, target, true);
                         }
                         return isEqualsPortType;
