@@ -298,7 +298,8 @@
 						<%if(localeIndex == 0){ %>
 						<th class="manualFileName" rowspan="2">
 							<liferay-ui:message key="edison-content-manual"/>
-							<span class="requiredField"> *</span> <liferay-ui:icon-help message="edison-content-file-descriptive-message"/>
+							<span class="requiredField"> *</span>
+							 <liferay-ui:icon-help message="edison-content-file-descriptive-message"/>
 						</th>
 						<%} %>
 						<td colspan="3">
@@ -694,6 +695,7 @@ function <portlet:namespace/>changeContentDiv(contentDiv){
 	if(contentDiv == 2001004){
 		/* 고급콘텐츠일때 */
 		$(".contentFile").show();
+		$("tr.contentFile > th > span.requiredField").show();
 		$(".advancedContent").show();
 	
 		if("<%=mode%>" == "update"){
@@ -702,7 +704,7 @@ function <portlet:namespace/>changeContentDiv(contentDiv){
 				$(".advancedExecuteFileName").show();
 				$(".advancedContentTd").attr("colspan",1);
 
-				$("#<portlet:namespace/>contentHtmlYn").prop("checked",true).attr("disabled", true);		
+				$("#<portlet:namespace/>contentHtmlYn").prop("checked",true).attr("disabled", true);
 			}
 		}
 	}else if(contentDiv == 2001002){
@@ -712,10 +714,12 @@ function <portlet:namespace/>changeContentDiv(contentDiv){
 	}else if(contentDiv == 2001005){
 		/* 논문일때 */
 		$(".contentFile").show();
-		$(".<portlet:namespace/>citation-data").show()
+		$(".<portlet:namespace/>citation-data").show();
+		$("tr.contentFile > th > span.requiredField").hide();
 	}else{
 		/* 그외 */
 		$(".contentFile").show();
+		$("tr.contentFile > th > span.requiredField").show();
 	}
 }
 
