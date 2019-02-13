@@ -1,7 +1,5 @@
 <#if isStepWorkbench == true>
-<div class="row" style="height: 100%;">
-	<div class="col-md-12 col" id="${namespace}${layoutKey}column-3" style="width: 100%;height: 100%;">
-	</div>
+<div class="col-md-12 col" id="${namespace}${layoutKey}column-3" style="width: 100%;height: 100%;">
 </div>
 <#else>
 <div class="hold-transition skin-black-light sidebar-mini" id="body-div">
@@ -28,8 +26,10 @@
 			</section>
 			
 			<section class="content" id="workbench-layout-area" style="display:none;">
-				<div class="row" style="height: 100%;">
-					<div class="col-md-12 col" id="${namespace}${layoutKey}column-3" style="width: 100%;height: 100%;">
+				<div class="container-fluid">
+					<div class="row" style="height: 100%;">
+						<div class="col-md-12 col" id="${namespace}${layoutKey}column-3" style="width: 100%;height: 100%;">
+						</div>
 					</div>
 				</div>
 			</section>

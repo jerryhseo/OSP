@@ -320,7 +320,7 @@ public class DashboardController {
 		    @RequestParam(value = "lastPosition", required = false) String strLastPoistion
 			) throws IOException{
 			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-			long lastPosition = GetterUtil.getLong(strLastPoistion, 0);
+			long lastPosition = GetterUtil.getLong(strLastPoistion, 1000);
 			com.liferay.portal.kernel.json.JSONObject result = JSONFactoryUtil.createJSONObject();
 			
 			long jobStatus = 0;
@@ -334,7 +334,8 @@ public class DashboardController {
 				jobStatus = simulationJob.getJobStatus();
 				try{
 					String logFile = OSPFileLocalServiceUtil.getJobResultPath(simulationUuid, jobUuid, jobUuid+".out");
-					com.liferay.portal.kernel.json.JSONObject outLog = getReadLogFile(request, jobUuid, logFile, lastPosition);;
+					
+					com.liferay.portal.kernel.json.JSONObject outLog = getReadLogFile(request, jobUuid, logFile, lastPosition);
 					result.put("outLog", outLog);
 				}catch(Exception e){
 					if(e instanceof NoSuchFileException){

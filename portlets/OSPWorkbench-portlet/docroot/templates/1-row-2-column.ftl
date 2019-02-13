@@ -31,11 +31,13 @@
 			</section>
 			
 			<section class="content" id="workbench-layout-area" style="display:none;">
-				<div class="row" style="height: 100%;">
-					<div class="col-md-12 col" id="${namespace}${layoutKey}column-3" style="width: 50%;height: 100%;">
-					</div>
-					<div class="devider vertical" id="${namespace}${layoutKey}devider-1" data-equal-id="${namespace}${layoutKey}column-3" data-remainder-id="${namespace}${layoutKey}column-4"></div>
-					<div class="col-md-12 col" id="${namespace}${layoutKey}column-4" style="width: 50%;height: 100%;">
+				<div class="container-fluid" style="height: 100%;">
+					<div class="row" style="height: 100%;">
+						<div class="col-md-12 col" id="${namespace}${layoutKey}column-3" style="width: 50%;height: 100%;">
+						</div>
+						<div class="devider vertical" id="${namespace}${layoutKey}devider-1" data-equal-id="${namespace}${layoutKey}column-3" data-remainder-id="${namespace}${layoutKey}column-4"></div>
+						<div class="col-md-12 col" id="${namespace}${layoutKey}column-4" style="width: 50%;height: 100%;">
+						</div>
 					</div>
 				</div>
 			</section>

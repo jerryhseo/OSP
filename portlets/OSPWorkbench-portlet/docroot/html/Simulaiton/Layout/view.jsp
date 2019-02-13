@@ -54,7 +54,7 @@
 	
 	String userScreenName = user.getScreenName();
 %>
-<div class="row" id="<portlet:namespace/>canvas">
+<div class="row-fluid" id="<portlet:namespace/>canvas">
 	
 </div>
 
@@ -67,7 +67,7 @@
 					<h4 class="modal-title">Job System Log</h4>
 				</div>
 				<div class="modal-body">
-					<textarea class="form-control" id="<portlet:namespace/>log-text" style="min-width: 90%;height: 350px;resize:none;" autofocus="autofocus" readonly="readonly" >
+					<textarea class="form-control" id="<portlet:namespace/>log-text" style="min-width: 90%;height: 650px;resize:none;" autofocus="autofocus" readonly="readonly" >
 					
 					</textarea>
 				</div>
@@ -330,7 +330,7 @@ $(function(e) {
 	
 	
 	//time out - 5 sec
-	<portlet:namespace/>displayTimer = setTimeout(function(){ <portlet:namespace/>displayInit(); }, 1000*5);
+	<portlet:namespace/>displayTimer = setTimeout(function(){ <portlet:namespace/>displayInit(); }, 1000*10);
 });
 
 /***********************************************************************

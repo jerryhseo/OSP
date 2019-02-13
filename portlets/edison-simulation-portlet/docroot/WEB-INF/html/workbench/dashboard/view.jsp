@@ -60,6 +60,8 @@ var <portlet:namespace/>simulationIsCopy = false;
 var <portlet:namespace/>refreshTimer;
 var <portlet:namespace/>portOuterHtmlArray = new Array();
 
+var <portlet:namespace/>STATUS_READY = false;
+
 
 var <portlet:namespace/>prevStatus = (function(){
 	var jobStatus = {};
@@ -177,6 +179,9 @@ Liferay.on(OSP.Event.OSP_RESPONSE_PORT_INFO, function( e ){
 
 		var outputPorts = <portlet:namespace/>scienceApp.outputPortsArray(); 
 		<portlet:namespace/>settingPorts( outputPorts, OSP.Enumeration.PortType.OUTPUT);
+		
+		
+		<portlet:namespace/>STATUS_READY = true;
 	}
 });
 
@@ -275,10 +280,11 @@ Liferay.on(OSP.Event.OSP_RESPONSE_SUBMIT_JOB_RESULT, function( e ){
 
 Liferay.on(OSP.Event.OSP_REFRESH_SIMULATIONS, function( e ){
 	var myId = '<%=portletDisplay.getId()%>';
-	console.log('OSP_REFRESH_SIMULATIONS: ['+e.portletId+', '+new Date()+']', e.data);
+	console.log('OSP_REFRESH_SIMULATIONS: ['+e.portletId+', '+new Date()+']', e.data, e);
 	if(e.targetPortlet === myId||e.targetPortlet ==='BROADCAST'){
 		<portlet:namespace/>searchJobUUid = nullToStr(e.data.searchJobUuid);
-		<portlet:namespace/>searchSimulation(nullToStr(e.data.simulationUuid),nullToStr(e.data.searchJobUuid));
+		
+		<portlet:namespace/>refreshSimulation(nullToStr(e.data.simulationUuid),nullToStr(e.data.searchJobUuid));
 	}
 });
 
@@ -368,6 +374,20 @@ Liferay.on(OSP.Event.OSP_RESPONSE_COPY_JOB, function( e ){
 /***********************************************************************
  * Portlet AJAX Function
  ***********************************************************************/
+var <portlet:namespace/>refreshSimulationTimer;
+function <portlet:namespace/>refreshSimulation(simulationUuid,jobUuid){
+	if(<portlet:namespace/>STATUS_READY){
+		if(<portlet:namespace/>refreshSimulationTimer){
+			clearInterval(<portlet:namespace/>refreshSimulationTimer);
+		}
+		<portlet:namespace/>searchSimulation(simulationUuid,jobUuid);
+	}else{
+		if (typeof <portlet:namespace/>refreshSimulationTimer === "undefined") {
+			<portlet:namespace/>refreshSimulationTimer = setInterval(<portlet:namespace/>refreshSimulation, 500, simulationUuid,jobUuid);
+		}
+	}
+}
+
 function <portlet:namespace/>searchSimulation(simulationUuid,jobUuid){
 	var eventData = {
 			targetPortlet: <portlet:namespace/>connector,

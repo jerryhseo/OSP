@@ -21,24 +21,26 @@
 			</section>
 			
 			<section class="content" id="workbench-layout-area" style="display:none;height:94%;">
-				<#if INPUT_FILE_PATH?has_content>
-					<#assign layoutKey="INPUT_">
-					<div class="row flow-grid" style="display:none;height: 100%;" id="INPUT">
-						<#include "*/${INPUT_FILE_PATH}">
-					</div>
-				</#if>
-				<#if LOG_FILE_PATH?has_content>
-					<#assign layoutKey="LOG_">
-					<div class="row flow-grid" style="display:none;height: 100%;" id="LOG">
-						<#include "*/${LOG_FILE_PATH}">
-					</div>
-				</#if>
-				<#if OUTPUT_FILE_PATH?has_content>
-					<#assign layoutKey="OUTPUT_">
-					<div class="row flow-grid" style="display:none;height: 100%;" id="OUTPUT">
-						<#include "*/${OUTPUT_FILE_PATH}">
-					</div>
-				</#if>
+				<div class="container-fluid" style="height: 100%;">
+					<#if INPUT_FILE_PATH?has_content>
+						<#assign layoutKey="INPUT_">
+						<div class="row flow-grid" style="display:none;height: 100%;" id="INPUT">
+							<#include "*/${INPUT_FILE_PATH}">
+						</div>
+					</#if>
+					<#if LOG_FILE_PATH?has_content>
+						<#assign layoutKey="LOG_">
+						<div class="row flow-grid" style="display:none;height: 100%;" id="LOG">
+							<#include "*/${LOG_FILE_PATH}">
+						</div>
+					</#if>
+					<#if OUTPUT_FILE_PATH?has_content>
+						<#assign layoutKey="OUTPUT_">
+						<div class="row flow-grid" style="display:none;height: 100%;" id="OUTPUT">
+							<#include "*/${OUTPUT_FILE_PATH}">
+						</div>
+					</#if>
+				</div>
 			</section>
 		</div>
 	</div>

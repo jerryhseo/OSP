@@ -125,10 +125,11 @@ public class LayoutController {
 			model.addAttribute("currentUserName", themeDisplay.getUser().getScreenName());
 			model.addAttribute("nodeId", nodeId);
 			
+			response.setTitle(model.get("pageTitle").toString()+" Simulation Workbench");
+			
 			
 			IBAgent agent = new IBAgent(themeDisplay.getScopeGroup(), themeDisplay.getUser());
 			agent.ibAgentLog();
-			
 			
 			return "view";
 		}catch(Exception e){
@@ -243,12 +244,6 @@ public class LayoutController {
 		
 		cfg.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
 		
-		
-		
-		
-		
-		
-		
 		Template template = cfg.getTemplate(templateFile);
 		PrintWriter writer = resourceResponse.getWriter();
 		try {
@@ -285,6 +280,8 @@ public class LayoutController {
 			/*Cluster*/
 			scienceApp.setCluster(CustomUtil.strNull(scienceApp.getCluster(), _DEFAULT_CLUSTER));
 			model.addAttribute("scienceApp", scienceApp);
+			
+			model.addAttribute("pageTitle", scienceApp.getName()+" v"+scienceApp.getVersion());
 			if(scienceApp.getIsStepLayout()){
 				model.addAttribute("isFlowLayout", true);
 			}else{

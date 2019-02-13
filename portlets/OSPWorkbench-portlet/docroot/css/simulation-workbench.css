@@ -192,8 +192,6 @@
 
 .simulation-workbench #workbench-layout-area{
 	position: relative;
-	margin-left: 30px;
-	margin-right: 30px;
 	padding: 0px;
 }
 .simulation-workbench #workbench-layout-area .row{
