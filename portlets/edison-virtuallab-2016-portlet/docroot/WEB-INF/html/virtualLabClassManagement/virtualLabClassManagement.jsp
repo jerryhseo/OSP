@@ -57,6 +57,7 @@
 
 <script type="text/javascript">
 AUI().ready(function() {
+	
 	var checkValue = "${virtualLabClassInfo.classId}";
 	if (checkValue != '') {
 		<portlet:namespace/>dataSearchList("${virtualLabClassInfo.curPage}");
@@ -450,21 +451,29 @@ function <portlet:namespace/>deleteClassManager(virtualClassId, classManagerId, 
 }
 
 function <portlet:namespace/>checkValidation(form) {
+	var saveBtn = $("#<portlet:namespace/>virtualLabCalssSaveBtn");
+	
 	if (form.submitted) return false;
 	if(!checkValue(form.<portlet:namespace/>classTitle, "<liferay-ui:message key='edison-virtuallab-tablerow-virtualclass' />", 4, 40)) {
+		saveBtn.prop("disabled", false);
 		return false;
 	} else if (!checkValue(form.<portlet:namespace/>classStartDt, "<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-start-date' />", 10, 14)) {
+		saveBtn.prop("disabled", false);
 		return false;
 	} else if (!checkValue(form.<portlet:namespace/>classEndDt, "<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-end-date' />", 10, 14)) {
+		saveBtn.prop("disabled", false);
 		return false;
 	} else if (!checkValue(form.<portlet:namespace/>classDescription, "<liferay-ui:message key='edison-simulation-execute-simulation-description' />", 0, 75)) {
+		saveBtn.prop("disabled", false);
 		return false;
 	} else if (!checkValue(form.<portlet:namespace/>classPersonnel, "<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-student-number' />", 1, 3)) {
+		saveBtn.prop("disabled", false);
 		return false;
 	} else {
 		form.submitted = true;
 		return true;
 	}
+	saveBtn.prop("disabled", false);
 	return false;
 }
 
@@ -526,6 +535,11 @@ function <portlet:namespace/>virtualLabClassDisable(virtualLabId, classId, group
 			}
 		});
 	}
+}
+
+function <portlet:namespace/>virtualLabCalssCreate(){
+	$("#<portlet:namespace/>virtualLabCalssSaveBtn").prop("disabled", true);
+	$("#<portlet:namespace/>virtualLabCalssSaveButton").click();
 }
 
 </script>
@@ -648,10 +662,11 @@ function <portlet:namespace/>virtualLabClassDisable(virtualLabId, classId, group
 			</table>
 			<div align="right" style="margin-bottom: 10px; padding-right: 20px;">
 				<c:if test="${empty virtualLabClassInfo}">
-					<input id="<portlet:namespace/>virtualLabCalssSaveButton" name="<portlet:namespace/>virtualLabCalssSaveButton" class="btn btn-default"  type="submit" value="<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-create' />" />
+					<input id="<portlet:namespace/>virtualLabCalssSaveButton" name="<portlet:namespace/>virtualLabCalssSaveButton" class="btn btn-default" onclick="<portlet:namespace/>virtualLabCalssCreate()" type="button" value="<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-create' />" />
 				</c:if>
 				<c:if test="${!empty virtualLabClassInfo}">
-					<input id="<portlet:namespace/>virtualLabCalssSaveButton" name="<portlet:namespace/>virtualLabCalssSaveButton" class="btn btn-default"  type="submit" value="<liferay-ui:message key='edison-button-board-modify' />" />
+					<input id="<portlet:namespace/>virtualLabCalssSaveBtn" name="<portlet:namespace/>virtualLabCalssSaveBtn" class="btn btn-default" onclick="<portlet:namespace/>virtualLabCalssCreate()" type="button" value="<liferay-ui:message key='edison-button-board-modify' />" />
+					<input id="<portlet:namespace/>virtualLabCalssSaveButton" name="<portlet:namespace/>virtualLabCalssSaveButton" class="btn btn-default" style="display: none;" type="submit" value="<liferay-ui:message key='edison-button-board-modify' />" />
 				</c:if>
 			</div>
 			
