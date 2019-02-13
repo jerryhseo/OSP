@@ -33,7 +33,7 @@
         <div id="<portlet:namespace/>simulation-tree" class="simulation-tree"></div>
     </div>
     <div class="rightcontent" id="<portlet:namespace/>job-info-wrapper">
-        <div style="width: 100%; height: 560px; text-align: center; ">
+        <div style="width: 100%; height: 550px; text-align: center; ">
             <p style="top: 40%; position: relative; font-size: 2.5em !important;"><i class="icon-file"></i> Select a simulation from the tree.</p>
         </div>
     </div>

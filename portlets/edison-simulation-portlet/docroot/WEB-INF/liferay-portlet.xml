@@ -204,7 +204,7 @@
 		<icon>/icon.png</icon>
 		<configuration-action-class>org.kisti.edison.bestsimulation.portlet.simulation.ConfigurationController</configuration-action-class>
 		<action-url-redirect>true</action-url-redirect>
-		<css-class-wrapper>edison-statistics-class-management container</css-class-wrapper>		
+		<css-class-wrapper>edison-statistics-class-management container</css-class-wrapper>
 		<add-default-resource>true</add-default-resource>
 	</portlet>
     
