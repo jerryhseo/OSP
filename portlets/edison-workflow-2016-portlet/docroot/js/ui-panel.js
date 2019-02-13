@@ -101,6 +101,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
     $(JQ_PORTLET_BOUNDARY_ID + " .sidebar-btn[data-btn-type='save']").click(function (e) {
         e.stopPropagation();
         saveOrUpdateDesigner();
+        $("ul.sidebar-menu.top > li.treeview").show();
     });
 
     $(JQ_PORTLET_BOUNDARY_ID + " .sidebar-btn").click(function (e) {
@@ -281,6 +282,8 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
     }
 
     function setActiveApp(scienceAppId) {
+    	$("ul.sidebar-menu.top > li.treeview").show();
+    	
     	if(scienceAppId==0 || scienceAppId=='undefined' || scienceAppId == null){
     		$("#" + namespace + "active-app-register").css("display","block");
     		$("#" + namespace + "active-app-config").css("display","none");
