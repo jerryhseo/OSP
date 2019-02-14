@@ -45,6 +45,7 @@ public class ScienceAppSoap implements Serializable {
 		soapModel.setPreviousVersionId(model.getPreviousVersionId());
 		soapModel.setIconId(model.getIconId());
 		soapModel.setManualId(model.getManualId());
+		soapModel.setManualUrl(model.getManualUrl());
 		soapModel.setExeFileName(model.getExeFileName());
 		soapModel.setAppType(model.getAppType());
 		soapModel.setRunType(model.getRunType());
@@ -233,6 +234,14 @@ public class ScienceAppSoap implements Serializable {
 
 	public void setManualId(String manualId) {
 		_manualId = manualId;
+	}
+
+	public String getManualUrl() {
+		return _manualUrl;
+	}
+
+	public void setManualUrl(String manualUrl) {
+		_manualUrl = manualUrl;
 	}
 
 	public String getExeFileName() {
@@ -465,6 +474,7 @@ public class ScienceAppSoap implements Serializable {
 	private long _previousVersionId;
 	private long _iconId;
 	private String _manualId;
+	private String _manualUrl;
 	private String _exeFileName;
 	private String _appType;
 	private String _runType;

@@ -819,6 +819,15 @@
 									</a>
 								</c:if>
 								
+								<c:if test="${empty solver.current_manualId or solver.current_manualId eq ''}">
+									<c:if test="${!empty solver.current_manualUrl}">
+										<a class="btn btn-info <portlet:namespace/>executeBtn" href="${solver.current_manualUrl}" target="_blank">
+											<i class="fa fa-link" style="margin-right: 5px;"></i>
+											<b>Manual</b>
+										</a>
+									</c:if>
+								</c:if>
+								
 								<c:if test="${solver.appType eq 'Solver' and workBenchPlid ne 0 and isSignedIn and solver.openLevel ne downloadOnly}">
 									<a class="btn btn-primary <portlet:namespace/>executeRun <portlet:namespace/>executeBtn" onclick="<portlet:namespace/>moveWorkbench('${params.solverId}');">
 										<b>

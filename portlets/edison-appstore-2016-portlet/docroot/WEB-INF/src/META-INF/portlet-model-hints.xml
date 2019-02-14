@@ -161,6 +161,7 @@
 		<field name="previousVersionId" type="long" />
 		<field name="iconId" type="long" />
 		<field name="manualId" type="String" localized="true" />
+		<field name="manualUrl" type="String" localized="true" />
 		<field name="exeFileName" type="String" />
 		<field name="appType" type="String" />
 		<field name="runType" type="String" />

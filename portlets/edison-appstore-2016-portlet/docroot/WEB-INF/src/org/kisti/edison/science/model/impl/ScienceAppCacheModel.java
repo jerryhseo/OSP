@@ -38,7 +38,7 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(81);
+		StringBundler sb = new StringBundler(83);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -68,6 +68,8 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 		sb.append(iconId);
 		sb.append(", manualId=");
 		sb.append(manualId);
+		sb.append(", manualUrl=");
+		sb.append(manualUrl);
 		sb.append(", exeFileName=");
 		sb.append(exeFileName);
 		sb.append(", appType=");
@@ -185,6 +187,13 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 		}
 		else {
 			scienceAppImpl.setManualId(manualId);
+		}
+
+		if (manualUrl == null) {
+			scienceAppImpl.setManualUrl(StringPool.BLANK);
+		}
+		else {
+			scienceAppImpl.setManualUrl(manualUrl);
 		}
 
 		if (exeFileName == null) {
@@ -324,6 +333,7 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 		previousVersionId = objectInput.readLong();
 		iconId = objectInput.readLong();
 		manualId = objectInput.readUTF();
+		manualUrl = objectInput.readUTF();
 		exeFileName = objectInput.readUTF();
 		appType = objectInput.readUTF();
 		runType = objectInput.readUTF();
@@ -399,6 +409,13 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 		}
 		else {
 			objectOutput.writeUTF(manualId);
+		}
+
+		if (manualUrl == null) {
+			objectOutput.writeUTF(StringPool.BLANK);
+		}
+		else {
+			objectOutput.writeUTF(manualUrl);
 		}
 
 		if (exeFileName == null) {
@@ -526,6 +543,7 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 	public long previousVersionId;
 	public long iconId;
 	public String manualId;
+	public String manualUrl;
 	public String exeFileName;
 	public String appType;
 	public String runType;

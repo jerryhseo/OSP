@@ -89,6 +89,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 			{ "previousVersionId", Types.BIGINT },
 			{ "iconId", Types.BIGINT },
 			{ "manualId", Types.VARCHAR },
+			{ "manualUrl", Types.VARCHAR },
 			{ "exeFileName", Types.VARCHAR },
 			{ "appType", Types.VARCHAR },
 			{ "runType", Types.VARCHAR },
@@ -116,7 +117,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 			{ "cluster", Types.VARCHAR },
 			{ "workflowId", Types.BIGINT }
 		};
-	public static final String TABLE_SQL_CREATE = "create table EDAPP_ScienceApp (uuid_ VARCHAR(75) null,scienceAppId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,createDate DATE null,modifiedDate DATE null,name VARCHAR(75) null,version VARCHAR(75) null,title STRING null,descriptionId LONG,previousVersionId LONG,iconId LONG,manualId STRING null,exeFileName VARCHAR(75) null,appType VARCHAR(75) null,runType VARCHAR(75) null,authorId LONG,stage VARCHAR(75) null,status INTEGER,recentModifierId LONG,parallelModule VARCHAR(75) null,minCpus INTEGER,maxCpus INTEGER,defaultCpus INTEGER,statusDate DATE null,openLevel VARCHAR(75) null,license VARCHAR(75) null,srcFileName VARCHAR(75) null,targetLanguage VARCHAR(75) null,isStepLayout BOOLEAN,layout VARCHAR(75) null,developers STRING null,editorType VARCHAR(75) null,isPort BOOLEAN,isCompile BOOLEAN,projectCategoryId LONG,execute LONG,cluster VARCHAR(75) null,workflowId LONG)";
+	public static final String TABLE_SQL_CREATE = "create table EDAPP_ScienceApp (uuid_ VARCHAR(75) null,scienceAppId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,createDate DATE null,modifiedDate DATE null,name VARCHAR(75) null,version VARCHAR(75) null,title STRING null,descriptionId LONG,previousVersionId LONG,iconId LONG,manualId STRING null,manualUrl STRING null,exeFileName VARCHAR(75) null,appType VARCHAR(75) null,runType VARCHAR(75) null,authorId LONG,stage VARCHAR(75) null,status INTEGER,recentModifierId LONG,parallelModule VARCHAR(75) null,minCpus INTEGER,maxCpus INTEGER,defaultCpus INTEGER,statusDate DATE null,openLevel VARCHAR(75) null,license VARCHAR(75) null,srcFileName VARCHAR(75) null,targetLanguage VARCHAR(75) null,isStepLayout BOOLEAN,layout VARCHAR(75) null,developers STRING null,editorType VARCHAR(75) null,isPort BOOLEAN,isCompile BOOLEAN,projectCategoryId LONG,execute LONG,cluster VARCHAR(75) null,workflowId LONG)";
 	public static final String TABLE_SQL_DROP = "drop table EDAPP_ScienceApp";
 	public static final String ORDER_BY_JPQL = " ORDER BY scienceApp.createDate DESC, scienceApp.version DESC";
 	public static final String ORDER_BY_SQL = " ORDER BY EDAPP_ScienceApp.createDate DESC, EDAPP_ScienceApp.version DESC";
@@ -175,6 +176,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 		model.setPreviousVersionId(soapModel.getPreviousVersionId());
 		model.setIconId(soapModel.getIconId());
 		model.setManualId(soapModel.getManualId());
+		model.setManualUrl(soapModel.getManualUrl());
 		model.setExeFileName(soapModel.getExeFileName());
 		model.setAppType(soapModel.getAppType());
 		model.setRunType(soapModel.getRunType());
@@ -279,6 +281,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 		attributes.put("previousVersionId", getPreviousVersionId());
 		attributes.put("iconId", getIconId());
 		attributes.put("manualId", getManualId());
+		attributes.put("manualUrl", getManualUrl());
 		attributes.put("exeFileName", getExeFileName());
 		attributes.put("appType", getAppType());
 		attributes.put("runType", getRunType());
@@ -393,6 +396,12 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 
 		if (manualId != null) {
 			setManualId(manualId);
+		}
+
+		String manualUrl = (String)attributes.get("manualUrl");
+
+		if (manualUrl != null) {
+			setManualUrl(manualUrl);
 		}
 
 		String exeFileName = (String)attributes.get("exeFileName");
@@ -970,6 +979,108 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 
 		setManualId(LocalizationUtil.updateLocalization(manualIdMap,
 				getManualId(), "ManualId",
+				LocaleUtil.toLanguageId(defaultLocale)));
+	}
+
+	@JSON
+	@Override
+	public String getManualUrl() {
+		if (_manualUrl == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _manualUrl;
+		}
+	}
+
+	@Override
+	public String getManualUrl(Locale locale) {
+		String languageId = LocaleUtil.toLanguageId(locale);
+
+		return getManualUrl(languageId);
+	}
+
+	@Override
+	public String getManualUrl(Locale locale, boolean useDefault) {
+		String languageId = LocaleUtil.toLanguageId(locale);
+
+		return getManualUrl(languageId, useDefault);
+	}
+
+	@Override
+	public String getManualUrl(String languageId) {
+		return LocalizationUtil.getLocalization(getManualUrl(), languageId);
+	}
+
+	@Override
+	public String getManualUrl(String languageId, boolean useDefault) {
+		return LocalizationUtil.getLocalization(getManualUrl(), languageId,
+			useDefault);
+	}
+
+	@Override
+	public String getManualUrlCurrentLanguageId() {
+		return _manualUrlCurrentLanguageId;
+	}
+
+	@JSON
+	@Override
+	public String getManualUrlCurrentValue() {
+		Locale locale = getLocale(_manualUrlCurrentLanguageId);
+
+		return getManualUrl(locale);
+	}
+
+	@Override
+	public Map<Locale, String> getManualUrlMap() {
+		return LocalizationUtil.getLocalizationMap(getManualUrl());
+	}
+
+	@Override
+	public void setManualUrl(String manualUrl) {
+		_manualUrl = manualUrl;
+	}
+
+	@Override
+	public void setManualUrl(String manualUrl, Locale locale) {
+		setManualUrl(manualUrl, locale, LocaleUtil.getDefault());
+	}
+
+	@Override
+	public void setManualUrl(String manualUrl, Locale locale,
+		Locale defaultLocale) {
+		String languageId = LocaleUtil.toLanguageId(locale);
+		String defaultLanguageId = LocaleUtil.toLanguageId(defaultLocale);
+
+		if (Validator.isNotNull(manualUrl)) {
+			setManualUrl(LocalizationUtil.updateLocalization(getManualUrl(),
+					"ManualUrl", manualUrl, languageId, defaultLanguageId));
+		}
+		else {
+			setManualUrl(LocalizationUtil.removeLocalization(getManualUrl(),
+					"ManualUrl", languageId));
+		}
+	}
+
+	@Override
+	public void setManualUrlCurrentLanguageId(String languageId) {
+		_manualUrlCurrentLanguageId = languageId;
+	}
+
+	@Override
+	public void setManualUrlMap(Map<Locale, String> manualUrlMap) {
+		setManualUrlMap(manualUrlMap, LocaleUtil.getDefault());
+	}
+
+	@Override
+	public void setManualUrlMap(Map<Locale, String> manualUrlMap,
+		Locale defaultLocale) {
+		if (manualUrlMap == null) {
+			return;
+		}
+
+		setManualUrl(LocalizationUtil.updateLocalization(manualUrlMap,
+				getManualUrl(), "ManualUrl",
 				LocaleUtil.toLanguageId(defaultLocale)));
 	}
 
@@ -1555,6 +1666,17 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 			}
 		}
 
+		Map<Locale, String> manualUrlMap = getManualUrlMap();
+
+		for (Map.Entry<Locale, String> entry : manualUrlMap.entrySet()) {
+			Locale locale = entry.getKey();
+			String value = entry.getValue();
+
+			if (Validator.isNotNull(value)) {
+				availableLanguageIds.add(LocaleUtil.toLanguageId(locale));
+			}
+		}
+
 		Map<Locale, String> developersMap = getDevelopersMap();
 
 		for (Map.Entry<Locale, String> entry : developersMap.entrySet()) {
@@ -1613,6 +1735,16 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 			setManualId(getManualId(defaultLocale), defaultLocale, defaultLocale);
 		}
 
+		String manualUrl = getManualUrl(defaultLocale);
+
+		if (Validator.isNull(manualUrl)) {
+			setManualUrl(getManualUrl(modelDefaultLanguageId), defaultLocale);
+		}
+		else {
+			setManualUrl(getManualUrl(defaultLocale), defaultLocale,
+				defaultLocale);
+		}
+
 		String developers = getDevelopers(defaultLocale);
 
 		if (Validator.isNull(developers)) {
@@ -1652,6 +1784,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 		scienceAppImpl.setPreviousVersionId(getPreviousVersionId());
 		scienceAppImpl.setIconId(getIconId());
 		scienceAppImpl.setManualId(getManualId());
+		scienceAppImpl.setManualUrl(getManualUrl());
 		scienceAppImpl.setExeFileName(getExeFileName());
 		scienceAppImpl.setAppType(getAppType());
 		scienceAppImpl.setRunType(getRunType());
@@ -1855,6 +1988,14 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 			scienceAppCacheModel.manualId = null;
 		}
 
+		scienceAppCacheModel.manualUrl = getManualUrl();
+
+		String manualUrl = scienceAppCacheModel.manualUrl;
+
+		if ((manualUrl != null) && (manualUrl.length() == 0)) {
+			scienceAppCacheModel.manualUrl = null;
+		}
+
 		scienceAppCacheModel.exeFileName = getExeFileName();
 
 		String exeFileName = scienceAppCacheModel.exeFileName;
@@ -1997,7 +2138,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(81);
+		StringBundler sb = new StringBundler(83);
 
 		sb.append("{uuid=");
 		sb.append(getUuid());
@@ -2027,6 +2168,8 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 		sb.append(getIconId());
 		sb.append(", manualId=");
 		sb.append(getManualId());
+		sb.append(", manualUrl=");
+		sb.append(getManualUrl());
 		sb.append(", exeFileName=");
 		sb.append(getExeFileName());
 		sb.append(", appType=");
@@ -2086,7 +2229,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(124);
+		StringBundler sb = new StringBundler(127);
 
 		sb.append("<model><model-name>");
 		sb.append("org.kisti.edison.science.model.ScienceApp");
@@ -2147,6 +2290,10 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 		sb.append(
 			"<column><column-name>manualId</column-name><column-value><![CDATA[");
 		sb.append(getManualId());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>manualUrl</column-name><column-value><![CDATA[");
+		sb.append(getManualUrl());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>exeFileName</column-name><column-value><![CDATA[");
@@ -2287,6 +2434,8 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 	private long _iconId;
 	private String _manualId;
 	private String _manualIdCurrentLanguageId;
+	private String _manualUrl;
+	private String _manualUrlCurrentLanguageId;
 	private String _exeFileName;
 	private String _appType;
 	private String _originalAppType;
