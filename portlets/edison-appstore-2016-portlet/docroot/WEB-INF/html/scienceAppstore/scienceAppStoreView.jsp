@@ -716,6 +716,15 @@
 		border-top: 2px solid #327bb9;
 	}
 	
+	#<portlet:namespace/>inputPortTable:hover,
+	#<portlet:namespace/>inputPortTable *:hover,
+	#<portlet:namespace/>logPortTable:hover,
+	#<portlet:namespace/>logPortTable *:hover,
+	#<portlet:namespace/>outputPortTable:hover,
+	#<portlet:namespace/>outputPortTable *:hover{
+		cursor: default;
+	}
+	
 	#<portlet:namespace/>scienceAppTitle{
 		padding:17px;
 		background-color:#f1f1f1;
@@ -762,6 +771,11 @@
 	.<portlet:namespace/>app-statistics,
 	.<portlet:namespace/>app-relation-info{
 		cursor: pointer;
+	}
+	
+	.<portlet:namespace/>select-app-hover:hover{
+		background-color: #efefef;
+		cursor: pointer !important;
 	}
 	</style>
 	
@@ -1035,7 +1049,7 @@
 										
 										<div class="h20"></div>
 										
-										<table id="<portlet:namespace/>inputPortTable" class="table table-bordered table-hover edison-table">
+										<table id="<portlet:namespace/>inputPortTable" class="table table-bordered edison-table">
 											<colgroup>
 												<col width="5%">
 												<col width="15%">
@@ -1059,7 +1073,7 @@
 										
 										<div class="h20"></div>
 										
-										<table id="<portlet:namespace/>logPortTable" class="table table-bordered table-hover edison-table">
+										<table id="<portlet:namespace/>logPortTable" class="table table-bordered edison-table">
 											<colgroup>
 												<col width="5%">
 												<col width="15%">
@@ -1083,7 +1097,7 @@
 										
 										<div class="h20"></div>
 										
-										<table id="<portlet:namespace/>outputPortTable" class="table table-bordered table-hover edison-table">
+										<table id="<portlet:namespace/>outputPortTable" class="table table-bordered edison-table">
 											<colgroup>
 												<col width="5%">
 												<col width="15%">
@@ -2719,14 +2733,16 @@ function <portlet:namespace/>moveWorkflow(targetWorkflowId){
 						success: function(data) {
 							
 							if (typeof data.editor != "undefined"){
-								$("<td/>").text(data.editor).appendTo(contentTr);
+								$("<td/>").addClass("<portlet:namespace/>select-app-hover").text(data.editor)
+											.attr("onclick", "<portlet:namespace/>shortcuts('" + data.editorAppId + "', '" + data.editorGroupId + "', 'SCIENCE_APP')").appendTo(contentTr);
 							} else {
 								$("<td/>").text("-").appendTo(contentTr);
 							}
 							
 							if(portType!='INPUT'){
 								if (typeof data.analyzer != "undefined"){
-									$("<td/>").text(data.analyzer).appendTo(contentTr);
+									$("<td/>").addClass("<portlet:namespace/>select-app-hover").text(data.analyzer)
+												.attr("onclick", "<portlet:namespace/>shortcuts('" + data.analyzerAppId + "', '" + data.analyzerGroupId + "', 'SCIENCE_APP')").appendTo(contentTr);
 								} else {
 									$("<td/>").text("-").appendTo(contentTr);
 								}

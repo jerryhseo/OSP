@@ -596,11 +596,17 @@ public class DataTypeEditorController{
 			if(GetterUtil.getInteger(viewMap.get("numEditors"),0)!=0){
 				List<Map<String, Object>> dataTypeEditorMap = DataTypeEditorLocalServiceUtil.retrieveDataTypeEditorList(dataTypeId);
 				String editorStr = "";
+				long editorAppId = 0;
+				long editorGroupId = 0;
 				for(Map<String,Object> editorMap : dataTypeEditorMap){
 					long scienceAppId = GetterUtil.getLong(editorMap.get("editorId"));
 					ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppId);
 					editorStr = editorStr.equals("")?scienceApp.getName():editorStr+","+scienceApp.getName();
+					editorAppId = scienceApp.getScienceAppId();
+					editorGroupId = scienceApp.getGroupId();
 				}
+				jsonMap.put("editorGroupId", 		editorGroupId);
+				jsonMap.put("editorAppId", 		editorAppId);
 				jsonMap.put("editor", 		editorStr);
 			}
 			
@@ -608,11 +614,17 @@ public class DataTypeEditorController{
 			if(GetterUtil.getInteger(viewMap.get("numAnalyzers"),0)!=0){
 				List<Map<String, Object>> dataTypeAnalyzerMap = DataTypeAnalyzerLocalServiceUtil.retrieveDataTypeAnalyzerList(dataTypeId);
 				String analyzerStr = "";
+				long analyzerAppId = 0;
+				long analyzerGroupId = 0;
 				for(Map<String,Object> analyzerMap : dataTypeAnalyzerMap){
 					long scienceAppId = GetterUtil.getLong(analyzerMap.get("analyzerId"));
 					ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppId);
 					analyzerStr = analyzerStr.equals("")?scienceApp.getName():analyzerStr+","+scienceApp.getName();
+					analyzerAppId = scienceApp.getScienceAppId();
+					analyzerGroupId = scienceApp.getGroupId();
 				}
+				jsonMap.put("analyzerGroupId", 		analyzerGroupId);
+				jsonMap.put("analyzerAppId", 		analyzerAppId);
 				jsonMap.put("analyzer", 		analyzerStr);
 			}
 			
