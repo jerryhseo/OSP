@@ -327,8 +327,10 @@ public String marshallParams(Map<String, String> params) {
 			
 			<tr>
 				<th rowspan="${fn:length(parentCategoryList)+1}">
-					<liferay-ui:message key='edison-science-appstore-view-tab-category' /><span class="requiredField"> *</span>
-					
+					<liferay-ui:message key='edison-science-appstore-view-tab-category' />
+					<c:if test="${isPort eq true}">
+						<span class="requiredField"> *</span>
+					</c:if>
 				</th>
 				
 			</tr>
@@ -859,9 +861,11 @@ public String marshallParams(Map<String, String> params) {
 			}
 			
 			// scienceAppCategory Check
-			if( $(":checkbox[name*='childrenCategoryCheckbox']:checked").length==0 ){
-				alert(Liferay.Language.get('edison-science-appstore-category-error'));
-				return false;
+			if('${isPort}' == 'true'){
+				if( $(":checkbox[name*='childrenCategoryCheckbox']:checked").length==0 ){
+					alert(Liferay.Language.get('edison-science-appstore-category-error'));
+					return false;
+				}
 			}
 			
 			$("input[name=<portlet:namespace/>childrenCategory]").prop("disabled",true);
