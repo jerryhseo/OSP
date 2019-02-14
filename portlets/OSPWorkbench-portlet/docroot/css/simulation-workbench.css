@@ -193,6 +193,7 @@
 .simulation-workbench #workbench-layout-area{
 	position: relative;
 	padding: 0px;
+	margin-right: 0.5%;
 }
 .simulation-workbench #workbench-layout-area .row{
 	position: relative;
