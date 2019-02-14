@@ -15897,6 +15897,7 @@ public class ScienceAppPersistenceImpl extends BasePersistenceImpl<ScienceApp>
 		scienceAppImpl.setPreviousVersionId(scienceApp.getPreviousVersionId());
 		scienceAppImpl.setIconId(scienceApp.getIconId());
 		scienceAppImpl.setManualId(scienceApp.getManualId());
+		scienceAppImpl.setManualUrl(scienceApp.getManualUrl());
 		scienceAppImpl.setExeFileName(scienceApp.getExeFileName());
 		scienceAppImpl.setAppType(scienceApp.getAppType());
 		scienceAppImpl.setRunType(scienceApp.getRunType());

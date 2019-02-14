@@ -458,6 +458,107 @@ public interface ScienceAppModel extends BaseModel<ScienceApp>, StagedModel {
 		Locale defaultLocale);
 
 	/**
+	 * Returns the manual url of this science app.
+	 *
+	 * @return the manual url of this science app
+	 */
+	public String getManualUrl();
+
+	/**
+	 * Returns the localized manual url of this science app in the language. Uses the default language if no localization exists for the requested language.
+	 *
+	 * @param locale the locale of the language
+	 * @return the localized manual url of this science app
+	 */
+	@AutoEscape
+	public String getManualUrl(Locale locale);
+
+	/**
+	 * Returns the localized manual url of this science app in the language, optionally using the default language if no localization exists for the requested language.
+	 *
+	 * @param locale the local of the language
+	 * @param useDefault whether to use the default language if no localization exists for the requested language
+	 * @return the localized manual url of this science app. If <code>useDefault</code> is <code>false</code> and no localization exists for the requested language, an empty string will be returned.
+	 */
+	@AutoEscape
+	public String getManualUrl(Locale locale, boolean useDefault);
+
+	/**
+	 * Returns the localized manual url of this science app in the language. Uses the default language if no localization exists for the requested language.
+	 *
+	 * @param languageId the ID of the language
+	 * @return the localized manual url of this science app
+	 */
+	@AutoEscape
+	public String getManualUrl(String languageId);
+
+	/**
+	 * Returns the localized manual url of this science app in the language, optionally using the default language if no localization exists for the requested language.
+	 *
+	 * @param languageId the ID of the language
+	 * @param useDefault whether to use the default language if no localization exists for the requested language
+	 * @return the localized manual url of this science app
+	 */
+	@AutoEscape
+	public String getManualUrl(String languageId, boolean useDefault);
+
+	@AutoEscape
+	public String getManualUrlCurrentLanguageId();
+
+	@AutoEscape
+	public String getManualUrlCurrentValue();
+
+	/**
+	 * Returns a map of the locales and localized manual urls of this science app.
+	 *
+	 * @return the locales and localized manual urls of this science app
+	 */
+	public Map<Locale, String> getManualUrlMap();
+
+	/**
+	 * Sets the manual url of this science app.
+	 *
+	 * @param manualUrl the manual url of this science app
+	 */
+	public void setManualUrl(String manualUrl);
+
+	/**
+	 * Sets the localized manual url of this science app in the language.
+	 *
+	 * @param manualUrl the localized manual url of this science app
+	 * @param locale the locale of the language
+	 */
+	public void setManualUrl(String manualUrl, Locale locale);
+
+	/**
+	 * Sets the localized manual url of this science app in the language, and sets the default locale.
+	 *
+	 * @param manualUrl the localized manual url of this science app
+	 * @param locale the locale of the language
+	 * @param defaultLocale the default locale
+	 */
+	public void setManualUrl(String manualUrl, Locale locale,
+		Locale defaultLocale);
+
+	public void setManualUrlCurrentLanguageId(String languageId);
+
+	/**
+	 * Sets the localized manual urls of this science app from the map of locales and localized manual urls.
+	 *
+	 * @param manualUrlMap the locales and localized manual urls of this science app
+	 */
+	public void setManualUrlMap(Map<Locale, String> manualUrlMap);
+
+	/**
+	 * Sets the localized manual urls of this science app from the map of locales and localized manual urls, and sets the default locale.
+	 *
+	 * @param manualUrlMap the locales and localized manual urls of this science app
+	 * @param defaultLocale the default locale
+	 */
+	public void setManualUrlMap(Map<Locale, String> manualUrlMap,
+		Locale defaultLocale);
+
+	/**
 	 * Returns the exe file name of this science app.
 	 *
 	 * @return the exe file name of this science app

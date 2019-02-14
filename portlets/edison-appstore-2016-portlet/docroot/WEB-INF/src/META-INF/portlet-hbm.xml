@@ -224,6 +224,7 @@
 		<property name="previousVersionId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="iconId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="manualId" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="manualUrl" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="exeFileName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="appType" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="runType" type="com.liferay.portal.dao.orm.hibernate.StringType" />

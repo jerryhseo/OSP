@@ -174,6 +174,7 @@ create table EDAPP_ScienceApp (
 	previousVersionId LONG,
 	iconId LONG,
 	manualId STRING null,
+	manualUrl STRING null,
 	exeFileName VARCHAR(75) null,
 	appType VARCHAR(75) null,
 	runType VARCHAR(75) null,

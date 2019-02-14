@@ -171,6 +171,10 @@ public class ScienceAppstoreController {
 				solver.put("current_manualId", solver.get("manualId_"+languageId));
 			}
 			
+			if(solver.get("manualUrl_"+languageId) != null){
+				solver.put("current_manualUrl", solver.get("manualUrl_"+languageId));
+			}
+			
 			StringBuffer jsonStringBuffer = new StringBuffer();
 			long scienceAppId = Long.parseLong(CustomUtil.strNull(solver.get("scienceAppId"), "0"));
 			long workflowId = Long.parseLong(CustomUtil.strNull(solver.get("workflowId"), "0"));

@@ -64,6 +64,7 @@ public class ScienceAppWrapper implements ScienceApp, ModelWrapper<ScienceApp> {
 		attributes.put("previousVersionId", getPreviousVersionId());
 		attributes.put("iconId", getIconId());
 		attributes.put("manualId", getManualId());
+		attributes.put("manualUrl", getManualUrl());
 		attributes.put("exeFileName", getExeFileName());
 		attributes.put("appType", getAppType());
 		attributes.put("runType", getRunType());
@@ -178,6 +179,12 @@ public class ScienceAppWrapper implements ScienceApp, ModelWrapper<ScienceApp> {
 
 		if (manualId != null) {
 			setManualId(manualId);
+		}
+
+		String manualUrl = (String)attributes.get("manualUrl");
+
+		if (manualUrl != null) {
+			setManualUrl(manualUrl);
 		}
 
 		String exeFileName = (String)attributes.get("exeFileName");
@@ -898,6 +905,147 @@ public class ScienceAppWrapper implements ScienceApp, ModelWrapper<ScienceApp> {
 		java.util.Map<java.util.Locale, java.lang.String> manualIdMap,
 		java.util.Locale defaultLocale) {
 		_scienceApp.setManualIdMap(manualIdMap, defaultLocale);
+	}
+
+	/**
+	* Returns the manual url of this science app.
+	*
+	* @return the manual url of this science app
+	*/
+	@Override
+	public java.lang.String getManualUrl() {
+		return _scienceApp.getManualUrl();
+	}
+
+	/**
+	* Returns the localized manual url of this science app in the language. Uses the default language if no localization exists for the requested language.
+	*
+	* @param locale the locale of the language
+	* @return the localized manual url of this science app
+	*/
+	@Override
+	public java.lang.String getManualUrl(java.util.Locale locale) {
+		return _scienceApp.getManualUrl(locale);
+	}
+
+	/**
+	* Returns the localized manual url of this science app in the language, optionally using the default language if no localization exists for the requested language.
+	*
+	* @param locale the local of the language
+	* @param useDefault whether to use the default language if no localization exists for the requested language
+	* @return the localized manual url of this science app. If <code>useDefault</code> is <code>false</code> and no localization exists for the requested language, an empty string will be returned.
+	*/
+	@Override
+	public java.lang.String getManualUrl(java.util.Locale locale,
+		boolean useDefault) {
+		return _scienceApp.getManualUrl(locale, useDefault);
+	}
+
+	/**
+	* Returns the localized manual url of this science app in the language. Uses the default language if no localization exists for the requested language.
+	*
+	* @param languageId the ID of the language
+	* @return the localized manual url of this science app
+	*/
+	@Override
+	public java.lang.String getManualUrl(java.lang.String languageId) {
+		return _scienceApp.getManualUrl(languageId);
+	}
+
+	/**
+	* Returns the localized manual url of this science app in the language, optionally using the default language if no localization exists for the requested language.
+	*
+	* @param languageId the ID of the language
+	* @param useDefault whether to use the default language if no localization exists for the requested language
+	* @return the localized manual url of this science app
+	*/
+	@Override
+	public java.lang.String getManualUrl(java.lang.String languageId,
+		boolean useDefault) {
+		return _scienceApp.getManualUrl(languageId, useDefault);
+	}
+
+	@Override
+	public java.lang.String getManualUrlCurrentLanguageId() {
+		return _scienceApp.getManualUrlCurrentLanguageId();
+	}
+
+	@Override
+	public java.lang.String getManualUrlCurrentValue() {
+		return _scienceApp.getManualUrlCurrentValue();
+	}
+
+	/**
+	* Returns a map of the locales and localized manual urls of this science app.
+	*
+	* @return the locales and localized manual urls of this science app
+	*/
+	@Override
+	public java.util.Map<java.util.Locale, java.lang.String> getManualUrlMap() {
+		return _scienceApp.getManualUrlMap();
+	}
+
+	/**
+	* Sets the manual url of this science app.
+	*
+	* @param manualUrl the manual url of this science app
+	*/
+	@Override
+	public void setManualUrl(java.lang.String manualUrl) {
+		_scienceApp.setManualUrl(manualUrl);
+	}
+
+	/**
+	* Sets the localized manual url of this science app in the language.
+	*
+	* @param manualUrl the localized manual url of this science app
+	* @param locale the locale of the language
+	*/
+	@Override
+	public void setManualUrl(java.lang.String manualUrl, java.util.Locale locale) {
+		_scienceApp.setManualUrl(manualUrl, locale);
+	}
+
+	/**
+	* Sets the localized manual url of this science app in the language, and sets the default locale.
+	*
+	* @param manualUrl the localized manual url of this science app
+	* @param locale the locale of the language
+	* @param defaultLocale the default locale
+	*/
+	@Override
+	public void setManualUrl(java.lang.String manualUrl,
+		java.util.Locale locale, java.util.Locale defaultLocale) {
+		_scienceApp.setManualUrl(manualUrl, locale, defaultLocale);
+	}
+
+	@Override
+	public void setManualUrlCurrentLanguageId(java.lang.String languageId) {
+		_scienceApp.setManualUrlCurrentLanguageId(languageId);
+	}
+
+	/**
+	* Sets the localized manual urls of this science app from the map of locales and localized manual urls.
+	*
+	* @param manualUrlMap the locales and localized manual urls of this science app
+	*/
+	@Override
+	public void setManualUrlMap(
+		java.util.Map<java.util.Locale, java.lang.String> manualUrlMap) {
+		_scienceApp.setManualUrlMap(manualUrlMap);
+	}
+
+	/**
+	* Sets the localized manual urls of this science app from the map of locales and localized manual urls, and sets the default locale.
+	*
+	* @param manualUrlMap the locales and localized manual urls of this science app
+	* @param defaultLocale the default locale
+	*/
+	@Override
+	public void setManualUrlMap(
+		java.util.Map<java.util.Locale, java.lang.String> manualUrlMap,
+		java.util.Locale defaultLocale) {
+		_scienceApp.setManualUrlMap(manualUrlMap, defaultLocale);
 	}
 
 	/**
