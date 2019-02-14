@@ -567,5 +567,9 @@ function <portlet:namespace/>copyParentNodeFiles(params){
 	return resultObj;
 }
 
+function cogClick(nodeId){
+	$("#"+nodeId).contextmenu();
+}
+
 </script>
 </div>

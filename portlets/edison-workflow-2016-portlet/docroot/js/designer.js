@@ -26,6 +26,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     var connectionColor = "#11C7E7";
 
     function turnOffBeforeConnect(jpInstance) {
+    	jpInstance.beforeStartConnect = function() { return false; }
         jpInstance.beforeConnect = function() { return false; }
     }
 

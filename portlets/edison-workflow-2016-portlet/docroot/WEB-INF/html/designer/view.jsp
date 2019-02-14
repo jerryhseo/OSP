@@ -257,6 +257,9 @@ var contextPath = '${contextPath}';
                 <span>Setting</span>
               </a>
             </li>
+          </ul>
+          
+           <ul class="sidebar-menu bottom" data-widget="tree">
             <li>
               <div class="sidebar-toggle-wrapper" class="sidebar-toggle" id="sidebar-toggle" data-toggle="push-menu" role="button">
                 <a href="#" class="sidebar-toggle">
@@ -266,9 +269,6 @@ var contextPath = '${contextPath}';
               </div>
             </li>
           </ul>
-          
-          <!-- <ul class="sidebar-menu bottom" data-widget="tree">
-          </ul> -->
         </section>
       </aside>
   <div class="content-wrapper">

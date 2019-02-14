@@ -1037,12 +1037,17 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 var nodeId = $(this).attr("node-id")
                 $(this).hover(
                     function (e) {
-                        move(function () { renderer.centerOnAndZoom(nodeId, 0.3) })
+                        /*move(function () { renderer.centerOnAndZoom(nodeId, 0.3) })*/
                         $("#" + nodeId).addClass("wf-selected-node")
                     },
                     function (e) {
                         $("#" + nodeId).removeClass("wf-selected-node")
                     })
+                $(this).click(
+                	function(e){
+                		move(function () { renderer.centerOnAndZoom(nodeId, 0.3) });
+                	}
+                )
                 $(this).children("a").click(function(e){
                     currNodes.select(nodeId)
                 })
@@ -1145,6 +1150,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             toastr['warning']('', 'Already open')
             return false
         }
+        
         var dialogId = namespace + getGUID()
         currOpenPort.put(portId, dialogId)
         window.AUI().use('liferay-portlet-url', function (A) {
