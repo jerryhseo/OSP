@@ -806,7 +806,16 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                     }, 100)
                 }
             })
-        jobsPagination(jobsMap.pagination, simulationId)
+        
+	        if(currJobs.getArray().length > 0){
+	        	jobsPagination(jobsMap.pagination, simulationId);
+	        } else {
+	        	_delay(function() {
+	        		toastr["error"]("", "Simulation Job not exist!!");
+	        		$(JQ_PORTLET_BOUNDARY_ID + " .top-btn[data-btn-type='new-job']").click();
+	        	}, 500)
+	        	
+	        }
 
     }
 
@@ -1037,7 +1046,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 var nodeId = $(this).attr("node-id")
                 $(this).hover(
                     function (e) {
-                        /*move(function () { renderer.centerOnAndZoom(nodeId, 0.3) })*/
                         $("#" + nodeId).addClass("wf-selected-node")
                     },
                     function (e) {
@@ -1278,7 +1286,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     }
 
     function openNewSimulationPanel() {
-        createPanel('New Simulation', PANEL_DATA['new'], 'new')
+    	createPanel('New Simulation', PANEL_DATA['new'], 'new')
     }
 
     function newSimulation(){

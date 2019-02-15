@@ -251,15 +251,16 @@ var contextPath = '${contextPath}';
                 <span>Execute</span>
               </a>
             </li>
+          </ul>
+          
+           <ul class="sidebar-menu bottom" data-widget="tree">
             <li class="treeview">
               <a href="#" class="sidebar-btn" data-btn-type="setting">
                 <i class="fa fa-lg  fa-gear"></i>
                 <span>Setting</span>
               </a>
             </li>
-          </ul>
-          
-           <ul class="sidebar-menu bottom" data-widget="tree">
+            
             <li>
               <div class="sidebar-toggle-wrapper" class="sidebar-toggle" id="sidebar-toggle" data-toggle="push-menu" role="button">
                 <a href="#" class="sidebar-toggle">

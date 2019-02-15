@@ -232,7 +232,12 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                 events: {
                     click: function(obj) {
                         if (!isDesigner && uiPanelInstance) {
-                            uiPanelInstance.openOutputPortData(obj)
+                        	var status = obj.node.data.status.status;
+                        	if(status != "WAITING" && status != "PAUSED"){
+                        		uiPanelInstance.openOutputPortData(obj)
+                        	} else {
+                        		toastr['warning']('', 'No execution results.');
+                        	}
                         }
                     },
                 },
