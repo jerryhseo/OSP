@@ -1236,6 +1236,17 @@
             Liferay.fire(OSP.Event.OSP_RESPONSE_CREATE_SIMULATION_JOB_RESULT, eventData );
         };
         
+        var fireCancleJobResult = function( targetPortId,status ){
+            var eventData = {
+                             portletId: Workbench.id(),
+                             targetPortlet: targetPortId,
+                             data: status
+            };
+            Liferay.fire(OSP.Event.OSP_RESPONSE_CANCLE_JOB_RESULT, eventData );
+        };
+        
+        
+        
         var fireCancelSimulationJobResult = function( targetPortId,data ){
             var eventData = {
                              portletId: Workbench.id(),
@@ -3320,6 +3331,39 @@
                     fireCreateSimulationJobResult(portletId,data);
                 }
             });
+        };
+        
+        Workbench.handleCancleJob = function(portletId, resourceURL){
+        	
+        	var simulation = Workbench.workingSimulation();
+        	var job = simulation.workingJob();
+        	
+        	var ajaxData = Liferay.Util.ns(
+                     Workbench.namespace(),
+                     {
+                    	 command: 'CANCLE_JOB',
+                         simulationUuid: simulation.uuid(),
+                         jobUuid: job.uuid()
+                     }
+        	);
+        	
+        	
+        	$.ajax({
+                type: 'POST',
+                url: resourceURL,
+                async : false,
+                data  : ajaxData,
+                success: function() {
+                    fireCancleJobResult(portletId,true);
+                },
+                error:function(data,e){
+                    console.log(data);
+                    console.log('AJAX ERROR-->'+e);
+                    fireCancleJobResult(portletId,false);
+                }
+            });
+        	
+        	
         };
         
         Workbench.handleSubmitSimulation = function( $inputHandler, $getCoresDialog, resourceURL ){

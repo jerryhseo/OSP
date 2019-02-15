@@ -255,6 +255,18 @@ Liferay.on(OSP.Event.OSP_RESPONSE_SAVE_SIMULATION_RESULT, function( e ){
 	}
 });
 
+Liferay.on(OSP.Event.OSP_RESPONSE_CANCLE_JOB_RESULT, function( e ){
+	console.log('OSP_RESPONSE_CANCLE_JOB_RESULT: ['+e.targetPortlet+', '+new Date()+']');
+	var myId = '<%=portletDisplay.getId()%>';
+	if(e.targetPortlet === myId){
+		if(e.data){
+			toastr["success"]("", Liferay.Language.get('edison-data-update-success'));
+		}else{
+			toastr["error"]("", Liferay.Language.get('edison-data-update-error'));
+		}
+	}
+});
+
 Liferay.on(OSP.Event.OSP_RESPONSE_JOB_KEY, function( e ){
 	var myId = '<%=portletDisplay.getId()%>';
 	if(e.targetPortlet === myId){
@@ -351,10 +363,6 @@ function <portlet:namespace/>displayChange(status,workBenchType,isEdit){
 	if(workBenchType==='SIMULATION_WITH_WORKFLOW'){
 		$("li#<portlet:namespace/>job-li-divider").css("display","none");
 	}
-}
-
-function <portlet:namespace/>jobSelect(){
-	
 }
 
 function <portlet:namespace/>liEventFire(eventKey){

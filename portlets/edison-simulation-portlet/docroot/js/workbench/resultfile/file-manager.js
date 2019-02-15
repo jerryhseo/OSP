@@ -23,12 +23,17 @@ var print = function(param) {
                 file: [{
                     name: 'Download',
                     img: '',
-                    title: 'delete file or folder',
-                    fun: function(event) {
-                        var fn = window[file_manager.namespace + "download"];
-                        if(typeof fn === 'function') {
-                            fn(event.trigger[0].id);
-                        }
+                    title: 'File Download',
+                    fun: function(event,a,c) {
+                    	var fileSelection = _fn.getSelectionFile();
+                    	if(fileSelection.length===0){
+                    		alert("Please select a file to download");
+                    	}else{
+                    		var fn = window[file_manager.namespace + "download"];
+                    		if(typeof fn === 'function') {
+                    			fn(fileSelection);
+                    		}
+                    	}
                     }
                 }]
             }
@@ -100,6 +105,18 @@ var print = function(param) {
                     file_manager.selection.push(item.attr('id'));
                 }
             },
+            
+            getSelectionFile:function(){
+            	var selectionFile = [];
+            	var selectedItems = file_manager.explorer.find('file.ui-selected');
+            	
+            	for (var a = 0; a < selectedItems.length; a++) {
+                    var item = selectedItems.eq(a);
+                    selectionFile.push(item.attr('id'));
+                }
+            	
+            	return selectionFile;
+            },
 
             sort: function(array, propArray, asc) {
                 array = array.sort(function(a, b) {
@@ -156,16 +173,16 @@ var print = function(param) {
                     var file = filesArray[i];
                     if (file.type == 'directory') {
                         file_manager.tag = file_manager.folderTag.clone();
-                        file_manager.tag.html(file.name);
-                    } else if (file.type == 'file') {
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																										                        file_manager.tag.html(file.name);
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																										                    } else if (file.type == 'file') {
                         file_manager.tag = file_manager.fileTag.clone();
                         file_manager.tag.attr({
                             extension: file.extension
                         });
 
-                        var fileName = file.extension!=""?file.name + '.' + file.extension:file.name;
+//                      var fileName = file.extension!=""?file.name + '.' + file.extension:file.name;
                         file_manager.tag
-                            .html(fileName)
+                            .html(file.name)
                             .attr('title', file.name);
                     }
 
@@ -205,7 +222,7 @@ var print = function(param) {
                     file_manager.folderTag = j('<folder></folder>');
                     file_manager.fileTag = j('<file></file>');
 
-                    file_manager.viewport.delegate('folder, file', 'click', function() {
+                    file_manager.viewport.off('click').on('click','folder, file',function() {
                         var el = j(this);
                         if (file_manager.CTRL || file_manager.CMND) {
                             el.toggleClass('ui-selected').toggleClass('selected');

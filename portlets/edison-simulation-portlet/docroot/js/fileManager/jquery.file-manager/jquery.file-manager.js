@@ -82,7 +82,7 @@ var print = function(param) {
                 fileItem: [{
                     name: 'Download',
                     img: '',
-                    title: 'delete file or folder',
+                    title: 'File Download',
                     fun: function(e) {
                     	var selectedItem = file_manager.explorer.find('.ui-selected');
                     	_fileManager_fileDownload(selectedItem);

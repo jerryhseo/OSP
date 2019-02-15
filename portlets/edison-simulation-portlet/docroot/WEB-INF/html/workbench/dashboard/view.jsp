@@ -1304,12 +1304,13 @@ function <portlet:namespace/>jobResultFileView(simulationUuid, jobUuid) {
 		Liferay.Util.openWindow({
 			dialog: {
 				width:1024,
-				height:800,
+				height:750,
 				cache: false,
 				draggable: false,
 				resizable: false,
 				modal: true,
 				destroyOnClose: true,
+				className:'homepage-ui-dialog',
 				after: {
 					render: function(event) {
 						$("button.btn.close").on("click", function(e){

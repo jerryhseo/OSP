@@ -425,6 +425,20 @@ public class IBAgent {
 		return this.getFileId(targetPath.toString());
 	}
 	
+	public void cancleJob(String simulationUuid,String jobUuid) throws IOException, SystemException{
+		String apiUrl = URL+_simulationAPI+"/"+simulationUuid+"/job/"+jobUuid+"/cancel";
+		
+		HttpURLConnection conn = connect(apiUrl, "PUT", "application/json", "application/json");
+		
+		if (conn.getResponseCode() == 401) {
+			throw new SystemException("Failed IcebreakerService [ cancleJob ] : UNAUTHORIZED : access denied - HTTP error code : " + conn.getResponseCode());
+		}else if (conn.getResponseCode() == 404) {
+			throw new SystemException("Failed IcebreakerService [ cancleJob ] : NOT FOUND : no existing job - HTTP error code : " + conn.getResponseCode());
+		}else if (conn.getResponseCode() == 405) {
+			throw new SystemException("Failed IcebreakerService [ cancleJob ] : NOT FOUND : no existing job - HTTP error code : " + conn.getResponseCode());
+		}
+	}
+	
 	public JSONObject submit(
 			String simulationUuid,
 			String runType, 

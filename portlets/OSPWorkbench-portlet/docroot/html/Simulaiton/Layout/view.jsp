@@ -339,11 +339,15 @@ $(function(e) {
 Liferay.on(OSP.Event.OSP_REGISTER_EVENTS,function( e ){
 	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
 		console.log('OSP_REGISTER_EVENTS: ['+e.portletId+', '+new Date()+']' );
-		delete <portlet:namespace/>lodingPortlets[e.portletId];
-		if(Object.keys(<portlet:namespace/>lodingPortlets).length===0&&<portlet:namespace/>displayTimer){
-			//portlet all loding check
-			<portlet:namespace/>displayInit();
+		
+		if(<portlet:namespace/>lodingPortlets.hasOwnProperty(e.portletId)){
+			delete <portlet:namespace/>lodingPortlets[e.portletId];
+			if(Object.keys(<portlet:namespace/>lodingPortlets).length===0&&<portlet:namespace/>displayTimer){
+				//portlet all loding check
+				<portlet:namespace/>displayInit();
+			}
 		}
+		
 		<portlet:namespace/>workbench.handleRegisterEvents( e.portletId, e.data );
 	}
 });
@@ -433,6 +437,14 @@ Liferay.on(OSP.Event.OSP_CREATE_JOB,function( e ){
 			<portlet:namespace/>workbench.handleCreateJob( e.portletId, e.simulationUuid, e.title, e.data, '<%=serveResourceURL.toString()%>' );
 	}
 });
+
+Liferay.on(OSP.Event.OSP_CANCEL_JOB,function( e ){
+	if( <portlet:namespace/>workbench.id() == e.targetPortlet ){
+		console.log('OSP_CANCEL_JOB: ['+e.portletId+', '+new Date()+']', e );
+		<portlet:namespace/>workbench.handleCancleJob( e.portletId, '<%=serveResourceURL.toString()%>');
+	}
+});
+
 Liferay.on(OSP.Event.OSP_DELETE_JOB,function( e ){
 	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
 		console.log('OSP_DELETE_JOB: ['+e.portletId+', '+new Date()+']');

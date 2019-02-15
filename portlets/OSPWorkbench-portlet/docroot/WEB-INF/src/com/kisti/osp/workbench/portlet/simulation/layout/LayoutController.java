@@ -184,6 +184,8 @@ public class LayoutController {
 				this.readDLEntry(request, response);
 			}else if( command.equalsIgnoreCase("READ_DATATYPE_SAMPLE")){
 				this.readDataTypeSample(request, response);
+			}else if( command.equalsIgnoreCase("CANCLE_JOB")){
+				this.cancleJob(request, response);
 			}
 			
 			
@@ -774,6 +776,19 @@ public class LayoutController {
 		}
 		
 		ServletResponseUtil.write(httpResponse, jsonJob.toString() );
+	}
+	
+	
+	protected void cancleJob(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws IOException, SystemException {
+		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		User user = themeDisplay.getUser();
+		Group group = themeDisplay.getScopeGroup();
+		IBAgent ibAgent = new IBAgent(group, user);
+		
+		String simulationUuid = ParamUtil.getString(resourceRequest, "simulationUuid");
+		String jobUuid = ParamUtil.getString(resourceRequest, "jobUuid");
+		ibAgent.cancleJob(simulationUuid, jobUuid);
+		
 	}
 	
 	protected void readDLEntry( ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws IOException, PortletException{
