@@ -163,40 +163,40 @@
 	
 	<!-- Popup -->
 	<c:if test="${popState ne 'NO'}">
-			<c:forEach items="${popupList}" var="model"> 
-				<div id="POPUP_${model.boardSeq}" class="smallpupboxBoard" style="width:600px; height:405px; font-family: Arial,Nanum Barun Gothic,NanumGothic;">			
-					<div style="vertical-align: middle;">
-						<div class="smallpuptitle"> 
-							${model.title} 
-						</div>	  
-						<div class="smpupclosebtn">
-							<img src="${contextPath}/images/closeicon.png" width="21" height="21" onclick="closePopup('POPUP_${model.boardSeq}');return false;" style="cursor: pointer;"/>
-						</div>
-					</div><br>
-					
-					<div class="popupContent" style="overflow: auto;">
-						<c:out value="${model.content}" escapeXml="false"/>
+		<c:forEach items="${popupList}" var="model"> 
+			<div id="POPUP_${model.boardSeq}" class="smallpupboxBoard" style="width:600px; height:405px; font-family: Arial,Nanum Barun Gothic,NanumGothic;">			
+				<div style="vertical-align: middle;">
+					<div class="smallpuptitle"> 
+						${model.title} 
+					</div>	  
+					<div class="smpupclosebtn">
+						<img src="${contextPath}/images/closeicon.png" width="21" height="21" onclick="closePopup('POPUP_${model.boardSeq}');return false;" style="cursor: pointer;"/>
 					</div>
-	
-					<div>
-						<c:forEach items="${model.fileList}" var="fileModel">
-							<div style="cursor:pointer" onclick="<portlet:namespace/>fileDownload('${fileModel.fileEntryId }')" class="onMouseHover">
-								${fileModel.fileTitle }
-								<img src="<%=themeDisplay.getPathThemeImages() %>/custom/portlet/fileicon2.png" width="16" height="16" />
-							</div>
-						</c:forEach>
+				</div><br>
+				
+				<div class="popupContent" style="overflow: auto;">
+					<c:out value="${model.content}" escapeXml="false"/>
+				</div>
+
+				<div>
+					<c:forEach items="${model.fileList}" var="fileModel">
+						<div style="cursor:pointer" onclick="<portlet:namespace/>fileDownload('${fileModel.fileEntryId }')" class="onMouseHover">
+							${fileModel.fileTitle }
+							<img src="<%=themeDisplay.getPathThemeImages() %>/custom/portlet/fileicon2.png" width="16" height="16" />
+						</div>
+					</c:forEach>
+				</div>
+				
+				<div style="padding-top: 7px;">
+					<div style="float:left">
+						<a href="#" onclick="closePopup('POPUP_${model.boardSeq}');return false;" class="onMouseHover"><liferay-ui:message key='edison-button-board-close' /> X</a>
 					</div>
-					
-					<div style="padding-top: 7px;">
-						<div style="float:left">
-							<a href="#" onclick="closePopup('POPUP_${model.boardSeq}');return false;" class="onMouseHover"><liferay-ui:message key='edison-button-board-close' /> X</a>
-						</div>
-						<div style="float:right;padding-right:10px;">
-							<a href="#" onclick="closePopupAt('POPUP_${model.boardSeq}');return false;" class="onMouseHover"><liferay-ui:message key='edison-board-popup-close-alert' /> X</a> 
-						</div>
+					<div style="float:right;padding-right:10px;">
+						<a href="#" onclick="closePopupAt('POPUP_${model.boardSeq}');return false;" class="onMouseHover"><liferay-ui:message key='edison-board-popup-close-alert' /> X</a> 
 					</div>
 				</div>
-			</c:forEach>
+			</div>
+		</c:forEach>
 	</c:if>
 
 
@@ -280,6 +280,12 @@
 <script type="text/javascript">
 
 	$(document).ready(function(){
+		
+		/* Hide Popup notice - Mobile */
+		if(Liferay.Browser.isMobile() && 0 < $(".smallpupboxBoard").length){
+			$(".smallpupboxBoard").remove();
+		}
+		
 		getBoardList<portlet:namespace/>('${currentPage}');
 		<portlet:namespace/>popupCreate("${popState}");
 		
