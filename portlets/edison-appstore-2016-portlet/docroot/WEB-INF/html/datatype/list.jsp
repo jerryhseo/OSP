@@ -139,6 +139,7 @@
 							<button class="btn btn-success choiceButton" type="button" onclick="<portlet:namespace/>dataTypeChoice();"><span class="icon-ok">   <liferay-ui:message key="select"/></sapn></button>
 						</c:when>
 						<c:otherwise>
+							<button class="btn btn-primary choiceButton" type="button" onclick="<portlet:namespace/>dataTypeModify('upgrade');" style="display: none;"><span class="icon-copy">   <liferay-ui:message key="edison-appstore-copy"/></sapn></button>
 							<button class="btn btn-primary choiceButton" type="button" onclick="<portlet:namespace/>dataTypeModify('<%=Constants.COPY%>');" style="display: none;"><span class="icon-copy">   <liferay-ui:message key="copy"/></sapn></button>
 							<button class="btn btn-primary choiceButton" type="button" onclick="<portlet:namespace/>dataTypeModify('<%=Constants.UPDATE%>');" style="display: none;"><span class="icon-edit">   <liferay-ui:message key="update-data"/></sapn></button>
 							<button class="btn btn-primary choiceButton" type="button" onclick="<portlet:namespace/>dataTypeModify('<%=Constants.DELETE%>');" style="display: none;"><span class="icon-trash">   <liferay-ui:message key="delete"/></sapn></button>
@@ -299,6 +300,10 @@
 				if(!confirm(Liferay.Language.get('edison-science-appstore-data-type-copy-msg'))){
 					return false;
 				}
+			}else if(mode=='upgrade') {
+				if(!confirm(Liferay.Language.get('edison-science-appstore-data-type-upgrade-msg'))){
+					return false;
+				}
 			}
 			
 			
@@ -309,7 +314,7 @@
 			document.<portlet:namespace/>modifyDataTypeForm.<portlet:namespace/>dataTypeId.value=dataTypeId;
 			document.<portlet:namespace/>modifyDataTypeForm.<portlet:namespace/>mode.value=mode;
 			
-			if(mode=='<%=Constants.COPY%>'||mode=='<%=Constants.DELETE%>'){
+			if(mode=='<%=Constants.COPY%>' || mode=='<%=Constants.DELETE%>' || mode=='upgrade'){
 				document.<portlet:namespace/>modifyDataTypeForm.action = "<%=submitURL%>";
 			}else{
 				//UPDATE, ADD
