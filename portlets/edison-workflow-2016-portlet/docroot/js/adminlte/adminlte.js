@@ -611,6 +611,7 @@ throw new Error('AdminLTE requires jQuery')
     var windowHeight  = $(window).height() - mainHeaderTopHeight;
     var sidebarHeight = $(Selector.sidebar).height() || 0;
 
+    
     // Set the min-height of the content and sidebar based on
     // the height of the document.
     if ($('#body-div').hasClass(ClassName.fixed)) {
