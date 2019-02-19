@@ -60,9 +60,9 @@ var contextPath = '${contextPath}';
     .apparea{position: relative; height: 100%; display: flex; flex-grow:1;}
 
     .wf-selected-node {
-        -webkit-box-shadow: 9px 7px 7px 2px rgba(231,166,26,1);
-        -moz-box-shadow: 9px 7px 7px 2px rgba(231,166,26,1);
-        box-shadow: 9px 7px 7px 2px rgba(231,166,26,1);
+        -webkit-box-shadow: 5px 5px 5px 0px rgba(231,166,26,1);
+        -moz-box-shadow: 5px 5px 5px 0px rgba(231,166,26,1);
+        box-shadow: 5px 5px 5px 0px rgba(231,166,26,1);
     }
 
     .wf-selected-port {

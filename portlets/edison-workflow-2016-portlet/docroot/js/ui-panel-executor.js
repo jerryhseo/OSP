@@ -1139,7 +1139,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
         popPortDialog(node, portId, portData, isDataComponentCall);
     }
-
+    
     function popPortDialog(node, portId, portData, isDataComponentCall) {
         var portName = ''
         var nodeId = node.id
@@ -1155,8 +1155,8 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             return false
         }
         if (currOpenPort.containsKey(portId)) {
-            toastr['warning']('', 'Already open')
-            return false
+        	toastr['warning']('', 'Already open')
+        	return false
         }
         
         var dialogId = namespace + getGUID()
@@ -1181,38 +1181,60 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             portletURL.setWindowState('pop_up');
 
             var wWidth = $(window).width()
-            // var wHeight =$(window).height()
+            /*var wHeight =$(window).height()*/
 
-            var fWidth = wWidth > 2000 ? '50vw' : '1024px'
-            var fHeight = wWidth > 2000 ? '50vh' : '600px'
-
-            Liferay.Util.openWindow({
-                dialog: {
-                    width: fWidth,
-                    height: fHeight,
-                    cache: false,
-                    centered: false,
-                    draggable: true,
-                    resizable: true,
-                    modal: false,
-                    destroyOnClose: true,
-                    after: {
-                        render: function (event) {
-                            $('#' + dialogId).addClass('wf-port-popup')
-                            $("button.btn.close").on("click", function (e) {
-                                currOpenPort.remove(portId)
-                            });
-                        },
-                    },
-                },
-                id: dialogId,
-                uri: portletURL.toString(),
-                title: (isDataComponentCall ? 'DataComponent' : node.data.scienceAppData.name ) + " " + portName
+            /* init popup size */
+            var fWidth = '';
+            var fHeight = wWidth > 2000 ? '50vh' : '650px'
+            if(wWidth > 2000){
+            	fWidth = '50vw';
+            } else if(wWidth > 1500 && wWidth < 2000){
+            	fWidth = '1024px';
+        	} else {
+        		fWidth = wWidth * 0.7 + 'px';
+        		fHeight = wWidth * 0.6 + 'px';
+        	}
+            	
+            /* init popup position */
+            var popupCnt = $('.wf-port-popup').length;
+            var positionLeft = 230;
+            var positionTop = 72;
+            if(0 < popupCnt){
+            	var firstPopup = $('.wf-port-popup:first');
+            	if(firstPopup.position().left != 0 && firstPopup.position().top != 0){
+            		positionLeft = firstPopup.position().left + 40;
+            		positionTop = firstPopup.position().top + 40;
+            	}
+            }
+            
+            /*var openPortPopup = Liferay.Util.openWindow({*/
+        	var openPortPopup = Liferay.Util.Window.getWindow({
+            	dialog: {
+            		width: fWidth,
+            		height: fHeight,
+            		cache: false,
+            		centered: false,
+            		draggable: true,
+            		resizable: true,
+            		modal: false,
+            		destroyOnClose: true,
+            		after: {
+            			render: function (event) {
+            				$('#' + dialogId).addClass('wf-port-popup')
+            				$("button.btn.close").on("click", function (e) {
+            					currOpenPort.remove(portId)
+            				});
+            			},
+            		},
+            	},
+            	id: dialogId,
+            	uri: portletURL.toString(),
+            	title: (isDataComponentCall ? 'DataComponent' : node.data.scienceAppData.name ) + " " + portName
             });
-            $('#' + dialogId).css('top', '72px').css('left', '230px')
+            $('#' + dialogId).css('top', positionTop+'px').css('left', positionLeft+'px')
         });
     }
-
+    
     function openSimulation() {
         var simulationId = PANEL_DATA.open.form.selected;
         if(_isEmpty(simulationId, CONSTS.MESSAGE.edison_wfsimulation_select_first_message)){
