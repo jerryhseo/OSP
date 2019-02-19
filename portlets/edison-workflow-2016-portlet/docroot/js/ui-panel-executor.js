@@ -811,10 +811,10 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 	        	jobsPagination(jobsMap.pagination, simulationId);
 	        } else {
 	        	_delay(function() {
-	        		toastr["error"]("", "Simulation Job not exist!!");
-	        		$(JQ_PORTLET_BOUNDARY_ID + " .top-btn[data-btn-type='new-job']").click();
+	        		toastr["error"]("", var_workflow_not_exist_job_message);
+	        		/*$(JQ_PORTLET_BOUNDARY_ID + " .top-btn[data-btn-type='new-job']").click();*/
+	        		$(JQ_PORTLET_BOUNDARY_ID + " .top-btn[data-btn-type='new-job']").css("color", "red");
 	        	}, 500)
-	        	
 	        }
 
     }
@@ -1218,11 +1218,21 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             		resizable: true,
             		modal: false,
             		destroyOnClose: true,
+            		init: {
+            			init: function (event){
+            				console.log('ini......')
+            			}
+            		},
             		after: {
             			render: function (event) {
             				$('#' + dialogId).addClass('wf-port-popup')
             				$("button.btn.close").on("click", function (e) {
             					currOpenPort.remove(portId)
+            				});
+            				
+            				$(document).on('keydown', function(event){
+            					console.log("keydown click");
+            					alert(event.keyCode);
             				});
             			},
             		},

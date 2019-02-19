@@ -53,6 +53,7 @@ var var_cannot_load_analyzer_message = Liferay.Language.get("edison-workflow-can
 var var_cannot_load_intermediate_result_message = Liferay.Language.get("edison-workflow-cannot-intermediate-result-message");
 var var_no_available_analyzer_message = Liferay.Language.get("edison-workflow-no-available-analyzer-message");
 var var_workflow_status_not_found_message = Liferay.Language.get("edison-workflow-status-not-found");
+var var_workflow_not_exist_job_message = Liferay.Language.get("edison-workflow-not-exist-job-message");
 var contextPath = '${contextPath}';
 </script>
 
