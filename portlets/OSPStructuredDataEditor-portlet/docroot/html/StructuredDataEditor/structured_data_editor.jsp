@@ -104,10 +104,10 @@ function <portlet:namespace/>loadData( jsonData, changeAlert ){
 		}
 		break;
 	case OSP.Enumeration.PathType.DLENTRY_ID:
-		<portlet:namespace/>visualizer.readDLFileEntry();
+		<portlet:namespace/>visualizer.readDLFileEntry(changeAlert);
 		break;
 	case OSP.Enumeration.PathType.FILE:
-		<portlet:namespace/>visualizer.readServerFile();
+		<portlet:namespace/>visualizer.readServerFile(null, changeAlert);
 		break;
 	default:
 		<portlet:namespace/>visualizer.showAlert( 'Un-known dataType: '+jsonData.type_);
@@ -123,7 +123,7 @@ function <portlet:namespace/>refreshEditor(){
 					'<%=themeDisplay.getLanguageId()%>');
 };
 
-function <portlet:namespace/>processInitAction( jsonInitData, launchCanvas ){
+function <portlet:namespace/>processInitAction( jsonInitData, launchCanvas, changeAlert ){
 	console.log( 'jsonInitData', jsonInitData );
 	if( !jsonInitData.repositoryType_ || !jsonInitData.user_ ){
 		// Do nothing if repository is not specified.
@@ -142,7 +142,7 @@ function <portlet:namespace/>processInitAction( jsonInitData, launchCanvas ){
 		
 		<portlet:namespace/>visualizer.readDataTypeStructure( jsonInitData.dataType_.name, jsonInitData.dataType_.version);
 	}
-	<portlet:namespace/>visualizer.processInitAction( jsonInitData, false );
+	<portlet:namespace/>visualizer.processInitAction( jsonInitData, changeAlert );
 }
 
 /***********************************************************************
@@ -160,14 +160,14 @@ $('#<portlet:namespace/>openLocalFile').click(function(){
 	if( <portlet:namespace/>disabled )
 		return;
 
-	<portlet:namespace/>visualizer.openLocalFile();
+	<portlet:namespace/>visualizer.openLocalFile( true );
 });
 
 $('#<portlet:namespace/>openServerFile').click(function(){
 	if( <portlet:namespace/>disabled )
 		return;
 
-	<portlet:namespace/>visualizer.openServerFile();
+	<portlet:namespace/>visualizer.openServerFile(null, true);
 });
 
 $('#<portlet:namespace/>canvas').on('change', function(){
@@ -178,7 +178,6 @@ $('#<portlet:namespace/>canvas').on('change', function(){
 			type_: OSP.Enumeration.PathType.STRUCTURED_DATA,
 			content_: OSP.Util.toJSON( <portlet:namespace/>dataType.structure() )
 	};
-	console.log( 'data changed: ', jsonData );
 	
 	<portlet:namespace/>visualizer.fireDataChangedEvent( jsonData );
 });
@@ -188,7 +187,7 @@ $('#<portlet:namespace/>canvas').on('change', function(){
  ***********************************************************************/
  function <portlet:namespace/>handshakeEventHandler( jsonData, params ){
 	 <portlet:namespace/>visualizer.configConnection( params.connector, params.disabled );
-	<portlet:namespace/>processInitAction( jsonData );
+	<portlet:namespace/>processInitAction( jsonData, params.changeAlert );
 	<portlet:namespace/>visualizer.fireRegisterEventsEvent();
  }
  
@@ -209,7 +208,7 @@ function <portlet:namespace/>responseDataEventHandler( data, params ){
 	
 	switch( callbackParams.procFunc ){
 	case 'readServerFile':
-		<portlet:namespace/>visualizer.runProcFuncs( 'readServerFile', data );
+		<portlet:namespace/>visualizer.runProcFuncs( 'readServerFile', data, true );
 		break;
 	}
 }
@@ -223,7 +222,7 @@ function <portlet:namespace/>initializeEventHandler( data, params ){
 		version:<portlet:namespace/>dataType.version()
 	};
 	
-	<portlet:namespace/>processInitAction(initData, true);
+	<portlet:namespace/>processInitAction(initData, false);
 }
 
 function <portlet:namespace/>disableControlsEventHandler( data, params ){

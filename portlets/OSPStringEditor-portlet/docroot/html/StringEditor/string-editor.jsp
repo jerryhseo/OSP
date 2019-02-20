@@ -42,7 +42,7 @@ var <portlet:namespace/>config = {
 
 var <portlet:namespace/>visualizer;
 <portlet:namespace/>visualizer = OSP.Visualizer(<portlet:namespace/>config);
-<portlet:namespace/>processInitAction( JSON.parse( '<%=visualizerConfig.initData%>') );
+<portlet:namespace/>processInitAction( JSON.parse( '<%=visualizerConfig.initData%>'), false );
 
 /***********************************************************************
  * Canvas functions
@@ -56,13 +56,13 @@ function <portlet:namespace/>loadString( jsonData, changeAlert ){
 	}
 }
 
-function <portlet:namespace/>processInitAction( jsonInitData ){
+function <portlet:namespace/>processInitAction( jsonInitData, changeAlert ){
 	if( ! jsonInitData.type_ ){	
 		jsonInitData.type_ = OSP.Enumeration.PathType.CONTENT;
 		jsonInitData.content_ = '';
 	}
 	
-	<portlet:namespace/>visualizer.processInitAction( jsonInitData, true );
+	<portlet:namespace/>visualizer.processInitAction( jsonInitData, changeAlert );
 	$('#<portlet:namespace/>canvas').attr('disabled', <portlet:namespace/>disabled );
 }
 /***********************************************************************
@@ -107,7 +107,7 @@ function <portlet:namespace/>initializeEventHandler( data, params ){
 			type_: OSP.Enumeration.PathType.CONTENT,
 			content_: ''
 	};
-	<portlet:namespace/>visualizer.processInitAction( jsonData, true);
+	<portlet:namespace/>visualizer.processInitAction( jsonData, false);
 }
 
 function <portlet:namespace/>disableControlsEventHandler( data, params ){
