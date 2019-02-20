@@ -1051,6 +1051,15 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                     function (e) {
                         $("#" + nodeId).removeClass("wf-selected-node")
                     })
+                /*$(this).children("a").hover(
+                    function (e) {
+                        $("#" + nodeId + " ." + CONSTS.WF_JSPLUMB_TYPES.PORT_ELEMENT)
+                        	.addClass("wf-selected-port").siblings("label").addClass("wf-selected-port-label")
+                    },
+                    function (e) {
+                        $("#" + nodeId + " ." + CONSTS.WF_JSPLUMB_TYPES.PORT_ELEMENT)
+                        	.removeClass("wf-selected-port").siblings("label").removeClass("wf-selected-port-label")
+                    })*/
                 $(this).click(
                 	function(e){
                 		move(function () { renderer.centerOnAndZoom(nodeId, 0.3) });
@@ -1207,7 +1216,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             	}
             }
             
-            /*var openPortPopup = Liferay.Util.openWindow({*/
+            /*Liferay.Util.openWindow({*/
         	var openPortPopup = Liferay.Util.Window.getWindow({
             	dialog: {
             		width: fWidth,
@@ -1218,21 +1227,11 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             		resizable: true,
             		modal: false,
             		destroyOnClose: true,
-            		init: {
-            			init: function (event){
-            				console.log('ini......')
-            			}
-            		},
             		after: {
             			render: function (event) {
             				$('#' + dialogId).addClass('wf-port-popup')
             				$("button.btn.close").on("click", function (e) {
             					currOpenPort.remove(portId)
-            				});
-            				
-            				$(document).on('keydown', function(event){
-            					console.log("keydown click");
-            					alert(event.keyCode);
             				});
             			},
             		},
@@ -1241,6 +1240,15 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             	uri: portletURL.toString(),
             	title: (isDataComponentCall ? 'DataComponent' : node.data.scienceAppData.name ) + " " + portName
             });
+        	
+            A.one('body').on('key', function(event){
+        		openPortPopup.once('visibleChange', function(event){
+        			if(event.prevVal == true){
+        				event.newVal = true;
+        			}
+        		});
+        	}, 'esc');
+        	
             $('#' + dialogId).css('top', positionTop+'px').css('left', positionLeft+'px')
         });
     }
