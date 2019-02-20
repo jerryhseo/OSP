@@ -72,14 +72,15 @@
             return formData;
         };
 
-        var openServerFileExplorer = function( procFuncName ){
+        var openServerFileExplorer = function( procFuncName, changeAlert ){
             var buttons = {
                     OK: function(){
                                     fireRequestDataEvent( 
                                         fileExplorerId, 
                                         {},
                                         {
-                                            procFunc:procFuncName
+                                            procFunc:procFuncName,
+                                            changeAlert: changeAlert
                                         } );
 
                                     fileExplorerDialog.dialog('close');
@@ -152,7 +153,7 @@
             } 
         };
 
-        var readServerFile = function( jsonData ){
+        var readServerFile = function( jsonData, changeAlert ){
             if( jsonData ){
                 setCurrentData( jsonData );
             }
@@ -183,7 +184,7 @@
                             type_: OSP.Enumeration.PathType.FILE_CONTENT,
                             content_: data
                         };
-                        loadCanvas( result, true );
+                        loadCanvas( result, changeAlert );
                 },
                 error: function(data, e ){
                     console.log('Error read server file: ', jsonData, data, e);
@@ -199,7 +200,7 @@
             createURL('READ_FILE')
         };
 
-        var readDataTypeStructure = function( name, version ){
+        var readDataTypeStructure = function( name, version, changeAlert ){
             var params = {
                 command: 'READ_DATATYPE_STRUCTURE',
                 dataTypeName: name,
@@ -233,7 +234,7 @@
                         };
                         setCurrentData( result );
 
-                        loadCanvas( OSP.Util.toJSON(currentData, true) );
+                        loadCanvas( OSP.Util.toJSON(currentData, changeAlert) );
                 },
                 error: function(data, e ){
                     console.log('Error read first server file name: ', jsonData, data, e);
@@ -279,7 +280,7 @@
                         };
                         setCurrentData( result );
 
-                        loadCanvas( OSP.Util.toJSON(currentData, false));
+                        loadCanvas( OSP.Util.toJSON(currentData), changeAlert);
                 },
                 error: function(data, e ){
                     console.log('Error read first server file name: ', jsonData, data, e);
@@ -288,13 +289,13 @@
             });
         };
 
-        var readFirstServerFile = function( jsonData ){
+        var readFirstServerFile = function( jsonData, changeAlert ){
             if( jsonData ){
                 setCurrentData( jsonData );
             }
 
             var successFunc = function(){
-                loadCanvas( OSP.Util.toJSON(currentData), true );
+                loadCanvas( OSP.Util.toJSON(currentData), changeAlert );
             };
 
             getFirstFileName( successFunc );
@@ -410,7 +411,7 @@
             }
         };
 
-        var readDLFileEntry = function(){
+        var readDLFileEntry = function(changeAlert){
             var params = {
                 command:'READ_DLENTRY',
                 dlEntryId: currentData.content()
@@ -432,7 +433,7 @@
                         content_: result
                     };
                     setCurrentData( jsonData );
-                    loadCanvas( OSP.Util.toJSON(currentData), true );
+                    loadCanvas( OSP.Util.toJSON(currentData), changeAlert );
                 },
                 error: function(data, e ){
                     errorFunc(data, e);
@@ -536,7 +537,7 @@
             });
         };
 
-        var createURL = function( command ){
+        var createURL = function( command, changeAlert ){
             AUI().use('liferay-portlet-url', function(A) {
                 var serveResourceURL;
                 serveResourceURL = Liferay.PortletURL.createResourceURL();
@@ -554,7 +555,7 @@
                 };
 
                 setCurrentData( jsonData );
-                loadCanvas( OSP.Util.toJSON(currentData), true);
+                loadCanvas( OSP.Util.toJSON(currentData), changeAlert);
             });
         };
 
@@ -736,7 +737,7 @@
             Liferay.fire( OSP.Event.OSP_RESPONSE_DATA, createEventData( jsonData, params ) );
         };
 
-        var openHtmlIndex = function( jsonData ){
+        var openHtmlIndex = function( jsonData, changeAlert ){
             if( jsonData ){
                 setCurrentData( jsonData );
             }
@@ -765,7 +766,7 @@
                         type_: OSP.Enumeration.PathType.URL,
                         content_:  OSP.Util.mergePath( result.parentPath, result.fileName )
                     };
-                    loadCanvas( jsonData, true );
+                    loadCanvas( jsonData, changeAlert );
                     //successFunc( data.parentPath, data.fileInfos );
                 },
                 error:function(ed, e){
@@ -775,7 +776,7 @@
             }); 
         };
 
-        var openLocalFile = function( contentType ){
+        var openLocalFile = function( contentType, changeAlert ){
             console.log('Open Local File');
             var domFileSelector = $('<input type=\"file\" id=\"'+namespace+'selectFile\"/>');
             domFileSelector.click();
@@ -809,7 +810,7 @@
                         }
                         result.name_ = fileName;
                         result.content_ = evt.target.result;
-                        loadCanvas(result, true);
+                        loadCanvas(result, changeAlert);
                     };
                 }
             );
@@ -917,14 +918,14 @@
             }
         };
 
-        var openServerFile = function( procFuncName ){
+        var openServerFile = function( procFuncName, changeAlert ){
                 if( procFuncName )
-                    openServerFileExplorer( procFuncName );
+                    openServerFileExplorer( procFuncName, changeAlert );
                 else
-                    openServerFileExplorer( 'readServerFile' );
+                    openServerFileExplorer( 'readServerFile', changeAlert );
         };
 
-        var processInitAction = function( jsonData, launchCanvas ){
+        var processInitAction = function( jsonData, launchCanvas, changeAlert ){
             if( jsonData ){
                 initData = jsonData;
                 initData.type_ = jsonData.type_ ? jsonData.type_ : OSP.Enumeration.PathType.FOLDER;
@@ -936,7 +937,7 @@
 
             // console.log( 'After processInitAction: ', currentData );
             if( launchCanvas ){
-                loadCanvas( OSP.Util.toJSON(currentData), false );
+                loadCanvas( OSP.Util.toJSON(currentData), changeAlert );
             }
         };
 
@@ -1036,12 +1037,12 @@
             loadCanvas: loadCanvas,
             openHtmlIndex: openHtmlIndex,
             openLocalFile: openLocalFile,
-            openLocalFileURL: function(){
-                openLocalFile('url');
+            openLocalFileURL: function(changeAlert){
+                openLocalFile('url', changeAlert);
             },
             openServerFile: openServerFile,
-            openServerFileURL: function(){
-                openServerFile( 'readServerFileURL');
+            openServerFileURL: function(changeAlert){
+                openServerFile( 'readServerFileURL', changeAlert);
             },
             processInitAction: processInitAction,
             readDataTypeStructure:readDataTypeStructure,

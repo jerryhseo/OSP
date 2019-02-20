@@ -81,11 +81,11 @@ $('#<portlet:namespace/>canvas').load(function(){
  * Canvas functions
  ***********************************************************************/
 function <portlet:namespace/>loadCanvas( jsonData, changeAlert ){
-	console.log( 'jsonData: ', jsonData );
+	console.log( 'jsonData: ', jsonData, changeAlert );
 	
 	switch( jsonData.type_){
 		case OSP.Enumeration.PathType.FILE:
-			<portlet:namespace/>visualizer.readServerFile( jsonData );
+			<portlet:namespace/>visualizer.readServerFile( jsonData, changeAlert );
 			break;
 		case OSP.Enumeration.PathType.CONTENT:
 		case OSP.Enumeration.PathType.FILE_CONTENT:
@@ -98,7 +98,7 @@ function <portlet:namespace/>loadCanvas( jsonData, changeAlert ){
 				<portlet:namespace/>visualizer.fireDataChangedEvent();
 			break;
 		case OSP.Enumeration.PathType.DLENTRY_ID:
-			<portlet:namespace/>visualizer.readDLFileEntry();
+			<portlet:namespace/>visualizer.readDLFileEntry(changeAlert);
 			break;
 		case OSP.Enumeration.PathType.URL:
 			alert( 'Un-supported yet.');
@@ -166,14 +166,14 @@ $('#<portlet:namespace/>openLocalFile').click(function(){
 	if( <portlet:namespace/>disabled )
 		return;
 
-	<portlet:namespace/>visualizer.openLocalFile();
+	<portlet:namespace/>visualizer.openLocalFile( true );
 });
 
 $('#<portlet:namespace/>openServerFile').click(function(){
 	if( <portlet:namespace/>disabled )
 		return;
 
-	<portlet:namespace/>visualizer.openServerFile();
+	<portlet:namespace/>visualizer.openServerFile(null, true);
 });
 
 $('#<portlet:namespace/>save').click(function(){
@@ -206,7 +206,7 @@ $('#<portlet:namespace/>download').click(function(){
  * Handling OSP Events and event handlers
  ***********************************************************************/
 function <portlet:namespace/>loadDataEventHandler( data, params ){
-	console.log('[<portlet:namespace/>loadDataEventHandler] ', data );
+	console.log('[<portlet:namespace/>loadDataEventHandler] ', data, params );
 	
 	<portlet:namespace/>visualizer.loadCanvas( data, params.changeAlert );
 }
@@ -223,7 +223,7 @@ function <portlet:namespace/>responseDataEventHandler( data, params ){
 	
 	switch( params.procFunc ){
 	case 'readServerFile':
-		<portlet:namespace/>visualizer.runProcFuncs( 'readServerFile', data );
+		<portlet:namespace/>visualizer.runProcFuncs( 'readServerFile', data, true );
 		break;
 	case 'saveAtServerAs':
 		<portlet:namespace/>visualizer.callIframeFunc('getContent', function(content){
