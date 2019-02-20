@@ -32,35 +32,30 @@ div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_table-rf-designer-parame
 					
 				<div class="form-group col-md-2">
 					<label>SF(4~256)</label>
-					<input class="form-control" type="text" value="4"/>
+					<input class="form-control" id="" type="text" value="4"/>
 				</div>
 				<div class="form-group col-md-2">
 					<label>Samples / Chip</label>
-					<input class="form-control" type="text" />
+					<input class="form-control" type="text" value="8"/>
 				</div>
-				<div class="form-group col-md-4">
+				<div class="form-group col-md-2">
 					<label>Pulse Shaping Filter</label>
 					<select class="form-control">
-						<option value="RAISED-COSINE">Raised Cosine</option>
+						<option value="RAISED-COSINE" selected="selected">Raised Cosine</option>
 						<option value="GAUSSIAN">Gaussian</option>
 					</select>
 				</div>
 				<div class="form-group col-md-2">
 					<label>Filter Taps</label>
-					<input class="form-control" type="text" />
+					<input class="form-control" type="text" value="9"/>
 				</div>
 				<div class="form-group col-md-2">
 					<label>Roll-off Factor</label>
-					<input class="form-control" type="text" />
+					<input class="form-control" type="text" value="0.22"/>
 				</div>
-			</div>
-			<div class="panel-footer">
-				<div class="btn-group">
-					<button class="btn btn-primary">
-						<span class="icon-bar-chart">
-							RF Design Parameter
-						</span>
-					</button>
+				<div class="form-group col-md-2">
+					<label>3dB BW(MHz)</label>
+					<input class="form-control" type="text" value="5"/>
 				</div>
 			</div>
 		</div>
@@ -90,7 +85,8 @@ div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_table-rf-designer-parame
 							<th>
 								<select class="form-control" id="tx-block-1">
 									<option value="NONE">None</option>
-									<option value="AMPLIFIER">Amplifier</option>
+									<option value="AMP-AM">Amp(AM/AM)</option>
+									<option value="AMP-PM">Amp(AM/PM)</option>
 									<option value="BPF-BUTTER">BPF(Butter)</option>
 									<option value="BPF-CHEBY">BPF(Cheby)</option>
 								</select>
@@ -98,7 +94,8 @@ div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_table-rf-designer-parame
 							<th>
 								<select class="form-control" id="tx-block-2">
 									<option value="NONE">None</option>
-									<option value="AMPLIFIER">Amplifier</option>
+									<option value="AMP-AM">Amp(AM/AM)</option>
+									<option value="AMP-PM">Amp(AM/PM)</option>
 									<option value="BPF-BUTTER">BPF(Butter)</option>
 									<option value="BPF-CHEBY">BPF(Cheby)</option>
 								</select>
@@ -106,7 +103,8 @@ div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_table-rf-designer-parame
 							<th>
 								<select class="form-control" id="tx-block-3">
 									<option value="NONE">None</option>
-									<option value="AMPLIFIER">Amplifier</option>
+									<option value="AMP-AM">Amp(AM/AM)</option>
+									<option value="AMP-PM">Amp(AM/PM)</option>
 									<option value="BPF-BUTTER">BPF(Butter)</option>
 									<option value="BPF-CHEBY">BPF(Cheby)</option>
 								</select>
@@ -114,7 +112,8 @@ div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_table-rf-designer-parame
 							<th>
 								<select class="form-control" id="tx-block-4">
 									<option value="NONE">None</option>
-									<option value="AMPLIFIER">Amplifier</option>
+									<option value="AMP-AM">Amp(AM/AM)</option>
+									<option value="AMP-PM">Amp(AM/PM)</option>
 									<option value="BPF-BUTTER">BPF(Butter)</option>
 									<option value="BPF-CHEBY">BPF(Cheby)</option>
 								</select>
@@ -122,7 +121,8 @@ div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_table-rf-designer-parame
 							<th>
 								<select class="form-control" id="tx-block-5">
 									<option value="NONE">None</option>
-									<option value="AMPLIFIER">Amplifier</option>
+									<option value="AMP-AM">Amp(AM/AM)</option>
+									<option value="AMP-PM">Amp(AM/PM)</option>
 									<option value="BPF-BUTTER">BPF(Butter)</option>
 									<option value="BPF-CHEBY">BPF(Cheby)</option>
 								</select>
@@ -136,7 +136,8 @@ div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_table-rf-designer-parame
 							<th>
 								<select class="form-control" id="rx-block-1">
 									<option value="NONE">None</option>
-									<option value="AMPLIFIER">Amplifier</option>
+									<option value="AMP-AM">Amp(AM/AM)</option>
+									<option value="AMP-PM">Amp(AM/PM)</option>
 									<option value="BPF-BUTTER">BPF(Butter)</option>
 									<option value="BPF-CHEBY">BPF(Cheby)</option>
 								</select>
@@ -144,7 +145,8 @@ div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_table-rf-designer-parame
 							<th>
 								<select class="form-control" id="rx-block-2">
 									<option value="NONE">None</option>
-									<option value="AMPLIFIER">Amplifier</option>
+									<option value="AMP-AM">Amp(AM/AM)</option>
+									<option value="AMP-PM">Amp(AM/PM)</option>
 									<option value="BPF-BUTTER">BPF(Butter)</option>
 									<option value="BPF-CHEBY">BPF(Cheby)</option>
 								</select>
@@ -152,7 +154,8 @@ div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_table-rf-designer-parame
 							<th>
 								<select class="form-control" id="rx-block-3">
 									<option value="NONE">None</option>
-									<option value="AMPLIFIER">Amplifier</option>
+									<option value="AMP-AM">Amp(AM/AM)</option>
+									<option value="AMP-PM">Amp(AM/PM)</option>
 									<option value="BPF-BUTTER">BPF(Butter)</option>
 									<option value="BPF-CHEBY">BPF(Cheby)</option>
 								</select>
@@ -161,7 +164,11 @@ div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_table-rf-designer-parame
 								<input class="form-control" type="text" value="Mixer" id="rx-mixer" disabled/>
 							</th>
 							<th>
-								<input class="form-control" type="text" value="LPF" id="rx-lpf" disabled/>
+								<select class="form-control" id="rx-lpf">
+									<option value="NONE">None</option>
+									<option value="LPF-BUTTER">LPF(Butter)</option>
+									<option value="LPF-CHEBY">LPF(Cheby)</option>
+								</select>
 							</th>
 							<th>
 								<input class="form-control" type="text" value="BBA" id="rx-bba" disabled/>
@@ -176,14 +183,14 @@ div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_table-rf-designer-parame
 							<td><img src="${contextPath}/images/wcdma/Short.png" class="img-responsive" id="<portlet:namespace/>image-tx-block-3"></td>
 							<td><img src="${contextPath}/images/wcdma/Short.png" class="img-responsive" id="<portlet:namespace/>image-tx-block-4"></td>
 							<td><img src="${contextPath}/images/wcdma/Short.png" class="img-responsive" id="<portlet:namespace/>image-tx-block-5"></td>
-							<td><img src="${contextPath}/images/wcdma/PL.png" class="img-responsive"    id="<portlet:namespace/>image-channel-pl"></td>
-							<td><img src="${contextPath}/images/wcdma/AWGN.png" class="img-responsive"  id="<portlet:namespace/>image-channel-awgn"></td>
+							<td><img src="${contextPath}/images/wcdma/PL.png"    class="img-responsive" id="<portlet:namespace/>image-channel-pl"></td>
+							<td><img src="${contextPath}/images/wcdma/AWGN.png"  class="img-responsive" id="<portlet:namespace/>image-channel-awgn"></td>
 							<td><img src="${contextPath}/images/wcdma/Short.png" class="img-responsive" id="<portlet:namespace/>image-rx-block-1"></td>
 							<td><img src="${contextPath}/images/wcdma/Short.png" class="img-responsive" id="<portlet:namespace/>image-rx-block-2"></td>
 							<td><img src="${contextPath}/images/wcdma/Short.png" class="img-responsive" id="<portlet:namespace/>image-rx-block-3"></td>
 							<td><img src="${contextPath}/images/wcdma/mixer.png" class="img-responsive" id="<portlet:namespace/>image-rx-mixer"></td>
-							<td><img src="${contextPath}/images/wcdma/LPF.png" class="img-responsive"   id="<portlet:namespace/>image-rx-lpf"></td>
-							<td><img src="${contextPath}/images/wcdma/BBA.png" class="img-responsive"   id="<portlet:namespace/>image-rx-bba"></td>
+							<td><img src="${contextPath}/images/wcdma/LPF.png"   class="img-responsive" id="<portlet:namespace/>image-rx-lpf"></td>
+							<td><img src="${contextPath}/images/wcdma/BBA.png"   class="img-responsive" id="<portlet:namespace/>image-rx-bba"></td>
 						</tr>
 						<tr>
 							<td colspan="6">
@@ -231,21 +238,17 @@ div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_table-rf-designer-parame
 								Tx Total :
 							</td>
 							<td colspan="5">
-								<div class="form-group col-md-4">
+								<div class="form-group col-md-6">
 									<label>Gain(db)</label>
 									<input class="form-control" type="text" disabled/>
 								</div>
-								<div class="form-group col-md-4">
+								<div class="form-group col-md-6">
 									<label>NF(dB)</label>
-									<input class="form-control" type="text" disabled/>
-								</div>
-								<div class="form-group col-md-4">
-									<label>OIP3(dB)</label>
 									<input class="form-control" type="text" disabled/>
 								</div>
 							</td>
 							<td colspan="2" class="text-center" style="vertical-align: middle;">
-								<button class="btn btn-primary"> 
+								<button class="btn btn-primary" onclick="<portlet:namespace/>calculation();"> 
 									<span class="icon-bar-chart"> Calculation </span> 
 								</button> 
 							</td>
@@ -253,16 +256,12 @@ div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_table-rf-designer-parame
 								Rx Total :
 							</td>
 							<td colspan="5">
-								<div class="form-group col-md-4">
+								<div class="form-group col-md-6">
 									<label>Gain(db)</label>
 									<input class="form-control" type="text" disabled/>
 								</div>
-								<div class="form-group col-md-4">
+								<div class="form-group col-md-6">
 									<label>NF(dB)</label>
-									<input class="form-control" type="text" disabled/>
-								</div>
-								<div class="form-group col-md-4">
-									<label>IIP3(dB)</label>
 									<input class="form-control" type="text" disabled/>
 								</div>
 							</td>
@@ -391,6 +390,9 @@ L(dB) = L_unit + [L_dec*log(D)] - G_Tx - G_Rx
 <!-- Plotly libs -->
 <script src="${contextPath}/js/plotly/plotly-latest.min.js"></script>
 
+<!--numeric JS-->
+<script src="${contextPath}/js/numeric/numeric.min.js"></script>
+
 <!--math JS-->
 <script src="${contextPath}/js/mathjs/math.min.js"></script>
 
@@ -434,7 +436,15 @@ var <portlet:namespace/>RF_DESIGN_PARAMETER = {
 				
 			]
 		},
-		"AMPLIFIER":{
+		"AMP-AM":{
+			"image":"Amp.png",
+			"input":[
+					{"label":"Gain(dB)","id":"gain"},
+					{"label":"NF(dB)","id":"nf"},
+					{"label":"OIP3(dB)","id":"oip"}
+				]
+		},
+		"AMP-PM":{
 			"image":"Amp.png",
 			"input":[
 					{"label":"Gain(dB)","id":"gain"},
@@ -452,7 +462,8 @@ var <portlet:namespace/>RF_DESIGN_PARAMETER = {
 					{"label":"OIP3(dB)","id":"oip"},
 					{"label":"Order","id":"order"},
 					{"label":"F_up(MHz)","id":"f-up"},
-					{"label":"F_lo(MHz)","id":"f-lo"}
+					{"label":"F_lo(MHz)","id":"f-lo"},
+					{"label":"Apass(dB)","id":"apass"}
 				]
 		},
 		"BPF-CHEBY":{
@@ -464,7 +475,7 @@ var <portlet:namespace/>RF_DESIGN_PARAMETER = {
 					{"label":"Order","id":"order"},
 					{"label":"F_up(MHz)","id":"f-up"},
 					{"label":"F_lo(MHz)","id":"f-lo"},
-					{"label":"Ripple(dB)","id":"ripple"}
+					{"label":"Apass(dB)","id":"apass"}
 				]
 		},
 		"RX-MIXER":{
@@ -494,9 +505,29 @@ var <portlet:namespace/>RF_DESIGN_PARAMETER = {
 			"input":[
 				{"label":"Gain(dB)","id":"gain"},
 				{"label":"NF(dB)","id":"nf"},
+				{"label":"IIP3(dB)","id":"iip3"}
+			]
+		},
+		"LPF-BUTTER":{
+			"image":"LPF.png",
+			"input":[
+				{"label":"Gain(dB)","id":"gain"},
+				{"label":"NF(dB)","id":"nf"},
 				{"label":"IIP3(dB)","id":"iip3"},
-				{"label":"AM_PM(kHz)","id":"am-pm"},
-				{"label":"Pwr_A/P(dB)","id":"pwr-ap"}
+				{"label":"Order","id":"order"},
+				{"label":"Fcut(kHz)","id":"fcut"},
+				{"label":"Apass(dB)","id":"apass"}
+			]
+		},
+		"LPF-CHEBY":{
+			"image":"LPF.png",
+			"input":[
+				{"label":"Gain(dB)","id":"gain"},
+				{"label":"NF(dB)","id":"nf"},
+				{"label":"IIP3(dB)","id":"iip3"},
+				{"label":"Order","id":"order"},
+				{"label":"Fcut(kHz)","id":"fcut"},
+				{"label":"Apass(dB)","id":"apass"}
 			]
 		}
 	},
@@ -698,6 +729,11 @@ function <portlet:namespace/>plotlyGrid(idStr,xTitle,yTitle,data){
 	Plotly.newPlot(idStr, data, layout, {
         scrollZoom: false
     });
+}
+
+
+function <portlet:namespace/>calculation(){
+	calculation(<portlet:namespace/>RF_DESIGN_PARAMETER.data);
 }
 
 </script>
