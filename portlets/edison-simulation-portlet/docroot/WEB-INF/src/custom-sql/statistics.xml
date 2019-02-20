@@ -571,4 +571,49 @@
 		]]>
 	</sql>
 	
+	<sql id="org.kisti.edison.statistics.getClassStatisticsManagementList" >
+		<![CDATA[
+		SELECT 
+			EVL.groupId AS groupId,
+			EVL.virtualLabUniversityField AS university,
+			EVL.virtualLabId AS virtualLabId,
+			ExtractValue(EVL.virtualLabTitle, 'root/VirtualLabTitle[@language-id="@@languageId@@"]') AS virtualLabTitle,
+			ExtractValue(EVLC.classTitle, 'root/ClassTitle[@language-id="@@languageId@@"]') AS classTitle,
+			CONCAT(U.firstName, U.middleName, U.lastName) AS virtualLabPersonName,
+			EVLC.virtualClassCd AS classId,
+			EVLCS.lastModifiedDt as lastModifiedDt
+		FROM
+			EDVIR_VirtualLab EVL
+			LEFT JOIN
+				EDVIR_VirtualLabs_VirtualLabClasses EVLVLC
+			ON EVL.virtualLabId = EVLVLC.virtualLabId
+			LEFT JOIN
+				EDVIR_VirtualLabClass EVLC
+			ON EVLVLC.classId = EVLC.classId
+			LEFT JOIN
+				EDVIR_Professor EP
+			ON EVL.professorSeq = EP.professorSeq
+			LEFT JOIN
+				User_ U
+			ON EP.userId = U.userId
+			LEFT OUTER JOIN
+				EDSIM_VirtualLabClassStatistics EVLCS
+			ON EVL.virtualLabId = EVLCS.virtualLabId AND EVLC.virtualClassCd = EVLCS.classId
+		WHERE 
+			EVL.groupId = #groupId# 
+			AND EVLC.classUseYn = 'Y' 
+			AND EVL.virtualLabUseYn='Y'
+			AND(
+					STR_TO_DATE(EVLC.classCreateDt, '%Y-%m-%d') BETWEEN STR_TO_DATE(#startDt#, '%Y-%m-%d') AND STR_TO_DATE(#endDt#, '%Y-%m-%d') 
+			)
+		<isNotEmpty property="universityCode">
+			AND EVL.virtualLabUniversityField = #universityCode#
+		</isNotEmpty>
+		GROUP BY 
+			university, 
+			virtualLabId, 
+			classId
+		]]>
+	</sql>
+	
 </custom-sql>

@@ -568,4 +568,9 @@ public interface SimulationJobLocalService extends BaseLocalService,
 	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getVirtualLabClassStatisticsList(
 		java.util.Map<java.lang.String, java.lang.Object> params,
 		java.util.Locale locale, boolean excelFile);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getClassStatisticsManagementList(
+		java.util.Map<java.lang.String, java.lang.Object> params,
+		java.util.Locale locale, boolean excelFile);
 }

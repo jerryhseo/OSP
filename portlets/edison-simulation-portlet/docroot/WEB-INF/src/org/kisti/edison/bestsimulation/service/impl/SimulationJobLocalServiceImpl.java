@@ -1845,4 +1845,47 @@ public class SimulationJobLocalServiceImpl
 		return returnList;
 	}
 	
+	public List<Map<String, Object>> getClassStatisticsManagementList(Map<String, Object> params, Locale locale, boolean excelFile) {
+		List<Object[]> virtualClassStatisticsList = simulationJobFinder.getClassStatisticsManagementList(params, locale);
+		
+		List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+		
+		Map <String, Object> resultRow = null;
+		if(virtualClassStatisticsList != null && virtualClassStatisticsList.size() > 0) {
+			for (int i = 0; i < virtualClassStatisticsList.size(); i++) {
+				Object[] resultArray = virtualClassStatisticsList.get(i);
+				
+				if(resultArray != null) {
+					int groupId = (Integer) resultArray[0];
+					String university = (String) resultArray[1];
+					Long virtualLabId = (Long) resultArray[2];
+					String virtualLabTitle = (String) resultArray[3];
+					String classTitle = (String) resultArray[4];
+					String virtualLabPersonName = (String) resultArray[5];
+					String classId = (String) resultArray[6];
+					String lastModifiedDt = CustomUtil.strNull(resultArray[7]);
+					
+					resultRow = new HashMap<String, Object>();
+					resultRow.put("groupId", groupId);
+					
+					String affiliation = "";
+					if(!"".equals(university)){
+						affiliation = EdisonExpndoUtil.getCommonCdSearchFieldValue(String.valueOf(university), EdisonExpando.CDNM, locale);
+					}
+					
+					resultRow.put("universityId", university);
+					resultRow.put("university", affiliation);
+					resultRow.put("virtualLabId", virtualLabId);
+					resultRow.put("virtualLabTitle", virtualLabTitle);
+					resultRow.put("classTitle", classTitle);
+					resultRow.put("virtualLabPersonName", virtualLabPersonName);
+					resultRow.put("classId", classId);
+					resultRow.put("lastModifiedDt", lastModifiedDt);
+					
+					returnList.add(resultRow);
+				}
+			}
+		}
+		return returnList;
+	}
 }

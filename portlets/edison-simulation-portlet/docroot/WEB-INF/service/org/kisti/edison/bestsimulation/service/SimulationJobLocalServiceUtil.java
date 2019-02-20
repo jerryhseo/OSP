@@ -709,6 +709,13 @@ public class SimulationJobLocalServiceUtil {
 				   .getVirtualLabClassStatisticsList(params, locale, excelFile);
 	}
 
+	public static java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getClassStatisticsManagementList(
+		java.util.Map<java.lang.String, java.lang.Object> params,
+		java.util.Locale locale, boolean excelFile) {
+		return getService()
+				   .getClassStatisticsManagementList(params, locale, excelFile);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

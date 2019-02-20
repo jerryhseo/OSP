@@ -755,6 +755,14 @@ public class SimulationJobLocalServiceWrapper
 			locale, excelFile);
 	}
 
+	@Override
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getClassStatisticsManagementList(
+		java.util.Map<java.lang.String, java.lang.Object> params,
+		java.util.Locale locale, boolean excelFile) {
+		return _simulationJobLocalService.getClassStatisticsManagementList(params,
+			locale, excelFile);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */

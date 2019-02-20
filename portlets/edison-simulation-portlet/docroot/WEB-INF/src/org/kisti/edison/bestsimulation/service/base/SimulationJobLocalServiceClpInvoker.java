@@ -387,6 +387,12 @@ public class SimulationJobLocalServiceClpInvoker {
 		_methodParameterTypes153 = new String[] {
 				"java.util.Map", "java.util.Locale", "boolean"
 			};
+
+		_methodName154 = "getClassStatisticsManagementList";
+
+		_methodParameterTypes154 = new String[] {
+				"java.util.Map", "java.util.Locale", "boolean"
+			};
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -831,6 +837,13 @@ public class SimulationJobLocalServiceClpInvoker {
 				((Boolean)arguments[2]).booleanValue());
 		}
 
+		if (_methodName154.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes154, parameterTypes)) {
+			return SimulationJobLocalServiceUtil.getClassStatisticsManagementList((java.util.Map<java.lang.String, java.lang.Object>)arguments[0],
+				(java.util.Locale)arguments[1],
+				((Boolean)arguments[2]).booleanValue());
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -972,4 +985,6 @@ public class SimulationJobLocalServiceClpInvoker {
 	private String[] _methodParameterTypes152;
 	private String _methodName153;
 	private String[] _methodParameterTypes153;
+	private String _methodName154;
+	private String[] _methodParameterTypes154;
 }

@@ -219,6 +219,11 @@ public class SimulationJobFinderUtil {
 		return getFinder().getVirtualLabClassStatisticsList(params, locale);
 	}
 
+	public static java.util.List<java.lang.Object[]> getClassStatisticsManagementList(
+		java.util.Map params, java.util.Locale locale) {
+		return getFinder().getClassStatisticsManagementList(params, locale);
+	}
+
 	public static SimulationJobFinder getFinder() {
 		if (_finder == null) {
 			_finder = (SimulationJobFinder)PortletBeanLocatorUtil.locate(org.kisti.edison.bestsimulation.service.ClpSerializer.getServletContextName(),

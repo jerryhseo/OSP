@@ -121,4 +121,7 @@ public interface SimulationJobFinder {
 
 	public java.util.List<java.lang.Object[]> getVirtualLabClassStatisticsList(
 		java.util.Map params, java.util.Locale locale);
+
+	public java.util.List<java.lang.Object[]> getClassStatisticsManagementList(
+		java.util.Map params, java.util.Locale locale);
 }

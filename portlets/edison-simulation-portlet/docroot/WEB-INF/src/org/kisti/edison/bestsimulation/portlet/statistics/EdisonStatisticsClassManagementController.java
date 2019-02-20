@@ -7,50 +7,30 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
-import javax.servlet.http.HttpServletResponse;
 
 import org.kisti.edison.bestsimulation.service.SimulationJobLocalServiceUtil;
 import org.kisti.edison.model.EdisonExpando;
-import org.kisti.edison.model.EdisonMessageConstants;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.EdisonExpndoUtil;
-import org.kisti.edison.util.ExcelUtil;
-import org.kisti.edison.util.HtmlFormUtils;
-import org.kisti.edison.util.PagingUtil;
 import org.kisti.edison.util.RequestUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Group;
-import com.liferay.portal.model.Layout;
-import com.liferay.portal.security.permission.ActionKeys;
-import com.liferay.portal.security.permission.PermissionCheckerFactoryUtil;
 import com.liferay.portal.service.GroupLocalServiceUtil;
-import com.liferay.portal.service.LayoutLocalServiceUtil;
-import com.liferay.portal.service.permission.LayoutPermissionUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.portlet.PortletURLFactoryUtil;
 
 import net.sf.json.JSONObject;
 
@@ -181,11 +161,8 @@ public class EdisonStatisticsClassManagementController {
 			params.put("groupId", groupId);
 			params.put("universityCode", CustomUtil.strNull(params.get("universityCode")));
 			
-			/*List<Map<String, Object>> statisticsDataList = SimulationJobLocalServiceUtil.getVirtualClassStatisticsList(params, themeDisplay.getLocale(), false);*/
-			
 			// get VirtualClassStatisticsList in Statistics Table
-			List<Map<String, Object>> virtualLabClassStatisticsList = SimulationJobLocalServiceUtil.getVirtualLabClassStatisticsList(params, themeDisplay.getLocale(), false);
-			System.out.println("virtualLabClassStatisticsList : " + virtualLabClassStatisticsList.toString());
+			List<Map<String, Object>> virtualLabClassStatisticsList = SimulationJobLocalServiceUtil.getClassStatisticsManagementList(params, themeDisplay.getLocale(), false);
 			
 			JSONObject obj = new JSONObject();
 			obj.put("dataList", virtualLabClassStatisticsList);
@@ -201,14 +178,11 @@ public class EdisonStatisticsClassManagementController {
 	@ResourceMapping(value ="updateClassStatistics" ) //하위사이트 groupId로 각 리스트 가져오기
 	public void updateClassStatistics(ResourceRequest request, ResourceResponse response) throws IOException{
 		try {
-			System.out.println("1...updateClassStatistics");
-			
 			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute (WebKeys.THEME_DISPLAY);
 			Map<String, Object> params = RequestUtil.getParameterMap(request);
 			
 			String checkedLabIds = CustomUtil.strNull(params.get("checkedLabIds"), "");
 			String[] checkedLabIdsArr = checkedLabIds.split(",");
-			System.out.println("checkedLabIdsArr length : " + checkedLabIdsArr.length);
 			
 			for(String checkedLabId : checkedLabIdsArr){
 				Map sendParams = new HashMap();

@@ -78,7 +78,7 @@ function <portlet:namespace/>dataSearch(){
 					var nowLabId = statisticsList[i].virtualLabId;
 					var nowLab = statisticsList[i].virtualLabTitle;
 					
-					if(university != nowUniversity){
+					/* if(university != nowUniversity){
 						
 						if(classCount != 0){
 							$("#<portlet:namespace/>"+universityId).attr("rowspan", classCount);
@@ -93,7 +93,7 @@ function <portlet:namespace/>dataSearch(){
 						$("<td/>").addClass("center").attr("id","<portlet:namespace/>"+universityId).text(nowUniversity).css("text-align","center").appendTo($rowResult);
 						
 						var checkThisClass = $("<input/>").addClass("<portlet:namespace/>checkClass").attr("type", "checkbox").attr("name", "<portlet:namespace/>checkClass").attr("value", labId);
-						$("<td/>").addClass("center").append(checkThisClass).appendTo($rowResult);
+						$("<td/>").addClass("center").attr("id","<portlet:namespace/>"+universityId+"_"+labId+"_check").append(checkThisClass).appendTo($rowResult);
 						$("<td/>").addClass("center").attr("id","<portlet:namespace/>"+universityId+"_"+labId).text(nowLab).css("text-align","center").appendTo($rowResult);
 						classCount = 0;
 						labCount = 0;
@@ -105,22 +105,36 @@ function <portlet:namespace/>dataSearch(){
 							lab=nowLab;
 							labId = nowLabId;
 							var checkThisClass = $("<input/>").addClass("<portlet:namespace/>checkClass").attr("type", "checkbox").attr("name", "<portlet:namespace/>checkClass").attr("value", labId);
-							$("<td/>").addClass("center").append(checkThisClass).appendTo($rowResult);
+							$("<td/>").addClass("center").attr("id","<portlet:namespace/>"+universityId+"_"+labId+"_check").append(checkThisClass).appendTo($rowResult);
 							$("<td/>").addClass("center").attr("id","<portlet:namespace/>"+universityId+"_"+labId).text(nowLab).css("text-align","center").appendTo($rowResult);
 							
 							labCount = 0;
-						}						
-					} 
+						}
+					} */
+					
+					/* if(lab != nowLab){//가상실험실이 다른경우
+						if(labCount != 0){//rowspan
+							$("#<portlet:namespace/>"+universityId+"_"+labId).attr("rowspan", labCount);
+						}
+						lab=nowLab;
+						labId = nowLabId;
+						
+						labCount = 0;
+					} */
+					var checkThisClass = $("<input/>").addClass("<portlet:namespace/>checkClass").attr("type", "checkbox").attr("name", "<portlet:namespace/>checkClass").attr("value", labId);
+					$("<td/>").addClass("center").attr("id","<portlet:namespace/>"+universityId+"_"+labId+"_check").append(checkThisClass).appendTo($rowResult);
+					$("<td/>").addClass("center").attr("id","<portlet:namespace/>"+universityId+"_"+labId).text(nowLab).css("text-align","center").appendTo($rowResult);
 					
 					$("<td/>").addClass("center").text(statisticsList[i].classTitle).css("text-align","center").appendTo($rowResult);
-					$("<td/>").addClass("center").text(statisticsList[i].virtualLabPersonName).css("text-align","center").appendTo($rowResult);
+					/* $("<td/>").addClass("center").text(statisticsList[i].virtualLabPersonName).css("text-align","center").appendTo($rowResult); */
 					$("<td/>").addClass("center").text(statisticsList[i].lastModifiedDt).css("text-align","center").appendTo($rowResult);
 
 					classCount++;
 					labCount++;
 				} 
-				$("#<portlet:namespace/>"+universityId).attr("rowspan", classCount);
-				$("#<portlet:namespace/>"+universityId+"_"+labId).attr("rowspan", labCount);
+				/* $("#<portlet:namespace/>"+universityId).attr("rowspan", classCount);
+				$("#<portlet:namespace/>"+universityId+"_"+labId).attr("rowspan", labCount); */
+				/* $("#<portlet:namespace/>"+universityId+"_"+labId+"_check").attr("rowspan", labCount); */
 			}else if(statisticsList.length== 0){
 				$rowResult = $("<tr/>");
 				$("<td/>").addClass("center").text("<liferay-ui:message key='edison-class-statistics-no-status' />")
@@ -233,16 +247,16 @@ function <portlet:namespace/>excelDown(){
 		<div class="panel-heading clearfix"></div>
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
 			<colgroup>
-				<col width="20%" />
-				<col width="10%" />
-				<col width="20%" />
-				<col width="20%" />
+				<!-- <col width="20%" /> -->
 				<col width="15%" />
-				<col width="15%" />
+				<col width="30%" />
+				<col width="30%" />
+				<!-- <col width="15%" /> -->
+				<col width="25%" />
 			</colgroup>
 			<thead>
 				<tr>
-					<th align="center" scope="col"><liferay-ui:message key='edison-create-account-field-title-university' /></th>
+					<%-- <th align="center" scope="col"><liferay-ui:message key='edison-create-account-field-title-university' /></th> --%>
 					<th align="center" scope="col">
 						<liferay-ui:message key='edison-statistics-select-all' />
 						<br/>
@@ -250,7 +264,7 @@ function <portlet:namespace/>excelDown(){
 					</th>
 					<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-virtuallab' /></th>
 					<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-virtualclass' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-professor' /></th>
+					<%-- <th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-professor' /></th> --%>
 					<th align="center" scope="col"><liferay-ui:message key='edison-statistics-last-modified-date' /></th> <!-- 최근 수정일자 -->
 				</tr>
 			</thead>
