@@ -74,7 +74,7 @@ var <portlet:namespace/>config = {
 var <portlet:namespace/>visualizer;
 $('#<portlet:namespace/>canvas').load(function(){
 	<portlet:namespace/>visualizer = OSP.Visualizer(<portlet:namespace/>config);
-	<portlet:namespace/>processInitAction( JSON.parse( '<%=visualizerConfig.initData%>' ) );
+	<portlet:namespace/>processInitAction( JSON.parse( '<%=visualizerConfig.initData%>' ), false );
 });
 	
 /***********************************************************************
@@ -116,7 +116,7 @@ function <portlet:namespace/>setTitle( title ){
 	$('#<portlet:namespace/>title').html( '<h4 style="margin:0;">'+title+'</h4>' );
 };
 
-function <portlet:namespace/>processInitAction( jsonInitData ){
+function <portlet:namespace/>processInitAction( jsonInitData, changeAlert ){
 	
 	if( !jsonInitData.repositoryType_ ){
 		// Do nothing if repository is not specified.
@@ -129,7 +129,7 @@ function <portlet:namespace/>processInitAction( jsonInitData ){
 	jsonInitData.parent_ = jsonInitData.parent_ ? jsonInitData.parent_ : '';
 	jsonInitData.name_ = jsonInitData.name_ ? jsonInitData.name_ : '';
 	
-	<portlet:namespace/>visualizer.processInitAction( jsonInitData, false );
+	<portlet:namespace/>visualizer.processInitAction( jsonInitData, changeAlert );
 }
 
 
@@ -139,7 +139,6 @@ function <portlet:namespace/>processInitAction( jsonInitData ){
 function <portlet:namespace/>fireDataChangedEvent( content ){
 	console.log('fireDataChangedEvent in text editor wrapper...');
 	<portlet:namespace/>visualizer.fireDataChangedEvent({
-		type_: "content",
 		content_: content 
 	});
 };
@@ -237,7 +236,7 @@ function <portlet:namespace/>responseDataEventHandler( data, params ){
 function <portlet:namespace/>initializeEventHandler( data, params ){
 	console.log('[<portlet:namespace/>initializeEventHandler] ', data, params );
 	
-	<portlet:namespace/>visualizer.processInitAction();
+	<portlet:namespace/>visualizer.processInitAction(null, false);
 	
 	<portlet:namespace/>visualizer.callIframeFunc('setContent', null, '' );
 	<portlet:namespace/>setTitle('');
