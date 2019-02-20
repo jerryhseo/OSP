@@ -121,9 +121,9 @@ function <portlet:namespace/>dataSearch(){
 						
 						labCount = 0;
 					} */
-					var checkThisClass = $("<input/>").addClass("<portlet:namespace/>checkClass").attr("type", "checkbox").attr("name", "<portlet:namespace/>checkClass").attr("value", labId);
-					$("<td/>").addClass("center").attr("id","<portlet:namespace/>"+universityId+"_"+labId+"_check").append(checkThisClass).appendTo($rowResult);
-					$("<td/>").addClass("center").attr("id","<portlet:namespace/>"+universityId+"_"+labId).text(nowLab).css("text-align","center").appendTo($rowResult);
+					var checkThisClass = $("<input/>").addClass("<portlet:namespace/>checkClass").attr("type", "checkbox").attr("name", "<portlet:namespace/>checkClass").attr("value", nowLabId);
+					$("<td/>").addClass("center").attr("id","<portlet:namespace/>"+nowUniversityId+"_"+nowLabId+"_check").append(checkThisClass).appendTo($rowResult);
+					$("<td/>").addClass("center").attr("id","<portlet:namespace/>"+nowUniversityId+"_"+nowLabId).text(nowLab).css("text-align","center").appendTo($rowResult);
 					
 					$("<td/>").addClass("center").text(statisticsList[i].classTitle).css("text-align","center").appendTo($rowResult);
 					/* $("<td/>").addClass("center").text(statisticsList[i].virtualLabPersonName).css("text-align","center").appendTo($rowResult); */

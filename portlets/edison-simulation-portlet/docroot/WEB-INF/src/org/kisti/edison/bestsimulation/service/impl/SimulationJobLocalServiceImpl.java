@@ -1660,10 +1660,7 @@ public class SimulationJobLocalServiceImpl
 	
 	public void executeSchedulerOfClassStatistics(Map params) throws SystemException {
 		try {
-			System.out.println("1...executeSchedulerOfClassStatistics");
-			System.out.println("params : " + params.toString());
 			List<Object[]> virtualClassStatisticsList = simulationJobFinder.getVirtualClassListForInsertStatistics(params);
-			System.out.println("virtualClassStatisticsList size : " + virtualClassStatisticsList.size());
 			
 			List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
 			
@@ -1731,7 +1728,6 @@ public class SimulationJobLocalServiceImpl
 						virtualLabClassStatistics.setCputime(avgerageRuntime);
 						
 						if(hasClassStatistics){
-							System.out.println("1.....");
 							virtualLabClassStatistics.setNew(false);
 							VirtualLabClassStatisticsLocalServiceUtil.updateVirtualLabClassStatistics(virtualLabClassStatistics);
 							updateCnt += 1;
