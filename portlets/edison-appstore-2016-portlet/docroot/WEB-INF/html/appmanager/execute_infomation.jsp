@@ -151,7 +151,7 @@
 				</c:if>
 			</c:if>
 			
-			<input class="button02_1" onclick="<portlet:namespace/>actionCall('<%=Constants.ADD%>');return false;" value="<liferay-ui:message key='edison-button-save'/>" type="button">
+			<input class="button02_1" onclick="<portlet:namespace/>actionCall('<%=Constants.ADD%>');" value="<liferay-ui:message key='edison-button-save'/>" type="button">
 			
 			<c:if test="${ownerThan}">
 				<input class="button02_1" onclick="<portlet:namespace/>actionCall('<%=Constants.DELETE%>');return false;" value="<liferay-ui:message key='delete'/>" type="button">
@@ -660,7 +660,7 @@ function <portlet:namespace/>actionCall(mode){
 		$minCpus = $("#<portlet:namespace/>minCpus");
 		$maxCpus = $("#<portlet:namespace/>maxCpus");
 		$defaultCpus = $("#<portlet:namespace/>defaultCpus");
-		if($("#<portlet:namespace/>runType").val()!="<%=ScienceAppConstants.APP_RUNTYPE_SEQUENTIAL%>"){
+		<%-- if($("#<portlet:namespace/>runType").val()!="<%=ScienceAppConstants.APP_RUNTYPE_SEQUENTIAL%>"){ --%>
 			
 			if($maxCpus.val()==""){
 				alert(Liferay.Language.get('this-field-is-mandatory'));
@@ -685,7 +685,7 @@ function <portlet:namespace/>actionCall(mode){
 				$minCpus.focus();
 				return false;
 			}
-		}
+		/* } */
 		
 		$minCpus.attr("disabled", false);
 		$maxCpus.attr("disabled", false);
@@ -693,6 +693,7 @@ function <portlet:namespace/>actionCall(mode){
 		
 		submitForm(<portlet:namespace/>frm);
 	}else{
+		alert("else....")
 		if(confirm(Liferay.Language.get('edison-appstore-delete-data-alert'))){
 			<portlet:namespace/>frm.<portlet:namespace/>actionMode.value = mode;
 		}else{
