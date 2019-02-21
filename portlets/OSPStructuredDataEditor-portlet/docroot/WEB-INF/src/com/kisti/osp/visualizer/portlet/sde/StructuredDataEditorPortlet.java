@@ -1,8 +1,6 @@
 package com.kisti.osp.visualizer.portlet.sde;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;

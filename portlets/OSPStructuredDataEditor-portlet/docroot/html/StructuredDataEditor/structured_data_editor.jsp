@@ -121,6 +121,12 @@ function <portlet:namespace/>refreshEditor(){
 					$('#<portlet:namespace/>canvas'),
 					'<%=request.getContextPath()%>',
 					'<%=themeDisplay.getLanguageId()%>');
+	
+	var inputs = $('#<portlet:namespace/>canvas').find('input');
+	
+	inputs.each(function(index){
+		$(this).prop('disabled', <portlet:namespace/>disabled);
+	});
 };
 
 function <portlet:namespace/>processInitAction( jsonInitData, launchCanvas, changeAlert ){
@@ -243,6 +249,7 @@ function <portlet:namespace/>disableControlsEventHandler( data, params ){
 	console.log('[<portlet:namespace/>disableControlsEventHandler] ');
 	<portlet:namespace/>disabled = params.disabled;
 	var inputs = $('#<portlet:namespace/>canvas').find('input');
+	
 	inputs.each(function(index){
 		$(this).prop('disabled', <portlet:namespace/>disabled);
 	});
