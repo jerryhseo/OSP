@@ -1051,15 +1051,15 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                     function (e) {
                         $("#" + nodeId).removeClass("wf-selected-node")
                     })
-                /*$(this).children("a").hover(
+                $(this).children("a").hover(
                     function (e) {
-                        $("#" + nodeId + " ." + CONSTS.WF_JSPLUMB_TYPES.PORT_ELEMENT)
+                        $("#" + nodeId + " ." + CONSTS.WF_JSPLUMB_TYPES.PORT_ELEMENT + ".not-ready")
                         	.addClass("wf-selected-port").siblings("label").addClass("wf-selected-port-label")
                     },
                     function (e) {
                         $("#" + nodeId + " ." + CONSTS.WF_JSPLUMB_TYPES.PORT_ELEMENT)
                         	.removeClass("wf-selected-port").siblings("label").removeClass("wf-selected-port-label")
-                    })*/
+                    })
                 $(this).click(
                 	function(e){
                 		move(function () { renderer.centerOnAndZoom(nodeId, 0.3) });
