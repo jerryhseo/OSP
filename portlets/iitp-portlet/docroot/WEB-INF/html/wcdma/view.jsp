@@ -24,7 +24,7 @@ div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_table-rf-designer-parame
 			<div class="panel-heading clearfix ">
 				<h2 class="panel-title">System Block Diagram</h2>
 			</div>
-			<div class="panel-body">
+			<div class="panel-body" id="<portlet:namespace/>simulationParameter">
 				<img src="${contextPath}/images/wcdma/WCDMA_BlockDiagram6.png" class="img-responsive">
 				<h5>
 					<p class="icon-arrow-right"></p><u>Simulation Parameter</u>
@@ -32,30 +32,30 @@ div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_table-rf-designer-parame
 					
 				<div class="form-group col-md-2">
 					<label>SF(4~256)</label>
-					<input class="form-control" id="" type="text" value="4"/>
+					<input class="form-control simulation-parameter" id="SF" name="SF" type="text" value="4"/>
 				</div>
 				<div class="form-group col-md-2">
 					<label>Samples / Chip</label>
-					<input class="form-control" type="text" value="8"/>
+					<input class="form-control simulation-parameter" id="zero" name="zero" type="text" value="8"/>
 				</div>
 				<div class="form-group col-md-2">
 					<label>Pulse Shaping Filter</label>
-					<select class="form-control">
+					<select class="form-control simulation-parameter" id="ft" name="ft" >
 						<option value="RAISED-COSINE" selected="selected">Raised Cosine</option>
 						<option value="GAUSSIAN">Gaussian</option>
 					</select>
 				</div>
 				<div class="form-group col-md-2">
 					<label>Filter Taps</label>
-					<input class="form-control" type="text" value="9"/>
+					<input class="form-control simulation-parameter" id="N" name="N" type="text" value="9"/>
 				</div>
 				<div class="form-group col-md-2">
 					<label>Roll-off Factor</label>
-					<input class="form-control" type="text" value="0.22"/>
+					<input class="form-control simulation-parameter" id="rolloff" name="rolloff" type="text" value="0.22"/>
 				</div>
 				<div class="form-group col-md-2">
 					<label>3dB BW(MHz)</label>
-					<input class="form-control" type="text" value="5"/>
+					<input class="form-control simulation-parameter" id="B" name="B" type="text" value="5"/>
 				</div>
 			</div>
 		</div>
@@ -136,28 +136,28 @@ div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_table-rf-designer-parame
 							<th>
 								<select class="form-control" id="rx-block-1">
 									<option value="NONE">None</option>
-									<option value="AMP-AM">Amp(AM/AM)</option>
-									<option value="AMP-PM">Amp(AM/PM)</option>
-									<option value="BPF-BUTTER">BPF(Butter)</option>
-									<option value="BPF-CHEBY">BPF(Cheby)</option>
+									<option value="RX-AMP-AM">Amp(AM/AM)</option>
+									<option value="RX-AMP-PM">Amp(AM/PM)</option>
+									<option value="RX-BPF-BUTTER">BPF(Butter)</option>
+									<option value="RX-BPF-CHEBY">BPF(Cheby)</option>
 								</select>
 							</th>
 							<th>
 								<select class="form-control" id="rx-block-2">
 									<option value="NONE">None</option>
-									<option value="AMP-AM">Amp(AM/AM)</option>
-									<option value="AMP-PM">Amp(AM/PM)</option>
-									<option value="BPF-BUTTER">BPF(Butter)</option>
-									<option value="BPF-CHEBY">BPF(Cheby)</option>
+									<option value="RX-AMP-AM">Amp(AM/AM)</option>
+									<option value="RX-AMP-PM">Amp(AM/PM)</option>
+									<option value="RX-BPF-BUTTER">BPF(Butter)</option>
+									<option value="RX-BPF-CHEBY">BPF(Cheby)</option>
 								</select>
 							</th>
 							<th>
 								<select class="form-control" id="rx-block-3">
 									<option value="NONE">None</option>
-									<option value="AMP-AM">Amp(AM/AM)</option>
-									<option value="AMP-PM">Amp(AM/PM)</option>
-									<option value="BPF-BUTTER">BPF(Butter)</option>
-									<option value="BPF-CHEBY">BPF(Cheby)</option>
+									<option value="RX-AMP-AM">Amp(AM/AM)</option>
+									<option value="RX-AMP-PM">Amp(AM/PM)</option>
+									<option value="RX-BPF-BUTTER">BPF(Butter)</option>
+									<option value="RX-BPF-CHEBY">BPF(Cheby)</option>
 								</select>
 							</th>
 							<th>
@@ -233,18 +233,18 @@ div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_table-rf-designer-parame
 							<td id="<portlet:namespace/>data-area-rx-bba">
 							</td>
 						</tr>
-						<tr>
+						<tr id="<portlet:namespace/>calculationResultDiv">
 							<td class="text-center" style="vertical-align: middle;">
 								Tx Total :
 							</td>
 							<td colspan="5">
 								<div class="form-group col-md-6">
 									<label>Gain(db)</label>
-									<input class="form-control" type="text" disabled/>
+									<input class="form-control" id="<portlet:namespace/>txGain" type="text" disabled/>
 								</div>
 								<div class="form-group col-md-6">
 									<label>NF(dB)</label>
-									<input class="form-control" type="text" disabled/>
+									<input class="form-control" id="<portlet:namespace/>txNF" type="text" disabled/>
 								</div>
 							</td>
 							<td colspan="2" class="text-center" style="vertical-align: middle;">
@@ -258,11 +258,11 @@ div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_table-rf-designer-parame
 							<td colspan="5">
 								<div class="form-group col-md-6">
 									<label>Gain(db)</label>
-									<input class="form-control" type="text" disabled/>
+									<input class="form-control" id="<portlet:namespace/>rxGain" type="text" disabled/>
 								</div>
 								<div class="form-group col-md-6">
 									<label>NF(dB)</label>
-									<input class="form-control" type="text" disabled/>
+									<input class="form-control" id="<portlet:namespace/>rxNF" type="text" disabled/>
 								</div>
 							</td>
 						</tr>
@@ -418,7 +418,7 @@ var <portlet:namespace/>RF_DESIGN_PARAMETER = {
 			"input":[
 				{"label":"Gain(dB)","id":"gain"},
 				{"label":"NF(dB)","id":"nf"},
-				{"label":"OIP3(dB)","id":"oip"},
+				{"label":"OIP3(dB)","id":"oip3"},
 				{"label":"Fc(MHz)","id":"fc"},
 				{"label":"imbal(dB)","id":"imbal-db"},
 				{"label":"imbal(deg)","id":"imbal-deg"}
@@ -441,7 +441,7 @@ var <portlet:namespace/>RF_DESIGN_PARAMETER = {
 			"input":[
 					{"label":"Gain(dB)","id":"gain"},
 					{"label":"NF(dB)","id":"nf"},
-					{"label":"OIP3(dB)","id":"oip"}
+					{"label":"OIP3(dB)","id":"oip3"}
 				]
 		},
 		"AMP-PM":{
@@ -449,7 +449,7 @@ var <portlet:namespace/>RF_DESIGN_PARAMETER = {
 			"input":[
 					{"label":"Gain(dB)","id":"gain"},
 					{"label":"NF(dB)","id":"nf"},
-					{"label":"OIP3(dB)","id":"oip"},
+					{"label":"OIP3(dB)","id":"oip3"},
 					{"label":"AM_PM(deg)","id":"am-pm"},
 					{"label":"Pwr_A/P(dB)","id":"pwr-ap"}
 				]
@@ -459,7 +459,7 @@ var <portlet:namespace/>RF_DESIGN_PARAMETER = {
 			"input":[
 					{"label":"Gain(dB)","id":"gain"},
 					{"label":"NF(dB)","id":"nf"},
-					{"label":"OIP3(dB)","id":"oip"},
+					{"label":"OIP3(dB)","id":"oip3"},
 					{"label":"Order","id":"order"},
 					{"label":"F_up(MHz)","id":"f-up"},
 					{"label":"F_lo(MHz)","id":"f-lo"},
@@ -471,7 +471,49 @@ var <portlet:namespace/>RF_DESIGN_PARAMETER = {
 			"input":[
 					{"label":"Gain(dB)","id":"gain"},
 					{"label":"NF(dB)","id":"nf"},
-					{"label":"OIP3(dB)","id":"oip"},
+					{"label":"OIP3(dB)","id":"oip3"},
+					{"label":"Order","id":"order"},
+					{"label":"F_up(MHz)","id":"f-up"},
+					{"label":"F_lo(MHz)","id":"f-lo"},
+					{"label":"Apass(dB)","id":"apass"}
+				]
+		},
+		"RX-AMP-AM":{
+			"image":"Amp.png",
+			"input":[
+					{"label":"Gain(dB)","id":"gain"},
+					{"label":"NF(dB)","id":"nf"},
+					{"label":"IIP3(dB)","id":"iip3"}
+				]
+		},
+		"RX-AMP-PM":{
+			"image":"Amp.png",
+			"input":[
+					{"label":"Gain(dB)","id":"gain"},
+					{"label":"NF(dB)","id":"nf"},
+					{"label":"IIP3(dB)","id":"iip3"},
+					{"label":"AM_PM(deg)","id":"am-pm"},
+					{"label":"Pwr_A/P(dB)","id":"pwr-ap"}
+				]
+		},
+		"RX-BPF-BUTTER":{
+			"image":"BPF.png",
+			"input":[
+					{"label":"Gain(dB)","id":"gain"},
+					{"label":"NF(dB)","id":"nf"},
+					{"label":"IIP3(dB)","id":"iip3"},
+					{"label":"Order","id":"order"},
+					{"label":"F_up(MHz)","id":"f-up"},
+					{"label":"F_lo(MHz)","id":"f-lo"},
+					{"label":"Apass(dB)","id":"apass"}
+				]
+		},
+		"RX-BPF-CHEBY":{
+			"image":"BPF.png",
+			"input":[
+					{"label":"Gain(dB)","id":"gain"},
+					{"label":"NF(dB)","id":"nf"},
+					{"label":"IIP3(dB)","id":"iip3"},
 					{"label":"Order","id":"order"},
 					{"label":"F_up(MHz)","id":"f-up"},
 					{"label":"F_lo(MHz)","id":"f-lo"},
@@ -532,8 +574,6 @@ var <portlet:namespace/>RF_DESIGN_PARAMETER = {
 		}
 	},
 	"data":{
-		
-		
 	}
 }
 
@@ -731,9 +771,31 @@ function <portlet:namespace/>plotlyGrid(idStr,xTitle,yTitle,data){
     });
 }
 
-
 function <portlet:namespace/>calculation(){
-	calculation(<portlet:namespace/>RF_DESIGN_PARAMETER.data);
+	var simObj = {};
+	
+	//Simulation Parameter to Object
+	$("#<portlet:namespace/>simulationParameter").find(".simulation-parameter")
+		.each(function(index){
+			var thisName = $(this).attr("name");
+			var thisValue = $(this).val();
+			simObj[thisName]=thisValue;
+		}
+	);
+	
+	<portlet:namespace/>RF_DESIGN_PARAMETER.data[DESIGNER.Constants.DesignerKey.SM_PARA] = simObj;
+	var calDiv = $("#<portlet:namespace/>calculationResultDiv");
+	
+	bStart();
+	setTimeout(function(){
+		var plotlyData = calculation(<portlet:namespace/>RF_DESIGN_PARAMETER.data,calDiv,'<portlet:namespace/>');
+		
+		if(plotlyData){
+			bEnd();
+		}
+	},1000);
+	
+// 	<portlet:namespace/>plotlyGrid('power-plot-content','REAL','IMAG',plotlyData);
 }
 
 </script>

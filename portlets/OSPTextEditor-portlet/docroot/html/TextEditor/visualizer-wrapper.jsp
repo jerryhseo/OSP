@@ -17,7 +17,7 @@ OSPVisualizerConfig visualizerConfig = OSPVisualizerUtil.getVisualizerConfig(ren
 				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 					Menu<span class="caret"></span>
    				</button>
-				<ul class="dropdown-menu dropdown-menu-left">
+				<ul class="dropdown-menu dropdown-menu-right">
                        <li><a href="#" id="<portlet:namespace/>sample"><i class="icon-file"></i>Sample</a></li>
                        <li><a href="#" id="<portlet:namespace/>openLocalFile"><i class="icon-file"></i>Open local file</a></li>
                        <li><a href="#" id="<portlet:namespace/>openServerFile"><i class="icon-file"></i>Open Server file</a></li>
@@ -74,18 +74,18 @@ var <portlet:namespace/>config = {
 var <portlet:namespace/>visualizer;
 $('#<portlet:namespace/>canvas').load(function(){
 	<portlet:namespace/>visualizer = OSP.Visualizer(<portlet:namespace/>config);
-	<portlet:namespace/>processInitAction( JSON.parse( '<%=visualizerConfig.initData%>' ) );
+	<portlet:namespace/>processInitAction( JSON.parse( '<%=visualizerConfig.initData%>' ), false );
 });
 	
 /***********************************************************************
  * Canvas functions
  ***********************************************************************/
 function <portlet:namespace/>loadCanvas( jsonData, changeAlert ){
-	console.log( 'jsonData: ', jsonData );
+	console.log( 'jsonData: ', jsonData, changeAlert );
 	
 	switch( jsonData.type_){
 		case OSP.Enumeration.PathType.FILE:
-			<portlet:namespace/>visualizer.readServerFile( jsonData );
+			<portlet:namespace/>visualizer.readServerFile( jsonData, changeAlert );
 			break;
 		case OSP.Enumeration.PathType.CONTENT:
 		case OSP.Enumeration.PathType.FILE_CONTENT:
@@ -98,7 +98,7 @@ function <portlet:namespace/>loadCanvas( jsonData, changeAlert ){
 				<portlet:namespace/>visualizer.fireDataChangedEvent();
 			break;
 		case OSP.Enumeration.PathType.DLENTRY_ID:
-			<portlet:namespace/>visualizer.readDLFileEntry();
+			<portlet:namespace/>visualizer.readDLFileEntry(changeAlert);
 			break;
 		case OSP.Enumeration.PathType.URL:
 			alert( 'Un-supported yet.');
@@ -116,7 +116,7 @@ function <portlet:namespace/>setTitle( title ){
 	$('#<portlet:namespace/>title').html( '<h4 style="margin:0;">'+title+'</h4>' );
 };
 
-function <portlet:namespace/>processInitAction( jsonInitData ){
+function <portlet:namespace/>processInitAction( jsonInitData, changeAlert ){
 	
 	if( !jsonInitData.repositoryType_ ){
 		// Do nothing if repository is not specified.
@@ -129,7 +129,7 @@ function <portlet:namespace/>processInitAction( jsonInitData ){
 	jsonInitData.parent_ = jsonInitData.parent_ ? jsonInitData.parent_ : '';
 	jsonInitData.name_ = jsonInitData.name_ ? jsonInitData.name_ : '';
 	
-	<portlet:namespace/>visualizer.processInitAction( jsonInitData, false );
+	<portlet:namespace/>visualizer.processInitAction( jsonInitData, changeAlert );
 }
 
 
@@ -139,7 +139,6 @@ function <portlet:namespace/>processInitAction( jsonInitData ){
 function <portlet:namespace/>fireDataChangedEvent( content ){
 	console.log('fireDataChangedEvent in text editor wrapper...');
 	<portlet:namespace/>visualizer.fireDataChangedEvent({
-		type_: "content",
 		content_: content 
 	});
 };
@@ -166,14 +165,14 @@ $('#<portlet:namespace/>openLocalFile').click(function(){
 	if( <portlet:namespace/>disabled )
 		return;
 
-	<portlet:namespace/>visualizer.openLocalFile();
+	<portlet:namespace/>visualizer.openLocalFile( true );
 });
 
 $('#<portlet:namespace/>openServerFile').click(function(){
 	if( <portlet:namespace/>disabled )
 		return;
 
-	<portlet:namespace/>visualizer.openServerFile();
+	<portlet:namespace/>visualizer.openServerFile(null, true);
 });
 
 $('#<portlet:namespace/>save').click(function(){
@@ -206,7 +205,7 @@ $('#<portlet:namespace/>download').click(function(){
  * Handling OSP Events and event handlers
  ***********************************************************************/
 function <portlet:namespace/>loadDataEventHandler( data, params ){
-	console.log('[<portlet:namespace/>loadDataEventHandler] ', data );
+	console.log('[<portlet:namespace/>loadDataEventHandler] ', data, params );
 	
 	<portlet:namespace/>visualizer.loadCanvas( data, params.changeAlert );
 }
@@ -223,7 +222,7 @@ function <portlet:namespace/>responseDataEventHandler( data, params ){
 	
 	switch( params.procFunc ){
 	case 'readServerFile':
-		<portlet:namespace/>visualizer.runProcFuncs( 'readServerFile', data );
+		<portlet:namespace/>visualizer.runProcFuncs( 'readServerFile', data, true );
 		break;
 	case 'saveAtServerAs':
 		<portlet:namespace/>visualizer.callIframeFunc('getContent', function(content){
@@ -237,7 +236,7 @@ function <portlet:namespace/>responseDataEventHandler( data, params ){
 function <portlet:namespace/>initializeEventHandler( data, params ){
 	console.log('[<portlet:namespace/>initializeEventHandler] ', data, params );
 	
-	<portlet:namespace/>visualizer.processInitAction();
+	<portlet:namespace/>visualizer.processInitAction(null, false);
 	
 	<portlet:namespace/>visualizer.callIframeFunc('setContent', null, '' );
 	<portlet:namespace/>setTitle('');

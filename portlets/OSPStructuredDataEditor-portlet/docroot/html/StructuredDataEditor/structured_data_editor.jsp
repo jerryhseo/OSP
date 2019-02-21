@@ -24,7 +24,7 @@ OSPVisualizerConfig visualizerConfig = OSPVisualizerUtil.getVisualizerConfig(ren
 				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 					Menu<span class="caret"></span>
    				</button>
-				<ul class="dropdown-menu dropdown-menu-left">
+				<ul class="dropdown-menu dropdown-menu-right">
                        <li><a href="#" id="<portlet:namespace/>sample"><i class="icon-file"></i>Sample</a></li>
                        <li><a href="#" id="<portlet:namespace/>openLocalFile"><i class="icon-file"></i>Open local file</a></li>
                        <li><a href="#" id="<portlet:namespace/>openServerFile"><i class="icon-file"></i>Open Server file</a></li>
@@ -81,6 +81,7 @@ OSPVisualizerConfig visualizerConfig = OSPVisualizerUtil.getVisualizerConfig(ren
  ***********************************************************************/
 function <portlet:namespace/>loadData( jsonData, changeAlert ){
 	var dataType = <portlet:namespace/>dataType;
+	
 	$('#<portlet:namespace/>canvas').empty();
 	
 	switch( jsonData.type_ ){
@@ -103,10 +104,10 @@ function <portlet:namespace/>loadData( jsonData, changeAlert ){
 		}
 		break;
 	case OSP.Enumeration.PathType.DLENTRY_ID:
-		<portlet:namespace/>visualizer.readDLFileEntry();
+		<portlet:namespace/>visualizer.readDLFileEntry(changeAlert);
 		break;
 	case OSP.Enumeration.PathType.FILE:
-		<portlet:namespace/>visualizer.readServerFile();
+		<portlet:namespace/>visualizer.readServerFile(null, changeAlert);
 		break;
 	default:
 		<portlet:namespace/>visualizer.showAlert( 'Un-known dataType: '+jsonData.type_);
@@ -122,7 +123,7 @@ function <portlet:namespace/>refreshEditor(){
 					'<%=themeDisplay.getLanguageId()%>');
 };
 
-function <portlet:namespace/>processInitAction( jsonInitData, launchCanvas ){
+function <portlet:namespace/>processInitAction( jsonInitData, launchCanvas, changeAlert ){
 	console.log( 'jsonInitData', jsonInitData );
 	if( !jsonInitData.repositoryType_ || !jsonInitData.user_ ){
 		// Do nothing if repository is not specified.
@@ -141,7 +142,7 @@ function <portlet:namespace/>processInitAction( jsonInitData, launchCanvas ){
 		
 		<portlet:namespace/>visualizer.readDataTypeStructure( jsonInitData.dataType_.name, jsonInitData.dataType_.version);
 	}
-	<portlet:namespace/>visualizer.processInitAction( jsonInitData, false );
+	<portlet:namespace/>visualizer.processInitAction( jsonInitData, changeAlert );
 }
 
 /***********************************************************************
@@ -159,25 +160,38 @@ $('#<portlet:namespace/>openLocalFile').click(function(){
 	if( <portlet:namespace/>disabled )
 		return;
 
-	<portlet:namespace/>visualizer.openLocalFile();
+	<portlet:namespace/>visualizer.openLocalFile( true );
 });
 
 $('#<portlet:namespace/>openServerFile').click(function(){
 	if( <portlet:namespace/>disabled )
 		return;
 
-	<portlet:namespace/>visualizer.openServerFile();
+	<portlet:namespace/>visualizer.openServerFile(null, true);
 });
 
 $('#<portlet:namespace/>canvas').on('change', function(){
 	if( <portlet:namespace/>disabled )
 		return;
 	
+	let structure = <portlet:namespace/>dataType.structure();
+	let pages = structure.activeParameterFormattedInputs();
+	let fileContents = {
+			fileCount: pages.length,
+			content: pages
+	};
+	
+	/*
 	var jsonData = {
 			type_: OSP.Enumeration.PathType.STRUCTURED_DATA,
 			content_: OSP.Util.toJSON( <portlet:namespace/>dataType.structure() )
 	};
-	console.log( 'data changed: ', jsonData );
+	*/
+	var jsonData = {
+			type_: OSP.Enumeration.PathType.FILE_CONTENTS,
+			content_: fileContents
+	};
+	
 	
 	<portlet:namespace/>visualizer.fireDataChangedEvent( jsonData );
 });
@@ -187,7 +201,7 @@ $('#<portlet:namespace/>canvas').on('change', function(){
  ***********************************************************************/
  function <portlet:namespace/>handshakeEventHandler( jsonData, params ){
 	 <portlet:namespace/>visualizer.configConnection( params.connector, params.disabled );
-	<portlet:namespace/>processInitAction( jsonData );
+	<portlet:namespace/>processInitAction( jsonData, params.changeAlert );
 	<portlet:namespace/>visualizer.fireRegisterEventsEvent();
  }
  
@@ -208,7 +222,7 @@ function <portlet:namespace/>responseDataEventHandler( data, params ){
 	
 	switch( callbackParams.procFunc ){
 	case 'readServerFile':
-		<portlet:namespace/>visualizer.runProcFuncs( 'readServerFile', data );
+		<portlet:namespace/>visualizer.runProcFuncs( 'readServerFile', data, true );
 		break;
 	}
 }
@@ -222,7 +236,7 @@ function <portlet:namespace/>initializeEventHandler( data, params ){
 		version:<portlet:namespace/>dataType.version()
 	};
 	
-	<portlet:namespace/>processInitAction(initData, true);
+	<portlet:namespace/>processInitAction(initData, false);
 }
 
 function <portlet:namespace/>disableControlsEventHandler( data, params ){

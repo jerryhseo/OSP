@@ -31,9 +31,8 @@
         var blockVisualizer = function(){
             var offset = $('#p_p_id'+namespace).offset();
             console.log('Block visualizer: '+namespace, offset, $('#p_p_id'+namespace).width(), $('#p_p_id'+namespace).height() );
-            console.log('theme display: ', Liferay.ThemeDisplay.getPathThemeImages());
             $('#p_p_id'+namespace).block({
-                        message:'<img src=\"'+Liferay.ThemeDisplay.getPathThemeImages()+'/common/processing.gif\" style=\"position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:999;\"/>',
+                        message:'<img src=\"'+Liferay.ThemeDisplay.getPathThemeImages()+'/common/loading.gif\" style=\"position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:999;\"/>',
                         css: {
                             'width':$('#p_p_id'+namespace).width()+'px',
                             'height':$('#p_p_id'+namespace).height()+'px',
@@ -73,21 +72,20 @@
             return formData;
         };
 
-        var openServerFileExplorer = function( procFuncName ){
+        var openServerFileExplorer = function( procFuncName, changeAlert ){
             var buttons = {
                     OK: function(){
-                                     console.log('===== FireExplorer OK.' );
                                     fireRequestDataEvent( 
                                         fileExplorerId, 
                                         {},
                                         {
-                                            procFunc:procFuncName
+                                            procFunc:procFuncName,
+                                            changeAlert: changeAlert
                                         } );
 
                                     fileExplorerDialog.dialog('close');
                                 },
                     Cancel: function(){
-                                    console.log('===== FireExplorer Cancel.' );
                                     fileExplorerDialog.dialog('close');
                                 }
             };
@@ -97,7 +95,6 @@
                 var instanceIndex = portletId.lastIndexOf('_INSTANCE_');
                 if( instanceIndex > 0)
                     fileExplorerId += portletId.substring(instanceIndex);
-                console.log( 'FileExplorer ID: '+fileExplorerId );
 
                 fileExplorerDialog = $( 
                     '<div title=\"Select a file\" id=\"'+fileExplorerId+'\"></div>');
@@ -112,7 +109,6 @@
 
                 AUI().use('liferay-portlet-url', function(A){
                     var dialogURL = Liferay.PortletURL.createRenderURL();
-                    console.log('dialogURL: '+dialogURL.toString() );
                     dialogURL.setPortletId(fileExplorerId);
                     dialogURL.setWindowState('EXCLUSIVE');
 
@@ -157,12 +153,11 @@
             } 
         };
 
-        var readServerFile = function( jsonData ){
+        var readServerFile = function( jsonData, changeAlert ){
             if( jsonData ){
                 setCurrentData( jsonData );
             }
 
-            console.log( 'readServerFile: ', currentData );
             var params = {
                 command:'READ_FILE',
                 repositoryType: baseFolder.repositoryType(),
@@ -189,7 +184,7 @@
                             type_: OSP.Enumeration.PathType.FILE_CONTENT,
                             content_: data
                         };
-                        loadCanvas( result, true );
+                        loadCanvas( result, changeAlert );
                 },
                 error: function(data, e ){
                     console.log('Error read server file: ', jsonData, data, e);
@@ -205,7 +200,7 @@
             createURL('READ_FILE')
         };
 
-        var readDataTypeStructure = function( name, version ){
+        var readDataTypeStructure = function( name, version, changeAlert ){
             var params = {
                 command: 'READ_DATATYPE_STRUCTURE',
                 dataTypeName: name,
@@ -239,7 +234,7 @@
                         };
                         setCurrentData( result );
 
-                        loadCanvas( OSP.Util.toJSON(currentData, true) );
+                        loadCanvas( OSP.Util.toJSON(currentData, changeAlert) );
                 },
                 error: function(data, e ){
                     console.log('Error read first server file name: ', jsonData, data, e);
@@ -262,7 +257,6 @@
                 params.fileName = baseFolder.name();
             }
 
-            console.log( 'getFirstFileName: ', params );
              var formData = createFormData( params );
 
              $.ajax({
@@ -286,7 +280,7 @@
                         };
                         setCurrentData( result );
 
-                        loadCanvas( OSP.Util.toJSON(currentData, false));
+                        loadCanvas( OSP.Util.toJSON(currentData), changeAlert);
                 },
                 error: function(data, e ){
                     console.log('Error read first server file name: ', jsonData, data, e);
@@ -295,13 +289,13 @@
             });
         };
 
-        var readFirstServerFile = function( jsonData ){
+        var readFirstServerFile = function( jsonData, changeAlert ){
             if( jsonData ){
                 setCurrentData( jsonData );
             }
 
             var successFunc = function(){
-                loadCanvas( OSP.Util.toJSON(currentData), true );
+                loadCanvas( OSP.Util.toJSON(currentData), changeAlert );
             };
 
             getFirstFileName( successFunc );
@@ -385,7 +379,6 @@
         };
 
         var runProcFuncs = function( funcName ){
-            console.log( 'procFuncName: '+funcName, procFuncs);
             var args = Array.prototype.slice.call(arguments);
             var newArgs = [];
             var funcName = args[0];
@@ -412,15 +405,13 @@
                 stripedArgs.push(args[i]);
             }
 
-            //console.log( 'callIframeFunc: ', currentData );
-            //console.log('stripped args: '+JSON.stringify(stripedArgs));
             var result = canvas.contentWindow[funcName].apply(canvas.contentWindow, stripedArgs);
             if( resultProcFunc ){
                 resultProcFunc( result );
             }
         };
 
-        var readDLFileEntry = function(){
+        var readDLFileEntry = function(changeAlert){
             var params = {
                 command:'READ_DLENTRY',
                 dlEntryId: currentData.content()
@@ -442,7 +433,7 @@
                         content_: result
                     };
                     setCurrentData( jsonData );
-                    loadCanvas( OSP.Util.toJSON(currentData), true );
+                    loadCanvas( OSP.Util.toJSON(currentData), changeAlert );
                 },
                 error: function(data, e ){
                     errorFunc(data, e);
@@ -477,7 +468,6 @@
                 beforeSend: blockVisualizer,
                 success : function(data) {
                         //currentData.deserialize( data );
-                        console.log( 'currentData after upload: ', currentData );
                         currentData.type( OSP.Enumeration.PathType.FILE );
                         successFunc(data);
                 },
@@ -494,7 +484,6 @@
                         '</p>' +
                     '</div>';
             var dialog = $(dialogDom);
-            console.log( 'namespace in showDefaultFileUploadConfirmDialog(): '+namespace);
             dialog.find( '#'+namespace+'targetFilePath').val(OSP.Util.mergePath(currentData.parent(), targetFileName));
             dialog.dialog({
                 resizable: false,
@@ -507,7 +496,6 @@
                         var path = OSP.Util.convertToPath( targetPath );
                         currentData.parent(path.parent_);
                         currentData.name(path.name_);
-                        console.log( 'target path: ', path );
                         submitUpload( localFile, successFunc );
                         dialog.dialog( 'destroy' );
                     },
@@ -534,7 +522,6 @@
                     contentType: false,
                     beforeSend: blockVisualizer,
                     success: function( result ){
-                        console.log( 'duplicated result: ', result);
                         if( result.duplicated ){
                             showFileUploadConfirmDialog( localFile, targetFileName, successFunc );
                         }
@@ -550,7 +537,7 @@
             });
         };
 
-        var createURL = function( command ){
+        var createURL = function( command, changeAlert ){
             AUI().use('liferay-portlet-url', function(A) {
                 var serveResourceURL;
                 serveResourceURL = Liferay.PortletURL.createResourceURL();
@@ -568,7 +555,7 @@
                 };
 
                 setCurrentData( jsonData );
-                loadCanvas( OSP.Util.toJSON(currentData), true);
+                loadCanvas( OSP.Util.toJSON(currentData), changeAlert);
             });
         };
 
@@ -589,37 +576,19 @@
             data[namespace+'fileNames'] = JSON.stringify(fileNames);
 
             var url = resourceURL + separator + $.param(data);
-            console.log('Download URL: '+url);
 
             window.location.href = url;
         };
 
-        /*
         var attachEventHandler = function( event, handler ){
-            AUI().use('event', 'node', function(A){
-                var aCanvas = A.one( '#'+namespace+'canvas' );
-                console.log( 'Event handler attached: '+portletId+' - '+ event );
-                var eventHandler = function( e ){
-                        if( e.targetPortlet !== portletId )   return;
-                        console.log( event+': ', e);
-                        handler( e.data, e.params );
-                };
-    
-                //aCanvas.detach( event );
-                aCanvas.on( event, eventHandler );
-            });
-        };
-        */
-        
-        var attachEventHandler = function( event, handler ){
-            console.log( 'Event handler attached: '+portletId+' - '+ event );
+            // console.log( 'Event handler attached: '+portletId+' - '+ event );
             if( attachedEventHandlers[event] ){
                 Liferay.detach( event, attachedEventHandlers[event] );
             }
             else{
                 attachedEventHandlers[event] = function( e ){
                     if( e.targetPortlet !== portletId )   return;
-                    console.log( event+': ', e);
+                    console.log( event+'['+portletId+']: ', e);
                     handler( e.data, e.params );
                 };
             }
@@ -633,7 +602,6 @@
             currentData.dirty(false);
             baseFolder = new OSP.InputData();
 
-            console.log('initData: ', initData );
             for( var key in initData ){
                 switch( key ){
                     case OSP.Constants.TYPE:
@@ -652,13 +620,13 @@
             }
 
             if( !baseFolder.repositoryType() ){
-                console.log('[WORNING] Portlet '+portletId+' baseFolder has no repositoryType!');
+                console.log('[WARNING] Portlet '+portletId+' baseFolder has no repositoryType!');
             }
 
         };
 
         var attachEventHandlers = function(){
-            console.log( 'Event Handlers: ', eventHandlers);
+           // console.log( 'Event Handlers: ', eventHandlers);
             for( var event in eventHandlers){
                 var handler = eventHandlers[event];
                 attachEventHandler( event, handler);
@@ -670,8 +638,7 @@
                disabled = params.disabled;
 
                 processInitAction(data, false);
-                console.log('baseFolder: ', baseFolder );
-                console.log('currentData: ', currentData );
+                // console.log('baseFolder: ', baseFolder );
                 
                 var eventData = {
                             portletId: portletId,
@@ -684,17 +651,11 @@
             };
 
             var defaultEventsResigeteredEventHandler = function( jsonData, params ){
-                //Very first data to be disploy from the connector.
-                console.log( 'defaultEventsResigeteredEventHandler called.....', jsonData );
-                if( jsonData ){
-//                    Visualizer.loadCanvas( jsonData, false);
-                }
             }; 
 
             var defaultDisableControlsEventHandler = function( data, params ){
                 disabled = data;
                 if( canvas.tagName.toLowerCase() === 'iframe' && canvas.contentWindow['disable']){
-                    //callIframeFuncDelayed( 'disable', 10, function(){}, disabled );
                      canvas.contentWindow['disable']( disabled );
                 }
             };
@@ -720,16 +681,8 @@
             };
         };
 
-        var fire = function(){
-            AUI().use('event', 'node', function(A){
-                var aCanvas = A.one( '#'+namespace+'canvas' );
-                //aCanvas.detach( event );
-                aCanvas.on( event, eventHandler );
-            });
-        };
-
         var fireRegisterEventsEvent = function( data, params ){
-            console.log( '++++ EventData: ', createEventData(data, params ));
+            // console.log( '++++ EventData: ', createEventData(data, params ));
             Liferay.fire( OSP.Event.OSP_REGISTER_EVENTS, createEventData(data, params ));
         };
 
@@ -745,7 +698,7 @@
                 currentData.dirty(true);
             }
 
-            console.log('Fire data changed event: ', currentData );
+            // console.log('Fire data changed event: ', currentData );
             var eventData = data ? data : OSP.Util.toJSON(currentData);
             Liferay.fire( OSP.Event.OSP_DATA_CHANGED, createEventData(eventData, params ) );
         };
@@ -784,7 +737,7 @@
             Liferay.fire( OSP.Event.OSP_RESPONSE_DATA, createEventData( jsonData, params ) );
         };
 
-        var openHtmlIndex = function( jsonData ){
+        var openHtmlIndex = function( jsonData, changeAlert ){
             if( jsonData ){
                 setCurrentData( jsonData );
             }
@@ -813,7 +766,7 @@
                         type_: OSP.Enumeration.PathType.URL,
                         content_:  OSP.Util.mergePath( result.parentPath, result.fileName )
                     };
-                    loadCanvas( jsonData, true );
+                    loadCanvas( jsonData, changeAlert );
                     //successFunc( data.parentPath, data.fileInfos );
                 },
                 error:function(ed, e){
@@ -823,7 +776,7 @@
             }); 
         };
 
-        var openLocalFile = function( contentType ){
+        var openLocalFile = function( contentType, changeAlert ){
             console.log('Open Local File');
             var domFileSelector = $('<input type=\"file\" id=\"'+namespace+'selectFile\"/>');
             domFileSelector.click();
@@ -857,7 +810,7 @@
                         }
                         result.name_ = fileName;
                         result.content_ = evt.target.result;
-                        loadCanvas(result, true);
+                        loadCanvas(result, changeAlert);
                     };
                 }
             );
@@ -947,7 +900,7 @@
 
 
         var loadCanvas = function( jsonData, changeAlert ){
-            console.log('loadCanvas data: ', jsonData, changeAlert );
+            // console.log('loadCanvas data: ', jsonData, changeAlert );
             setCurrentData( jsonData );
             loadCanvasFunc( OSP.Util.toJSON(currentData), changeAlert);
         };
@@ -965,14 +918,14 @@
             }
         };
 
-        var openServerFile = function( procFuncName ){
+        var openServerFile = function( procFuncName, changeAlert ){
                 if( procFuncName )
-                    openServerFileExplorer( procFuncName );
+                    openServerFileExplorer( procFuncName, changeAlert );
                 else
-                    openServerFileExplorer( 'readServerFile' );
+                    openServerFileExplorer( 'readServerFile', changeAlert );
         };
 
-        var processInitAction = function( jsonData, launchCanvas ){
+        var processInitAction = function( jsonData, launchCanvas, changeAlert ){
             if( jsonData ){
                 initData = jsonData;
                 initData.type_ = jsonData.type_ ? jsonData.type_ : OSP.Enumeration.PathType.FOLDER;
@@ -982,9 +935,9 @@
             
             setBaseFolderAndCurrentData();
 
-            console.log( 'After processInitAction: ', currentData );
+            // console.log( 'After processInitAction: ', currentData );
             if( launchCanvas ){
-                loadCanvas( OSP.Util.toJSON(currentData), false );
+                loadCanvas( OSP.Util.toJSON(currentData), changeAlert );
             }
         };
 
@@ -1024,7 +977,7 @@
         // Set namespace on iframe if canvas is iframe
         
         if( canvas.tagName.toLowerCase() === 'iframe' ){
-            console.log('Visualizer setNamespace!!');
+            // console.log('Visualizer setNamespace!!');
             canvas.contentWindow['setNamespace']( namespace );
             										  
 
@@ -1046,6 +999,9 @@
                 readServerFileURL
         ];
 
+        /**
+         * The following block will be enabled after OSP_HANDSHAKE event is deprecated.  
+         *  
         if( connector ){
             var events = [];
             for( var event in attachedEventHandlers ){
@@ -1054,6 +1010,7 @@
             console.log('--------------------------', events);
             fireRegisterEventsEvent( events, {} );
         }
+         */
 
         return {
             callIframeFunc: callIframeFunc,
@@ -1080,12 +1037,12 @@
             loadCanvas: loadCanvas,
             openHtmlIndex: openHtmlIndex,
             openLocalFile: openLocalFile,
-            openLocalFileURL: function(){
-                openLocalFile('url');
+            openLocalFileURL: function(changeAlert){
+                openLocalFile('url', changeAlert);
             },
             openServerFile: openServerFile,
-            openServerFileURL: function(){
-                openServerFile( 'readServerFileURL');
+            openServerFileURL: function(changeAlert){
+                openServerFile( 'readServerFileURL', changeAlert);
             },
             processInitAction: processInitAction,
             readDataTypeStructure:readDataTypeStructure,

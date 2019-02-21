@@ -20,7 +20,7 @@ OSPVisualizerConfig visualizerConfig = OSPVisualizerUtil.getVisualizerConfig(ren
 				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 					Menu<span class="caret"></span>
    				</button>
-				<ul class="dropdown-menu dropdown-menu-left">
+				<ul class="dropdown-menu dropdown-menu-right">
                        <li><a href="#" id="<portlet:namespace/>sample"><i class="icon-file"></i>Sample</a></li>
                        <li><a href="#" id="<portlet:namespace/>upload"><i class="icon-upload"></i> Upload</a></li>
                        <li><a href="#" id="<portlet:namespace/>download"><i class="icon-download-alt"></i> Download</a></li>					
@@ -60,7 +60,7 @@ var <portlet:namespace/>config = {
 var <portlet:namespace/>visualizer;
 $('#<portlet:namespace/>canvas').load(function(){
 	<portlet:namespace/>visualizer = OSP.Visualizer(<portlet:namespace/>config);
-	<portlet:namespace/>processInitAction( JSON.parse( '<%=visualizerConfig.initData%>') );
+	<portlet:namespace/>processInitAction( JSON.parse( '<%=visualizerConfig.initData%>'), false );
 });
 
 /***********************************************************************
@@ -99,7 +99,7 @@ function <portlet:namespace/>setCurrentSelect ( fullPath ){
 	$('#<portlet:namespace/>currentData').val( '/' + fullPath);
 }
 
-function <portlet:namespace/>processInitAction( jsonInitData ){
+function <portlet:namespace/>processInitAction( jsonInitData, changeAlert ){
 	if( !jsonInitData.repositoryType_ ){
 		// Do nothing if repository is not specified.
 		// This means processInitAction will be performed OSP_SHAKEHAND event handler.
@@ -117,7 +117,7 @@ function <portlet:namespace/>processInitAction( jsonInitData ){
 		jsonInitData.name_ = '';
 	}
 	
-	<portlet:namespace/>visualizer.processInitAction( jsonInitData, true );
+	<portlet:namespace/>visualizer.processInitAction( jsonInitData, changeAlert );
 }
 
  /***********************************************************************
