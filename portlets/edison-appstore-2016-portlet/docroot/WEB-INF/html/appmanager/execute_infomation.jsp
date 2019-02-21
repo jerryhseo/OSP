@@ -693,7 +693,6 @@ function <portlet:namespace/>actionCall(mode){
 		
 		submitForm(<portlet:namespace/>frm);
 	}else{
-		alert("else....")
 		if(confirm(Liferay.Language.get('edison-appstore-delete-data-alert'))){
 			<portlet:namespace/>frm.<portlet:namespace/>actionMode.value = mode;
 		}else{
