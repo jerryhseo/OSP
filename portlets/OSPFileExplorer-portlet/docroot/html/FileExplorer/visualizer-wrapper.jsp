@@ -20,7 +20,7 @@ OSPVisualizerConfig visualizerConfig = OSPVisualizerUtil.getVisualizerConfig(ren
 				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 					Menu<span class="caret"></span>
    				</button>
-				<ul class="dropdown-menu dropdown-menu-left">
+				<ul class="dropdown-menu dropdown-menu-right">
                        <li><a href="#" id="<portlet:namespace/>sample"><i class="icon-file"></i>Sample</a></li>
                        <li><a href="#" id="<portlet:namespace/>upload"><i class="icon-upload"></i> Upload</a></li>
                        <li><a href="#" id="<portlet:namespace/>download"><i class="icon-download-alt"></i> Download</a></li>					
