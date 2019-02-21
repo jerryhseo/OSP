@@ -244,7 +244,7 @@ function <portlet:namespace/>disableControlsEventHandler( data, params ){
 	<portlet:namespace/>disabled = params.disabled;
 	var inputs = $('#<portlet:namespace/>canvas').find('input');
 	inputs.each(function(index){
-		$(this).attr('disabled', <portlet:namespace/>disabled);
+		$(this).prop('disabled', <portlet:namespace/>disabled);
 	});
 }
 </script>
