@@ -545,7 +545,9 @@ function <portlet:namespace/>moveVirtualLab(virtualLabId, groupId) {
 			window.location.href = URL;
 		} else {
 			successedJoin = false;
-			content = $("<div/>").html(Liferay.Language.get('edison-virtuallab-join-message') + "<br/>" + Liferay.Language.get('edison-default-site-join-regist-confirm'))
+			/* content = $("<div/>").html(Liferay.Language.get('edison-virtuallab-join-message') + "<br/>" + Liferay.Language.get('edison-default-site-join-regist-confirm'))
+								.css("font-size", "15px"); */
+			content = $("<div/>").html("<liferay-ui:message key='edison-virtuallab-join-message' />" + "<br/>" + "<liferay-ui:message key='edison-default-site-join-regist-confirm' />")
 								.css("font-size", "15px");
 			
 			$.confirm({

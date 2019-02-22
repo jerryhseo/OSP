@@ -253,7 +253,6 @@
     background-color: hsla(32, 100%, 49%, 0.95) !important;
 }
 
-
 .wf-box.RUNNING .wf-node-header h1.wf-node-header-title,
 .wf-box.FAILED .wf-node-header h1.wf-node-header-title,
 .wf-box.DONE .wf-node-header h1.wf-node-header-title,
