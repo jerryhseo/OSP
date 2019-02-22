@@ -31,6 +31,8 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebService;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebServiceMode;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.GroupLocalServiceUtil;
@@ -60,10 +62,15 @@ public class SimulationServiceImpl extends SimulationServiceBaseImpl {
 	 */
 	private final static long EDISON_COMPANY_ID = 20154;
 	
+	private static Log log = LogFactoryUtil.getLog(SimulationServiceImpl.class);
+	
 	@JSONWebService(method = "POST", value = "add-simulation")
 	public JSONObject addSimulationWithJob(long userId, String appName, String appVersion, String simulationTitle, String jobData){
 		JSONObject resultInfo = JSONFactoryUtil.createJSONObject();
 		Boolean isValid = true;
+		
+		log.info("EDISON add-simulation API Active");
+		
 		try {
 			
 			if(!StringUtils.hasText(simulationTitle)){
@@ -101,6 +108,7 @@ public class SimulationServiceImpl extends SimulationServiceBaseImpl {
 			resultInfo.put("simulationUuid", simulationUuid);
 			resultInfo.put("simulationJobUuid", jobUuid);
 		}catch (Exception e) {
+			log.error(e);
 			e.printStackTrace();
 			resultInfo.put("isValid", false);
 			resultInfo.put("failMessage", e.getMessage());
