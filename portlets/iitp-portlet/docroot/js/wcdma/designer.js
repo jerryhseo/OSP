@@ -34,7 +34,7 @@
 				if(isNaN(value)){
 					return 0;
 				}else{
-					return value;
+					return Number(value);
 				}
 			}
 		},
@@ -209,7 +209,7 @@
 			}
 			return convVec;
 		},
-		blockCalu : function(RBS7, object, zero, isRightCal){
+		blockCalu : function(RBS7, object, Fs,isRightCal){
 			var RBS8 = [new Array(RBS7[0].length), new Array(RBS7[0].length)];
 			
 			if(object === null||typeof object =="undefined"||object === ''){
@@ -226,16 +226,14 @@
 				var F_flo		= getDataFormFilterData(object,'f-lo');
 				var F_order		= getDataFormFilterData(object,'order');
 				var Apass		= getDataFormFilterData(object,'apass');
-				var Fs			= 3840000 * zero;
 				
 				var RBS8 = [new Array(RBS7[0].length), new Array(RBS7[0].length)];
 				
 				if(Comp==0){
 					RBS8 = RBS7;
-				}else if(Comp==='AMP-AM'){
+				}else if(Comp==='AMP-AM'||Comp==='RX-AMP-AM'){
 					var theta = math.atan2(RBS7[1], RBS7[0]);
 					var alpha1 = math.pow(10, Gain / 20);
-					
 					var P_IIP3 = 0.001 * math.pow(10, IIP3 / 10);
 					var A_IIP3 = math.sqrt(2 * P_IIP3 * 50);
 					var alpha3 = -(4 / 3 * alpha1 / math.pow(A_IIP3, 2));
@@ -255,7 +253,7 @@
 					    RBS8[0][i] = A[i] * cos[i];
 					    RBS8[1][i] = A[i] * sin[i];
 					}
-				}else if(Comp==='AMP-PM'){
+				}else if(Comp==='AMP-PM'||Comp==='RX-AMP-PM'){
 					var theta = math.atan2(RBS7[1], RBS7[0]);
 					var alpha1 = math.pow(10, Gain / 20);
 					
@@ -287,7 +285,7 @@
 					    RBS8[0][i] = A[i] * cos[i];
 					    RBS8[1][i] = A[i] * sin[i];
 					}
-				}else if(Comp==='BPF-BUTTER'){
+				}else if(Comp==='BPF-BUTTER'||Comp==='RX-BPF-BUTTER'){
 					var epsilon_LPF = math.sqrt(math.pow(10, Apass / 10) - 1);
 					var F_fcent = math.sqrt(F_fup * F_flo);
 					var F_fc = (F_fup - F_fcent) * math.pow(10, 6);
@@ -311,7 +309,7 @@
 					}
 					RBS8[0] = math.re(this.myifft(this.myfftshift(SI2)));
 					RBS8[1] = math.re(this.myifft(this.myfftshift(SQ2)));
-				}else if(Comp==='BPF-CHEBY'){
+				}else if(Comp==='BPF-CHEBY'||Comp==='RX-BPF-CHEBY'){
 					var epsilon_LPF = math.sqrt(math.pow(10, Apass / 10) - 1);
 					var F_fcent = math.sqrt(F_fup * F_flo);
 					var F_fc = (F_fup - F_fcent) * math.pow(10, 6);

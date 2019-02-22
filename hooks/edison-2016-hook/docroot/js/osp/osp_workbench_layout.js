@@ -142,6 +142,10 @@
             P.status = function( status ){
                 return P.property.apply(P, OSP.Util.addFirstArgument(OSP.Constants.STATUS, arguments));
             };
+            
+            P.dataType = function( dataType ){
+                return P.property.apply(P, OSP.Util.addFirstArgument(OSP.Constants.DATA_TYPE, arguments));
+            };
 
             P.preferences = function( preferences ){
                 return P.property.apply(P, OSP.Util.addFirstArgument(OSP.Constants.PREFERENCES, arguments));
@@ -211,12 +215,16 @@
                     
                     /*repositoryType_*/
                     initData[OSP.Constants.REPOSITORY_TYPE] = P.repositoryType();
+                    /*dataType_*/
+                    initData[OSP.Constants.DATA_TYPE] = P.dataType();
+                    
                     
                     portletURL.setParameter( 'initData', JSON.stringify(initData));
                     
                     portletURL.setParameter( 'connector', connector);
                     portletURL.setWindowState(windowState);
 
+                    
                     $.ajax({
                         url: portletURL.toString(),
                         type:'POST',
@@ -1462,8 +1470,11 @@
                     			portlet.repositoryType(OSP.Enumeration.RepositoryTypes.USER_JOBS);
                         	break;
                     	}
+                    	
+                    	if(scienceApp.getPort(portlet.portName())){
+                    		portlet.dataType(scienceApp.getPort(portlet.portName()).dataType());
+                    	}
                     }
-                    
                 }
             }
             
@@ -2423,10 +2434,10 @@
                     inputData.name( result.fileName );
                     
                     switch( contentType ){
-                        case 'fileContent':
+                        case OSP.Enumeration.PathType.FILE_CONTENT:
                             inputData.content( result.fileContent );
                             break;
-                        case 'structuredData':
+                        case OSP.Enumeration.PathType.STRUCTURED_DATA:
                             var ospDataType = new OSP.DataType();
                             ospDataType.deserializeStructure( JSON.parse(result.dataStructure) );
                             if( result.fileContent ){

@@ -16,6 +16,8 @@ div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_table-rf-designer-parame
 div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_table-rf-designer-parameter .form-group .form-control{
 	text-align: center;
 }
+
+.toast-designer-pos {top: 70px; left: 80%;}
 </style>
 <div class="h20"></div>
 <div class="row">
@@ -29,34 +31,41 @@ div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_table-rf-designer-parame
 				<h5>
 					<p class="icon-arrow-right"></p><u>Simulation Parameter</u>
 				</h5>
-					
-				<div class="form-group col-md-2">
-					<label>SF(4~256)</label>
-					<input class="form-control simulation-parameter" id="SF" name="SF" type="text" value="4"/>
-				</div>
-				<div class="form-group col-md-2">
-					<label>Samples / Chip</label>
-					<input class="form-control simulation-parameter" id="zero" name="zero" type="text" value="8"/>
-				</div>
-				<div class="form-group col-md-2">
-					<label>Pulse Shaping Filter</label>
-					<select class="form-control simulation-parameter" id="ft" name="ft" >
-						<option value="RAISED-COSINE" selected="selected">Raised Cosine</option>
-						<option value="GAUSSIAN">Gaussian</option>
-					</select>
-				</div>
-				<div class="form-group col-md-2">
-					<label>Filter Taps</label>
-					<input class="form-control simulation-parameter" id="N" name="N" type="text" value="9"/>
-				</div>
-				<div class="form-group col-md-2">
-					<label>Roll-off Factor</label>
-					<input class="form-control simulation-parameter" id="rolloff" name="rolloff" type="text" value="0.22"/>
-				</div>
-				<div class="form-group col-md-2">
-					<label>3dB BW(MHz)</label>
-					<input class="form-control simulation-parameter" id="B" name="B" type="text" value="5"/>
-				</div>
+						
+				<form action="" id="<portlet:namespace/>parameterform" onsubmit="return false;">
+					<div class="form-group col-md-2">
+						<label>SF(4~256)</label>
+						<input class="form-control simulation-parameter" id="SF" name="SF" type="text" value="4" required/>
+						<div class="help-block with-errors"></div>
+					</div>
+					<div class="form-group col-md-2">
+						<label>Samples / Chip</label>
+						<input class="form-control simulation-parameter" id="zero" name="zero" type="text" value="8" required/>
+						<div class="help-block with-errors"></div>
+					</div>
+					<div class="form-group col-md-2">
+						<label>Pulse Shaping Filter</label>
+						<select class="form-control simulation-parameter" id="ft" name="ft" >
+							<option value="RAISED-COSINE" selected="selected">Raised Cosine</option>
+							<option value="GAUSSIAN">Gaussian</option>
+						</select>
+					</div>
+					<div class="form-group col-md-2">
+						<label>Filter Taps</label>
+						<input class="form-control simulation-parameter" id="N" name="N" type="text" value="33" required/>
+						<div class="help-block with-errors"></div>
+					</div>
+					<div class="form-group col-md-2">
+						<label>Roll-off Factor</label>
+						<input class="form-control simulation-parameter" id="rolloff" name="rolloff" type="text" value="0.22" required/>
+						<div class="help-block with-errors"></div>
+					</div>
+					<div class="form-group col-md-2">
+						<label>3dB BW(MHz)</label>
+						<input class="form-control simulation-parameter" id="B" name="B" type="text" value="5" required/>
+						<div class="help-block with-errors"></div>
+					</div>
+				</form>
 			</div>
 		</div>
 	</div>
@@ -64,6 +73,11 @@ div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_table-rf-designer-parame
 		<div class="panel panel-default" style="min-height: 390px">
 			<div class="panel-heading clearfix ">
 				<h2 class="panel-title">Constellation</h2>
+			</div>
+			<div class="panel-body" >
+				<div id="constellation-plot-content" style="height: 390px;">
+					
+				</div>
 			</div>
 		</div>
 	</div>
@@ -277,7 +291,9 @@ div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_table-rf-designer-parame
 				<h2 class="panel-title">BER</h2>
 			</div>
 			<div class="panel-body">
-				
+				<div id="ber-plot-content" style="height: 650px;">
+					
+				</div>
 			</div>
 			<div class="panel-footer">
 				<div class="row" style="margin-left: -15px;margin-right: -15px;">
@@ -286,14 +302,14 @@ div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_table-rf-designer-parame
 					</div>
 					<div class="col-md-3">
 						<label>From(dB)</label>
-						<input class="form-control" type="text"/>
+						<input class="form-control" id="<portlet:namespace/>from" type="text" value="1"/>
 					</div>
 					<div class="col-md-3">
 						<label>To(dB)</label>
-						<input class="form-control" type="text"/>
+						<input class="form-control" id="<portlet:namespace/>to" type="text" value="3"/>
 					</div>
 					<div class="col-md-3">
-						<button class="btn btn-primary"> 
+						<button class="btn btn-primary" onclick="<portlet:namespace/>berplot();"> 
 							<span class="icon-bar-chart"> Plot </span> 
 						</button>
 					</div>
@@ -400,7 +416,14 @@ L(dB) = L_unit + [L_dec*log(D)] - G_Tx - G_Rx
 <script src="${contextPath}/js/wcdma/designer.js"></script>
 <script src="${contextPath}/js/wcdma/fomular.js"></script>
 
+<script src="${contextPath}/js/lib/toastr.min.js"></script>
+
+<!--bootstrap validation JS-->
+<script src="${contextPath}/js/validation/validator.min.js"></script>
+
 <script type="text/javascript">
+var toastr;
+
 var <portlet:namespace/>RF_DESIGN_PARAMETER = {
 	"form":{
 		"CHANNEL-PL":{
@@ -600,6 +623,24 @@ $(document).ready(function(){
 		
 		<portlet:namespace/>RF_DESIGN_PARAMETER.data[parentKey][thisName] = thisValue;
 	});
+	
+	toastr.options = {
+		"closeButton": true,
+		"debug": false,
+		"newestOnTop": true,
+		"progressBar": false,
+		"positionClass": "toast-designer-pos",
+		"preventDuplicates": false,
+		"onclick": null,
+		"showDuration": "300",
+		"hideDuration": "1000",
+		"timeOut": "5000",
+		"extendedTimeOut": "1000",
+		"showEasing": "swing",
+		"hideEasing": "linear",
+		"showMethod": "slideDown",
+		"hideMethod": "slideUp"
+	};
 });
 
 function <portlet:namespace/>init() {
@@ -750,7 +791,6 @@ function <portlet:namespace/>powerLevelGrid(){
 		inputData[key] = value;
 	});
 	
-	
 	var plotlyData = getPowerLevelDiagramData(<portlet:namespace/>RF_DESIGN_PARAMETER.data,pIn,channel,inputData);
 	
 	<portlet:namespace/>plotlyGrid('power-plot-content','No. of Stage','Power Level (dBm)',plotlyData);
@@ -766,12 +806,71 @@ function <portlet:namespace/>plotlyGrid(idStr,xTitle,yTitle,data){
             }
         };
 	
+	if(idStr==='ber-plot-content'){
+		layout.yaxis['type'] = ['log'];
+	}
+	
 	Plotly.newPlot(idStr, data, layout, {
         scrollZoom: false
     });
 }
 
 function <portlet:namespace/>calculation(){
+	if (<portlet:namespace/>isValidate($("#<portlet:namespace/>parameterform"))) {
+		<portlet:namespace/>simulationParameterUpdate();
+		
+		var calDiv = $("#<portlet:namespace/>calculationResultDiv");
+		bStart();
+		var sampleData = {
+			"CHANNEL-AWGN": {"snr": "2", "type": "CHANNEL-AWGN"},
+			"CHANNEL-PL": {"distance": "1","g-rx": "0","g-tx": "0","l-dec": "0","l-unit": "40","type": "CHANNEL-PL"},
+			"RX-BBA": {"gain": "34", "nf": "28", "iip3": "20", "type": "RX-BBA"},
+			"RX-BLOCK-1": {"gain": "16", "nf": "1.5", "iip3": "8", "type": "RX-AMP-AM"},
+			"RX-LPF": {"apass": "3","fcut": "3.5","gain": "-2","iip3": "35","nf": "25","order": "3","type": "LPF-BUTTER"},
+			"RX-MIXER": {fc: "2112","gain": "15","iip3": "11","imbal-db": "0","imbal-deg": "0","nf": "10","type": "RX-MIXER"},
+			"SIMULATION-PARAMETER": {"B": "5","N": "33","SF": "4","ft": "RAISED-COSINE","rolloff": "0.22","zero": "8"},
+			"TX-BLOCK-1": {"apass": "3","f-lo": "2108.5","f-up": "2115.5","gain": "-2","nf": "4","oip3": "100","order": "3","type": "BPF-BUTTER"},
+			"TX-BLOCK-2": {"gain": "25", "nf": "5", "oip3": "47", "type": "AMP-AM"},
+			"TX-MIXER": {"fc": "2112","gain": "-1","imbal-db": "0.05","imbal-deg": "4","nf": "1","oip3": "10","type": "TX-MIXER"}
+		};
+		<portlet:namespace/>RF_DESIGN_PARAMETER.data = sampleData;
+		
+		setTimeout(function(){
+			var plotlyData = calculation(<portlet:namespace/>RF_DESIGN_PARAMETER.data,calDiv,'<portlet:namespace/>');
+			
+			if(!plotlyData){
+				toastr["error"]("", Liferay.Language.get('edison-data-event-error'));
+			}else{
+				console.log(plotlyData);
+				<portlet:namespace/>plotlyGrid('constellation-plot-content','REAL','IMAG',plotlyData);
+			}
+			bEnd();
+		},1000);
+	}
+}
+
+function <portlet:namespace/>berplot(){
+	if (<portlet:namespace/>isValidate($("#<portlet:namespace/>parameterform"))) {
+		<portlet:namespace/>simulationParameterUpdate();
+		
+		bStart();
+		setTimeout(function(){
+			var from = $("input#<portlet:namespace/>from").val();
+			var to = $("input#<portlet:namespace/>to").val();
+			
+			var plotlyData = berplot(<portlet:namespace/>RF_DESIGN_PARAMETER.data,from,to);
+			if(!plotlyData){
+				toastr["error"]("", Liferay.Language.get('edison-data-event-error'));
+			}else{
+				console.log(plotlyData);
+				<portlet:namespace/>plotlyGrid('ber-plot-content','SNR(dB)','BER',plotlyData);
+			}
+			bEnd();
+		},1000);
+	}
+}
+
+function <portlet:namespace/>simulationParameterUpdate(){
 	var simObj = {};
 	
 	//Simulation Parameter to Object
@@ -784,18 +883,11 @@ function <portlet:namespace/>calculation(){
 	);
 	
 	<portlet:namespace/>RF_DESIGN_PARAMETER.data[DESIGNER.Constants.DesignerKey.SM_PARA] = simObj;
-	var calDiv = $("#<portlet:namespace/>calculationResultDiv");
-	
-	bStart();
-	setTimeout(function(){
-		var plotlyData = calculation(<portlet:namespace/>RF_DESIGN_PARAMETER.data,calDiv,'<portlet:namespace/>');
-		
-		if(plotlyData){
-			bEnd();
-		}
-	},1000);
-	
-// 	<portlet:namespace/>plotlyGrid('power-plot-content','REAL','IMAG',plotlyData);
+}
+
+function <portlet:namespace/>isValidate(formObject) {
+    formObject.validator('validate');
+    return formObject.find(".has-error").length === 0;
 }
 
 </script>

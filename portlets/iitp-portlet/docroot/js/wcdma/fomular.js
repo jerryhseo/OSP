@@ -1,5 +1,6 @@
 var t = 16384;
 //var t = 32768;
+var SNR_dB,ber;
 
 /*Calculation Fomular*/
 function calculation(filterData,calDiv,namespace){
@@ -80,30 +81,29 @@ function calculation(filterData,calDiv,namespace){
 		var RBS1 = RBS0.map(RBS0 => RBS0 * 2 - 1);
 		var RBS2 = DESIGNER.Constants.stop(RBS1,t);
 		
-		var SF = 4; // remove code
+		var SF	 = getDataFormFilterData(filterData[DESIGNER.Constants.DesignerKey.SM_PARA]    ,'SF');
+		var zero = getDataFormFilterData(filterData[DESIGNER.Constants.DesignerKey.SM_PARA]    ,'zero');
+		var ft 	 = filterData[DESIGNER.Constants.DesignerKey.SM_PARA]['ft'];
+		var rolloff = getDataFormFilterData(filterData[DESIGNER.Constants.DesignerKey.SM_PARA]    ,'rolloff');
+		var B 	 = getDataFormFilterData(filterData[DESIGNER.Constants.DesignerKey.SM_PARA]    ,'B');
+		var N	 = getDataFormFilterData(filterData[DESIGNER.Constants.DesignerKey.SM_PARA]    ,'N');
+		var Fs = 3840000 * zero;
+		
 		var RBS3 = DESIGNER.Constants.stretch(RBS2, SF);
 		
 		[RBS4, wn] = DESIGNER.Constants.spreading(RBS3, SF);
-		var zero = 8;// remove code - Samples/Chip
 		var RBS5 = DESIGNER.Constants.zeroinsert(RBS4, zero);
-		
-		var ft = "RAISED-COSINE";// remove code - Pulse Shaping Filter
-		var rolloff = 0.22;// remove code - Roll-off Factor
-		var B = 5;// remove code - 3dB BW(MHz)
-		var N = 33;// Filter Taps
-		var Fs = 3840000 * zero;
-		
 		var RBS6 = DESIGNER.Constants.pulsefilter(RBS5, ft, rolloff, N, zero, B);
 		
 		var Mismatch_Gain = getDataFormFilterData(filterData[DESIGNER.Constants.DesignerKey.TX_MIXER]    ,'imbal-db');
 		var Mismatch_Phase = getDataFormFilterData(filterData[DESIGNER.Constants.DesignerKey.TX_MIXER]    ,'imbal-deg');
 		
 		var RBS7 = DESIGNER.Constants.iqmismatch(RBS6, Gain0, Mismatch_Gain, Mismatch_Phase);
-		var RBS8 = DESIGNER.Constants.blockCalu(RBS7,filterData[DESIGNER.Constants.DesignerKey.TX_BLOCK_1],zero,false);
-		var RBS82 = DESIGNER.Constants.blockCalu(RBS8, filterData[DESIGNER.Constants.DesignerKey.TX_BLOCK_2],zero,false);
-		var RBS83 = DESIGNER.Constants.blockCalu(RBS82, filterData[DESIGNER.Constants.DesignerKey.TX_BLOCK_3],zero,false);
-		var RBS84 = DESIGNER.Constants.blockCalu(RBS83, filterData[DESIGNER.Constants.DesignerKey.TX_BLOCK_4],zero,false);
-		var RBS85 = DESIGNER.Constants.blockCalu(RBS84, filterData[DESIGNER.Constants.DesignerKey.TX_BLOCK_5],zero,false);
+		var RBS8 = DESIGNER.Constants.blockCalu(RBS7,filterData[DESIGNER.Constants.DesignerKey.TX_BLOCK_1],Fs,false);
+		var RBS82 = DESIGNER.Constants.blockCalu(RBS8, filterData[DESIGNER.Constants.DesignerKey.TX_BLOCK_2],Fs,false);
+		var RBS83 = DESIGNER.Constants.blockCalu(RBS82, filterData[DESIGNER.Constants.DesignerKey.TX_BLOCK_3],Fs,false);
+		var RBS84 = DESIGNER.Constants.blockCalu(RBS83, filterData[DESIGNER.Constants.DesignerKey.TX_BLOCK_4],Fs,false);
+		var RBS85 = DESIGNER.Constants.blockCalu(RBS84, filterData[DESIGNER.Constants.DesignerKey.TX_BLOCK_5],Fs,false);
 		
 		var G_Tx = getDataFormFilterData(filterData[DESIGNER.Constants.DesignerKey.CHANNEL_PL]  ,'g-tx');
 		var G_Rx = getDataFormFilterData(filterData[DESIGNER.Constants.DesignerKey.CHANNEL_PL]  ,'g-rx');
@@ -112,13 +112,11 @@ function calculation(filterData,calDiv,namespace){
 		var D = getDataFormFilterData(filterData[DESIGNER.Constants.DesignerKey.CHANNEL_PL]  ,'distance');
 		[RBS9, T_loss] = DESIGNER.Constants.Pathloss(RBS85, G_Tx, G_Rx, L_unit, L_dec, D);
 		
-		var SNR_dB = getDataFormFilterData(filterData[DESIGNER.Constants.DesignerKey.CHANNEL_AWGN]    ,'snr')
+		SNR_dB = getDataFormFilterData(filterData[DESIGNER.Constants.DesignerKey.CHANNEL_AWGN]    ,'snr')
 		var RBS10 = DESIGNER.Constants.AWGNC(RBS9, SNR_dB);
-		var RBS86 = DESIGNER.Constants.blockCalu(RBS10, filterData[DESIGNER.Constants.DesignerKey.RX_BLOCK_1],zero,true);
-		var RBS87 = DESIGNER.Constants.blockCalu(RBS86, filterData[DESIGNER.Constants.DesignerKey.RX_BLOCK_2],zero,true);
-		var RBS88 = DESIGNER.Constants.blockCalu(RBS87, filterData[DESIGNER.Constants.DesignerKey.RX_BLOCK_2],zero,true);
-		
-		
+		var RBS86 = DESIGNER.Constants.blockCalu(RBS10, filterData[DESIGNER.Constants.DesignerKey.RX_BLOCK_1],Fs,true);
+		var RBS87 = DESIGNER.Constants.blockCalu(RBS86, filterData[DESIGNER.Constants.DesignerKey.RX_BLOCK_2],Fs,true);
+		var RBS88 = DESIGNER.Constants.blockCalu(RBS87, filterData[DESIGNER.Constants.DesignerKey.RX_BLOCK_3],Fs,true);
 		var Mismatch_Gain2 = getDataFormFilterData(filterData[DESIGNER.Constants.DesignerKey.RX_MIXER]    ,'imbal-db');
 		var Mismatch_Phase2 = getDataFormFilterData(filterData[DESIGNER.Constants.DesignerKey.RX_MIXER]    ,'imbal-deg');
 		var RBS89 = DESIGNER.Constants.iqmismatch(RBS88, Gain9, Mismatch_Gain2, Mismatch_Phase2);
@@ -128,7 +126,7 @@ function calculation(filterData,calDiv,namespace){
 		var RBS12 = DESIGNER.Constants.despreading(RBS11, wn, SF);
 		var RBS13 = DESIGNER.Constants.downsample(RBS12, SF);
 		var RBS14 = DESIGNER.Constants.patose(RBS13, t);
-		var ber = DESIGNER.Constants.BERfunc(RBS14, RBS1, t);
+		ber = DESIGNER.Constants.BERfunc(RBS14, RBS1, t);
 		
 		var trace = {
 			x: constell[0],
@@ -140,6 +138,77 @@ function calculation(filterData,calDiv,namespace){
 		var data = [trace];
 		return data;
 	} catch (e) {
+		console.log(e.name,e.message)
+		return false;
+	} 
+}
+
+function berplot(filterData,from,to){
+	if(typeof RBS9 ==='undefined'){
+		alert("Calculation을 먼저 수행 하여야 합니다.");
+		return false;
+	}
+	
+	try {
+		var SF	 = getDataFormFilterData(filterData[DESIGNER.Constants.DesignerKey.SM_PARA]    ,'SF');
+		var zero = getDataFormFilterData(filterData[DESIGNER.Constants.DesignerKey.SM_PARA]    ,'zero');
+		var ft 	 = filterData[DESIGNER.Constants.DesignerKey.SM_PARA]['ft'];
+		var rolloff = getDataFormFilterData(filterData[DESIGNER.Constants.DesignerKey.SM_PARA]    ,'rolloff');
+		var B 	 = getDataFormFilterData(filterData[DESIGNER.Constants.DesignerKey.SM_PARA]    ,'B');
+		var N	 = getDataFormFilterData(filterData[DESIGNER.Constants.DesignerKey.SM_PARA]    ,'N');
+		var Fs = 3840000 * zero;
+		
+		var Gain9  = getDataFormFilterData(filterData[DESIGNER.Constants.DesignerKey.RX_MIXER]  ,'gain');
+		
+		var RBS0 = DESIGNER.Constants.randbit(t);
+		var RBS1 = RBS0.map(RBS0 => RBS0 * 2 - 1);
+		
+		
+		var RBS10 = DESIGNER.Constants.AWGNC(RBS9, from);
+		var RBS86 = DESIGNER.Constants.blockCalu(RBS10, filterData[DESIGNER.Constants.DesignerKey.RX_BLOCK_1],Fs,true);
+		var RBS87 = DESIGNER.Constants.blockCalu(RBS86, filterData[DESIGNER.Constants.DesignerKey.RX_BLOCK_2],Fs,true);
+		var RBS88 = DESIGNER.Constants.blockCalu(RBS87, filterData[DESIGNER.Constants.DesignerKey.RX_BLOCK_3],Fs,true);
+		
+		var RBS89 = DESIGNER.Constants.iqmismatch(RBS88, Gain9, Mismatch_Gain2, Mismatch_Phase2);
+		var RBS810 = DESIGNER.Constants.BBblock(RBS89, filterData[DESIGNER.Constants.DesignerKey.RX_LPF], Fs);
+		var RBS811 = DESIGNER.Constants.BBblock2(RBS810, filterData[DESIGNER.Constants.DesignerKey.RX_BBA]);
+		
+		[RBS11, constell] = DESIGNER.Constants.integrate(RBS811, SF, t, Fs, zero);
+		var RBS12 = DESIGNER.Constants.despreading(RBS11, wn, SF);
+		var RBS13 = DESIGNER.Constants.downsample(RBS12, SF);
+		var RBS14 = DESIGNER.Constants.patose(RBS13, t);
+		var berf = DESIGNER.Constants.BERfunc(RBS14, RBS1, t);
+		
+		
+		var RBS10 = DESIGNER.Constants.AWGNC(RBS9, to);
+		var RBS86 = DESIGNER.Constants.blockCalu(RBS10, filterData[DESIGNER.Constants.DesignerKey.RX_BLOCK_1],Fs,true);
+		var RBS87 = DESIGNER.Constants.blockCalu(RBS86, filterData[DESIGNER.Constants.DesignerKey.RX_BLOCK_2],Fs,true);
+		var RBS88 = DESIGNER.Constants.blockCalu(RBS87, filterData[DESIGNER.Constants.DesignerKey.RX_BLOCK_3],Fs,true);
+		
+		var Mismatch_Gain2 = getDataFormFilterData(filterData[DESIGNER.Constants.DesignerKey.RX_MIXER]    ,'imbal-db');
+		var Mismatch_Phase2 = getDataFormFilterData(filterData[DESIGNER.Constants.DesignerKey.RX_MIXER]    ,'imbal-deg');
+		var RBS89 = DESIGNER.Constants.iqmismatch(RBS88, Gain9, Mismatch_Gain2, Mismatch_Phase2);
+		var RBS810 = DESIGNER.Constants.BBblock(RBS89, filterData[DESIGNER.Constants.DesignerKey.RX_LPF], Fs);
+		var RBS811 = DESIGNER.Constants.BBblock2(RBS810, filterData[DESIGNER.Constants.DesignerKey.RX_BBA]);
+		
+		[RBS11, constell] = DESIGNER.Constants.integrate(RBS811, SF, t, Fs, zero);
+		var RBS12 = DESIGNER.Constants.despreading(RBS11, wn, SF);
+		var RBS13 = DESIGNER.Constants.downsample(RBS12, SF);
+		var RBS14 = DESIGNER.Constants.patose(RBS13, t);
+		var bert = DESIGNER.Constants.BERfunc(RBS14, RBS1, t);
+		
+		
+		var trace = {
+				x: [from,SNR_dB,to],
+				y: [berf,ber,bert],
+				mode: 'markers',
+				type: 'scatter'
+		};
+		
+		var data = [trace];
+		return data;
+	}catch (e) {
+		console.log(e.name,e.message)
 		return false;
 	} 
 }
@@ -250,7 +319,6 @@ function getPowerLevelDiagramData(filterData,pIn,channel,inputData){
     };
     
     var data = [trace1];
-    console.log(data);
     return data;
 }
 
