@@ -13,6 +13,7 @@ import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import org.kisti.edison.bestsimulation.NoSuchSimulationJobDataException;
 import org.kisti.edison.bestsimulation.model.Simulation;
 import org.kisti.edison.bestsimulation.model.SimulationJob;
 import org.kisti.edison.bestsimulation.model.SimulationJobData;
@@ -151,7 +152,11 @@ public class JobController {
 			out.flush();
 			out.close();
 		}catch (Exception e) {
-			e.printStackTrace();
+			if(e instanceof NoSuchSimulationJobDataException){
+				
+			}else{
+				e.printStackTrace();
+			}
 		}
 	}
 	

@@ -116,7 +116,7 @@ function sdrcommon_collectionPopup(result){
   		}
   		
   		if(errorMsg!=""){
-  			alertMsg += "Partially Failed <br/>";
+  			alertMsg += "<br/> Partially Failed <br/>";
   			alertMsg += errorMsg.replace(/,/gi, ',<br/>');
   		}
   		
