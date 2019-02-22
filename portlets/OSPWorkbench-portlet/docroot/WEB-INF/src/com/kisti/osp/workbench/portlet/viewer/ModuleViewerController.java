@@ -112,6 +112,9 @@ public class ModuleViewerController {
 			jobUuid = "21a3331e-64a6-44f4-8b08-7f649e1ef126";
 		}
 		
+		
+		System.out.println(portData);
+		
 		JSONObject portDataJson = JSONFactoryUtil.createJSONObject(portData);
 		String defaultPortlet = "";
 		String portName = "";
