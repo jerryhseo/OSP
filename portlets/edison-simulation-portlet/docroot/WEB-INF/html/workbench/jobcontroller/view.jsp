@@ -456,11 +456,31 @@ function sdrcommon_collectionPopup(result){
 		method: 'POST',
 		timeout: 10000,
 	}).done(function (result) {
-		if(result.isComplete){
-			$.alert(Liferay.Language.get("edison-simulation-monitoring-export-job-success-msg")+ "<br/>" + result.msg.replace(/,/gi, ',<br/>'));
-		}else{
-			$.alert(Liferay.Language.get("edison-simulation-monitoring-export-job-fail-msg")+ "<br/>" + result.msg.replace(/,/gi, ',<br/>'));
+		var successMsg = result.successMsg;
+		var errorMsg = result.errorMsg;
+		
+		var alertMsg = "";
+		if(successMsg!=""){
+			alertMsg += "Successfully Transfer JobData To SDR <br/>";
+			alertMsg += successMsg.replace(/,/gi, ',<br/>');
 		}
+		
+		if(errorMsg!=""){
+			alertMsg += "Partially Failed <br/>";
+			alertMsg += errorMsg.replace(/,/gi, ',<br/>');
+		}
+		
+		if(alertMsg==""){
+			alertMsg = "No data to send to SDR.";
+		}
+		
+		$.alert(alertMsg);
+		
+// 		if(result.isComplete){
+// 			$.alert(Liferay.Language.get("edison-simulation-monitoring-export-job-success-msg")+ "<br/>" + result.msg.replace(/,/gi, ',<br/>'));
+// 		}else{
+// 			$.alert(Liferay.Language.get("edison-simulation-monitoring-export-job-fail-msg")+ "<br/>" + result.msg.replace(/,/gi, ',<br/>'));
+// 		}
 	}).error(function (msg) {
 		$.alert(Liferay.Language.get("edison-simulation-monitoring-export-job-fail-msg"));
 		console.log(msg);
