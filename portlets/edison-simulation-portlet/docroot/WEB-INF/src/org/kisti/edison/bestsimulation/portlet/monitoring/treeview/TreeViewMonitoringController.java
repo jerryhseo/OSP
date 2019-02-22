@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.kisti.edison.bestsimulation.NoSuchSimulationJobDataException;
 import org.kisti.edison.bestsimulation.model.Simulation;
 import org.kisti.edison.bestsimulation.model.SimulationJob;
 import org.kisti.edison.bestsimulation.model.SimulationJobData;
@@ -249,98 +250,77 @@ public class TreeViewMonitoringController{
         ResourceRequest request, ResourceResponse response) throws PortalException, SystemException, IOException{
 
         final int REPO_ID = 1;
-        Gson result = new GsonBuilder().create();
         PrintWriter out = response.getWriter();
         response.setContentType("application/json; charset=UTF-8");
         ServiceContext sc = ServiceContextFactory.getInstance(request);
         ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
         Map<String, Object> resultMap  = new HashMap<String, Object>();
-        List<Map<String, Object>> results = new ArrayList<>();
 
         // Initialize variables
-        resultMap.put("isComplete", true);
-        resultMap.put("completeCount", 0);
-        resultMap.put("msg", "Partially Failed: ");
-        int successJob = 0;
+        boolean isComplete = true;
+		String successMsg = "";
+		String errorMsg = "";
 
-        try{
-            List<SimulationJob> jobs = SimulationJobLocalServiceUtil
-                .getJobsBySimulationUuidWithAdditionalCondition(simulationUuid);
-            Simulation simulation = SimulationLocalServiceUtil.getSimulationByUUID(simulationUuid);
+        List<SimulationJob> jobs = SimulationJobLocalServiceUtil
+            .getJobsBySimulationUuidWithAdditionalCondition(simulationUuid);
+        Simulation simulation = SimulationLocalServiceUtil.getSimulationByUUID(simulationUuid);
 
-            for(SimulationJob job : jobs){
-                Map<String, Object> eachResult = new HashMap<String, Object>();
-                String jobUuid = job.getJobUuid();
-                String scienceAppId = simulation.getScienceAppId();
-                String jobTitle = simulation.getSimulationTitle(themeDisplay.getLocale()) + " - "
-                    + job.getJobTitle(themeDisplay.getLocale());
-                
-                ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(GetterUtil.getLong(scienceAppId, 0));
-                if(scienceApp != null && job.getJobStatus() == JOB_STATUS_SUCCESS){
-                    successJob++;
-                    com.liferay.portal.kernel.json.JSONObject saveInfo = JSONFactoryUtil.createJSONObject();
-                    SimulationJobData simulationJobData = SimulationJobDataLocalServiceUtil
-                        .getSimulationJobData(jobUuid);
-                    
-                    saveInfo = DatasetServiceUtil.save(
-        					GetterUtil.getLong(collectionId), 
-        					jobUuid,  
-        					scienceApp.getName(), 
-        					scienceApp.getVersion(), 
-        					jobTitle, 
-        					GetterUtil.getLong(scienceAppId, 0), 
-        					REPO_ID,  
-        					simulationJobData.getJobData(), 
-        					scienceApp.getLayout(), 
-        					job.getJobStartDt(), 
-        					job.getJobEndDt(), 
-        					scienceApp.getRunType(), 
-        					sc);
-
-                    if(saveInfo.getBoolean("isValid")){
-                        com.liferay.portal.kernel.json.JSONObject curateInfo = JSONFactoryUtil.createJSONObject();
-                        curateInfo = DatasetServiceUtil.curate(saveInfo.getLong("datasetId"), sc);
-
-                        if(curateInfo.getBoolean("isValid")){ // success
-                            int completeCount = (int) resultMap.get("completeCount");
-                            resultMap.put("completeCount", ++completeCount);
-                        } else{ // fail
-                            resultMap.put("isComplete", false);
-                            String message = (String) resultMap.get("msg");
-                            message = message + ", " + jobTitle;
-                            resultMap.put("msg", message);
-                        }
-                    } else { // fail
-                        resultMap.put("isComplete", false);
-                        String message = (String) resultMap.get("msg");
-                        message = message + ", " + jobTitle;
-                        resultMap.put("msg", message);
-                    }
-
-                    // failed job doesn't need to be added
-                    results.add(eachResult);
-                } else{ // only success job is saved
-                    String msg = "No scienceAppId or failed job - scienceAppId : " + scienceAppId;
-                    //resultMap.put("isComplete", false);
-                    log.info(msg);
-                }
-                
+        for(SimulationJob job : jobs){
+            Map<String, Object> eachResult = new HashMap<String, Object>();
+            String jobUuid = job.getJobUuid();
+            String scienceAppId = simulation.getScienceAppId();
+            String jobTitle = simulation.getSimulationTitle(themeDisplay.getLocale()) + " - "
+                + job.getJobTitle(themeDisplay.getLocale());
+            
+            boolean isTrance = true;
+            ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(GetterUtil.getLong(scienceAppId, 0));
+            if(scienceApp != null && job.getJobStatus() == JOB_STATUS_SUCCESS){
+                com.liferay.portal.kernel.json.JSONObject saveInfo = JSONFactoryUtil.createJSONObject();
+                try{
+                	SimulationJobData simulationJobData = SimulationJobDataLocalServiceUtil.getSimulationJobData(jobUuid);
+                	
+                	saveInfo = DatasetServiceUtil.save(
+                			GetterUtil.getLong(collectionId), 
+                			jobUuid,  
+                			scienceApp.getName(), 
+                			scienceApp.getVersion(), 
+                			jobTitle, 
+                			GetterUtil.getLong(scienceAppId, 0), 
+                			REPO_ID,  
+                			simulationJobData.getJobData(), 
+                			scienceApp.getLayout(), 
+                			job.getJobStartDt(), 
+                			job.getJobEndDt(), 
+                			scienceApp.getRunType(), 
+                			sc);
+                	
+                	if(saveInfo.getBoolean("isValid")){
+                		com.liferay.portal.kernel.json.JSONObject curateInfo = JSONFactoryUtil.createJSONObject();
+                		curateInfo = DatasetServiceUtil.curate(saveInfo.getLong("datasetId"), sc);
+                		
+                		if(!curateInfo.getBoolean("isValid")){
+                			isTrance = false;
+                		}
+                	} else {
+                		isTrance = false;
+                	}
+                }catch (NoSuchSimulationJobDataException e) {
+                	isTrance = false;
+				}finally {
+					if(isTrance){
+						if(successMsg.equals("")){successMsg += jobTitle;}else{successMsg += ", "+jobTitle;}
+					}else{
+						if(isComplete){isComplete = false;}
+						if(errorMsg.equals("")){errorMsg += jobTitle;}else{errorMsg += ", "+jobTitle;}
+					}
+				}
             }
-        } catch (Exception e){ // error
-            resultMap.put("isComplete", false);
-            resultMap.put("msg", "Error while saving the data");
-            log.error("transferSimulationData", e);
         }
+        
+        resultMap.put("successMsg", successMsg);
+		resultMap.put("errorMsg", errorMsg);
 
-        int jobCount = (int) resultMap.get("completeCount");
-        if(successJob == jobCount) {
-            resultMap.put("isComplete", true);
-            resultMap.put("msg", "Successfully Transfer JobData To SDR");
-        } else {
-            resultMap.put("isComplete", false);
-        }
-        resultMap.put("results", results);
-        out.write(result.toJson(resultMap));
+        out.write(new Gson().toJson(resultMap).toString());
         out.flush();
         out.close();
     }

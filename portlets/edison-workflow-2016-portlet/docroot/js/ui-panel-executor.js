@@ -812,17 +812,21 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             })
         
 	        if(currJobs.getArray().length > 0){
+	        	$(JQ_PORTLET_BOUNDARY_ID + " .top-btn[data-btn-type='new-job']").css("color", "#333333");
 	        	jobsPagination(jobsMap.pagination, simulationId);
 	        } else {
 	        	_delay(function() {
+	        		/* Init layout */
+	        		var getCurrentInstance = designer.getCurrentJsPlumbInstance();
+	        		getCurrentInstance.clear();
+	        		
+	        		/* Empty job message */
 	        		toastr["error"]("", var_workflow_not_exist_job_message);
-	        		/*$(JQ_PORTLET_BOUNDARY_ID + " .top-btn[data-btn-type='new-job']").click();*/
 	        		$(JQ_PORTLET_BOUNDARY_ID + " .top-btn[data-btn-type='new-job']").css("color", "red");
-	        	}, 500)
+	        	}, 100)
 	        }
-
     }
-
+    
     function jobsPagination(paginationData, simulationId){
         var paginationTemplate =
             '<li class="prev"><a href="#">«</a></li>' +
