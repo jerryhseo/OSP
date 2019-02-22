@@ -617,7 +617,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         wfBackgroupSave();
 //        console.log(JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" })));
     }
-
     function wfBackgroupSave() {
         var localWorkflow = modifyingWorkflow;
         var wfId = localWorkflow.workflowId;
@@ -1336,8 +1335,16 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         wfPortletGlobalData.wfElements = {};
         modifyingWorkflow = undefined;
     }
+    
+    function allNodesPause(){
+    	$.each(currentJsPlumbInstance.getNodes(), function(){
+    		var node = this;
+    		uiPanelInstance.pauseNode(node, true, null, false);
+    	});
+    }
 
     return {
+    	"allNodesPause": allNodesPause,
         "addScienceApp": addScienceApp,
         "removeSicenceApps": removeSicenceApps,
         "getWorkflowDefinition": getWorkflowDefinition,
