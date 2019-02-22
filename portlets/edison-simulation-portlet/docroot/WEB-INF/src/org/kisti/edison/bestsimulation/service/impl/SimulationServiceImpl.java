@@ -102,6 +102,10 @@ public class SimulationServiceImpl extends SimulationServiceBaseImpl {
 			String jobUuid = CustomUtil.strNull(simulationAndJobMap.get("jobUuid"));
 			SimulationJobDataLocalServiceUtil.modifySimulationJobData(jobUuid, jobData);
 			
+			
+			System.out.println("EDISON add-simulation API Active simulationUuid--->"+simulationUuid);
+			System.out.println("EDISON add-simulation API Active jobUuid--->"+jobUuid);
+			
 			long plid = PortalUtil.getPlidFromPortletId(group.getGroupId(), false, "SimulationWorkbench_WAR_OSPWorkbenchportlet");
 			resultInfo.put("isValid", isValid);
 			resultInfo.put("workbencPlid", plid);
