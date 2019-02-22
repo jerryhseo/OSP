@@ -821,19 +821,19 @@ function <portlet:namespace/>calculation(){
 		
 		var calDiv = $("#<portlet:namespace/>calculationResultDiv");
 		bStart();
-		var sampleData = {
-			"CHANNEL-AWGN": {"snr": "2", "type": "CHANNEL-AWGN"},
-			"CHANNEL-PL": {"distance": "1","g-rx": "0","g-tx": "0","l-dec": "0","l-unit": "40","type": "CHANNEL-PL"},
-			"RX-BBA": {"gain": "34", "nf": "28", "iip3": "20", "type": "RX-BBA"},
-			"RX-BLOCK-1": {"gain": "16", "nf": "1.5", "iip3": "8", "type": "RX-AMP-AM"},
-			"RX-LPF": {"apass": "3","fcut": "3.5","gain": "-2","iip3": "35","nf": "25","order": "3","type": "LPF-BUTTER"},
-			"RX-MIXER": {fc: "2112","gain": "15","iip3": "11","imbal-db": "0","imbal-deg": "0","nf": "10","type": "RX-MIXER"},
-			"SIMULATION-PARAMETER": {"B": "5","N": "33","SF": "4","ft": "RAISED-COSINE","rolloff": "0.22","zero": "8"},
-			"TX-BLOCK-1": {"apass": "3","f-lo": "2108.5","f-up": "2115.5","gain": "-2","nf": "4","oip3": "100","order": "3","type": "BPF-BUTTER"},
-			"TX-BLOCK-2": {"gain": "25", "nf": "5", "oip3": "47", "type": "AMP-AM"},
-			"TX-MIXER": {"fc": "2112","gain": "-1","imbal-db": "0.05","imbal-deg": "4","nf": "1","oip3": "10","type": "TX-MIXER"}
-		};
-		<portlet:namespace/>RF_DESIGN_PARAMETER.data = sampleData;
+// 		var sampleData = {
+// 			"CHANNEL-AWGN": {"snr": "2", "type": "CHANNEL-AWGN"},
+// 			"CHANNEL-PL": {"distance": "1","g-rx": "0","g-tx": "0","l-dec": "0","l-unit": "40","type": "CHANNEL-PL"},
+// 			"RX-BBA": {"gain": "34", "nf": "28", "iip3": "20", "type": "RX-BBA"},
+// 			"RX-BLOCK-1": {"gain": "16", "nf": "1.5", "iip3": "8", "type": "RX-AMP-AM"},
+// 			"RX-LPF": {"apass": "3","fcut": "3.5","gain": "-2","iip3": "35","nf": "25","order": "3","type": "LPF-BUTTER"},
+// 			"RX-MIXER": {fc: "2112","gain": "15","iip3": "11","imbal-db": "0","imbal-deg": "0","nf": "10","type": "RX-MIXER"},
+// 			"SIMULATION-PARAMETER": {"B": "5","N": "33","SF": "4","ft": "RAISED-COSINE","rolloff": "0.22","zero": "8"},
+// 			"TX-BLOCK-1": {"apass": "3","f-lo": "2108.5","f-up": "2115.5","gain": "-2","nf": "4","oip3": "100","order": "3","type": "BPF-BUTTER"},
+// 			"TX-BLOCK-2": {"gain": "25", "nf": "5", "oip3": "47", "type": "AMP-AM"},
+// 			"TX-MIXER": {"fc": "2112","gain": "-1","imbal-db": "0.05","imbal-deg": "4","nf": "1","oip3": "10","type": "TX-MIXER"}
+// 		};
+// 		<portlet:namespace/>RF_DESIGN_PARAMETER.data = sampleData;
 		
 		setTimeout(function(){
 			var plotlyData = calculation(<portlet:namespace/>RF_DESIGN_PARAMETER.data,calDiv,'<portlet:namespace/>');
