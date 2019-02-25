@@ -171,6 +171,7 @@ var <portlet:namespace/>initLiObj    = {"simulation":true,"edit":false,"new":tru
 var <portlet:namespace/>openDataTransSimulationIds = [];
 var <portlet:namespace/>openDataTransJobId = '';
 var <portlet:namespace/>openDataTransMode = '';
+var <portlet:namespace/>connector ='';
 /***********************************************************************
 * Initailization section and handling Liferay events
 ***********************************************************************/
@@ -208,6 +209,7 @@ Liferay.on(OSP.Event.OSP_EVENTS_REGISTERED,function(e){
 Liferay.on(OSP.Event.OSP_RESPONSE_APP_INFO, function( e ){
 	var myId = '<%=portletDisplay.getId()%>';
 	if(e.targetPortlet === myId){
+		console.log('OSP_RESPONSE_APP_INFO: ['+e.portletId+', '+new Date()+']', e.data);
 		<portlet:namespace/>init(e.data.scienceApp);
 		<portlet:namespace/>displayChange("INIT",'',true);
 	}
