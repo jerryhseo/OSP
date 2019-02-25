@@ -172,6 +172,7 @@ var <portlet:namespace/>openDataTransSimulationIds = [];
 var <portlet:namespace/>openDataTransJobId = '';
 var <portlet:namespace/>openDataTransMode = '';
 var <portlet:namespace/>connector ='';
+var <portlet:namespace/>parentNamespace = '';
 /***********************************************************************
 * Initailization section and handling Liferay events
 ***********************************************************************/
