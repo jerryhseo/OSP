@@ -26,7 +26,7 @@
 			</section>
 			
 			<section class="content" id="workbench-layout-area" style="display:none;">
-				<div class="container-fluid">
+				<div class="container-fluid" style="height: 100%;">
 					<div class="row" style="height: 100%;">
 						<div class="col-md-12 col" id="${namespace}${layoutKey}column-3" style="width: 100%;height: 100%;">
 						</div>
