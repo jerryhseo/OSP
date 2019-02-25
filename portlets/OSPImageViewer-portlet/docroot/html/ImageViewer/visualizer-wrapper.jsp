@@ -81,6 +81,7 @@ function <portlet:namespace/>loadImage( jsonData, changeAlert ){
 	    <portlet:namespace/>visualizer.readFirstServerFileURL();
 		break;
 	case OSP.Enumeration.PathType.URL:
+		<portlet:namespace/>setTitle(jsonData.name_);
 		<portlet:namespace/>visualizer.callIframeFunc( 'loadImage', null, jsonData.content_ );
 		break;
 	case OSP.Enumeration.PathType.FILE_CONTENT:
