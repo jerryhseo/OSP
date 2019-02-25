@@ -58,12 +58,12 @@ public class SimulationJobServiceImpl extends SimulationJobServiceBaseImpl {
 		if(gid == 0L) gid = 0;
 		if(simulationUuid == null) simulationUuid = "";
 		if(jobUuid == null) jobUuid = "";
-		if(jobStartDt == null) jobStartDt = ""; 
-		if(jobEndDt == null) jobEndDt = ""; 
+		if(jobStartDt == null) jobStartDt = "";
+		if(jobEndDt == null) jobEndDt = "";
 		
 		simulationUuid = simulationUuid.trim();
 		jobUuid = jobUuid.trim();
-		jobStartDt = jobStartDt.trim(); 
+		jobStartDt = jobStartDt.trim();
 		jobEndDt = jobEndDt.trim();
 		
 		SimulationJob simulationJob = null;
