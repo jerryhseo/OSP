@@ -193,11 +193,11 @@
             });
         };
 
-        var readServerFileURL = function( jsonData ){
+        var readServerFileURL = function( jsonData, changeAlert ){
             if( jsonData ){
                 setCurrentData( jsonData );
             }
-            createURL('READ_FILE')
+            createURL('READ_FILE', changeAlert);
         };
 
         var readDataTypeStructure = function( name, version, changeAlert ){
@@ -280,7 +280,8 @@
                         };
                         setCurrentData( result );
 
-                        loadCanvas( OSP.Util.toJSON(currentData), changeAlert);
+                        successFunc();
+                        //loadCanvas( OSP.Util.toJSON(currentData), false);
                 },
                 error: function(data, e ){
                     console.log('Error read first server file name: ', jsonData, data, e);
@@ -301,16 +302,16 @@
             getFirstFileName( successFunc );
         };
 
-        var readFirstServerFileURL = function( jsonData ){
+        var readFirstServerFileURL = function( jsonData, changeAlert ){
             if( jsonData ){
                  setCurrentData( jsonData );
             }
 
              var successFunc = function(){
-                createURL('READ_FILE');
+                createURL('READ_FILE', changeAlert);
             };
 
-            getFirstFileName( successFunc );
+            getFirstFileName( successFunc, changeAlert );
         };
 
         var refreshFileExplorer = function(){
@@ -442,8 +443,8 @@
             });
         };
 
-        var readDLFileEntryURL = function(){
-            createURL('READ_DLENTRY')
+        var readDLFileEntryURL = function(changeAlert){
+            createURL('READ_DLENTRY', changeAlert);
         };
 
         var submitUpload = function( localFile, successFunc ){

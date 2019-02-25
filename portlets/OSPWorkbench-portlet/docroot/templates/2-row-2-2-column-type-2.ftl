@@ -28,7 +28,7 @@
 </div>
 <#else>
 <div class="hold-transition skin-black-light sidebar-mini" id="body-div">
-	<header class="main-header" id="${namespace}${layoutKey}column-2">
+	<header class="main-header" id="${namespace}${layoutKey}column-2" section-type="system">
 		
 	</header>
 	<div class="wrapper">
