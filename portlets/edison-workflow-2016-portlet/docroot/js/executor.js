@@ -259,6 +259,21 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
             }, errorCallback
         );
     }
+    
+    /* 2019.02.26 _ Reuse and Copy */
+    function reuseCopySimulationJobEngine(params, callback, errorCallback) {
+        _clearTimeout(STATUS_TIMER);
+        aSyncAjaxHelper.post(
+            URI_PREFIX + "/simulation/" + params.simulationId + "/job/" + params.simulationJobId + "/reuse/copy",
+            params,
+            function (simulationJob) {
+                if (callback) {
+                    callback(simulationJob);
+                }
+            }, errorCallback
+        );
+    }
+    
     function exportSimulationJob(params, callback, errorCallback) {
         _clearTimeout(STATUS_TIMER);
         aSyncAjaxHelper.post(
@@ -700,6 +715,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
         "pauseSimulationJob": pauseSimulationJob,
         "resumeSimulationJob": resumeSimulationJob,
         "rerunSimulationJobEngine": rerunSimulationJobEngine,
+        "reuseCopySimulationJobEngine": reuseCopySimulationJobEngine,
         "pauseSingleNode": pauseSingleNode,
         "resumeSingleNode": resumeSingleNode,
         "exportSimulationJob": exportSimulationJob,

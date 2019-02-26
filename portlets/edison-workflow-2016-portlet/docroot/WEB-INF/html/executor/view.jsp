@@ -54,6 +54,7 @@ var var_cannot_load_intermediate_result_message = Liferay.Language.get("edison-w
 var var_no_available_analyzer_message = Liferay.Language.get("edison-workflow-no-available-analyzer-message");
 var var_workflow_status_not_found_message = Liferay.Language.get("edison-workflow-status-not-found");
 var var_workflow_not_exist_job_message = Liferay.Language.get("edison-workflow-not-exist-job-message");
+var var_workflow_include_reuse_node_message = Liferay.Language.get("edison-workflow-include-reuse-node-message");
 var contextPath = '${contextPath}';
 </script>
 
@@ -126,7 +127,7 @@ var contextPath = '${contextPath}';
     	text-align: center;
     	vertical-align: middle !important;
     }
-
+    
 </style>
 <div class="container-fluid workflow-executor">
   <div class="row" id="<portlet:namespace/>canvas" style="border-top: 1px solid #e5e5e9;">
@@ -135,7 +136,7 @@ var contextPath = '${contextPath}';
         <!-- App Name -->
         <div class="logo">
           <div class="logo-lg">
-            <h3 style="font-size: 17px;" id="<portlet:namespace/>appName">Workflow Simulation</h3>
+            <h3 style="font-size: 17px;" id="<portlet:namespace/>appName">Workflow Executor</h3>
             <h5 id="<portlet:namespace/>appVersion"></h5>
           </div>
           <div class="logo-sm">
@@ -147,50 +148,54 @@ var contextPath = '${contextPath}';
           <!-- Navbar Left Menu -->
           <div class="navbar-left">
             <ul class="nav navbar-nav">
-              <li id="<portlet:namespace/>header-li-simulation" class="top-btn" data-btn-type="open">
+              <li id="<portlet:namespace/>header-li-simulation" class="top-btn" data-btn-type="open" data-is-init="true">
                 <i class="fa fa-cubes fa-2x"></i><br>
                 <span class="nav-icon-text">Simulations</span>
               </li>
-              <li id="<portlet:namespace/>header-li-edit" class="top-btn" data-btn-type="setting">
+              <li id="<portlet:namespace/>header-li-edit" class="top-btn" data-btn-type="setting" data-is-init="true">
                 <i class="fa fa-cogs fa-2x"></i><br>
                 <span class="nav-icon-text">Edit</span>
               </li>
               <li class="<portlet:namespace/>divider-vertical" id="<portlet:namespace/>job-li-divider" style="display: block;"></li>
-              <li id="<portlet:namespace/>header-li-new" class="top-btn" data-btn-type="new-job" data-divider="job-li-divider">
+              <li id="<portlet:namespace/>header-li-new" class="top-btn" data-btn-type="new-job" data-divider="job-li-divider" data-is-init="true">
                 <i class="fa fa-plus-square-o fa-2x"></i><br>
                 <span class="nav-icon-text">New</span>
               </li>
-              <li id="<portlet:namespace/>header-li-save" data-btn-type="save-job" data-divider="job-li-divider">
+              <li id="<portlet:namespace/>header-li-save" class="top-btn" data-btn-type="save-job" data-divider="job-li-divider">
                 <i class="fa fa-save fa-2x"></i><br>
                 <span class="nav-icon-text">Save</span>
               </li>
-              <li id="<portlet:namespace/>header-li-copy" data-btn-type="copy-job" data-divider="job-li-divider">
+              <li id="<portlet:namespace/>header-li-copy" class="top-btn" data-btn-type="copy-job" data-divider="job-li-divider">
                 <i class="fa fa-copy fa-2x"></i><br>
                 <span class="nav-icon-text">Copy</span>
               </li>
-              <li id="<portlet:namespace/>header-li-delete" data-btn-type="delete-job" data-divider="job-li-divider">
+              <li id="<portlet:namespace/>header-li-delete" class="top-btn" data-btn-type="delete-job" data-divider="job-li-divider">
                 <i class="fa fa-trash-o fa-2x"></i><br>
                 <span class="nav-icon-text">Delete</span>
               </li>
-              <li class="<portlet:namespace/>divider-vertical" style="display: block;"></li>
-              <li id="<portlet:namespace/>header-li-submit" data-divider="ib-li-divider" class="before-submit">
+              <li class="<portlet:namespace/>divider-vertical" style="display: block;" class="top-btn"></li>
+              <li id="<portlet:namespace/>header-li-submit" data-divider="ib-li-divider" class="before-submit top-btn">
                 <i class="fa fa-cloud-upload fa-2x"></i><br>
                 <span class="nav-icon-text">Submit</span>
               </li>
-              <li id="<portlet:namespace/>header-li-pause" data-divider="ib-li-divider" class="after-submit before-pause" style="display: none;">
+              <li id="<portlet:namespace/>header-li-pause" data-divider="ib-li-divider" class="after-submit before-pause top-btn" style="display: none;">
                 <i class="fa fa-pause-circle fa-2x"></i><br>
                 <span class="nav-icon-text">Pause</span>
               </li>
-              <li id="<portlet:namespace/>header-li-resume" data-divider="ib-li-divider" class="after-submit after-pause" style="display: none;">
+              <li id="<portlet:namespace/>header-li-resume" data-divider="ib-li-divider" class="after-submit after-pause top-btn" style="display: none;">
                 <i class="fa fa-play-circle fa-2x"></i><br>
                 <span class="nav-icon-text">Resume</span>
               </li>
-              <li id="<portlet:namespace/>header-li-rerun" data-divider="ib-li-divider" class="after-stop" style="display: none;">
+              <li id="<portlet:namespace/>header-li-rerun" data-divider="ib-li-divider" class="after-stop top-btn" style="display: none;">
                 <i class="fa fa-undo fa-flip-horizontal fa-2x"></i><br>
                 <span class="nav-icon-text">ReRun</span>
               </li>
+              <li id="<portlet:namespace/>header-li-reuse-copy" data-divider="ib-li-divider" class="reuse-copy-btn" style="display: none;">
+                <i class="fa fa-copy fa-2x"></i><br>
+                <span class="nav-icon-text">Copy<br><span style="font-size: 12px; display: block; line-height: 0.7em;">(Reuse Job)</span></span>
+              </li>
               <li class="<portlet:namespace/>divider-vertical" style="display: block;"></li>
-              <li id="<portlet:namespace/>header-li-data" class="top-btn" data-btn-type="designer" data-divider="data-li-divider">
+              <li id="<portlet:namespace/>header-li-data" class="top-btn" data-btn-type="designer" data-divider="data-li-divider" data-is-init="true">
                 <i class="fa fa-share-square-o fa-2x"></i><br>
                 <span class="nav-icon-text">Designer</span>
               </li>

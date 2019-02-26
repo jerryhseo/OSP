@@ -911,6 +911,11 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                                 icon: isReUseNode ? "fa-ban" : "fa-recycle",
                                 callback: function(key, options) {
                                     uiPanelInstance.setReuseNode(node, !isReUseNode)
+                                    if(!isReUseNode){
+                                    	$("#p_p_id" + namespace + " .reuse-copy-btn").show();
+                                    } else {
+                                    	$("#p_p_id" + namespace + " .reuse-copy-btn").hide();
+                                    }
                                 }
                             }
                         }

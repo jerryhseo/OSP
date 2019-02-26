@@ -134,7 +134,18 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             return false
         }
     }
-
+    
+    /* Reuse node status setting for reuse copy job */
+    function setReUseNodeStatusByReuseCopy(node) {
+        if (node && !!node.isReUseNode) {
+            $('#' + node.id).addClass('is-re-use-node')
+            $('#' + node.id + ' .top-cog-icon').removeClass('fa-cog').addClass('fa-recycle')
+        } else {
+            $('#' + node.id).removeClass('is-re-use-node')
+            $('#' + node.id + ' .top-cog-icon').removeClass('fa-recycle').addClass('fa-cog')
+        }
+    }
+    
     function setReUseNodeStatus(node) {
         if (node && node.data && !!node.data.isReUseNode) {
             $('#' + node.id).addClass('is-re-use-node')
@@ -149,7 +160,25 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         if (node) {
             node.data.isReUseNode = !!isReUsable
             setReUseNodeStatus(node)
+            
+            if(!!isReUsable){
+            	setReuseParentNodes(node);
+            }
         }
+    }
+    
+    /* 2019.02.25 _ Set reuse flag in parentNodes */
+    function setReuseParentNodes(node){
+    	var parentNodes = node.data.status.parentNodes;
+    	if(parentNodes.length > 0){
+    		for(var idx in parentNodes){
+    			var parentNodeId = parentNodes[idx];
+    			var parentNode = currNodes.get(parentNodeId);
+    			if(!parentNode.data.isReUseNode){
+    				setReuseNode(parentNode, true);
+    			}
+    		}
+    	}
     }
 
     function insertIbUuid(node) {
@@ -586,7 +615,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     }
 
     function updateNodeStatus(workflowStatus) {
-        // console.log(workflowStatus)
         if (workflowStatus && workflowStatus.workflow) {
             if (workflowStatus.workflow.status === CONSTS.WF_STATUS_CODE.PAUSED) {
                 $(".before-pause").hide()
@@ -602,7 +630,19 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 $(".after-pause").hide()
                 $(".before-pause").hide()
                 $(".after-stop").show()
+            } else {
+                /* 2019.02.26 _ Reuse node execute button */
+            	$(".after-pause").hide()
+                $(".before-pause").hide()
+                $(".before-submit").show();
+                $(".after-submit").hide();
             }
+        } else {
+        	$(".before-pause").hide();
+            $(".after-pause").hide();
+            $(".after-stop").hide();
+            $(".before-submit").show();
+            $(".after-submit").hide();
         }
         if (workflowStatus && workflowStatus.workflow && workflowStatus.workflow.simulations) {
             $.each(workflowStatus.workflow.simulations, function () {
@@ -674,7 +714,21 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                         executor.clearStatusTimeout()
                         var job = currJobs.get(id)
                         if(console) {
-                            console.log(job)
+//                        	console.log(job)
+                        	if(job){
+                        		var thisJobScreenLogic = JSON.parse(job.screenLogic);
+                        		var nodes = thisJobScreenLogic.nodes;
+                        		for(var nodeIdx in nodes) {
+                        			setReUseNodeStatusByReuseCopy(nodes[nodeIdx]);
+                        		}
+                        		
+                        		/* reuse copy btn */
+                        		if($(".is-re-use-node").length > 0){
+                        			$("#p_p_id" + namespace + " .reuse-copy-btn").show();
+                        		} else {
+                        			$("#p_p_id" + namespace + " .reuse-copy-btn").hide();
+                        		}
+                        	}
                         }
                         if(job) {
                             if (_isBlank(job.workflowUUID)) {
@@ -687,8 +741,12 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                                 $(".after-pause").hide()
                                 $(".after-stop").hide()
 
-                                var initStatus = JSON.parse(job.statusResponse)
-                                updateNodeStatus(initStatus)
+                                // 2019.02.26 _ Reuse Copy -> job.statusResponse is null.
+                                var initStatus = null;
+                                if(job.statusResponse){
+                                	initStatus = JSON.parse(job.statusResponse)
+                                }
+                                
                                 if(pauseCallback) {
                                     pauseCallback(currNodes.getArray())
                                 }else{
@@ -812,6 +870,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             })
         
 	        if(currJobs.getArray().length > 0){
+	        	$(JQ_PORTLET_BOUNDARY_ID + " .top-btn").show();
 	        	$(JQ_PORTLET_BOUNDARY_ID + " .top-btn[data-btn-type='new-job']").css("color", "#333333");
 	        	jobsPagination(jobsMap.pagination, simulationId);
 	        } else {
@@ -819,6 +878,10 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 	        		/* Init layout */
 	        		var getCurrentInstance = designer.getCurrentJsPlumbInstance();
 	        		getCurrentInstance.clear();
+	        		
+	        		/* Init top button */
+	        		$(JQ_PORTLET_BOUNDARY_ID + " .top-btn").hide();
+	        		$(JQ_PORTLET_BOUNDARY_ID + " .top-btn[data-is-init='true']").show();
 	        		
 	        		/* Empty job message */
 	        		toastr["error"]("", var_workflow_not_exist_job_message);
@@ -993,6 +1056,20 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             '       {{/data.arrInputPorts}}' +
             '       </ul>' +
             '    </li>\n' +
+            '    <li class="treeview log">' +
+            '       <a href="#"><i class="fa fa-laptop"></i><div>log</div></a>' +
+            '       <ul class="treeview-menu">' +
+            '          {{#data.arrLogPorts}}' +
+            '             <li class="treeview port-li log" port-id="{{id}}">\n' +
+            '                 <a href="#" class="sidebar-btn job-li" port-id=\"{{id}}\">\n' +
+            '                     <i class="fa fa-edit"></i>\n' +
+            '                     <div>{{name_}}</div>\n' +
+            '                 </a>\n' +
+            '             </li>' +
+            '          {{/data.arrLogPorts}}' +
+            '       </ul>' +
+            '    </li>\n' +
+            
             '    <li class="treeview output">' +
             '       <a href="#"><i class="fa fa-laptop"></i><div>output</div></a>' +
             '       <ul class="treeview-menu">' +
@@ -1025,7 +1102,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             designer.getCurrentJsPlumbInstance().getNodes(),
             function (id) {
             })
-
+        
         $.each(currNodes.getArray(), function(i, node){
             node.data.arrInputPorts = []
             node.data.arrOutputPorts = []
@@ -1443,8 +1520,20 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 var inputs = [{"name": "Title", "value": seqMap.seq}];
                 var btns = {"ok": "Save", "cancel": "Cancel"};
                 createOpenModal("Copy", inputs, btns, function(e){
-                    var title = $("#" + namespace + "wf-modal").find("input[name='Title']").val();
-                    copySimulationJob(sourceJob, title)
+                	
+                	var title = $("#" + namespace + "wf-modal").find("input[name='Title']").val();
+                	$.confirm({
+                		title: "Copy",
+                		content: "Do you want to include the reuse node when copying?",
+                		buttons: {
+                			YES : function(){
+                				reuseCopy(title);
+                			},
+                			NO : function(){
+                				copySimulationJob(sourceJob, title);
+                			}
+                		}
+                	});
                     $("#" + namespace + "wf-modal").modal("hide");
                 });
             })
@@ -1649,7 +1738,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     function rerun(pauseNodId, pauseCallback) {
         submitSimulationJob(true, pauseNodId, pauseCallback)
     }
-
+    
     function resume(){
         var simulationJobId = currJobs.selected() ? currJobs.selected().simulationJobId : undefined
         if (simulationJobId) {
@@ -1837,7 +1926,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 var simulationJobId = currJobs.selected().simulationJobId
                 var token = getIcebreakerAccessToken()
                 // console.log(token)
-                console.log(json.nodes)
+//                console.log(json.nodes)
 
                 var exeFunction = !!isReRun ? executor.rerunSimulationJobEngine : executor.createSimulationJobEngine
 
@@ -1882,6 +1971,154 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
 
         // console.log(designer.getCurrentJsPlumbInstance().getNodes())
+    }
+    
+    $("#" + namespace + "header-li-reuse-copy").click(function (e) {
+        if(_isEmpty(currJobs.selected(), CONSTS.MESSAGE.edison_wfsimulation_no_selected_job_message)){
+            return false;
+        }
+        var sourceJob = currJobs.selected();
+        executor.fetchSimulationJobSeq(
+            currSimulations.selected().simulationId,
+            function (seqMap) {
+                var inputs = [{"name": "Title", "value": seqMap.seq}];
+                var btns = {"ok": "Save", "cancel": "Cancel"};
+                createOpenModal("Copy", inputs, btns, function(e){
+                	var title = $("#" + namespace + "wf-modal").find("input[name='Title']").val();
+                	reuseCopy(title);
+                    $("#" + namespace + "wf-modal").modal("hide");
+                });
+            })
+    })
+    
+    /* 2019.02.25 _ Add reuse copy function */
+    function reuseCopy(title, pauseNodId, pauseCallback) {
+        if(!currJobs.selected()) {
+            toastr['error']('', CONSTS.MESSAGE.edison_wfsimulation_no_valid_node_data_message)
+            return false
+        }
+
+        if(!validateSimulationJob()){
+            toastr['warning']('',CONSTS.MESSAGE.edison_wfsimulation_validation_fail_message)
+            return false
+        }
+
+        executor.clearStatusTimeout()
+
+        bStart()
+        _delay(function() {
+            if (pauseNodId && currNodes.get(pauseNodId)) {
+                var pauseNode = currNodes.get(pauseNodId)
+                pauseNode.data.pause = 'pause'
+            }
+            saveSimulationJob(currJobs.selected(), function() {
+                resetSubmitData()
+                var prefix = CONSTS.WF_ENGINE.CMD_PREFIX
+                var jp = designer.getCurrentJsPlumbInstance()
+                var outputPorts = currOutputPorts.getArray()
+                $.each(outputPorts, function(){
+                    var currSourcePortData = this
+                    var sourcePort = jp.getPort(this.id)
+                    var sourceNode = sourcePort.getNode()
+                    if(isDataComponentNode(sourceNode)) {
+                        return
+                    }
+                    $.each(sourcePort.getSourceEdges(), function(){
+                        var targetPort = this.target
+                        if(targetPort) {
+                            var prefixedId = prefix + targetPort.id
+                            var targetNode = targetPort.getNode()
+
+                            if(isDataComponentNode(targetNode)) {
+                                return
+                            }
+
+                            sourceNode.data.childNodes || (sourceNode.data.childNodes = [])
+                            if($.inArray(targetNode.getFullId(), sourceNode.data.childNodes) < 0){
+                                sourceNode.data.childNodes.push(targetNode.getFullId())
+                            }
+
+                            sourceNode.data.outPort || (sourceNode.data.outPort = {})
+                            sourceNode.data.outPort.hasOwnProperty(prefixedId) || (sourceNode.data.outPort[prefixedId] = [])
+                            if($.inArray(targetNode.getFullId(), sourceNode.data.outPort[prefixedId]) < 0){
+                                sourceNode.data.outPort[prefixedId].push(targetNode.getFullId())
+                            }
+
+                            sourceNode.data.outPortFile || (sourceNode.data.outPortFile = {})
+                            if (currSourcePortData[OSP.Constants.OUTPUT_DATA]) {
+                                sourceNode.data.outPortFile[prefixedId] = currSourcePortData[OSP.Constants.OUTPUT_DATA][OSP.Constants.NAME]
+                            }
+
+                            targetNode.data.parentNodes || (targetNode.data.parentNodes = [])
+                            if($.inArray(sourceNode.getFullId(), targetNode.data.parentNodes) < 0){
+                                targetNode.data.parentNodes.push(sourceNode.getFullId())
+                            }
+
+                            targetNode.data.connectedPorts || (targetNode.data.connectedPorts = [])
+                            if($.inArray(targetPort.data.id, targetNode.data.connectedPorts) < 0){
+                                targetNode.data.connectedPorts.push(targetPort.data.id)
+                            }
+                        }
+                    })
+                })
+                // return false
+
+                var json = designer.getCurrentJsPlumbInstance().exportData({ type: "json" })
+                var nodes = []
+                $.each(json.nodes, function(i, node){
+                	node.regenerateClientId = true
+                    if (!isDataComponentNode({data: node})) {
+                        nodes.push(node)
+                    }
+                })
+                json.nodes = nodes
+                // return false
+                var simulationId = currJobs.selected().simulationId
+                var simulationJobId = currJobs.selected().simulationJobId
+                var token = getIcebreakerAccessToken()
+
+                var exeFunction = executor.reuseCopySimulationJobEngine;
+
+                exeFunction({
+                    simulationId: simulationId,
+                    simulationJobId: simulationJobId,
+                    icebreakerVcToken: token.icebreakerVcToken,
+                    groupId: token.groupId,
+                    strNodes: JSON.stringify(json.nodes),
+                    title: title,
+                }, function(simulationJob) {
+                    toastr['success']('', CONSTS.MESSAGE.edison_wfsimulation_submit_success_message)
+                    if (currJobs.contains(simulationJob.simulationJobId)) {
+                        currJobs.update(simulationJob.id, simulationJob)
+                        if (_isBlank(simulationJob.workflowUUID)) {
+                            $(".before-submit").show()
+                            $(".after-submit").hide()
+                        } else {
+                            $(".before-submit").hide()
+                            $(".after-submit").show()
+                            var initStatus = JSON.parse(simulationJob.statusResponse)
+                            updateNodeStatus(initStatus)
+                            pauseCallback(currNodes)
+                            if(!pauseCallback) {
+                                executor.updateStatus(simulationJob.id, initStatus, updateNodeStatus)
+                            }
+                        }
+                        
+                    } else {
+                        fetchJobs(simulationId, null, currPageJob, null, simulationJobId, pauseCallback)
+                    }
+                    
+                    fetchJobs(simulationJob.simulationId, null, 1);
+                    bEnd()
+                }, function() {
+                    bEnd()
+                    toastr['error']('', CONSTS.MESSAGE.edison_wfsimulation_submit_fail_message)
+                })
+            }, function () {
+                bEnd()
+                toastr['error']('', CONSTS.MESSAGE.edison_wfsimulation_submit_fail_message)
+            })
+        }, 2000)
     }
 
     /////////////////////////////////////////// renew end

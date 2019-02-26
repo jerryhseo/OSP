@@ -331,6 +331,26 @@ public class WorkflowSimulationController{
         }
     }
     
+    /* 2019.02.25 _ Add reuse copy API */
+    @RequestMapping(value = {
+        "/{simulationId}/job/{simulationJobId}/reuse/copy"}, method = RequestMethod.POST)
+    public @ResponseBody Map<String, Object> reuseCopySimulationJob(
+        @PathVariable("simulationId") long simulationId, 
+        @PathVariable("simulationJobId") long simulationJobId, 
+        @RequestParam("strNodes") String strNodes,
+        @RequestParam("icebreakerVcToken") String icebreakerVcToken,
+        @RequestParam("title") String title,
+        HttpServletRequest request) throws Exception{
+        try{
+            User user = PortalUtil.getUser(request);
+            return WorkflowSimulationJobLocalServiceUtil.reuseCopyWorkflowEngineJson(
+                simulationJobId, strNodes, user.getScreenName(), icebreakerVcToken, request, title).getModelAttributes();
+        }catch (Exception e){
+            log.error("error", e);
+            throw e;
+        }
+    }
+    
     @RequestMapping(value = {
         "/{simulationId}/job/{simulationJobId}/export", 
         "/job/{simulationJobId}/export"}, method = RequestMethod.POST)

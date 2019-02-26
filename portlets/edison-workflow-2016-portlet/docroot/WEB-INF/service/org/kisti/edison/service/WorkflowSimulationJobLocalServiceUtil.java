@@ -503,6 +503,16 @@ public class WorkflowSimulationJobLocalServiceUtil {
 			userName, ibToken, request);
 	}
 
+	public static org.kisti.edison.model.WorkflowSimulationJob reuseCopyWorkflowEngineJson(
+		long simulationJobId, java.lang.String strNodes,
+		java.lang.String userName, java.lang.String ibToken,
+		javax.servlet.http.HttpServletRequest request, java.lang.String title)
+		throws org.kisti.edison.WFEngine500Exception {
+		return getService()
+				   .reuseCopyWorkflowEngineJson(simulationJobId, strNodes,
+			userName, ibToken, request, title);
+	}
+
 	public static org.kisti.edison.model.WorkflowSimulationJob createWorkflowEngineJson(
 		long simulationJobId, java.lang.String strNodes,
 		java.lang.String userName, java.lang.String ibToken,
