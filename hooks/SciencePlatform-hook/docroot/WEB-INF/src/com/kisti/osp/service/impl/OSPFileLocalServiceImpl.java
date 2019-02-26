@@ -1616,7 +1616,6 @@ public class OSPFileLocalServiceImpl extends OSPFileLocalServiceBaseImpl {
 				result.put("parentPath", target);
 				result.put("fileName", file.getName());
 				ServletResponseUtil.write(httpResponse, result.toString());
-				System.out.println(result.toString(4));
 				return;
 			}
 		}
@@ -1969,9 +1968,6 @@ public class OSPFileLocalServiceImpl extends OSPFileLocalServiceBaseImpl {
         }
 		else if(command.equalsIgnoreCase("GET_FIRST_FILE_NAME")){
             try {
-            	System.out.println(parentPath);
-            	System.out.println(fileName);
-            	
 				getFirstFileName(resourceResponse, userScreenName, parentPath, fileName, repositoryType);
 			} catch (PortalException e) {
 				// TODO Auto-generated catch block

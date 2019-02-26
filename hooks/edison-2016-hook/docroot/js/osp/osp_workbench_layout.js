@@ -3419,6 +3419,11 @@
                     if (dataType) {
                         data[OSP.Constants.DATA_TYPE] = dataType;
                     }
+                    
+                    if(port.hasOwnProperty(OSP.Constants.OUTPUT_DATA)){
+                    	data[OSP.Constants.TYPE]=port[OSP.Constants.OUTPUT_DATA][OSP.Constants.TYPE];
+                    	data[OSP.Constants.NAME]=port[OSP.Constants.OUTPUT_DATA][OSP.Constants.NAME];
+                    }
                 }
             }
 
