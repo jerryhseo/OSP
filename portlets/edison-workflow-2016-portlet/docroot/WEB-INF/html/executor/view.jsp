@@ -538,6 +538,12 @@ AUI().ready(['liferay-util-window'], function(){
 	Liferay.provide(window,'<portlet:namespace />closePopup',function(popupIdToClose) {
 		Liferay.Util.getWindow(popupIdToClose).destroy();
 	});
+	
+	
+	Liferay.provide(window, "getPortDataFromDialog", function(dialogId,nodeId,portName){
+			var portData = uiPanel.getPortData(nodeId, portName);
+			return portData;
+	});
 });
 
 function <portlet:namespace/>copyParentNodeFiles(params){
