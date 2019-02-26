@@ -167,6 +167,15 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         }
     }
     
+    function reuseNodeCheck(){
+    	/* reuse copy btn */
+		if($(".is-re-use-node").length > 0){
+			$("#p_p_id" + namespace + " .reuse-copy-btn").show();
+		} else {
+			$("#p_p_id" + namespace + " .reuse-copy-btn").hide();
+		}
+    }
+    
     /* 2019.02.25 _ Set reuse flag in parentNodes */
     function setReuseParentNodes(node){
     	var parentNodes = node.data.status.parentNodes;
@@ -722,12 +731,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                         			setReUseNodeStatusByReuseCopy(nodes[nodeIdx]);
                         		}
                         		
-                        		/* reuse copy btn */
-                        		if($(".is-re-use-node").length > 0){
-                        			$("#p_p_id" + namespace + " .reuse-copy-btn").show();
-                        		} else {
-                        			$("#p_p_id" + namespace + " .reuse-copy-btn").hide();
-                        		}
+                        		reuseNodeCheck();
                         	}
                         }
                         if(job) {
@@ -2678,6 +2682,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 		"setReuseNode" : setReuseNode,
 		// "insertIbUuid" : insertIbUuid,
 		"pauseNode" : pauseNode,
+		"reuseNodeCheck" : reuseNodeCheck,
 		"isEmpty" : function() {
 			return _isEmpty(PANEL_DATA.setting.form.workflowId
 					&& PANEL_DATA.setting.form.simulationId);
