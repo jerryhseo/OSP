@@ -287,6 +287,8 @@ Liferay.on(OSP.Event.OSP_RESPONSE_JOB_KEY, function( e ){
 function <portlet:namespace/>init(scienceApp){
 	<portlet:namespace/>drawAppInfomation(scienceApp);
 }
+
+
 function <portlet:namespace/>drawAppInfomation(data){
 	$("#<portlet:namespace/>appName").html(cutStr(data.name(),12)).attr("title",data.name());
 	$("#<portlet:namespace/>appVersion").html("Ver "+data.version());
@@ -463,7 +465,7 @@ function sdrcommon_collectionPopup(result){
 		var errorMsg = result.errorMsg;
 		
 		var alertMsg = "";
-		if(successMsg!=""){
+		if(successMsg!=""){ 
 			alertMsg += "Successfully Transfer JobData To SDR <br/>";
 			alertMsg += successMsg.replace(/,/gi, ',<br/>');
 		}

@@ -1098,6 +1098,18 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         currInputPorts.update(prevPortData.id, prevPortData)
     }
 
+    function getPortData(nodeId, portName){
+    	var portId = nodeId + "." + portName;
+    	var portData = {};
+    	
+    	var currPortData = $.extend({}, currInputPorts.get(portId))
+        delete currPortData.id;
+        
+        portData[currInputPorts.get(portId)[OSP.Constants.NAME]] = currPortData;
+    	
+    	return portData;
+    }
+    
     function setPortData(nodeId, portName, strPortDataJson) {
         var portId = nodeId + "." + portName
         if (strPortDataJson && strPortDataJson !== "false") {
@@ -1193,9 +1205,11 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             if (node.data.ibData.ibUuid) {
                 portletURL.setParameter('jobUuid', node.data.ibData.ibUuid);
             }
-            portletURL.setParameter('portData', JSON.stringify(portData));
-            portletURL.setParameter('portType',
-                currInputPorts.contains(portId) ? CONSTS.WF_JSPLUMB_TYPES.INPUT_PORTS : CONSTS.WF_JSPLUMB_TYPES.OUTPUT_PORTS);
+            
+//            portletURL.setParameter('portData', JSON.stringify(portData));
+            
+            portletURL.setParameter('portName', portName);
+            portletURL.setParameter('portType',currInputPorts.contains(portId) ? CONSTS.WF_JSPLUMB_TYPES.INPUT_PORTS : CONSTS.WF_JSPLUMB_TYPES.OUTPUT_PORTS);
             portletURL.setParameter('nodeId', nodeId);
             portletURL.setParameter('userId', userId);
             portletURL.setParameter('dialogId', dialogId);
@@ -1254,13 +1268,13 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             	title: (isDataComponentCall ? 'DataComponent' : node.data.scienceAppData.name ) + " " + portName
             });
         	
-            A.one('body').on('key', function(event){
-        		openPortPopup.once('visibleChange', function(event){
-        			if(event.prevVal == true){
-        				event.newVal = true;
-        			}
-        		});
-        	}, 'esc');
+//            A.one('body').on('key', function(event){
+//        		openPortPopup.once('visibleChange', function(event){
+//        			if(event.prevVal == true){
+//        				event.newVal = true;
+//        			}
+//        		});
+//        	}, 'esc');
         	
             $('#' + dialogId).css('top', positionTop+'px').css('left', positionLeft+'px')
         });
@@ -2417,6 +2431,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 		"setSelectedJobFromWorkbench" : setSelectedJobFromWorkbench,
 		"openInputPort" : openInputPort,
 		"setPortData" : setPortData,
+		"getPortData" : getPortData,
 		"closePortPopup" : closePortPopup,
 		"openNodeHandler" : openNodeHandler,
 		"isPauseAbleNode" : isPauseAbleNode,
