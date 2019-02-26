@@ -346,9 +346,11 @@ Liferay.on(OSP.Event.OSP_REGISTER_EVENTS,function( e ){
 				//portlet all loding check
 				<portlet:namespace/>displayInit();
 			}
+			<portlet:namespace/>workbench.handleRegisterEvents( e.portletId, e.data ,false);
+		}else{
+			<portlet:namespace/>workbench.handleRegisterEvents( e.portletId, e.data ,true);
 		}
 		
-		<portlet:namespace/>workbench.handleRegisterEvents( e.portletId, e.data );
 	}
 });
 
