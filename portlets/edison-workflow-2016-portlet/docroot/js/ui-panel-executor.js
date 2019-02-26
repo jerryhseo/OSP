@@ -167,15 +167,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         }
     }
     
-    function reuseNodeCheck(){
-    	/* reuse copy btn */
-		if($(".is-re-use-node").length > 0){
-			$("#p_p_id" + namespace + " .reuse-copy-btn").show();
-		} else {
-			$("#p_p_id" + namespace + " .reuse-copy-btn").hide();
-		}
-    }
-    
     /* 2019.02.25 _ Set reuse flag in parentNodes */
     function setReuseParentNodes(node){
     	var parentNodes = node.data.status.parentNodes;
@@ -724,15 +715,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                         var job = currJobs.get(id)
                         if(console) {
 //                        	console.log(job)
-                        	if(job){
-                        		var thisJobScreenLogic = JSON.parse(job.screenLogic);
-                        		var nodes = thisJobScreenLogic.nodes;
-                        		for(var nodeIdx in nodes) {
-                        			setReUseNodeStatusByReuseCopy(nodes[nodeIdx]);
-                        		}
-                        		
-                        		reuseNodeCheck();
-                        	}
                         }
                         if(job) {
                             if (_isBlank(job.workflowUUID)) {
@@ -1977,24 +1959,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         // console.log(designer.getCurrentJsPlumbInstance().getNodes())
     }
     
-    $("#" + namespace + "header-li-reuse-copy").click(function (e) {
-        if(_isEmpty(currJobs.selected(), CONSTS.MESSAGE.edison_wfsimulation_no_selected_job_message)){
-            return false;
-        }
-        var sourceJob = currJobs.selected();
-        executor.fetchSimulationJobSeq(
-            currSimulations.selected().simulationId,
-            function (seqMap) {
-                var inputs = [{"name": "Title", "value": seqMap.seq}];
-                var btns = {"ok": "Save", "cancel": "Cancel"};
-                createOpenModal("Copy", inputs, btns, function(e){
-                	var title = $("#" + namespace + "wf-modal").find("input[name='Title']").val();
-                	reuseCopy(title);
-                    $("#" + namespace + "wf-modal").modal("hide");
-                });
-            })
-    })
-    
     /* 2019.02.25 _ Add reuse copy function */
     function reuseCopy(title, pauseNodId, pauseCallback) {
         if(!currJobs.selected()) {
@@ -2682,7 +2646,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 		"setReuseNode" : setReuseNode,
 		// "insertIbUuid" : insertIbUuid,
 		"pauseNode" : pauseNode,
-		"reuseNodeCheck" : reuseNodeCheck,
 		"isEmpty" : function() {
 			return _isEmpty(PANEL_DATA.setting.form.workflowId
 					&& PANEL_DATA.setting.form.simulationId);
