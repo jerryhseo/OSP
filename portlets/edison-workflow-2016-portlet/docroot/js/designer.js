@@ -911,7 +911,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                                 icon: isReUseNode ? "fa-ban" : "fa-recycle",
                                 callback: function(key, options) {
                                     uiPanelInstance.setReuseNode(node, !isReUseNode)
-                                    uiPanelInstance.reuseNodeCheck();
                                 }
                             }
                         }

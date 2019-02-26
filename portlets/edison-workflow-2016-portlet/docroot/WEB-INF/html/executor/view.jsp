@@ -190,10 +190,6 @@ var contextPath = '${contextPath}';
                 <i class="fa fa-undo fa-flip-horizontal fa-2x"></i><br>
                 <span class="nav-icon-text">ReRun</span>
               </li>
-              <li id="<portlet:namespace/>header-li-reuse-copy" data-divider="ib-li-divider" class="reuse-copy-btn" style="display: none;">
-                <i class="fa fa-copy fa-2x"></i><br>
-                <span class="nav-icon-text">Copy<br><span style="font-size: 12px; display: block; line-height: 0.7em;">(Reuse Job)</span></span>
-              </li>
               <li class="<portlet:namespace/>divider-vertical" style="display: block;"></li>
               <li id="<portlet:namespace/>header-li-data" class="top-btn" data-btn-type="designer" data-divider="data-li-divider" data-is-init="true">
                 <i class="fa fa-share-square-o fa-2x"></i><br>
