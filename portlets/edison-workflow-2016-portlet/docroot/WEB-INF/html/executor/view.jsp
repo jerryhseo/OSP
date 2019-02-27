@@ -161,36 +161,36 @@ var contextPath = '${contextPath}';
                 <i class="fa fa-plus-square-o fa-2x"></i><br>
                 <span class="nav-icon-text">New</span>
               </li>
-              <li id="<portlet:namespace/>header-li-save" class="top-btn" data-btn-type="save-job" data-divider="job-li-divider">
+              <li id="<portlet:namespace/>header-li-save" class="top-btn has-job-btn" data-btn-type="save-job" data-divider="job-li-divider" style="display: none;">
                 <i class="fa fa-save fa-2x"></i><br>
                 <span class="nav-icon-text">Save</span>
               </li>
-              <li id="<portlet:namespace/>header-li-copy" class="top-btn" data-btn-type="copy-job" data-divider="job-li-divider">
+              <li id="<portlet:namespace/>header-li-copy" class="top-btn has-job-btn" data-btn-type="copy-job" data-divider="job-li-divider" style="display: none;">
                 <i class="fa fa-copy fa-2x"></i><br>
                 <span class="nav-icon-text">Copy</span>
               </li>
-              <li id="<portlet:namespace/>header-li-delete" class="top-btn" data-btn-type="delete-job" data-divider="job-li-divider">
+              <li id="<portlet:namespace/>header-li-delete" class="top-btn has-job-btn" data-btn-type="delete-job" data-divider="job-li-divider" style="display: none;">
                 <i class="fa fa-trash-o fa-2x"></i><br>
                 <span class="nav-icon-text">Delete</span>
               </li>
               <li class="<portlet:namespace/>divider-vertical" style="display: block;" class="top-btn"></li>
-              <li id="<portlet:namespace/>header-li-submit" data-divider="ib-li-divider" class="before-submit top-btn">
+              <li id="<portlet:namespace/>header-li-submit" data-divider="ib-li-divider" class="before-submit top-btn" style="display: none;">
                 <i class="fa fa-cloud-upload fa-2x"></i><br>
                 <span class="nav-icon-text">Submit</span>
               </li>
-              <li id="<portlet:namespace/>header-li-pause" data-divider="ib-li-divider" class="after-submit before-pause top-btn" style="display: none;">
+              <li id="<portlet:namespace/>header-li-pause" data-divider="ib-li-divider" class="after-submit before-pause top-btn" style="display: none;" style="display: none;">
                 <i class="fa fa-pause-circle fa-2x"></i><br>
                 <span class="nav-icon-text">Pause</span>
               </li>
-              <li id="<portlet:namespace/>header-li-resume" data-divider="ib-li-divider" class="after-submit after-pause top-btn" style="display: none;">
+              <li id="<portlet:namespace/>header-li-resume" data-divider="ib-li-divider" class="after-submit after-pause top-btn" style="display: none;" style="display: none;">
                 <i class="fa fa-play-circle fa-2x"></i><br>
                 <span class="nav-icon-text">Resume</span>
               </li>
-              <li id="<portlet:namespace/>header-li-rerun" data-divider="ib-li-divider" class="after-stop top-btn" style="display: none;">
+              <li id="<portlet:namespace/>header-li-rerun" data-divider="ib-li-divider" class="after-stop top-btn" style="display: none;" style="display: none;">
                 <i class="fa fa-undo fa-flip-horizontal fa-2x"></i><br>
                 <span class="nav-icon-text">ReRun</span>
               </li>
-              <li id="<portlet:namespace/>header-li-reuse-run" data-divider="ib-li-divider" style="display: none;">
+              <li id="<portlet:namespace/>header-li-reuse-run" data-divider="ib-li-divider" style="display: none;" style="display: none;">
                 <i class="fa fa-play-circle fa-2x"></i><br>
                 <span class="nav-icon-text">RUN</span>
               </li>
@@ -199,7 +199,7 @@ var contextPath = '${contextPath}';
                 <i class="fa fa-share-square-o fa-2x"></i><br>
                 <span class="nav-icon-text">Designer</span>
               </li>
-              <li id="<portlet:namespace/>header-li-export" class="top-btn">
+              <li id="<portlet:namespace/>header-li-export" class="top-btn has-job-btn" style="display: none;">
                 <i class="fa fa-download fa-2x"></i><br>
                 <span class="nav-icon-text">Export</span>
               </li>
@@ -489,6 +489,9 @@ $(document).ready(function(){
       });
     }
   }, 1000);
+  
+  $("#p_p_id<portlet:namespace/> .top-btn").hide();
+  $("#p_p_id<portlet:namespace/> .top-btn[data-is-init='true']").show();
 });
 
 function <portlet:namespace/>moveToDesigner(){

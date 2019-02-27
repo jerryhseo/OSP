@@ -882,7 +882,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             })
         
 	        if(currJobs.getArray().length > 0){
-	        	/* $(JQ_PORTLET_BOUNDARY_ID + " .top-btn").show(); */
+	        	$(JQ_PORTLET_BOUNDARY_ID + " .top-btn.has-job-btn").show(); 
 	        	$(JQ_PORTLET_BOUNDARY_ID + " .top-btn[data-btn-type='new-job']").css("color", "#333333");
 	        	jobsPagination(jobsMap.pagination, simulationId);
 	        } else {
