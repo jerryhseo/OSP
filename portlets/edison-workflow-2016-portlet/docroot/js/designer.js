@@ -904,16 +904,18 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                         }
                     };
                     if (!isDesigner && uiPanelInstance) {
-                        if(uiPanelInstance.isReUsableNode(node)){
-                            var isReUseNode = (!!node && !!node.data && !!node.data.isReUseNode)
-                            items["items"]["open-reuse-handler"] = {
-                                name: isReUseNode ? "Do not reuse" : "ReUse",
-                                icon: isReUseNode ? "fa-ban" : "fa-recycle",
-                                callback: function(key, options) {
-                                    uiPanelInstance.setReuseNode(node, !isReUseNode)
-                                }
-                            }
-                        }
+                    	if(uiPanelInstance.isReUsableJob()){
+                    		if(uiPanelInstance.isReUsableNode(node)){
+                    			var isReUseNode = (!!node && !!node.data && !!node.data.isReUseNode)
+                    			items["items"]["open-reuse-handler"] = {
+                    				name: isReUseNode ? "Do not reuse" : "ReUse",
+                    						icon: isReUseNode ? "fa-ban" : "fa-recycle",
+                    								callback: function(key, options) {
+                    									uiPanelInstance.setReuseNode(node, !isReUseNode)
+                    								}
+                    			}
+                    		}
+                    	}
                         if(uiPanelInstance.isPauseAbleNode(node)){
                             var status = node.data.status.status
                             items["items"]["open-pause-handler"] = {
