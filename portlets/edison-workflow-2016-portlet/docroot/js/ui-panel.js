@@ -101,7 +101,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
     $(JQ_PORTLET_BOUNDARY_ID + " .sidebar-btn[data-btn-type='save']").click(function (e) {
         e.stopPropagation();
         saveOrUpdateDesigner();
-        $("ul.sidebar-menu.top > li.treeview").show();
+        /*$("ul.sidebar-menu.top > li.treeview").show();*/
     });
 
     $(JQ_PORTLET_BOUNDARY_ID + " .sidebar-btn").click(function (e) {

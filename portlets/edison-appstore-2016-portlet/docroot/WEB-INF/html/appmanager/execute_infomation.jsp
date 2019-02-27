@@ -236,7 +236,7 @@
 							</aui:select>
 						</td> --%>
 					</tr>
-					<tr class="is-not-dwn-only">
+					<tr class="is-not-dwn-only data-parallel-cpu">
 						<th>Min CPU</th>
 						<td>
 							<aui:input name="minCpus" type="text" label="" cssClass="short_field runTypeDisabled" disabled="" value="${data.minCpus}">
@@ -254,7 +254,7 @@
 							</aui:input>
 						</td>
 					</tr>
-					<tr class="is-not-dwn-only">
+					<tr class="is-not-dwn-only data-parallel-cpu">
 						<th>Max CPU</th>
 						<td>
 							<aui:input name="maxCpus" type="text" label="" cssClass="short_field runTypeDisabled" disabled="" value="${data.maxCpus}">
@@ -470,6 +470,14 @@ if(mode.equals(Constants.UPDATE)){
 		changeAppType('${data.appType}');
 // 		<portlet:namespace/>noUpdateDisabled('${data.status}');
 		<portlet:namespace/>getClusterList();
+		
+		if('${data.runType}' == "<%=ScienceAppConstants.APP_RUNTYPE_SEQUENTIAL%>"){
+			$("#<portlet:namespace/>minCpus").val('0');
+			$("#<portlet:namespace/>maxCpus").val('0');
+			$("#<portlet:namespace/>defaultCpus").val('0');
+			$(".data-parallel-cpu").hide();
+		}
+		
 	});
 <%} else { %>
 	$(document).ready(function () {
@@ -599,7 +607,6 @@ AUI().ready(function() {
 	}).dialog("widget").find(".ui-dialog-titlebar").remove();
 });
 
-
 function <portlet:namespace/>gitHubCompile(){
 	
 	var gitHubUrl = $("#<portlet:namespace/>gitHubUrl").val();
@@ -653,6 +660,19 @@ function <portlet:namespace/>gitHubCompile(){
 	
 }
 
+$("#<portlet:namespace/>runType").on('change', function(){
+	var runType = this.value;
+	if(runType == "<%=ScienceAppConstants.APP_RUNTYPE_SEQUENTIAL%>"){
+		$("#<portlet:namespace/>minCpus").val('0');
+		$("#<portlet:namespace/>maxCpus").val('0');
+		$("#<portlet:namespace/>defaultCpus").val('0');
+		
+		$(".data-parallel-cpu").hide();
+	} else {
+		$(".data-parallel-cpu").show();
+	}
+});
+
 function <portlet:namespace/>actionCall(mode){
 	if(mode=='<%=Constants.ADD%>'){
 		<portlet:namespace/>frm.encoding = "multipart/form-data";
@@ -660,7 +680,7 @@ function <portlet:namespace/>actionCall(mode){
 		$minCpus = $("#<portlet:namespace/>minCpus");
 		$maxCpus = $("#<portlet:namespace/>maxCpus");
 		$defaultCpus = $("#<portlet:namespace/>defaultCpus");
-		<%-- if($("#<portlet:namespace/>runType").val()!="<%=ScienceAppConstants.APP_RUNTYPE_SEQUENTIAL%>"){ --%>
+		if($("#<portlet:namespace/>runType").val()!="<%=ScienceAppConstants.APP_RUNTYPE_SEQUENTIAL%>"){
 			
 			if($maxCpus.val()==""){
 				alert(Liferay.Language.get('this-field-is-mandatory'));
@@ -685,7 +705,7 @@ function <portlet:namespace/>actionCall(mode){
 				$minCpus.focus();
 				return false;
 			}
-		/* } */
+		}
 		
 		$minCpus.attr("disabled", false);
 		$maxCpus.attr("disabled", false);
