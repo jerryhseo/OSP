@@ -1321,6 +1321,8 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
 
         if (!isDesigner) {
             turnOffBeforeConnect(currentJsPlumbInstance);
+        }else{
+        	renderer.zoomToFit();
         }
     }
 
