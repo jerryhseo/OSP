@@ -190,6 +190,10 @@ var contextPath = '${contextPath}';
                 <i class="fa fa-undo fa-flip-horizontal fa-2x"></i><br>
                 <span class="nav-icon-text">ReRun</span>
               </li>
+              <li id="<portlet:namespace/>header-li-reuse-run" data-divider="ib-li-divider" style="display: none;">
+                <i class="fa fa-play-circle fa-2x"></i><br>
+                <span class="nav-icon-text">RUN</span>
+              </li>
               <li class="<portlet:namespace/>divider-vertical" style="display: block;"></li>
               <li id="<portlet:namespace/>header-li-data" class="top-btn" data-btn-type="designer" data-divider="data-li-divider" data-is-init="true">
                 <i class="fa fa-share-square-o fa-2x"></i><br>

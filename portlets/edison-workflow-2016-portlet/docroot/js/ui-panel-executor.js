@@ -96,6 +96,20 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     };
 
     /////////////////////////////////////////// renew start
+    /* 2019.02.27 _ Job status check */
+    function isReUsableJob(job) {
+        if (job && job.status && (job.status === CONSTS.WF_STATUS_CODE.COMPLETED || job.status === CONSTS.WF_STATUS_CODE.FAILED)) {
+            return true
+        } else {
+        	var currJob = currJobs.selected();
+        	if(currJob.status === CONSTS.WF_STATUS_CODE.COMPLETED || currJob.status === CONSTS.WF_STATUS_CODE.FAILED){
+        		return true;
+        	} else {
+        		return false
+        	}
+        }
+    }
+    
     function isReUsableNode(node) {
         if (node && node.data && node.data.status &&
             node.data.status.status === CONSTS.WF_STATUS_CODE.COMPLETED) {
@@ -135,25 +149,18 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         }
     }
     
-    /* Reuse node status setting for reuse copy job */
-    function setReUseNodeStatusByReuseCopy(node) {
-        if (node && !!node.isReUseNode) {
-            $('#' + node.id).addClass('is-re-use-node')
-            $('#' + node.id + ' .top-cog-icon').removeClass('fa-cog').addClass('fa-recycle')
-        } else {
-            $('#' + node.id).removeClass('is-re-use-node')
-            $('#' + node.id + ' .top-cog-icon').removeClass('fa-recycle').addClass('fa-cog')
-        }
-    }
-    
     function setReUseNodeStatus(node) {
-        if (node && node.data && !!node.data.isReUseNode) {
-            $('#' + node.id).addClass('is-re-use-node')
-            $('#' + node.id + ' .top-cog-icon').removeClass('fa-cog').addClass('fa-recycle')
-        } else {
-            $('#' + node.id).removeClass('is-re-use-node')
-            $('#' + node.id + ' .top-cog-icon').removeClass('fa-recycle').addClass('fa-cog')
-        }
+    	/* 2019.02.27 _ check this job status */
+    	var currJob = currJobs.selected();
+    	if(currJob && currJob.status && (currJob.status === CONSTS.WF_STATUS_CODE.SUCCESS || currJob.status === CONSTS.WF_STATUS_CODE.FAILED)){
+    		if (node && node.data && !!node.data.isReUseNode) {
+    			$('#' + node.id).addClass('is-re-use-node')
+    			$('#' + node.id + ' .top-cog-icon').removeClass('fa-cog').addClass('fa-recycle')
+    		} else {
+    			$('#' + node.id).removeClass('is-re-use-node')
+    			$('#' + node.id + ' .top-cog-icon').removeClass('fa-recycle').addClass('fa-cog')
+    		}
+    	}
     }
 
     function setReuseNode(node, isReUsable) {
@@ -620,29 +627,48 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 $(".before-pause").hide()
                 $(".after-pause").show()
                 $(".after-stop").hide()
+                $("#" + namespace + "header-li-reuse-run").hide();
             } else if (workflowStatus.workflow.status === CONSTS.WF_STATUS_CODE.RUNNING) {
                 $(".after-pause").hide()
                 $(".before-pause").show()
                 $(".after-stop").hide()
+                $("#" + namespace + "header-li-reuse-run").hide();
             } else if (workflowStatus.workflow.status === CONSTS.WF_STATUS_CODE.FAILED ||
                 workflowStatus.workflow.status === CONSTS.WF_STATUS_CODE.CANCELED ||
                 workflowStatus.workflow.status === CONSTS.WF_STATUS_CODE.COMPLETED) {
                 $(".after-pause").hide()
                 $(".before-pause").hide()
                 $(".after-stop").show()
+                $("#" + namespace + "header-li-reuse-run").hide();
             } else {
                 /* 2019.02.26 _ Reuse node execute button */
             	$(".after-pause").hide()
                 $(".before-pause").hide()
-                $(".before-submit").show();
                 $(".after-submit").hide();
+            	$(".before-submit").hide();
+                $(".after-stop").hide();
+                var currJob = currJobs.selected();
+                if(currJob && currJob.status && (currJob.status === CONSTS.WF_STATUS_CODE.WAITING || currJob.status === CONSTS.WF_STATUS_CODE.CREATED)){
+                	if($(".SUCCESS").length > 0){
+                		/* execute button when reuse copy job refresh */
+                		$("#" + namespace + "header-li-reuse-run").show();
+                	} else {
+                		$("#" + namespace + "header-li-reuse-run").hide();
+                		$(".before-submit").show();
+                	}
+                } else {
+                	/* init execute button when reuse copy */
+                	$("#" + namespace + "header-li-reuse-run").show();
+                }
+                
             }
         } else {
         	$(".before-pause").hide();
             $(".after-pause").hide();
-            $(".after-stop").hide();
             $(".before-submit").show();
             $(".after-submit").hide();
+            $(".after-stop").hide();
+            $("#" + namespace + "header-li-reuse-run").show();
         }
         if (workflowStatus && workflowStatus.workflow && workflowStatus.workflow.simulations) {
             $.each(workflowStatus.workflow.simulations, function () {
@@ -714,7 +740,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                         executor.clearStatusTimeout()
                         var job = currJobs.get(id)
                         if(console) {
-//                        	console.log(job)
+                        	console.log(job)
                         }
                         if(job) {
                             if (_isBlank(job.workflowUUID)) {
@@ -1508,18 +1534,23 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 createOpenModal("Copy", inputs, btns, function(e){
                 	
                 	var title = $("#" + namespace + "wf-modal").find("input[name='Title']").val();
-                	$.confirm({
-                		title: "Copy",
-                		content: "Do you want to include the reuse node when copying?",
-                		buttons: {
-                			YES : function(){
-                				reuseCopy(title);
-                			},
-                			NO : function(){
-                				copySimulationJob(sourceJob, title);
+                	
+                	if($('.is-re-use-node').length > 0){
+                		$.confirm({
+                			title: "Copy",
+                			content: var_workflow_include_reuse_node_message,
+                			buttons: {
+                				YES : function(){
+                					reuseCopy(title);
+                				},
+                				NO : function(){
+                					copySimulationJob(sourceJob, title);
+                				}
                 			}
-                		}
-                	});
+                		});
+                	} else {
+                		copySimulationJob(sourceJob, title);
+                	}
                     $("#" + namespace + "wf-modal").modal("hide");
                 });
             })
@@ -1600,6 +1631,11 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     $("#" + namespace + "header-li-rerun").click(function (e) {
         rerun()
     })
+    
+    /* 2019.02.27 _ Reuse job run button event */
+    $("#" + namespace + "header-li-reuse-run").click(function (e) {
+    	rerun();
+    });
 
     $("#" + namespace + "header-li-pause").click(function (e) {
         pause()
@@ -2642,6 +2678,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 		"isPauseAbleNode" : isPauseAbleNode,
 		"isResumeAbleNode" : isResumeAbleNode,
 		"consoleNodeInfo" : consoleNodeInfo,
+		"isReUsableJob" : isReUsableJob,
 		"isReUsableNode" : isReUsableNode,
 		"setReuseNode" : setReuseNode,
 		// "insertIbUuid" : insertIbUuid,
