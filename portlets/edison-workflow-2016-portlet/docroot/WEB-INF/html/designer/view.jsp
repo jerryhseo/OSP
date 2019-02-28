@@ -631,13 +631,15 @@ $(document).ready(function(){
         - $(".menu-panel .box.box-solid > .box-header").actual("outerHeight"));
   });
 
-  if(loadedWorkflowId && loadedWorkflowId !== 'null'){
-	  bStart();
-      setTimeout(function() {
-	    uiPanel.openWorkflow(loadedWorkflowId);
-	    bEnd();
-	  }, 3000);
-  }
+  
+  /*JSPlumb의 Canvas의 높이가 정확히 계산이 되기 위하여 3초간 Block*/
+  bStart();
+  setTimeout(function() {
+	  if(loadedWorkflowId && loadedWorkflowId !== 'null'){
+		uiPanel.openWorkflow(loadedWorkflowId);
+	  }
+    bEnd();
+  }, 3000);
   
   
   
