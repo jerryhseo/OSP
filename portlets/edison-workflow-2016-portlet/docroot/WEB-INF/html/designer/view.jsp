@@ -639,7 +639,7 @@ $(document).ready(function(){
 		uiPanel.openWorkflow(loadedWorkflowId);
 	  }
     bEnd();
-  }, 3500);
+  }, 4500);
   
   
   
