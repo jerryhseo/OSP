@@ -2510,7 +2510,7 @@ function <portlet:namespace/>moveWorkflow(targetWorkflowId){
 						if(selectType === "SCIENCE_APP"){
 							
 							/* Add ScienceApp Version */
-							relateInfoTitle =  + " v" + dataList[i].version;
+							relateInfoTitle +=" v" + dataList[i].version;
 							
 							if(dataList[i].modelDiv == "Editor"){
 								dataType = "E";
