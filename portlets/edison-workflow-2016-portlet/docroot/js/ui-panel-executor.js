@@ -1068,7 +1068,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             '       {{/data.arrInputPorts}}' +
             '       </ul>' +
             '    </li>\n' +
-            '    <li class="treeview log">' +
+           /* '    <li class="treeview log">' +
             '       <a href="#"><i class="fa fa-laptop"></i><div>log</div></a>' +
             '       <ul class="treeview-menu">' +
             '          {{#data.arrLogPorts}}' +
@@ -1080,7 +1080,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             '             </li>' +
             '          {{/data.arrLogPorts}}' +
             '       </ul>' +
-            '    </li>\n' +
+            '    </li>\n' +*/
             
             '    <li class="treeview output">' +
             '       <a href="#"><i class="fa fa-laptop"></i><div>output</div></a>' +
