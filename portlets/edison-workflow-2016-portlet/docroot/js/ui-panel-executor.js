@@ -1190,11 +1190,24 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     function getPortData(nodeId, portName){
     	var portId = nodeId + "." + portName;
     	var portData = {};
+    	var isInput = false;
     	
-    	var currPortData = $.extend({}, currInputPorts.get(portId))
+    	var currPortData = null;
+    	if(currInputPorts.get(portId)){
+    		currPortData = $.extend({}, currInputPorts.get(portId));
+    		isInput= true;
+    	} else {
+    		currPortData = $.extend({}, currOutputPorts.get(portId));
+    		isInput= false;
+    	}
+    	
         delete currPortData.id;
         
-        portData[currInputPorts.get(portId)[OSP.Constants.NAME]] = currPortData;
+        if(isInput){
+        	portData[currInputPorts.get(portId)[OSP.Constants.NAME]] = currPortData;
+        } else {
+        	portData[currOutputPorts.get(portId)[OSP.Constants.NAME]] = currPortData;
+        }
     	
     	return portData;
     }
