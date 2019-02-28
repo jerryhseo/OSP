@@ -232,7 +232,7 @@ public class SearchLocalServiceImpl extends SearchLocalServiceBaseImpl{
         searchCondition.getLocale(),  appTypes, categoryIds, searchCondition.getSearchKeyword());
     List<Map<String, Object>> apps = ScienceAppLocalServiceUtil.retrieveListScienceAppFromExplore(
         searchCondition.getCompanyGroupId(), searchCondition.getGroupId(),
-        searchCondition.getLocale(), appTypes, categoryIds, searchCondition.getSearchKeyword(),
+        searchCondition.getLocale(), appTypes, categoryIds, searchCondition.getSearchKeyword(),  null,
         searchCondition.getStart(), searchCondition.getListSize(),
         searchCondition.getSortField(), searchCondition.getSortOrder());
     if(count > 0){

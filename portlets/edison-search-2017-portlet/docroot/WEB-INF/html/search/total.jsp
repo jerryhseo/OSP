@@ -2,9 +2,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/common/init.jsp"%>
 <style>
-.tab-sub-title{float: left; border-bottom: none !important;}
-.tab-sub-title-hr{clear: both; border-bottom: solid 1px #444;}
-.sort-order-div{float: right; margin-top: 18px; margin-bottom: 9px; width: 170px;}
+.tab-sub-title {
+ float: left;
+ border-bottom: none !important;
+}
+
+.tab-sub-title-hr {
+ clear: both;
+ border-bottom: solid 1px #444;
+}
+
 </style>
 
 <portlet:defineObjects />
@@ -43,272 +50,407 @@
   <liferay-portlet:param name="action" value="collectionDetail"/>
 </liferay-portlet:renderURL>
 
-<div class="contabm" style="${isSingleSearch ? 'display:none;' : ''}">
-  <ul id="<portlet:namespace/>search-tab-button">
-    <li class="sel" onclick="<portlet:namespace/>toggleTab(this); return false;">
-      <a id="total-tab-button" href="#total-tab"><liferay-ui:message key="edison-search-total"/>(${searchResults.appCount + searchResults.contentCount + searchResults.projectCount + searchResults.dataCount})</a>
-    </li>
-    <c:if test="${param.areaScienceApp}">
-      <li onclick="<portlet:namespace/>toggleTab(this); return false;">
-        <a id="app-tab-button" href="#app-tab"><liferay-ui:message key="edison-search-science-app"/>(${searchResults.appCount})</a>
-      </li>
-    </c:if>
-    <c:if test="${param.areaContents}">
-      <li onclick="<portlet:namespace/>toggleTab(this); return false;">
-        <a id="content-tab-button" href="#content-tab"><liferay-ui:message key="edison-search-contents"/>(${searchResults.contentCount})</a>
-      </li>
-    </c:if>
-    <c:if test="${param.areaSimulationProject}">
-      <li onclick="<portlet:namespace/>toggleTab(this); return false;">
-        <a id="project-tab-button" href="#project-tab"><liferay-ui:message key="edison-search-simulation-project"/>(${searchResults.projectCount})</a>
-      </li>
-    </c:if>
-    <c:if test="${param.areaScienceData}">
-      <li onclick="<portlet:namespace/>toggleTab(this); return false;">
-        <a id="data-tab-button" href="#data-tab"><liferay-ui:message key="edison-search-science-data"/>(${searchResults.dataCount})</a>
-      </li>
-    </c:if>
-  </ul>
-</div>
-<c:if test="${!isSingleSearch}">
-<div id="<portlet:namespace/>total-search-tab" class="search-tab loaded conlist">
-  <c:if test="${searchResults.appCount > 0}">
-    <h3 class="styleh3"><liferay-ui:message key="edison-search-science-app"/>(${searchResults.appCount} <liferay-ui:message key="edison-search-cnt"/>)</h3>
-    <div class="search-results">
-      <ul>
-        <c:forEach items="${searchResults.appResults}" var="element">
-          <li>
-            <a href="#appdetail" onclick="<portlet:namespace/>moveScienceAppDetail(${element.groupId}, ${element.scienceAppId}); return false;">${element.name}</a>
-            <div style="float: right; line-height: 2.3em !important;">
-                <c:if test="${!empty element.current_manualId and element.current_manualId ne 0}">
-                    <img src="${contextPath}/images/search/btn_manual.jpg" style="height: 24px; cursor: pointer;"
-                        onClick="<portlet:namespace/>fileDownload('${element.current_manualId}')" />
+<div class="nav-tabs-custom" style="${isSingleSearch ? 'display:none;' : ''}">
+    <ul id="<portlet:namespace/>search-tab-button" class="nav nav-tabs">
+        <li class="active" onclick="<portlet:namespace/>toggleTab(this);"><a id="total-tab-button"
+            href="#<portlet:namespace/>total-search-tab" data-toggle="tab"> <liferay-ui:message
+                    key="edison-search-total" /><span class="hidden-xs hidden-sm">(${searchResults.appCount + searchResults.contentCount + searchResults.projectCount + searchResults.dataCount})</span>
+        </a></li>
+        <c:if test="${param.areaScienceApp}">
+            <li onclick="<portlet:namespace/>toggleTab(this);"><a id="app-tab-button"
+                href="#<portlet:namespace/>app-search-tab" data-toggle="tab"> <liferay-ui:message
+                        key="edison-search-science-app" /><span class="hidden-xs hidden-sm">(${searchResults.appCount})</span>
+            </a></li>
+        </c:if>
+        <c:if test="${param.areaContents}">
+            <li onclick="<portlet:namespace/>toggleTab(this);"><a id="content-tab-button"
+                href="#<portlet:namespace/>content-search-tab" data-toggle="tab"> <liferay-ui:message
+                        key="edison-search-contents" /><span class="hidden-xs hidden-sm">(${searchResults.contentCount})</span>
+            </a></li>
+        </c:if>
+        <c:if test="${param.areaSimulationProject}">
+            <li onclick="<portlet:namespace/>toggleTab(this);"><a id="project-tab-button"
+                href="#<portlet:namespace/>project-search-tab" data-toggle="tab"> <liferay-ui:message
+                        key="edison-search-simulation-project" /><span class="hidden-xs hidden-sm">(${searchResults.projectCount})</span></a>
+            </li>
+        </c:if>
+        <c:if test="${param.areaScienceData}">
+            <li onclick="<portlet:namespace/>toggleTab(this);"><a id="data-tab-button"
+                href="#<portlet:namespace/>data-search-tab" data-toggle="tab"> <liferay-ui:message
+                        key="edison-search-science-data" /><span class="hidden-xs hidden-sm">(${searchResults.dataCount})</span></a>
+            </li>
+        </c:if>
+    </ul>
+    <div class="tab-content box">
+        <c:if test="${!isSingleSearch}">
+            <div id="<portlet:namespace/>total-search-tab" class="tab-pane fade in active">
+                <c:if test="${searchResults.appCount > 0}">
+                    <div class="box-header">
+                        <h3 class="styleh3">
+                            <liferay-ui:message key="edison-search-science-app" />
+                            (${searchResults.appCount}
+                            <liferay-ui:message key="edison-search-cnt" />
+                            )
+                        </h3>
+                        <div class="box-tools pull-right"></div>
+                    </div>
+
+                    <div class="search-results box-body">
+                        <ul class="products-list product-list-in-box">
+                            <c:forEach items="${searchResults.appResults}" var="element">
+                                <li class="item">
+                                    <div class="product-img">
+                                        <img class="profile-user-img img-responsive" alt="${element.currentTitle}"
+                                            src="/documents/${element.iconRepositoryId}/${element.iconId}/${element.iconTitle}/${element.iconUuid}?imageThumbnail=2"
+                                            width="67px" style="height: 50px !important;"
+                                            onerror="this.src='${contextPath}/images/noimage.png'">
+                                    </div>
+                                    <div class="product-info">
+                                        <a class="product-title" href="#appdetail"
+                                            onclick="<portlet:namespace/>moveScienceAppDetail(${element.groupId}, ${element.scienceAppId}); return false;">
+                                            ${element.name}</a>
+                                        <div class="pull-right hidden-sm hidden-xs"
+                                            style="line-height: 2.3em !important;">
+                                            <c:if
+                                                test="${!empty element.current_manualId and element.current_manualId ne 0}">
+                                                <img src="${contextPath}/images/search/btn_manual.jpg"
+                                                    style="height: 24px; cursor: pointer;"
+                                                    onClick="<portlet:namespace/>fileDownload('${element.current_manualId}')" />
+                                            </c:if>
+                                            <c:if
+                                                test="${empty element.current_manualId or element.current_manualId eq 0}">
+                                                <img src="${contextPath}/images/search/btn_manual_none.jpg"
+                                                    style="height: 24px; cursor: default;" />
+                                            </c:if>
+                                            <c:if
+                                                test="${workBenchPlid ne 0 and isSignedIn and element.openLevel ne downloadOnly and element.appType eq 'Solver'}">
+                                                <img src="${contextPath}/images/search/btn_run.jpg"
+                                                    style="cursor: pointer; height: 24px;"
+                                                    onClick="<portlet:namespace/>moveWorkBench('${element.scienceAppId}');" />
+                                            </c:if>
+                                            <c:if test="${workBenchPlid ne 0 and element.openLevel eq downloadOnly}">
+                                                <img src="${contextPath}/images/download_btn.gif"
+                                                    style="cursor: pointer; height: 24px;"
+                                                    onClick="<portlet:namespace/>fileDownload('${element.srcFileName}')" />
+                                            </c:if>
+                                        </div>
+                                        <span class="product-description"> <c:if test="${!empty element.title}">
+                                ${element.title}<br />version : ${element.version} / <liferay-ui:message
+                                                    key="edison-virtuallab-owner" /> : ${element.screenName}
+                              </c:if> <c:if test="${empty element.title}">
+                                                <liferay-ui:message key="edison-search-no-detail" />
+                                            </c:if>
+                                        </span>
+                                        <div class="hidden-md hidden-lg" style="line-height: 2.3em !important;">
+                                            <c:if
+                                                test="${!empty element.current_manualId and element.current_manualId ne 0}">
+                                                <img src="${contextPath}/images/search/btn_manual.jpg"
+                                                    style="height: 24px; cursor: pointer;"
+                                                    onClick="<portlet:namespace/>fileDownload('${element.current_manualId}')" />
+                                            </c:if>
+                                            <c:if
+                                                test="${empty element.current_manualId or element.current_manualId eq 0}">
+                                                <img src="${contextPath}/images/search/btn_manual_none.jpg"
+                                                    style="height: 24px; cursor: default;" />
+                                            </c:if>
+                                            <c:if
+                                                test="${workBenchPlid ne 0 and isSignedIn and element.openLevel ne downloadOnly and element.appType eq 'Solver'}">
+                                                <img src="${contextPath}/images/search/btn_run.jpg"
+                                                    style="cursor: pointer; height: 24px;"
+                                                    onClick="<portlet:namespace/>moveWorkBench('${element.scienceAppId}');" />
+                                            </c:if>
+                                            <c:if test="${workBenchPlid ne 0 and element.openLevel eq downloadOnly}">
+                                                <img src="${contextPath}/images/download_btn.gif"
+                                                    style="cursor: pointer; height: 24px;"
+                                                    onClick="<portlet:namespace/>fileDownload('${element.srcFileName}')" />
+                                            </c:if>
+                                        </div>
+                                    </div>
+                                </li>
+                            </c:forEach>
+                        </ul>
+                    </div>
+                    <c:if test="${searchResults.appCount > 5}">
+                        <div class="box-footer text-center">
+                            <a href="#appMore" onclick="<portlet:namespace/>moreTab('app'); return false;"
+                                class="uppercase"> <liferay-ui:message key="edison-search-more" />
+                            </a>
+                        </div>
+                    </c:if>
                 </c:if>
-                <c:if test="${empty element.current_manualId or element.current_manualId eq 0}">
-                    <img src="${contextPath}/images/search/btn_manual_none.jpg" style="height: 24px; cursor: default;"/>
+
+                <c:if test="${searchResults.contentCount > 0}">
+                    <div class="box-header">
+                        <h3 class="styleh3">
+                            <liferay-ui:message key="edison-search-contents" />
+                            (${searchResults.contentCount}
+                            <liferay-ui:message key="edison-search-cnt" />
+                            )
+                        </h3>
+                        <div class="box-tools pull-right"></div>
+                    </div>
+
+                    <div class="search-results box-body">
+                        <ul class="products-list product-list-in-box">
+                            <c:forEach items="${searchResults.contentResults}" var="element">
+                                <li class="item">
+                                    <div class="product-img">
+                                        <img class="profile-user-img img-responsive" alt="${element.currentTitle}"
+                                            src="/documents/${element.iconRepositoryId}/${element.iconId}/${element.iconTitle}/${element.iconUuid}?imageThumbnail=2"
+                                            width="67px" style="height: 50px !important;"
+                                            onerror="this.src='${contextPath}/images/noimage.png'">
+                                    </div>
+                                    <div class="product-info">
+                                        <a class="product-title" href="#contentDetail"
+                                            onclick="<portlet:namespace/>moveContentDetail(${element.contentSeq}, ${element.contentDiv}); return false;">
+                                            ${element.title}</a> <span class="product-description"> ${element.resume}
+                                            <c:if test="${empty element.resume}">
+                                                <liferay-ui:message key="edison-search-no-detail" />
+                                            </c:if>
+                                        </span>
+                                    </div>
+                                </li>
+                            </c:forEach>
+                        </ul>
+                        <c:if test="${searchResults.contentCount > 5}">
+                            <div class="box-footer text-center">
+                                <a href="#appMore" onclick="<portlet:namespace/>moreTab('content'); return false;"
+                                    class="uppercase"> <liferay-ui:message key="edison-search-more" />
+                                </a>
+                            </div>
+                        </c:if>
+                    </div>
                 </c:if>
-                <c:if test="${workBenchPlid ne 0 and isSignedIn and element.openLevel ne downloadOnly and element.appType eq 'Solver'}">
-                    <img src="${contextPath}/images/search/btn_run.jpg"style="cursor:pointer; height: 24px;"
-                        onClick="<portlet:namespace/>moveWorkBench('${element.scienceAppId}');"/>
+                <c:if test="${searchResults.projectCount > 0}">
+                    <div class="box-header">
+                        <h3 class="styleh3">
+                            <liferay-ui:message key="edison-search-simulation-project" />
+                            (${searchResults.projectCount}
+                            <liferay-ui:message key="edison-search-cnt" />
+                            )
+                        </h3>
+                        <div class="box-tools pull-right"></div>
+                    </div>
+                    <div class="search-results box-body">
+                        <ul class="products-list product-list-in-box">
+                            <c:forEach items="${searchResults.projectResults}" var="element">
+                                <li class="item">
+                                    <div class="product-img">
+                                        <img class="profile-user-img img-responsive" alt="${element.currentTitle}"
+                                            src="/documents/${element.iconRepositoryId}/${element.iconId}/${element.iconTitle}/${element.iconUuid}?imageThumbnail=2"
+                                            width="67px" style="height: 50px !important;"
+                                            onerror="this.src='${contextPath}/images/noimage.png'">
+                                    </div>
+                                    <div class="product-info">
+                                        <a href="#simulationProjectDetail"
+                                            onclick="<portlet:namespace/>moveSimulationProjectDetail(${element.simulationProjectId}); return false;">${element.title}</a>
+                                        <span class="product-description">
+                                            ${element.explain}
+                                            <c:if test="${empty element.explain}">
+                                                <liferay-ui:message key="edison-search-no-detail" />
+                                            </c:if>
+                                        </span>
+                                    </div>
+                                </li>
+                            </c:forEach>
+                        </ul>
+                        <c:if test="${searchResults.projectCount > 5}">
+                            <div class="box-footer text-center">
+                                <a href="#appMore" onclick="<portlet:namespace/>moreTab('project'); return false;"
+                                    class="uppercase"> <liferay-ui:message key="edison-search-more" />
+                                </a>
+                            </div>
+                        </c:if>
+                    </div>
                 </c:if>
-                <c:if test="${workBenchPlid ne 0 and element.openLevel eq downloadOnly}">
-                    <img src="${contextPath}/images/download_btn.gif"style="cursor:pointer; height: 24px;"
-                        onClick="<portlet:namespace/>fileDownload('${element.srcFileName}')"/>
+
+                <c:if test="${searchResults.dataCount > 0}">
+                    <div class="box-header">
+                        <h3 class="styleh3">
+                            <liferay-ui:message key="edison-search-science-data" />
+                            (${searchResults.dataCount}
+                            <liferay-ui:message key="edison-search-cnt" />
+                            )
+                        </h3>
+                        <div class="box-tools pull-right"></div>
+                    </div>
+                    
+                    <div class="search-results box-body">
+                        <ul class="products-list product-list-in-box">
+                            <c:forEach items="${searchResults.dataResults}" var="element">
+                                <li class="item">
+                                    <div class="product-img">
+                                        <img class="profile-user-img img-responsive" alt="${element.vo.title}"
+                                            src="/documents/${element.iconRepositoryId}/${element.iconId}/${element.iconTitle}/${element.iconUuid}?imageThumbnail=2"
+                                            width="67px" style="height: 50px !important;"
+                                            onerror="this.src='${contextPath}/images/noimage.png'">
+                                    </div>
+                                    <div class="product-info">
+                                        <a href="#dataDetail"
+                                             onclick="<portlet:namespace/>moveDataDetail(${element.vo.collectionId}); return false;">${element.vo.title}
+                                        <c:if test="${!empty element.dsCnt && element.dsCnt ne 0}">(${element.dsCnt })</c:if>
+                                        <span class="label label-warning pull-right">
+                                            <c:choose>
+                                                <c:when test="${empty element.embago}">
+                                                    Inavailable
+                                                </c:when>
+                                                <c:when test="${element.embago == 0}">
+                                                    Available now.
+                                                </c:when>
+                                                <c:otherwise>
+                                                    Available in
+                                                    <c:if test="${element.embago > 30}">
+                                                        <fmt:parseNumber value="${element.embago / 30}" integerOnly="true" /> month.
+                                                    </c:if>
+                                                    <c:if test="${element.embago <= 30}">
+                                                        ${element.embago} day.
+                                                    </c:if>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </span>
+                                        </a>
+                                        <span class="product-description">
+                                            ${element.vo.description}
+                                        </span>
+                                        <span class="product-description">
+                                        <fmt:formatDate value="${element.vo.createDate }" pattern="yyyy-MM-dd" />
+                                        | ${element.vo.doi } | ${element.communityname }
+                                        <c:choose>
+                                            <c:when test="${!empty element.contributorNames[0] }">
+                                          | ${element.contributorNames[0] }
+                                          <c:if test="${fn:length(element.contributorNames) > 1 }">
+                                              and ${fn:length(element.contributorNames) - 1} others
+                                          </c:if>
+                                                        </c:when>
+                                                        <c:otherwise> | ${element.userName }</c:otherwise>
+                                                    </c:choose>
+                                        </span>
+                                    </div>
+                                </li>
+                            </c:forEach>
+                        </ul>
+                        <c:if test="${searchResults.dataCount > 5}">
+                            <div class="box-footer text-center">
+                                <a href="#appMore" onclick="<portlet:namespace/>moreTab('data'); return false;"
+                                    class="uppercase"> <liferay-ui:message key="edison-search-more" />
+                                </a>
+                            </div>
+                        </c:if>
+                    </div>
+                </c:if>
+                <c:if
+                    test="${searchResults.appCount + searchResults.contentCount + searchResults.projectCount + searchResults.dataCount eq 0}">
+                    <div class="search-results">
+                        <ul style="min-height: 100px; margin-top: 20px;">
+                            <li><span class="result-none"><liferay-ui:message key="edison-search-no-result" /></span></li>
+                        </ul>
+                    </div>
                 </c:if>
             </div>
-            <div>
-              <c:if test="${!empty element.title}">
-                ${element.title}<br/>version : ${element.version} / <liferay-ui:message key="edison-virtuallab-owner"/> : ${element.screenName}
-              </c:if>
-              <c:if test="${empty element.title}">
-                            <liferay-ui:message key="edison-search-no-detail"/>
-              </c:if>
+        </c:if>
+        <c:if test="${param.areaScienceApp}">
+            <div id="<portlet:namespace/>app-search-tab" class="search-tab conlist" style="display: none;">
+                <div class="box-header">
+                    <h3 class="styleh3">
+                        <liferay-ui:message key="edison-search-science-app" />
+                        (${searchResults.appCount}
+                        <liferay-ui:message key="edison-search-cnt" />
+                        )
+                    </h3>
+                    <div class="box-tools pull-right col-xs-4">
+                        <div class="input-group">
+                            <select class="form-control" name="<portlet:namespace/>sort-field" tab-type="app">
+                                <option value="${SORT_FIELD_CREATED}">Latest</option>
+                                <%-- <option value="${SORT_FIELD_VIEW}">View</option> --%>
+                                <option value="${SORT_FIELD_NAME}">Name</option>
+                            </select>
+                            <div class="input-group-btn">
+                                <button class="btn btn-default sort-order" title="${SORT_ORDER_DESC}" tab-type="app">
+                                    <i class="icon-sort-by-attributes-alt"> </i>
+                                </button>
+                                <input type="hidden" name="<portlet:namespace/>sort-order" value="${SORT_ORDER_DESC}"
+                                    tab-type="app" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="search-results"></div>
             </div>
-          </li>
-        </c:forEach>
-      </ul>
-      <c:if test="${searchResults.appCount > 5}">
-        <div class="more-button-wrapper">
-          <a class="btn_s" href="#appMore" onclick="<portlet:namespace/>toggleTabByTabType('app'); return false;"><i class="icon-plus"></i>&nbsp;&nbsp;<liferay-ui:message key="edison-search-more"/></a>
-        </div>
-      </c:if>
-    </div>
-  </c:if>
-  <c:if test="${searchResults.contentCount > 0}">
-    <h3 class="styleh3"><liferay-ui:message key="edison-search-contents"/>(${searchResults.contentCount} <liferay-ui:message key="edison-search-cnt"/>)</h3>
-    <div class="search-results">
-      <ul>
-        <c:forEach items="${searchResults.contentResults}" var="element">
-          <li>
-            <a href="#contentDetail" onclick="<portlet:namespace/>moveContentDetail(${element.contentSeq}, ${element.contentDiv}); return false;">${element.title}</a>
-            <div>
-              ${element.resume}
-              <c:if test="${empty element.resume}">
-                <liferay-ui:message key="edison-search-no-detail"/>
-              </c:if>
+        </c:if>
+        <c:if test="${param.areaContents}">
+          <div id="<portlet:namespace/>content-search-tab" class="search-tab conlist" style="display: none;">
+            <div class="box-header">
+                <h3 class="styleh3">
+                    <liferay-ui:message key="edison-search-contents" />
+                    (${searchResults.contentCount}
+                    <liferay-ui:message key="edison-search-cnt" />
+                    )
+                </h3>
+                <div class="box-tools pull-right col-xs-4">
+                    <div class="input-group">
+                        <select class="form-control" name="<portlet:namespace/>sort-field" tab-type="content">
+                          <option value="${SORT_FIELD_CREATED}">Latest</option>
+                          <option value="${SORT_FIELD_VIEW}">View</option>
+                          <%-- <option value="${SORT_FIELD_NAME}">Name</option> --%>
+                        </select>
+                        <div class="input-group-btn">
+                            <button class="btn btn-default sort-order"
+                                title="${SORT_ORDER_DESC}" tab-type="content">
+                                <i class="icon-sort-by-attributes-alt"> </i>
+                            </button>
+                            <input type="hidden" name="<portlet:namespace/>sort-order" value="${SORT_ORDER_DESC}"
+                                tab-type="content" />
+                        </div>
+                    </div>
+                </div>
             </div>
-          </li>
-        </c:forEach>
-      </ul>
-      <c:if test="${searchResults.contentCount > 5}">
-        <div class="more-button-wrapper">
-          <a class="btn_s" href="#contentMore" onclick="<portlet:namespace/>toggleTabByTabType('content'); return false;"><i class="icon-plus"></i>&nbsp;&nbsp;<liferay-ui:message key="edison-search-more"/></a>
-        </div>
-      </c:if>
-    </div>
-  </c:if>
-  <c:if test="${searchResults.projectCount > 0}">
-    <h3 class="styleh3"><liferay-ui:message key="edison-search-simulation-project"/>(${searchResults.projectCount} <liferay-ui:message key="edison-search-cnt"/>)</h3>
-    <div class="search-results">
-      <ul>
-        <c:forEach items="${searchResults.projectResults}" var="element">
-          <li>
-            <a href="#simulationProjectDetail" onclick="<portlet:namespace/>moveSimulationProjectDetail(${element.simulationProjectId}); return false;">${element.title}</a>
-            <div>
-              ${element.explain}
-              <c:if test="${empty element.explain}">
-                <liferay-ui:message key="edison-search-no-detail"/>
-              </c:if>
+            <div class="search-results"></div>
+          </div>
+        </c:if>
+        <c:if test="${param.areaSimulationProject}">
+          <div id="<portlet:namespace/>project-search-tab" class="search-tab conlist" style="display: none;">
+          
+          <div class="box-header">
+                <h3 class="styleh3">
+                    <liferay-ui:message key="edison-search-simulation-project" />
+                    (${searchResults.projectCount}
+                    <liferay-ui:message key="edison-search-cnt" />
+                    )
+                </h3>
             </div>
-          </li>
-        </c:forEach>
-      </ul>
-      <c:if test="${searchResults.projectCount > 5}">
-        <div class="more-button-wrapper">
-          <a class="btn_s" href="#projectMore" onclick="<portlet:namespace/>toggleTabByTabType('project'); return false;"><i class="icon-plus"></i>&nbsp;&nbsp;<liferay-ui:message key="edison-search-more"/></a>
-        </div>
-      </c:if>
-    </div>
-  </c:if>
-  <c:if test="${searchResults.dataCount > 0}">
-    <h3 class="styleh3"><liferay-ui:message key="edison-search-science-data"/>(${searchResults.dataCount} <liferay-ui:message key="edison-search-cnt"/>)</h3>
-    <div class="search-results">
-      <ul>
-        <c:forEach items="${searchResults.dataResults}" var="element">
-          <li>
-            <a href="#dataDetail" onclick="<portlet:namespace/>moveDataDetail(${element.vo.collectionId}); return false;">${element.vo.title}
-            <c:if test="${!empty element.dsCnt && element.dsCnt ne 0}">(${element.dsCnt })</c:if></a>
-            <div style="float: right; line-height: 2.3em !important;">
-              <c:choose>
-                <c:when test="${empty element.embago}">
-                              Inavailable
-                          </c:when>
-                <c:when test="${element.embago == 0}">
-                              Available now.
-                          </c:when>
-                <c:otherwise>
-                              Available in
-                              <c:if test="${element.embago > 30}">
-                    <fmt:parseNumber value="${element.embago / 30}" integerOnly="true" /> month.
-                              </c:if>
-                  <c:if test="${element.embago <= 30}">
-                                  ${element.embago} day.
-                              </c:if>
-                </c:otherwise>
-              </c:choose>
+            <div class="search-results"></div>
+          </div>
+        </c:if>
+        <c:if test="${param.areaScienceData}">
+          <div id="<portlet:namespace/>data-search-tab" class="search-tab conlist" style="display: none;">
+            <div class="box-header">
+                <h3 class="styleh3">
+                    <liferay-ui:message key="edison-search-science-data" />
+                    (${searchResults.dataCount}
+                    <liferay-ui:message key="edison-search-cnt" />
+                    )
+                </h3>
+                <div class="box-tools pull-right col-xs-4">
+                    <div class="input-group">
+                        <select class="form-control" name="<portlet:namespace/>sort-field" tab-type="data">
+                            <option value="${SORT_FIELD_CREATED}">Latest</option>
+                            <%-- <option value="${SORT_FIELD_VIEW}">View</option> --%>
+                            <option value="${SORT_FIELD_NAME}">Name</option>
+                        </select>
+                        <div class="input-group-btn">
+                            <button class="btn btn-default sort-order" title="${SORT_ORDER_DESC}" 
+                                tab-type="data">
+                                <i class="icon-sort-by-attributes-alt"> </i>
+                            </button>
+                            <input type="hidden" name="<portlet:namespace/>sort-order"
+                                value="${SORT_ORDER_DESC}" tab-type="data" />
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div>
-              <p class="description">${element.vo.description}</p>
-              <fmt:formatDate value="${element.vo.createDate }" pattern="yyyy-MM-dd" /> |
-              ${element.vo.doi } | 
-              ${element.communityname }
-              <c:choose>
-                <c:when test="${!empty element.contributorNames[0] }">
-                  | ${element.contributorNames[0] }
-                  <c:if test="${fn:length(element.contributorNames) > 1 }">
-                      and ${fn:length(element.contributorNames) - 1} others
-                  </c:if>
-                </c:when>
-                <c:otherwise> | ${element.userName }</c:otherwise>
-              </c:choose>
-            </div>
-          </li>
-        </c:forEach>
-      </ul>
-      <c:if test="${searchResults.dataCount > 5}">
-        <div class="more-button-wrapper">
-          <a class="btn_s" href="#datatMore" onclick="<portlet:namespace/>toggleTabByTabType('data'); return false;"><i class="icon-plus"></i>&nbsp;&nbsp;<liferay-ui:message key="edison-search-more"/></a>
-        </div>
-      </c:if>
-    </div>
-  </c:if>
-  <c:if test="${searchResults.appCount + searchResults.contentCount + searchResults.projectCount + searchResults.dataCount eq 0}">
-    <div class="search-results">
-      <ul>
-        <li><span class="result-none"><liferay-ui:message key="edison-search-no-result"/></span></li>
-      </ul>
-    </div>
-  </c:if>
-</div>
-</c:if>
-<c:if test="${param.areaScienceApp}">
-  <div id="<portlet:namespace/>app-search-tab" class="search-tab conlist" style="display: none;">
-    <div>
-      <h3 class="styleh3 tab-sub-title"><liferay-ui:message key="edison-search-science-app"/>(${searchResults.appCount} <liferay-ui:message key="edison-search-cnt"/>)</h3>
-      <div class="input-group sort-order-div">
-        <select class="form-control" name="<portlet:namespace/>sort-field" tab-type="app">
-          <option value="${SORT_FIELD_CREATED}">Latest</option>
-          <%-- <option value="${SORT_FIELD_VIEW}">View</option> --%>
-          <option value="${SORT_FIELD_NAME}">Name</option>
-        </select>
-        <div class="input-group-btn">
-          <button class="btn btn-default sort-order" title="${SORT_ORDER_DESC}" tab-type="app">
-            <i class="icon-sort-by-attributes-alt"> </i>
-          </button>
-          <input type="hidden" name="<portlet:namespace/>sort-order" value="${SORT_ORDER_DESC}" tab-type="app"/>
-        </div>
-      </div>
-      <div class="tab-sub-title-hr"></div>
-    </div>
-    <div class="search-results"></div>
-  </div>
-</c:if>
-<c:if test="${param.areaContents}">
-  <div id="<portlet:namespace/>content-search-tab" class="search-tab conlist" style="display: none;">
-  <div>
-    <h3 class="styleh3 tab-sub-title"><liferay-ui:message key="edison-search-contents"/>(${searchResults.contentCount} <liferay-ui:message key="edison-search-cnt"/>)</h3>
-    <div class="input-group sort-order-div">
-        <select class="form-control" name="<portlet:namespace/>sort-field" tab-type="content">
-          <option value="${SORT_FIELD_CREATED}">Latest</option>
-          <option value="${SORT_FIELD_VIEW}">View</option>
-          <%-- <option value="${SORT_FIELD_NAME}">Name</option> --%>
-        </select>
-        <div class="input-group-btn">
-          <button class="btn btn-default sort-order" title="${SORT_ORDER_DESC}" tab-type="content">
-            <i class="icon-sort-by-attributes-alt"> </i>
-          </button>
-          <input type="hidden" name="<portlet:namespace/>sort-order" value="${SORT_ORDER_DESC}" tab-type="content"/>
-        </div>
-      </div>
-      <div class="tab-sub-title-hr"></div>
-      </div>
-    <div class="search-results"></div>
-  </div>
-</c:if>
-<c:if test="${param.areaSimulationProject}">
-  <div id="<portlet:namespace/>project-search-tab" class="search-tab conlist" style="display: none;">
-  <div>
-    <h3 class="styleh3 tab-sub-title"><liferay-ui:message key="edison-search-simulation-project"/>(${searchResults.projectCount} <liferay-ui:message key="edison-search-cnt"/>)</h3>
-    <%-- <div class="input-group sort-order-div">
-        <select class="form-control" name="<portlet:namespace/>sort-field" tab-type="project">
-          <option value="${SORT_FIELD_CREATED}">Latest</option>
-          <option value="${SORT_FIELD_VIEW}">View</option>
-          <option value="${SORT_FIELD_NAME}">Name</option>
-        </select>
-        <div class="input-group-btn">
-          <button class="btn btn-default sort-order" title="${SORT_ORDER_DESC}" tab-type="project">
-            <i class="icon-sort-by-attributes-alt"> </i>
-          </button>
-          <input type="hidden" name="<portlet:namespace/>sort-order" value="${SORT_ORDER_DESC}" tab-type="project"/>
-        </div>
-      </div> --%>
-      <div class="tab-sub-title-hr"></div>
-      </div>
-    <div class="search-results"></div>
-  </div>
-</c:if>
-<c:if test="${param.areaScienceData}">
-  <div id="<portlet:namespace/>data-search-tab" class="search-tab conlist" style="display: none;">
-  <div>
-    <h3 class="styleh3 tab-sub-title"><liferay-ui:message key="edison-search-science-data"/>(${searchResults.dataCount} <liferay-ui:message key="edison-search-cnt"/>)</h3>
-    <div class="input-group sort-order-div">
-        <select class="form-control" name="<portlet:namespace/>sort-field" tab-type="data">
-          <option value="${SORT_FIELD_CREATED}">Latest</option>
-          <%-- <option value="${SORT_FIELD_VIEW}">View</option> --%>
-          <option value="${SORT_FIELD_NAME}">Name</option>
-        </select>
-        <div class="input-group-btn">
-          <button class="btn btn-default sort-order" title="${SORT_ORDER_DESC}" tab-type="data">
-            <i class="icon-sort-by-attributes-alt"> </i>
-          </button>
-          <input type="hidden" name="<portlet:namespace/>sort-order" value="${SORT_ORDER_DESC}" tab-type="data"/>
-        </div>
-      </div>
-      <div class="tab-sub-title-hr"></div>
-      </div>
-    <div class="search-results"></div>
-  </div>
-</c:if>
+            <div class="search-results"></div>
+          </div>
+        </c:if>
 <script>
 var <portlet:namespace/>TAB_TYPE = {
   "APP": "app",  
@@ -362,6 +504,10 @@ $(document).ready(function(){
   }
   
 });
+
+function <portlet:namespace/>moreTab(tabType) {
+    $("#" + tabType + "-tab-button").click();
+}
 
 function <portlet:namespace/>toggleTabByTabType(tabType){
   $("#<portlet:namespace/>search-tab-button > li").removeClass("sel");
@@ -433,7 +579,6 @@ function <portlet:namespace/>loadTab(tabType, currentPage){
 }
 
 function <portlet:namespace/>setRedirectUrlAndLocationHref(move, portletURL){
-  
   var parameters = <portlet:namespace/>getPostData();
   parameters["<portlet:namespace/>currentUrl"] = <portlet:namespace/>redirectURL;
   synchronousAjaxHelper.post("${getEncodedUrlUrl}", parameters, function(result){

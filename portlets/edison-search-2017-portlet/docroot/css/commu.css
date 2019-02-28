@@ -74,7 +74,7 @@
 .category02arrow.app{position:absolute; left:15%; margin-top:-12px;}
 
 /*좌측*/
-.leftm{width:230px; border-radius:3px; border:solid 1px #a9b2bf; float:left; margin-top:15px; min-height: 400px;}
+.leftm{width:230px; border-radius:3px; border:solid 1px #a9b2bf; float:left; margin-top: 20px; min-height: 400px;}
 .leftm > ul{margin:20px 20px;}
 .leftm > ul > li {font-size:16px; color:#011144; background:url(../images/search/minus.png) no-repeat 0 10px; padding-left:20px; line-height:1.5em; padding-top: 5px; padding-bottom: 5px;}
 .leftm > ul > li a:link{color:#011144;}
@@ -87,7 +87,7 @@
 
 /*우측*/
 .rightcon{width:940px; float:left; margin-top:15px; margin-left:30px;}
-.connav{ border-bottom:solid 1px #e3e8e9; overflow:hidden;}
+.connav{ /* border-bottom:solid 1px #e3e8e9; */ overflow:hidden;}
 .connav ul{ margin:0; padding:0;}
 .connav ul li{ font-size:13px; color:#777; float:left; margin-right:11px; line-height:2.0em;}
 .connav ul li:first-child{ color:#000; font-weight:600;}
@@ -119,13 +119,13 @@
 
 
 .conlist{}
-.conlist > .search-results > ul {margin: 0px !important; padding: 0;}
+/* .conlist > .search-results > ul {margin: 0px !important; padding: 0;}
 .conlist > .search-results > ul > li{ margin:0; padding:0; padding-top:3px; padding-bottom:15px; border-bottom:solid 1px #eee;}
 .conlist > .search-results > ul > li > a, 
 .conlist > .search-results > ul > li > div, 
 .conlist > .search-results > ul > li > .result-none{font-size:15px; color:#777; font-weight:500; line-height:1.4em;}
 .conlist > .search-results > ul > li > a, 
-.conlist > .search-results > ul > li > .result-none{ font-size:17px; color:#000; line-height: 2.5em;}
+.conlist > .search-results > ul > li > .result-none{ font-size:17px; color:#000; line-height: 2.5em;} */
 
 
 .conpwrap{text-align:center; overflow:hidden;}

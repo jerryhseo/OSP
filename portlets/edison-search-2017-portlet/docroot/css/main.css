@@ -16,11 +16,11 @@ h3.styleh3 {font-size:21px; color:#444;}
 .contabm > ul > li > a:focus{color: #000 !important;}
 .contabm > ul > li {cursor: pointer !important;}
 
-.search-results{margin-bottom: 30px;}
+/* .search-results{margin-bottom: 30px;}
 
 .search-results > ul > li > div{ overflow: hidden; text-overflow: ellipsis; 
 	display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; word-wrap:break-word;
- 	line-height: 1.4em !important; height: 2.8em;}
+ 	line-height: 1.4em !important; height: 2.8em;} */
  	
 .search-results > ul > li > div > .description{width:90%; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; margin-bottom: 1px;}
  	
