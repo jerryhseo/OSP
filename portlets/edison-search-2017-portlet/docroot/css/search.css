@@ -1,0 +1,162 @@
+#category-list>ul {
+    padding: 0px;
+}
+
+.search-btn-height {
+    height: 36px !important;
+}
+
+.search-main-title-image {
+    padding-top: 0px !important;
+    margin-top: -5px;
+}
+
+.hidden-check {
+    display: none;
+}
+
+.box {
+    border-top: none !important;
+}
+
+.products-list .product-img {
+    margin-right: 5px;
+}
+
+.products-list .product-img img {
+    width: 67px;
+    height: 50px;
+}
+
+.content {
+    padding: 0px !important;
+}
+
+.products-list .product-info {
+    margin-left: 70px;
+}
+
+.nav.nav-tabs>li {
+    cursor: pointer;
+}
+
+h3.styleh3 {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-bottom: 10px;
+    font-size: 17px;
+    line-height: 25px;
+    border-bottom: 1px solid #cccccc;
+}
+
+.nav-tabs-custom {}
+
+.sort-order-div {
+    width: 170px;
+}
+
+button.sort-order {
+    margin-top: 0 !important;
+    height: 32px;
+}
+
+.box-tools.pull-right.col-xs-4 {
+    padding-right: 0px;
+}
+
+@media ( max-width: 979px) {
+    .box-tools.pull-right.col-xs-4 {
+        padding: 0px !important;
+    }
+    .nav-tabs-custom>.tab-content {
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+    }
+    h3.styleh3 {
+        font-size: 13px;
+        line-height: 24px;
+    }
+    .aui .btn {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        display: inline;
+        margin-top: 5px;
+        width: auto;
+    }
+    .aui .btn {
+        padding: 7px 10px;
+        font-size: 13px;
+    }
+    .aui .input-group-btn {
+        position: relative;
+        font-size: 0;
+        white-space: nowrap;
+    }
+    .aui .input-group-addon,
+    .aui .add-on,
+    .aui .input-group-btn {
+        width: 1%;
+        white-space: nowrap;
+        vertical-align: middle;
+    }
+    .aui .input-group-btn:first-child>.btn,
+    .aui .input-group-btn:first-child>.btn-group {
+        margin-right: -1px;
+    }
+    .aui .input-group-btn>.btn {
+        position: relative;
+    }
+    #_edisonsearch_WAR_edisonsearch2017portlet_searchKeyword {
+        margin-top: 5px !important;
+        position: relative;
+        z-index: 2;
+        float: left !important;
+        width: auto !important;
+        margin-bottom: 0;
+        margin-right: 0;
+    }
+    .search-main-title {
+        margin-left: -20px !important;
+        margin-right: -20px !important;
+    }
+    .aui .nav>li>a {
+        padding: 10px 10px;
+    }
+    #footer {
+        width: auto;
+        margin-left: -30px !important;
+        margin-right: -30px !important;
+    }
+    #nsubtopwrap {
+        display: none;
+    }
+}
+
+.product-title {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: block;
+}
+
+.aui .btn-default {
+    color: #333333;
+    background-color: #e6e6e6;
+    border-color: #8c8c8c;
+}
+
+.nav-tabs-custom {
+    margin-bottom: 20px;
+    background: #fff;
+    box-shadow: none;
+    border-radius: 3px;
+}
+
+.nav-tabs-custom > .nav-tabs > li.active:first-child {
+ box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+}
+
+.tab-content.box {
+ box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+}
