@@ -45,7 +45,7 @@
 			<ul class="nav navbar-nav">
 				<c:if test="${!empty zipFileId }">
 					<li class="toolbar toolbar-level-up cursor-pointer tooltips">
-						<a href="javascript:void (0);" onclick="<portlet:namespace/>download('${zipFileId}');" class="icon-download-alt" style="font-size: 16px;"></a>
+						<a href="javascript:void (0);" onclick="<portlet:namespace/>downloadZip('${zipFileId}');" class="icon-download-alt" style="font-size: 16px;"></a>
 						<div class="toolbar-tooltip-text"><liferay-ui:message key="edison-simulation-monitoring-result-file-all-down"/></div> 
 					</li>
 				</c:if>
@@ -159,6 +159,13 @@ function <portlet:namespace/>girdBreadCrumb(folderFullPath){
 		}
 	}
 }
+
+
+function <portlet:namespace/>downloadZip(fileId){
+	var url = '${icebreakerUrl}/api/file/download?id=' + fileId;
+	window.location.href = url;
+}
+
 
 function <portlet:namespace/>download(fileIds){
 	for(var index in fileIds){
