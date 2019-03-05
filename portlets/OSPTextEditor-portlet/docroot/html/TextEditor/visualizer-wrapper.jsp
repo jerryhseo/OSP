@@ -139,6 +139,7 @@ function <portlet:namespace/>processInitAction( jsonInitData, changeAlert ){
 function <portlet:namespace/>fireDataChangedEvent( content ){
 	console.log('fireDataChangedEvent in text editor wrapper...');
 	<portlet:namespace/>visualizer.fireDataChangedEvent({
+		type_: 'content',
 		content_: content 
 	});
 };
