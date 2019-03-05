@@ -4,7 +4,7 @@
     if( OSP.Visualizer ){
         console.log( 'OSP.Visualizer already loaded.');
         return;
-    }webclipse
+    }
 
     OSP.Visualizer = function( config ){
         console.log( 'config: ', config );
@@ -28,14 +28,31 @@
         var fileExplorerId;
         var fileExplorerDialog;
 
+        var getPortletSection = function(){
+            var portlet = $('#p_p_id'+namespace);
+            if( !portlet[0] ){
+                portlet = $('#'+namespace);
+            }
+
+            return portlet;
+        };
+
         var blockVisualizer = function(){
-            var offset = $('#p_p_id'+namespace).offset();
-            console.log('Block visualizer: '+namespace, offset, $('#p_p_id'+namespace).width(), $('#p_p_id'+namespace).height() );
-            $('#p_p_id'+namespace).block({
+            var portlet = getPortletSection();
+
+            if( !portlet[0] ){
+                console.log( 'There is no portlet section for '+namespace);
+                return;
+            }
+
+            console.log( 'blockVisualizer portlets: ', portlet)
+            var offset = portlet.offset();
+            console.log('Block visualizer: '+namespace, offset, portlet.width(), portlet.height() );
+            portlet.block({
                         message:'<img src=\"'+Liferay.ThemeDisplay.getPathThemeImages()+'/common/loading.gif\" style=\"position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9990;\"/>',
                         css: {
-                            'width':$('#p_p_id'+namespace).width()+'px',
-                            'height':$('#p_p_id'+namespace).height()+'px',
+                            'width':portlet.width()+'px',
+                            'height':portlet.height()+'px',
                             'margin': '0px 0px 0px 0px',
                             'showOverlay': false
                         }
@@ -44,7 +61,12 @@
 
         var unblockVisualizer = function(){
             console.log('Unblock visualizer: '+namespace);
-            $('#p_p_id'+namespace).unblock();
+            var portlet = getPortletSection();
+            if( !portlet[0] ){
+                return;
+            }
+
+            portlet.unblock();
         };
 
         var showAlert = function( msg ){
