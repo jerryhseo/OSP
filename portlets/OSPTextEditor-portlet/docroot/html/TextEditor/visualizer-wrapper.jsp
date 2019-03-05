@@ -125,7 +125,7 @@ function <portlet:namespace/>processInitAction( jsonInitData, changeAlert ){
 	}
 	
 	jsonInitData.user_ = jsonInitData.user_ ? jsonInitData.user_ : '<%=user.getScreenName()%>';
-	jsonInitData.type_ = jsonInitData.type_ ? jsonInitData.type_ : OSP.Enumeration.PathType.FOLDER;
+	jsonInitData.type_ = jsonInitData.type_ ? jsonInitData.type_ : OSP.Enumeration.PathType.CONTENT;
 	jsonInitData.parent_ = jsonInitData.parent_ ? jsonInitData.parent_ : '';
 	jsonInitData.name_ = jsonInitData.name_ ? jsonInitData.name_ : '';
 	

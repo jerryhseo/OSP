@@ -7,6 +7,7 @@
 		var Path = this;
 		OSP._MapObject.apply(Path);
 
+		Path.VERSION='20190228-GA01';
 		Path.url = function( url ){
 			return Path.property.apply( Path, OSP.Util.addFirstArgument(OSP.Constants.CONTENT, arguments) );
 		};
@@ -138,6 +139,7 @@
 		var InputData = this;
 		OSP.Path.apply(InputData);
 
+		InputData.VERSION='20190228-GA01';
 
 		InputData.order = function( order ){
 			return InputData.property.apply( InputData, OSP.Util.addFirstArgument(OSP.Constants.ORDER, arguments) );
@@ -211,6 +213,7 @@
 		var DataType = this;
 		OSP._OpenObject.apply(DataType);
 
+		DataType.VERSION='20190228-GA01';
 		var DataStructure = function( jsonObject ){
 			var DS = this;
 			OSP._MapObject.apply(DS);

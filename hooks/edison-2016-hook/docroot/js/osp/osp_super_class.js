@@ -5,6 +5,9 @@
 	
 	OSP._MapObject = function(){
 		var MapObject = this;
+
+		MapObject.VERSION='20190228-GA01';
+
 		MapObject.property = function( key, value){
 			switch( arguments.length ){
 				case 1:
@@ -58,6 +61,7 @@
 		var OpenObject = this;
 		OSP._MapObject.apply(OpenObject);
 
+		OpenObject.VERSION='20190228-GA01';
 		OpenObject.id = function( id ){
 			return OpenObject.property.apply( OpenObject, OSP.Util.addFirstArgument(OSP.Constants.ID, arguments) );
 		};
@@ -311,6 +315,8 @@
 
 	OSP._StyleObject = function(){
 		var Style = this;
+
+		Style.VERSION='20190228-GA01';
 		Style.style = function( style ){
 			return Style.property.apply( Style, OSP.Util.addFirstArgument(OSP.Constants.STYLE, arguments) );
 		};
