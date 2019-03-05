@@ -31,7 +31,7 @@
         var getPortletSection = function(){
             var portlet = $('#p_p_id'+namespace);
             if( !portlet[0] ){
-                portlet = $('#'+namespace);
+                portlet = $('#'+namespace).parent();
             }
 
             return portlet;
