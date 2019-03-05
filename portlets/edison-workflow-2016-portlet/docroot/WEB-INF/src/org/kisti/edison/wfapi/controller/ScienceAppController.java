@@ -15,6 +15,7 @@ import org.kisti.edison.science.service.ScienceAppInputPortsLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppOutputPortsLocalServiceUtil;
 import org.kisti.edison.service.WorkflowSimulationJobLocalServiceUtil;
+import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.wfapi.custom.WorkflowBeanUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -80,7 +81,7 @@ public class ScienceAppController{
           lv2.put("parent", lv1CategoryId);
           List<Map<String, Object>> app = WorkflowBeanUtil.scienceAppToJstreeModel(
               ScienceAppLocalServiceUtil.getScienceAppListByCategoryId(lv2CategoryId, locale),
-              locale, lv2CategoryId);
+              locale, lv2CategoryId, false);
           apps.addAll(app);
         }
         results.addAll(subCategories);

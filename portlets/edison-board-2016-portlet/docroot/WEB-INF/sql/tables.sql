@@ -10,7 +10,7 @@ create table EDCON_Board (
 	groupBoardSeq INTEGER,
 	groupBoardTurn INTEGER,
 	replyDepth INTEGER,
-	siteGroup VARCHAR(75) null,
+	siteGroup VARCHAR(512) null,
 	popupYn BOOLEAN,
 	popupStartDt DATE null,
 	popupEndDt DATE null,

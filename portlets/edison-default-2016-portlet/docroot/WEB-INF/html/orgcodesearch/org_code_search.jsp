@@ -13,11 +13,54 @@
 <base target="_self">
 <title>공통 코드 조회</title>
 <script src="/edison-2016-hook/js/jquery-1.10.2.min.js"></script>
+
+<style type="text/css">
+	
+	.<portlet:namespace/>search-form{
+		margin: 20px 10px;
+		display: block;
+		height: 30px;
+	}
+	
+	#<portlet:namespace/>searchValue{
+		height: 98% !important;
+		width: 50% !important;
+		margin:0% !important;
+		float: right !important;
+		border: 1px solid #cccccc;
+		border-top-left-radius: 4px;
+		border-bottom-left-radius: 4px;
+		border-top-right-radius: 0px;
+		border-bottom-right-radius: 0px;
+		padding: 0px 10px !important;
+		background-color: white;
+	}
+	
+	button.<portlet:namespace/>search-btn{
+		padding: 2px 10px !important;
+		float: right !important;
+		background-color: white !important;
+		background-image: none !important;
+		border-color: #cccccc !important;
+		height: inherit;
+	}
+	
+</style>
+
 </head>
 <body>
 	<c:choose>
 		<c:when test="${comSearchType eq 'orgSearch'}">
 			<div class="table1_list">
+				
+				<div class="<portlet:namespace/>search-form">
+					<button class="btn btn-default <portlet:namespace/>search-btn" type="button" id="initB" onclick="<portlet:namespace/>clearSearchList();">Clear</button>
+					<button class="btn btn-default <portlet:namespace/>search-btn" id="keyWordB" onclick="<portlet:namespace/>dataSearchList();" type="button">
+						<i class="icon-search"></i>
+					</button>
+					<input name="<portlet:namespace/>searchValue" class="form-control" type="text" id="<portlet:namespace/>searchValue" size="40" onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataSearchList();" placeholder='<liferay-ui:message key="edison-search-organization"/>' value ="" />
+				</div>
+				
 				<table width="100%" border="0" cellpadding="0" cellspacing="0">
 					<colgroup>
 						<col width="10%"/>
@@ -37,7 +80,6 @@
 						if(codeList.size()>0){
 							int rowCnt = 1;
 							for(Map<String,String> codeMap : codeList){
-								out.println("<tr>");
 								String cd = codeMap.get(EdisonExpando.CD).toString();
 								String cdNm = codeMap.get(EdisonExpando.CDNM).toString();
 								String region = codeMap.get(EdisonExpando.REGION).toString();
@@ -47,22 +89,25 @@
 									regionNm = EdisonExpndoUtil.getCommonCdSearchFieldValue(region, EdisonExpando.CDNM, themeDisplay.getLocale());
 								} 
 								String hiddenCdNm = HtmlUtil.escapeJS(cdNm);
+								/* out.println("<tr class=\"<portlet:namespace/>org-list\" org-name=\"" + hiddenCdNm + "\">"); */
 					%>
-						<td class="tc" style="cursor: auto;">
-							<input type="radio" name="up_common_cd" onclick="selectOrg('<%=cd%>','<%=hiddenCdNm%>');"/>
-						</td>
-						<td class="tc" style="cursor: auto;">
-							<%=rowCnt%>
-						</td>
-						<td  style="cursor: pointer;" onclick="selectOrg('<%=cd%>','<%=hiddenCdNm%>');">
-							<%=cdNm%>
-						</td>
-						<td style="cursor: auto;">
-							<%=regionNm%>
-						</td>
+						<tr class="<portlet:namespace/>org-list" org-name="<%=hiddenCdNm%>">
+							<td class="tc" style="cursor: auto;">
+								<input type="radio" name="up_common_cd" onclick="selectOrg('<%=cd%>','<%=hiddenCdNm%>');"/>
+							</td>
+							<td class="tc" style="cursor: auto;">
+								<%=rowCnt%>
+							</td>
+							<td  style="cursor: pointer;" onclick="selectOrg('<%=cd%>','<%=hiddenCdNm%>');">
+								<%=cdNm%>
+							</td>
+							<td style="cursor: auto;">
+								<%=regionNm%>
+							</td>
+						</tr>
 					<%
 								rowCnt++;
-								out.println("</tr>");
+								/* out.println("</tr>"); */
 							}
 						}else{
 					%>
@@ -176,6 +221,31 @@
 			}
 			
 			window.self.close();
+		}
+		
+		function <portlet:namespace/>dataSearchList(){
+			var searchText = $("#<portlet:namespace/>searchValue").val();
+			var searchDataUpper = searchText.toUpperCase();
+			var searchDataLower = searchText.toLowerCase();
+			if(searchText == ""){
+				$(".<portlet:namespace/>org-list").show();
+			} else {
+				var upperLength = $(".<portlet:namespace/>org-list[org-name*="+searchDataUpper+"]").length;
+				var lowerLength = $(".<portlet:namespace/>org-list[org-name*="+searchDataLower+"]").length;
+				if(0 < upperLength || 0 < lowerLength){
+					$(".<portlet:namespace/>org-list").hide();
+					$(".<portlet:namespace/>org-list[org-name*="+searchDataUpper+"]").show();
+					$(".<portlet:namespace/>org-list[org-name*="+searchDataLower+"]").show();
+				} else {
+					$(".<portlet:namespace/>org-list").show();
+					alert('<liferay-ui:message key="edison-search-organization-error-msg"/>');
+				}
+			}
+		}
+		
+		function <portlet:namespace/>clearSearchList(){
+			$("#<portlet:namespace/>searchValue").val("");
+			$(".<portlet:namespace/>org-list").show();
 		}
 	</script>
 </footer>

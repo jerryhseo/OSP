@@ -196,13 +196,13 @@ var contextPath = '${contextPath}';
                 Workflow Designer
               </div>
             </li>
-            <li class="treeview">
+            <li class="treeview <portlet:namespace/>init-tab">
               <a href="#" class="sidebar-btn" data-btn-type="new">
                 <i class="fa fa-lg fa-file"></i>
                 <span>New</span>
               </a>
             </li>
-            <li class="treeview">
+            <li class="treeview <portlet:namespace/>init-tab">
               <a href="#" class="sidebar-btn" data-btn-type="open">
                 <i class="fa fa-lg fa-folder-open"></i>
                 <span>Open</span>
@@ -226,7 +226,7 @@ var contextPath = '${contextPath}';
                 <span>Save As</span>
               </a>
             </li>
-            <li>
+            <li class="treeview">
               <a href="#" class="sidebar-btn" data-btn-type="apps">
                 <i class="fa fa-lg fa-th"></i>
                 <span>Apps</span>
@@ -244,20 +244,23 @@ var contextPath = '${contextPath}';
                 <span>Configuration App</span>
               </a>
             </li>
-          </ul>
-          <ul class="sidebar-menu bottom" data-widget="tree">
+            
             <li class="treeview">
               <a href="#" class="sidebar-btn" id="<portlet:namespace/>executor" data-btn-type="execute">
                 <i class="fa fa-lg fa-play-circle"></i>
                 <span>Execute</span>
               </a>
             </li>
-            <li>
+          </ul>
+          
+           <ul class="sidebar-menu bottom" data-widget="tree">
+            <li class="treeview">
               <a href="#" class="sidebar-btn" data-btn-type="setting">
                 <i class="fa fa-lg  fa-gear"></i>
                 <span>Setting</span>
               </a>
             </li>
+            
             <li>
               <div class="sidebar-toggle-wrapper" class="sidebar-toggle" id="sidebar-toggle" data-toggle="push-menu" role="button">
                 <a href="#" class="sidebar-toggle">
@@ -563,6 +566,10 @@ $.widget.bridge('uibutton', $.ui.button);
 <script>
 var JQ_PORTLET_BOUNDARY_ID = "#p_p_id<portlet:namespace/>";
 $(document).ready(function(){
+	
+	$("ul.sidebar-menu.top > li.treeview").hide();
+	$("ul.sidebar-menu.top > li.treeview.<portlet:namespace/>init-tab").show();
+	
   var namespace = "<portlet:namespace/>";
   var loadedWorkflowId = '${workflowId}';
 
@@ -624,13 +631,15 @@ $(document).ready(function(){
         - $(".menu-panel .box.box-solid > .box-header").actual("outerHeight"));
   });
 
-  if(loadedWorkflowId && loadedWorkflowId !== 'null'){
-	  bStart();
-      setTimeout(function() {
-    	  uiPanel.openWorkflow(loadedWorkflowId);
-    	  bEnd();
-    	}, 2000);
-  }
+  
+  /*JSPlumb의 Canvas의 높이가 정확히 계산이 되기 위하여 3초간 Block*/
+  bStart();
+  setTimeout(function() {
+	  if(loadedWorkflowId && loadedWorkflowId !== 'null'){
+		uiPanel.openWorkflow(loadedWorkflowId);
+	  }
+    bEnd();
+  }, 4500);
   
   
   

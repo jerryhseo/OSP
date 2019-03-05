@@ -62,9 +62,13 @@ public class WorkflowBeanUtil{
     }
 
     public static List<Map<String, Object>> scienceAppToJstreeModel(List<ScienceApp> scienceApps, Locale locale,
-        long categoryId){
+        long categoryId, boolean includeWorkflowApp){
         List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
         for(ScienceApp scienceApp : scienceApps){
+        	if(!includeWorkflowApp && 0 < scienceApp.getWorkflowId()){
+        		// except workflowApp
+        		continue;
+        	}
             result.add(scienceAppToJstreeModel(scienceApp, locale, categoryId));
         }
         return result;

@@ -5,198 +5,253 @@
 <%@ include file="/common/init.jsp"%>
 <portlet:defineObjects />
 <%
-boolean areaScienceApp = GetterUtil.getBoolean(portletPreferences.getValue(SearchConstants.AREA_SCIENCE_APP, StringPool.TRUE));
-boolean areaContents = GetterUtil.getBoolean(portletPreferences.getValue(SearchConstants.AREA_CONTENTS, StringPool.TRUE));
-boolean areaSimulationProject = GetterUtil.getBoolean(portletPreferences.getValue(SearchConstants.AREA_SIMULATION_PROJECT, StringPool.TRUE));
-boolean areaScienceData = GetterUtil.getBoolean(portletPreferences.getValue(SearchConstants.AREA_SCIENCE_DATA, StringPool.TRUE));
-int areaCount = 0;
-String areaLabel = "";
-if(areaScienceApp){
-  areaCount++;
-  areaLabel = SearchConstants.AREA_SCIENCE_APP_LABEL;
-}
-if(areaContents){
-  areaCount++;
-  areaLabel = SearchConstants.AREA_CONTENTS_LABEL;
-}
-if(areaSimulationProject){
-  areaCount++;
-  areaLabel = SearchConstants.AREA_SIMULATION_PROJECT_LABEL;
-}
-if(areaScienceData){
-  areaCount++;
-  areaLabel = SearchConstants.AREA_SCIENCE_DATA_LABEL;
-}
+    boolean areaScienceApp = GetterUtil
+                    .getBoolean(portletPreferences.getValue(SearchConstants.AREA_SCIENCE_APP, StringPool.TRUE));
+            boolean areaContents = GetterUtil
+                    .getBoolean(portletPreferences.getValue(SearchConstants.AREA_CONTENTS, StringPool.TRUE));
+            boolean areaSimulationProject = GetterUtil
+                    .getBoolean(portletPreferences.getValue(SearchConstants.AREA_SIMULATION_PROJECT, StringPool.TRUE));
+            boolean areaScienceData = GetterUtil
+                    .getBoolean(portletPreferences.getValue(SearchConstants.AREA_SCIENCE_DATA, StringPool.TRUE));
+            int areaCount = 0;
+            String areaLabel = "";
+            if (areaScienceApp) {
+                areaCount++;
+                areaLabel = SearchConstants.AREA_SCIENCE_APP_LABEL;
+            }
+            if (areaContents) {
+                areaCount++;
+                areaLabel = SearchConstants.AREA_CONTENTS_LABEL;
+            }
+            if (areaSimulationProject) {
+                areaCount++;
+                areaLabel = SearchConstants.AREA_SIMULATION_PROJECT_LABEL;
+            }
+            if (areaScienceData) {
+                areaCount++;
+                areaLabel = SearchConstants.AREA_SCIENCE_DATA_LABEL;
+            }
 %>
-<liferay-portlet:resourceURL var="totalSearchUrl" id="totalSearch" copyCurrentRenderParameters="false"/>
-<liferay-portlet:resourceURL var="categorySearchUrl" id="categorySearch"/>
+<liferay-portlet:resourceURL var="totalSearchUrl" id="totalSearch" copyCurrentRenderParameters="false" />
+<liferay-portlet:resourceURL var="categorySearchUrl" id="categorySearch" />
 <liferay-portlet:renderURL var="currentUrl" copyCurrentRenderParameters="false" />
 
-<style>
-	.searchViewForm{
-		width: 1200px;
-	}
-	#category-list > ul{
-		padding: 0px;
-	}
-	
-  .search-btn-height{height: 36px !important;}
-  
-  .search-main-title-image{
-  	padding-top: 0px !important;
-  	margin-top: -5px;
-  }
-</style>
+<link rel="stylesheet" href="${contextPath}/css/adminlte/AdminLTE.css">
+<link rel="stylesheet" href="${contextPath}/css/adminlte/skins/skin-black-light.css">
+<link rel="stylesheet" href="${contextPath}/css/search.css">
+<script src="${contextPath}/js/adminlte/adminlte.js"></script>
 
 <h2 class="search-main-title">
-	<img src="${contextPath}/images/sub_tit_bl.png" class="search-main-title-image" />
-	<span>
-		<c:if test="<%=areaCount == 1%>">
-			<liferay-ui:message key="<%=areaLabel%>"/> <liferay-ui:message key="search"/>
-		</c:if>
-		<c:if test="<%=areaCount != 1%>">
-			<liferay-ui:message key="edison-search-total"/>
-		</c:if>
-	</span>
+    <img src="${contextPath}/images/sub_tit_bl.png" class="search-main-title-image" /> <span> <c:if
+            test="<%=areaCount == 1%>">
+            <liferay-ui:message key="<%=areaLabel%>" />
+            <liferay-ui:message key="search" />
+        </c:if> <c:if test="<%=areaCount != 1%>">
+            <liferay-ui:message key="edison-search-total" />
+        </c:if>
+    </span>
 </h2>
-<div class="h20"></div>
-<aui:form name="search-condition" method="post" action="<%= totalSearchUrl %>" cssClass="searchViewForm">
-  <div class="top_category">
-    <aui:field-wrapper name="search-panel" label="" inlineLabel="true" inlineField="true" cssClass="category01" >
-      <ul>
+<aui:form name="search-condition" method="post" action="<%=totalSearchUrl%>">
+    <div class="hidden-check">
         <c:if test="<%=areaScienceApp%>">
-          <li>
-            <aui:input name="<%=SearchConstants.AREA_SCIENCE_APP%>" cssClass="search-area"
-              label="<%=SearchConstants.AREA_SCIENCE_APP_LABEL%>" type="checkbox" checked="true" />
-              <a id="<portlet:namespace/>app-expand" class="content-expand" href="#app-expand"><i class="icon-angle-down"></i></a>
-          </li>
+            <aui:input name="<%=SearchConstants.AREA_SCIENCE_APP%>" type="checkbox" checked="true" />
         </c:if>
         <c:if test="<%=areaContents%>">
-        <li>
-          <aui:input name="<%=SearchConstants.AREA_CONTENTS%>" cssClass="search-area"
-            label="<%=SearchConstants.AREA_CONTENTS_LABEL%>" type="checkbox" checked="true" />
-            <a id="<portlet:namespace/>content-expand" class="content-expand" href="#content-expand"><i class="icon-angle-down"></i></a>
-         </li>
+            <aui:input name="<%=SearchConstants.AREA_CONTENTS%>" type="checkbox" checked="true" />
         </c:if>
         <c:if test="<%=areaSimulationProject%>">
-        <li>
-          <aui:input name="<%=SearchConstants.AREA_SIMULATION_PROJECT%>" cssClass="search-area"
-            label="<%=SearchConstants.AREA_SIMULATION_PROJECT_LABEL%>" type="checkbox" checked="true" />
-        </li>
+            <aui:input name="<%=SearchConstants.AREA_SIMULATION_PROJECT%>" type="checkbox" checked="true" />
         </c:if>
         <c:if test="<%=areaScienceData%>">
-        <li>
-          <aui:input name="<%=SearchConstants.AREA_SCIENCE_DATA%>" cssClass="search-area"
-            label="<%=SearchConstants.AREA_SCIENCE_DATA_LABEL%>" type="checkbox" checked="true" />
-        </li>
+            <aui:input name="<%=SearchConstants.AREA_SCIENCE_DATA%>" type="checkbox" checked="true" />
         </c:if>
-      </ul>
-    </aui:field-wrapper>
-  </div>
+    </div>
 
-  <div class="input-group">
-    <aui:input name="searchKeyword" type="text" label="" cssClass="form-control search-btn-height" />
-    <div class="input-group-btn search-btn-height">
-      <aui:button type="submit" value="edison-button-search" name="searchSubmit" cssClass="btn-default search-btn-height" />
-      <aui:button type="button" value="edison-button-board-initialize" name="searchInit" cssClass="btn btn-primary search-btn-height" />
+    <div class="hidden-md hidden-lg" style="margin-top: 10px;">
+        <div class="row">
+            <div class="col-md-12 col-xs-12 col-sm-12 hidden-sm hidden-xs" style="padding: 10px 10px 0px 10px !important;">
+                <div class="input-group-btn">
+                    <c:if test="<%=areaScienceApp%>">
+                    <div class="input-group-btn">
+                        <button type="button" btn-id="<%=SearchConstants.AREA_SCIENCE_APP%>" class="btn btn-primary btn-flat btn-category-check">
+                            <liferay-ui:message key="<%=SearchConstants.AREA_SCIENCE_APP_LABEL%>" />
+                        </button>
+                        <button type="button" btn-id="<%=SearchConstants.AREA_SCIENCE_APP%>" class="btn btn-primary btn-flat btn-category-check dropdown-toggle" data-toggle="dropdown">
+                            <i class="icon-angle-down"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><aui:input name="<%=ScienceAppConstants.APP_TYPE_SOLVER%>" cssClass="content-div"
+                                    label="<%=ScienceAppConstants.APP_TYPE_SOLVER%>" type="checkbox" checked="true" /></li>
+                            <li><aui:input name="<%=ScienceAppConstants.APP_TYPE_CONVERTER%>"
+                                    cssClass="content-div" label="<%=ScienceAppConstants.APP_TYPE_CONVERTER%>"
+                                    type="checkbox" checked="true" /></li>
+                            <li><aui:input name="<%=ScienceAppConstants.APP_TYPE_EDITOR%>" cssClass="content-div"
+                                    label="<%=ScienceAppConstants.APP_TYPE_EDITOR%>" type="checkbox" checked="true" /></li>
+                            <li><aui:input name="<%=ScienceAppConstants.APP_TYPE_ANALYZER%>" cssClass="content-div"
+                                    label="<%=ScienceAppConstants.APP_TYPE_ANALYZER%>" type="checkbox" checked="true" /></li>
+                        </ul>
+                    </div>
+                    </c:if>
+                    <c:if test="<%=areaContents%>">
+                    <div class="input-group-btn">
+                        <button type="button" btn-id="<%=SearchConstants.AREA_CONTENTS%>" class="btn btn-primary btn-flat btn-category-check">
+                            <liferay-ui:message key="<%=SearchConstants.AREA_CONTENTS_LABEL%>" />
+                        </button>
+                        <button type="button" btn-id="<%=SearchConstants.AREA_CONTENTS%>" class="btn btn-primary btn-flat btn-category-check dropdown-toggle" data-toggle="dropdown">
+                            <i class="icon-angle-down"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><aui:input name="<%=SearchConstants.DIV_CONTENTS_CLASSNOTE%>"
+                                    cssClass="content-div" label="<%=SearchConstants.DIV_CONTENTS_CLASSNOTE_LABEL%>"
+                                    type="checkbox" checked="true" /></li>
+                            <li><aui:input name="<%=SearchConstants.DIV_CONTENTS_MANUAL%>"
+                                    cssClass="content-div" label="<%=SearchConstants.DIV_CONTENTS_MANUAL_LABEL%>"
+                                    type="checkbox" checked="true" /></li>
+                            <li><aui:input name="<%=SearchConstants.DIV_CONTENTS_REFERENCE%>"
+                                    cssClass="content-div" label="<%=SearchConstants.DIV_CONTENTS_REFERENCE_LABEL%>"
+                                    type="checkbox" checked="true" /></li>
+                            <li><aui:input name="<%=SearchConstants.DIV_CONTENTS_ADVANCED%>"
+                                    cssClass="content-div" label="<%=SearchConstants.DIV_CONTENTS_ADVANCED_LABEL%>"
+                                    type="checkbox" checked="true" /></li>
+                        </ul>
+                    </div>
+                    </c:if>
+                    <c:if test="<%=areaSimulationProject%>">
+                    <div class="input-group-btn">
+                        <button type="button" btn-id="<%=SearchConstants.AREA_SIMULATION_PROJECT%>" class="btn btn-primary btn-flat btn-category-check">
+                            <liferay-ui:message key="<%=SearchConstants.AREA_SIMULATION_PROJECT_LABEL%>" />
+                        </button>
+                    </div>
+                    </c:if>
+                    <c:if test="<%=areaScienceData%>">
+                    <div class="input-group-btn">
+                        <button type="button" btn-id="<%=SearchConstants.AREA_SCIENCE_DATA%>" class="btn btn-primary btn-flat btn-category-check">
+                            <liferay-ui:message key="<%=SearchConstants.AREA_SCIENCE_DATA_LABEL%>" />
+                        </button>
+                    </div>
+                    </c:if>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-xs-12 col-sm-12" style="padding: 0px 10px 10px 10px !important;">
+                <div class="input-group-btn">
+                    <aui:input name="searchKeyword_mobile" type="text" label="" cssClass="form-control search-btn-height"
+                    style="border-top-left-radius: 0; border-bottom-left-radius: 0; width: auto; float: left; margin-top: 5px;" 
+                    placeholder="Search Keyword"/>
+                    <aui:button type="button" value="edison-button-search" name="searchSubmit_mobile"
+                        cssClass="btn btn-primary search-btn-height" />
+                    <aui:button type="button" value="edison-button-board-initialize" name="searchInit_mobile"
+                        cssClass="btn btn-primary btn-flat search-btn-height" />
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <div class="category02wrap">
-    <div id="<portlet:namespace/>content-expand-div">
-      <div class="category02arrow"><img src="${contextPath}/images/search/arrow02.png" width="13" height="8"></div>
-       <aui:field-wrapper name="search-sub-panel" label="" inlineLabel="true" inlineField="true" cssClass="category02">
-        <ul>
-          <li>
-            <aui:input name="<%=SearchConstants.DIV_CONTENTS_CLASSNOTE%>" cssClass="content-div"
-              label="<%=SearchConstants.DIV_CONTENTS_CLASSNOTE_LABEL%>" type="checkbox" checked="true" />
-          </li>
-          <li>
-            <aui:input name="<%=SearchConstants.DIV_CONTENTS_MANUAL%>" cssClass="content-div"
-              label="<%=SearchConstants.DIV_CONTENTS_MANUAL_LABEL%>" type="checkbox" checked="true" />
-          </li>
-          <li>
-            <aui:input name="<%=SearchConstants.DIV_CONTENTS_REFERENCE%>" cssClass="content-div"
-              label="<%=SearchConstants.DIV_CONTENTS_REFERENCE_LABEL%>" type="checkbox" checked="true" />
-          </li>
-          <li>
-            <aui:input name="<%=SearchConstants.DIV_CONTENTS_ADVANCED%>" cssClass="content-div"
-              label="<%=SearchConstants.DIV_CONTENTS_ADVANCED_LABEL%>" type="checkbox" checked="true" />
-          </li>
-        </ul>
-      </aui:field-wrapper>
+    <div class="hidden-xs hidden-sm" style="margin-top: 10px;">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="input-group">
+                    <div class="input-group-btn">
+                        <c:if test="<%=areaScienceApp%>">
+                        <div class="input-group-btn">
+                            <button type="button" btn-id="<%=SearchConstants.AREA_SCIENCE_APP%>" class="btn btn-primary btn-flat btn-category-check search-btn-height">
+                                <liferay-ui:message key="<%=SearchConstants.AREA_SCIENCE_APP_LABEL%>" />
+                            </button>
+                            <button type="button" btn-id="<%=SearchConstants.AREA_SCIENCE_APP%>" class="btn btn-primary btn-flat btn-category-check dropdown-toggle search-btn-height"
+                                data-toggle="dropdown">
+                                <i class="icon-angle-down"></i>
+                            </button>
+                            <ul class="dropdown-menu" style="padding: 10px 0px 10px 10px;">
+                                <li><aui:input name="<%=ScienceAppConstants.APP_TYPE_SOLVER%>"
+                                        cssClass="content-div" label="<%=ScienceAppConstants.APP_TYPE_SOLVER%>"
+                                        type="checkbox" checked="true" /></li>
+                                <li><aui:input name="<%=ScienceAppConstants.APP_TYPE_CONVERTER%>"
+                                        cssClass="content-div" label="<%=ScienceAppConstants.APP_TYPE_CONVERTER%>"
+                                        type="checkbox" checked="true" /></li>
+                                <li><aui:input name="<%=ScienceAppConstants.APP_TYPE_EDITOR%>"
+                                        cssClass="content-div" label="<%=ScienceAppConstants.APP_TYPE_EDITOR%>"
+                                        type="checkbox" checked="true" /></li>
+                                <li><aui:input name="<%=ScienceAppConstants.APP_TYPE_ANALYZER%>"
+                                        cssClass="content-div" label="<%=ScienceAppConstants.APP_TYPE_ANALYZER%>"
+                                        type="checkbox" checked="true" /></li>
+                            </ul>
+                        </div>
+                        </c:if>
+                        <c:if test="<%=areaContents%>">
+                        <div class="input-group-btn">
+                            <button type="button" btn-id="<%=SearchConstants.AREA_CONTENTS%>" class="btn btn-primary btn-flat btn-category-check search-btn-height">
+                                <liferay-ui:message key="<%=SearchConstants.AREA_CONTENTS_LABEL%>" />
+                            </button>
+                            <button type="button" btn-id="<%=SearchConstants.AREA_CONTENTS%>" class="btn btn-primary btn-flat btn-category-check dropdown-toggle search-btn-height"
+                                data-toggle="dropdown">
+                                <i class="icon-angle-down"></i>
+                            </button>
+                            <ul class="dropdown-menu" style="padding: 10px 0px 10px 10px;">
+                                <li><aui:input name="<%=SearchConstants.DIV_CONTENTS_CLASSNOTE%>"
+                                        cssClass="content-div" label="<%=SearchConstants.DIV_CONTENTS_CLASSNOTE_LABEL%>"
+                                        type="checkbox" checked="true" /></li>
+                                <li><aui:input name="<%=SearchConstants.DIV_CONTENTS_MANUAL%>"
+                                        cssClass="content-div" label="<%=SearchConstants.DIV_CONTENTS_MANUAL_LABEL%>"
+                                        type="checkbox" checked="true" /></li>
+                                <li><aui:input name="<%=SearchConstants.DIV_CONTENTS_REFERENCE%>"
+                                        cssClass="content-div" label="<%=SearchConstants.DIV_CONTENTS_REFERENCE_LABEL%>"
+                                        type="checkbox" checked="true" /></li>
+                                <li><aui:input name="<%=SearchConstants.DIV_CONTENTS_ADVANCED%>"
+                                        cssClass="content-div" label="<%=SearchConstants.DIV_CONTENTS_ADVANCED_LABEL%>"
+                                        type="checkbox" checked="true" /></li>
+                            </ul>
+                        </div>                            
+                        </c:if>
+                        <c:if test="<%=areaSimulationProject%>">
+                        <div class="input-group-btn">
+                            <button type="button" btn-id="<%=SearchConstants.AREA_SIMULATION_PROJECT%>" class="btn btn-primary btn-flat btn-category-check search-btn-height" style="margin-left: -1px;">
+                                <liferay-ui:message key="<%=SearchConstants.AREA_SIMULATION_PROJECT_LABEL%>" />
+                            </button>
+                        </div>
+                        </c:if>
+                        <c:if test="<%=areaScienceData%>">
+                        <div class="input-group-btn">
+                            <button type="button" btn-id="<%=SearchConstants.AREA_SCIENCE_DATA%>" class="btn btn-primary btn-flat btn-category-check search-btn-height" style="margin-left: -1px;">
+                                <liferay-ui:message key="<%=SearchConstants.AREA_SCIENCE_DATA_LABEL%>" />
+                            </button>
+                        </div>
+                        </c:if>
+                    </div>
+                    <aui:input name="searchKeyword" type="text" label="" cssClass="form-control search-btn-height" 
+                    style="border-top-left-radius: 0; border-bottom-left-radius: 0;" />
+                    <div class="input-group-btn">
+                        <aui:button type="button" value="edison-button-search" name="searchSubmit"
+                            cssClass="btn btn-primary search-btn-height" />
+                        <aui:button type="button" value="edison-button-board-initialize" name="searchInit"
+                            cssClass="btn btn-primary btn-flat search-btn-height" />
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-  
-  <div class="category02wrap">
-    <div id="<portlet:namespace/>app-expand-div">
-      <div class="category02arrow app"><img src="${contextPath}/images/search/arrow02.png" width="13" height="8"></div>
-       <aui:field-wrapper name="search-sub-panel" label="" inlineLabel="true" inlineField="true" cssClass="category02">
-        <ul>
-          <li>
-            <aui:input name="<%=ScienceAppConstants.APP_TYPE_SOLVER%>" cssClass="content-div"
-              label="<%=ScienceAppConstants.APP_TYPE_SOLVER%>" type="checkbox" checked="true" />
-          </li>
-          <li>
-            <aui:input name="<%=ScienceAppConstants.APP_TYPE_CONVERTER%>" cssClass="content-div"
-              label="<%=ScienceAppConstants.APP_TYPE_CONVERTER%>" type="checkbox" checked="true" />
-          </li>
-          <li>
-            <aui:input name="<%=ScienceAppConstants.APP_TYPE_EDITOR%>" cssClass="content-div"
-              label="<%=ScienceAppConstants.APP_TYPE_EDITOR%>" type="checkbox" checked="true" />
-          </li>
-          <li>
-            <aui:input name="<%=ScienceAppConstants.APP_TYPE_ANALYZER%>" cssClass="content-div"
-              label="<%=ScienceAppConstants.APP_TYPE_ANALYZER%>" type="checkbox" checked="true" />
-          </li>
-        </ul>
-      </aui:field-wrapper>
-    </div>
-  </div>
 </aui:form>
 
-<div class="bottom searchViewForm">
-  <div id="category-list" class="leftm"></div>
-  <div id="search-content" class="rightcon search-content-wrapper">
-    <div class="path connav">
-      <ul>
-        <li></li>
-      </ul>
+<div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm" style="padding-right: 0px !important;">
+        <div id="category-list" class="leftm"></div>
     </div>
-    <div class="content boxlist">
-      <%-- <ul>
-        <c:forEach items="${lv1Categories}" var="rootCategory">
-          <li class="category-card" id="content-${rootCategory.categoryId}" category-id="${rootCategory.categoryId}">
-            <div class="block left">
-              <span class="align-helper"></span>
-              <c:if test="${!empty rootCategory.image}">
-                <img src="${contextPath}/images/category/${rootCategory.image}.png">
-              </c:if>
-              <c:if test="${empty rootCategory.image}">
-                <img src="${contextPath}/images/search/imagesample.png">
-              </c:if>
-            </div>
-            <div class="block right">
-              <div class="tit">
-                ${rootCategory.title}
-              </div>
-              <div class="des">
-                ${rootCategory.description}
-              </div>
-            </div>
-          </li>
-        </c:forEach>
-      </ul> --%>
+    <div id="search-content" class="col-md-9" style="padding: 10px !important;">
+        <div class="path connav hidden-xs hidden-sm" style="margin-bottom: 10px;">
+            <ul>
+                <li></li>
+            </ul>
+        </div>
+        <div class="content boxlist">
+        </div>
     </div>
-  </div>
-</div>
 
-<img id="loadingBox" src="${contextPath}/images/loading.gif" style="display: none;"/>
-<script>
+    <img id="loadingBox" src="${contextPath}/images/loading.gif" style="display: none;" />
+    <script>
   var <portlet:namespace/>initData = ${categoriesJsonString};
   var <portlet:namespace/>redirectURL = '${redirectURL}';
   $(document).ajaxStart(function() {
-    $("#category-list").block({
+    /* $("#category-list").block({
       message: "",
       overlayCSS:  { backgroundColor: "#ffffff", opacity:0.0, cursor:"wait" }
     });
@@ -204,10 +259,12 @@ if(areaScienceData){
       message: $("#loadingBox"),
       css: { top: "3%"},
       overlayCSS:  { backgroundColor: "#ffffff", opacity:0.0, cursor:"wait" }
-    });
+    }); */
+    bStart();
   }).ajaxStop(function() {
-    $("#search-content").unblock();
-    $("#category-list").unblock();
+      bEnd();
+    /* $("#search-content").unblock();
+    $("#category-list").unblock(); */
   });
   
   function getSelectedCategoryId(){
@@ -221,7 +278,7 @@ if(areaScienceData){
   
   function isParentCategory(selectedCategoryId){
     var nodeData = $("#category-list")
-  	.jstree(true).get_node(selectedCategoryId).data;
+    .jstree(true).get_node(selectedCategoryId).data;
     if(nodeData["parentCategoryId"] === 0){
       return true;
     }
@@ -238,10 +295,14 @@ if(areaScienceData){
     return postData;
   }
   
-  function <portlet:namespace/>totalSearchSubmit(e){
+  function <portlet:namespace/>totalSearchSubmit(e, element){
+    var elementId = $(element).attr("id");
+    if(elementId && elementId.indexOf("mobile") > 0){
+      $("#<portlet:namespace/>searchKeyword").val($("#<portlet:namespace/>searchKeyword_mobile").val())
+    }
     if($("#<portlet:namespace/>searchKeyword").val() && 
         $.trim($("#<portlet:namespace/>searchKeyword").val()) != ""){
-      <portlet:namespace/>searchSubmit(e);
+        <portlet:namespace/>searchSubmit(e);
     }else{
       e.preventDefault();
       alert("검색어가 입력되지 않았습니다.");
@@ -332,7 +393,7 @@ if(areaScienceData){
       var paths = $("#category-list").jstree(true).get_path("#" + categoryId, ',').split(",");
       $.each(paths, function(){
         if(this){
-    	  pathText += "<li>&gt;</li>"; 
+          pathText += "<li>&gt;</li>"; 
           pathText += "<li>" + this + "</li>"; 
         }
       });
@@ -424,11 +485,11 @@ if(areaScienceData){
     });
     $(".category-card").on("click", categoryCardClickHandler);
     
-    $("#<portlet:namespace/>searchSubmit").click(function(e){
-      <portlet:namespace/>totalSearchSubmit(e);
+    $("#<portlet:namespace/>searchSubmit, #<portlet:namespace/>searchSubmit_mobile").click(function(e){
+        <portlet:namespace/>totalSearchSubmit(e, this);
     });
     
-    $("#<portlet:namespace/>searchInit").click(function(e){
+    $("#<portlet:namespace/>searchInit, #<portlet:namespace/>searchInit_mobile").click(function(e){
       location.reload();
     });
     
@@ -450,15 +511,31 @@ if(areaScienceData){
       $("#<portlet:namespace/>app-expand").children("i").removeClass("icon-angle-up");
       $("#<portlet:namespace/>app-expand").children("i").removeClass("icon-angle-down");
       $("#<portlet:namespace/>app-expand").children("i").addClass("icon-angle-down");
-	  $("#<portlet:namespace/>app-expand-div").hide();
+      $("#<portlet:namespace/>app-expand-div").hide();
       $("#<portlet:namespace/>content-expand-div").slideToggle();
     });
 
-    $("#<portlet:namespace/>searchKeyword").keypress(function(e){
+    $("#<portlet:namespace/>searchKeyword, #<portlet:namespace/>searchKeyword_mobile").keypress(function(e){
       if (e.keyCode === 13) {
-        <portlet:namespace/>totalSearchSubmit(e);
+        <portlet:namespace/>totalSearchSubmit(e, this);
       }
     });
+    
+    $(".btn-category-check").click(function (e){
+        if(!$(this).hasClass("dropdown-toggle")) {
+            var btnId = $(this).attr("btn-id");
+            console.log(btnId);
+            $("#<portlet:namespace/>" + btnId + "Checkbox").click();
+            if($("#<portlet:namespace/>" + btnId).val() == "false") {
+                $("button[btn-id='" + btnId + "']").removeClass("btn-primary")
+                $("button[btn-id='" + btnId + "']").addClass("btn-default")
+            } else {
+                $("button[btn-id='" + btnId + "']").addClass("btn-primary")
+                $("button[btn-id='" + btnId + "']").removeClass("btn-default")
+            }
+        }
+    });
+    
     if(!${isSingleCategory}){
       <portlet:namespace/>searchSubmit();
     }

@@ -53,6 +53,8 @@ var var_cannot_load_analyzer_message = Liferay.Language.get("edison-workflow-can
 var var_cannot_load_intermediate_result_message = Liferay.Language.get("edison-workflow-cannot-intermediate-result-message");
 var var_no_available_analyzer_message = Liferay.Language.get("edison-workflow-no-available-analyzer-message");
 var var_workflow_status_not_found_message = Liferay.Language.get("edison-workflow-status-not-found");
+var var_workflow_not_exist_job_message = Liferay.Language.get("edison-workflow-not-exist-job-message");
+var var_workflow_include_reuse_node_message = Liferay.Language.get("edison-workflow-include-reuse-node-message");
 var contextPath = '${contextPath}';
 </script>
 
@@ -60,9 +62,9 @@ var contextPath = '${contextPath}';
     .apparea{position: relative; height: 100%; display: flex; flex-grow:1;}
 
     .wf-selected-node {
-        -webkit-box-shadow: 9px 7px 7px 2px rgba(231,166,26,1);
-        -moz-box-shadow: 9px 7px 7px 2px rgba(231,166,26,1);
-        box-shadow: 9px 7px 7px 2px rgba(231,166,26,1);
+        -webkit-box-shadow: 5px 5px 5px 0px rgba(231,166,26,1);
+        -moz-box-shadow: 5px 5px 5px 0px rgba(231,166,26,1);
+        box-shadow: 5px 5px 5px 0px rgba(231,166,26,1);
     }
 
     .wf-selected-port {
@@ -125,7 +127,7 @@ var contextPath = '${contextPath}';
     	text-align: center;
     	vertical-align: middle !important;
     }
-
+    
 </style>
 <div class="container-fluid workflow-executor">
   <div class="row" id="<portlet:namespace/>canvas" style="border-top: 1px solid #e5e5e9;">
@@ -134,7 +136,7 @@ var contextPath = '${contextPath}';
         <!-- App Name -->
         <div class="logo">
           <div class="logo-lg">
-            <h3 style="font-size: 17px;" id="<portlet:namespace/>appName">Workflow Simulation</h3>
+            <h3 style="font-size: 17px;" id="<portlet:namespace/>appName">Workflow Executor</h3>
             <h5 id="<portlet:namespace/>appVersion"></h5>
           </div>
           <div class="logo-sm">
@@ -146,54 +148,58 @@ var contextPath = '${contextPath}';
           <!-- Navbar Left Menu -->
           <div class="navbar-left">
             <ul class="nav navbar-nav">
-              <li id="<portlet:namespace/>header-li-simulation" class="top-btn" data-btn-type="open">
+              <li id="<portlet:namespace/>header-li-simulation" class="top-btn" data-btn-type="open" data-is-init="true">
                 <i class="fa fa-cubes fa-2x"></i><br>
                 <span class="nav-icon-text">Simulations</span>
               </li>
-              <li id="<portlet:namespace/>header-li-edit" class="top-btn" data-btn-type="setting">
+              <li id="<portlet:namespace/>header-li-edit" class="top-btn" data-btn-type="setting" data-is-init="true">
                 <i class="fa fa-cogs fa-2x"></i><br>
                 <span class="nav-icon-text">Edit</span>
               </li>
               <li class="<portlet:namespace/>divider-vertical" id="<portlet:namespace/>job-li-divider" style="display: block;"></li>
-              <li id="<portlet:namespace/>header-li-new" class="top-btn" data-btn-type="new-job" data-divider="job-li-divider">
+              <li id="<portlet:namespace/>header-li-new" class="top-btn" data-btn-type="new-job" data-divider="job-li-divider" data-is-init="true">
                 <i class="fa fa-plus-square-o fa-2x"></i><br>
                 <span class="nav-icon-text">New</span>
               </li>
-              <li id="<portlet:namespace/>header-li-save" data-btn-type="save-job" data-divider="job-li-divider">
+              <li id="<portlet:namespace/>header-li-save" class="top-btn has-job-btn" data-btn-type="save-job" data-divider="job-li-divider" style="display: none;">
                 <i class="fa fa-save fa-2x"></i><br>
                 <span class="nav-icon-text">Save</span>
               </li>
-              <li id="<portlet:namespace/>header-li-copy" data-btn-type="copy-job" data-divider="job-li-divider">
+              <li id="<portlet:namespace/>header-li-copy" class="top-btn has-job-btn" data-btn-type="copy-job" data-divider="job-li-divider" style="display: none;">
                 <i class="fa fa-copy fa-2x"></i><br>
                 <span class="nav-icon-text">Copy</span>
               </li>
-              <li id="<portlet:namespace/>header-li-delete" data-btn-type="delete-job" data-divider="job-li-divider">
+              <li id="<portlet:namespace/>header-li-delete" class="top-btn has-job-btn" data-btn-type="delete-job" data-divider="job-li-divider" style="display: none;">
                 <i class="fa fa-trash-o fa-2x"></i><br>
                 <span class="nav-icon-text">Delete</span>
               </li>
-              <li class="<portlet:namespace/>divider-vertical" style="display: block;"></li>
-              <li id="<portlet:namespace/>header-li-submit" data-divider="ib-li-divider" class="before-submit">
+              <li class="<portlet:namespace/>divider-vertical" style="display: block;" class="top-btn"></li>
+              <li id="<portlet:namespace/>header-li-submit" data-divider="ib-li-divider" class="before-submit top-btn" style="display: none;">
                 <i class="fa fa-cloud-upload fa-2x"></i><br>
                 <span class="nav-icon-text">Submit</span>
               </li>
-              <li id="<portlet:namespace/>header-li-pause" data-divider="ib-li-divider" class="after-submit before-pause" style="display: none;">
+              <li id="<portlet:namespace/>header-li-pause" data-divider="ib-li-divider" class="after-submit before-pause top-btn" style="display: none;" style="display: none;">
                 <i class="fa fa-pause-circle fa-2x"></i><br>
                 <span class="nav-icon-text">Pause</span>
               </li>
-              <li id="<portlet:namespace/>header-li-resume" data-divider="ib-li-divider" class="after-submit after-pause" style="display: none;">
+              <li id="<portlet:namespace/>header-li-resume" data-divider="ib-li-divider" class="after-submit after-pause top-btn" style="display: none;" style="display: none;">
                 <i class="fa fa-play-circle fa-2x"></i><br>
                 <span class="nav-icon-text">Resume</span>
               </li>
-              <li id="<portlet:namespace/>header-li-rerun" data-divider="ib-li-divider" class="after-stop" style="display: none;">
+              <li id="<portlet:namespace/>header-li-rerun" data-divider="ib-li-divider" class="after-stop top-btn" style="display: none;" style="display: none;">
                 <i class="fa fa-undo fa-flip-horizontal fa-2x"></i><br>
                 <span class="nav-icon-text">ReRun</span>
               </li>
+              <li id="<portlet:namespace/>header-li-reuse-run" data-divider="ib-li-divider" style="display: none;" style="display: none;">
+                <i class="fa fa-play-circle fa-2x"></i><br>
+                <span class="nav-icon-text">RUN</span>
+              </li>
               <li class="<portlet:namespace/>divider-vertical" style="display: block;"></li>
-              <li id="<portlet:namespace/>header-li-data" class="top-btn" data-btn-type="designer" data-divider="data-li-divider">
+              <li id="<portlet:namespace/>header-li-data" class="top-btn" data-btn-type="designer" data-divider="data-li-divider" data-is-init="true">
                 <i class="fa fa-share-square-o fa-2x"></i><br>
                 <span class="nav-icon-text">Designer</span>
               </li>
-              <li id="<portlet:namespace/>header-li-export" class="top-btn">
+              <li id="<portlet:namespace/>header-li-export" class="top-btn has-job-btn" style="display: none;">
                 <i class="fa fa-download fa-2x"></i><br>
                 <span class="nav-icon-text">Export</span>
               </li>
@@ -410,6 +416,14 @@ $.widget.bridge('uibutton', $.ui.button);
   </div>
 {{/inputs}}
 </script>
+<script id="tpl-modal-wf-app-data-body" type="text/html">
+    {{#inputs}}
+        <div class="form-group">
+            <label for="{{name}}" class="control-label">{{name}}</label>
+            <textarea class="form-control" rows="20" id="{{name}}" name="{{name}}" style="resize: none; ">{{value}}</textarea>
+        </div>
+    {{/inputs}}
+</script>
 <script id="tpl-modal-footer" type="text/html">
     <button type="button" class="btn btn-default btn-flat" data-dismiss="modal" name="{{cancel}}">{{cancel}}</button>
     <button type="button" class="btn btn-primary btn-flat" name="{{ok}}">{{ok}}</button>
@@ -475,6 +489,9 @@ $(document).ready(function(){
       });
     }
   }, 1000);
+  
+  $("#p_p_id<portlet:namespace/> .top-btn").hide();
+  $("#p_p_id<portlet:namespace/> .top-btn[data-is-init='true']").show();
 });
 
 function <portlet:namespace/>moveToDesigner(){
@@ -529,6 +546,12 @@ AUI().ready(['liferay-util-window'], function(){
 	Liferay.provide(window,'<portlet:namespace />closePopup',function(popupIdToClose) {
 		Liferay.Util.getWindow(popupIdToClose).destroy();
 	});
+	
+	
+	Liferay.provide(window, "getPortDataFromDialog", function(dialogId,nodeId,portName){
+			var portData = uiPanel.getPortData(nodeId, portName);
+			return portData;
+	});
 });
 
 function <portlet:namespace/>copyParentNodeFiles(params){
@@ -557,6 +580,10 @@ function <portlet:namespace/>copyParentNodeFiles(params){
 		}
 	});
 	return resultObj;
+}
+
+function cogClick(nodeId){
+	$("#"+nodeId).contextmenu();
 }
 
 </script>

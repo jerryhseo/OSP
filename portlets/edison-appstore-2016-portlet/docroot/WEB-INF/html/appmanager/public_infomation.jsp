@@ -327,8 +327,10 @@ public String marshallParams(Map<String, String> params) {
 			
 			<tr>
 				<th rowspan="${fn:length(parentCategoryList)+1}">
-					<liferay-ui:message key='edison-science-appstore-view-tab-category' /><span class="requiredField"> *</span>
-					
+					<liferay-ui:message key='edison-science-appstore-view-tab-category' />
+					<c:if test="${isPort eq true}">
+						<span class="requiredField"> *</span>
+					</c:if>
 				</th>
 				
 			</tr>
@@ -349,19 +351,24 @@ public String marshallParams(Map<String, String> params) {
 			</c:forEach>
 			
 			<tr>
-				<th rowspan="<%=locales.length+1%>"><liferay-ui:message key='edison-table-list-header-manual' /><span class="requiredField"> *</span></th>
+				<th rowspan="<%=locales.length+1%>">
+					<liferay-ui:message key='edison-table-list-header-manual' /><span class="requiredField"> *</span> 
+					<liferay-ui:icon-help message="edison-science-app-manager-manual-help"/>
+				</th>
 			</tr>
 				<%for(Locale aLocale : locales){
 					String languageId = LocaleUtil.toLanguageId(aLocale);
 					String languageNm =aLocale.getDisplayName(themeDisplay.getLocale());
 					String manualId = "manualId_"+languageId;
 					String manualTitle = "manualTitle_"+languageId;
+					String manualUrl = "manualUrl_"+languageId;
 				%>
 					<tr>
 						<td colspan="3">
 							<%=languageNm%>&nbsp;&nbsp;
 							<input type="file" id="<portlet:namespace/>app_manual<%=languageId%>" name="<portlet:namespace/>app_manual<%=languageId %>">
 							<c:set value="<%=manualId%>" var="manualId"/>
+							<c:set value="<%=manualUrl%>" var="manualUrl"/>
 							<c:set value="<%=manualTitle%>" var="manualTitle"/>
 							
 							<c:if test="${data[manualTitle] ne null}">
@@ -371,6 +378,9 @@ public String marshallParams(Map<String, String> params) {
 								<img src='${contextPath}/images/icon_dustbin.png' class="appManualClass_<%=languageId%>" width=13 height=14 style="cursor:pointer"
 								onClick="<portlet:namespace/>deleteFile('${data[manualId]}','appManual','appManualClass_<%=languageId%>','<%=languageId%>');"/>
 							</c:if>
+							
+							<div class="h10"></div>
+							<input type="text" class="form-control" id="<portlet:namespace/>app_manual_url<%=languageId%>" name="<portlet:namespace/>app_manual_url<%=languageId %>" value="${data[manualUrl]}" placeholder="<liferay-ui:message key='edison-science-app-manager-manual-url-placeholder' />">
 						</td>
 					</tr>
 				<%} %>
@@ -765,9 +775,19 @@ public String marshallParams(Map<String, String> params) {
 					var manualAleadyExist = $("#<portlet:namespace/>appManual_"+targetLanguage).is(":visible");
 					if(!manualAleadyExist){
 						var newManual = $("#<portlet:namespace/>app_manual" + targetLanguage).val();
-						if(newManual == ""){
+						var newManualUrl = $("#<portlet:namespace/>app_manual_url" + targetLanguage).val();
+						if(newManual == "" && newManualUrl == ""){
 							alert(Liferay.Language.get("edison-appstore-solver-manual-exception-alert") + "( "+Liferay.Language.get(targetLanguage)+" )");
 							return false;
+						}
+						
+						if(newManualUrl != ""){
+							alert("here...")
+							var urlRegex = /^http(s)?:\/\/(www\.)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/;
+							if(!urlRegex.test(newManualUrl)){
+								alert(Liferay.Language.get('edison-science-app-manager-manual-url-error-msg'));
+								return false;
+							}
 						}
 					}
 					//developer
@@ -800,9 +820,18 @@ public String marshallParams(Map<String, String> params) {
 						var manualAleadyExist = $("#<portlet:namespace/>appManual_"+languageArray[i]).is(":visible");
 						if(!manualAleadyExist){
 							var newManual = $("#<portlet:namespace/>app_manual" + languageArray[i]).val();
-							if(newManual == ""){
+							var newManualUrl = $("#<portlet:namespace/>app_manual_url" + languageArray[i]).val();
+							if(newManual == "" && newManualUrl == ""){
 								alert(Liferay.Language.get("edison-appstore-solver-manual-exception-alert")  + "( "+Liferay.Language.get(languageArray[i]) +" )");
 								return false;
+							}
+							
+							if(newManualUrl != ""){
+								var urlRegex = /^http(s)?:\/\/(www\.)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/;
+								if(!urlRegex.test(newManualUrl)){
+									alert(Liferay.Language.get('edison-science-app-manager-manual-url-error-msg'));
+									return false;
+								}
 							}
 						}
 						
@@ -832,9 +861,11 @@ public String marshallParams(Map<String, String> params) {
 			}
 			
 			// scienceAppCategory Check
-			if( $(":checkbox[name*='childrenCategoryCheckbox']:checked").length==0 ){
-				alert(Liferay.Language.get('edison-science-appstore-category-error'));
-				return false;
+			if('${isPort}' == 'true'){
+				if( $(":checkbox[name*='childrenCategoryCheckbox']:checked").length==0 ){
+					alert(Liferay.Language.get('edison-science-appstore-category-error'));
+					return false;
+				}
 			}
 			
 			$("input[name=<portlet:namespace/>childrenCategory]").prop("disabled",true);

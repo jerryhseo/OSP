@@ -1033,6 +1033,15 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 			}
 			newApp.setProjectCategoryId(0);
 			
+			// Manual URL
+			for(Locale aLocale : locales){
+				String languageId = LocaleUtil.toLanguageId(aLocale);
+				String manualUrl = CustomUtil.strNull(params.get("app_manual_url" + languageId));
+				if(!manualUrl.equals("")){
+					newApp.setManualUrl(manualUrl, aLocale);
+				}
+			}
+			
 			// asset 등록
 			long entryId = scienceAppAddAssetEntry(sc, sc.getCompanyId(), sc.getScopeGroupId(), newApp);
 			
@@ -1158,6 +1167,15 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 						if(manualId == 0){
 							scienceApp.setManualId("0", locale);
 						}
+					}
+				}
+				
+				// Manual URL
+				for(Locale aLocale : locales){
+					String languageId = LocaleUtil.toLanguageId(aLocale);
+					String manualUrl = CustomUtil.strNull(params.get("app_manual_url" + languageId));
+					if(!manualUrl.equals("")){
+						scienceApp.setManualUrl(manualUrl, aLocale);
 					}
 				}
 				
@@ -1777,6 +1795,23 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 				}
 			}
 			returnMap.put("manualIds", scienceApp.getManualId());
+			
+			// Manual URL
+			for(Locale aLocale : LanguageUtil.getAvailableLocales()){
+				String manualUrl = CustomUtil.strNull(scienceApp.getManualUrl(aLocale), "");
+				String languageId = LocaleUtil.toLanguageId(aLocale);
+				if(manualUrl != null || manualUrl != ""){
+					try{
+						returnMap.put("manualUrl_" + languageId, manualUrl);
+					}catch (Exception e){
+						if(e instanceof NoSuchFileEntryException){
+						}else{
+							throw new PortalException(e);
+						}
+					}
+				}
+			}
+			returnMap.put("manualUrls", scienceApp.getManualUrl());
 
 			// 소스파일
 			long srcFileId = Long.parseLong(CustomUtil.strNull(scienceApp.getSrcFileName(), "0"));

@@ -28,7 +28,7 @@
 </div>
 <#else>
 <div class="hold-transition skin-black-light sidebar-mini" id="body-div">
-	<header class="main-header" id="${namespace}${layoutKey}column-2">
+	<header class="main-header" id="${namespace}${layoutKey}column-2" section-type="system">
 		
 	</header>
 	<div class="wrapper">
@@ -49,31 +49,33 @@
 			</section>
 			
 			<section class="content" id="workbench-layout-area" style="display:none;">
-				<div class="row" style="height:100%">
-					<div class="col-md-12 col" style="height: 100%;width: 50%;" id="col-${namespace}${layoutKey}column-3">
-						<div class="row" style="height:50%"  id="row-${namespace}${layoutKey}column-3">
-							<div class="col-md-12 col sub-col" style="height: 100%;width: 100%;" id="${namespace}${layoutKey}column-3" set-width="false" set-width-id="col-${namespace}${layoutKey}column-3">
+				<div class="container-fluid" style="height: 100%;">
+					<div class="row" style="height:100%">
+						<div class="col-md-12 col" style="height: 100%;width: 50%;" id="col-${namespace}${layoutKey}column-3">
+							<div class="row" style="height:50%"  id="row-${namespace}${layoutKey}column-3">
+								<div class="col-md-12 col sub-col" style="height: 100%;width: 100%;" id="${namespace}${layoutKey}column-3" set-width="false" set-width-id="col-${namespace}${layoutKey}column-3">
+									
+								</div>
+							</div>
+							<div class="devider horizontal" id="${namespace}${layoutKey}devider-1" data-equal-id="row-${namespace}${layoutKey}column-3" data-remainder-id="row-${namespace}${layoutKey}column-4"></div>
+							<div class="row" style="height:50%" id="row-${namespace}${layoutKey}column-4">
+								<div class="col-md-12 col sub-col" style="height: 100%;width: 100%;" id="${namespace}${layoutKey}column-4"  set-width="false">
 								
+								</div>
 							</div>
 						</div>
-						<div class="devider horizontal" id="${namespace}${layoutKey}devider-1" data-equal-id="row-${namespace}${layoutKey}column-3" data-remainder-id="row-${namespace}${layoutKey}column-4"></div>
-						<div class="row" style="height:50%" id="row-${namespace}${layoutKey}column-4">
-							<div class="col-md-12 col sub-col" style="height: 100%;width: 100%;" id="${namespace}${layoutKey}column-4"  set-width="false">
-							
+						<div class="devider vertical" id="${namespace}${layoutKey}devider-2" data-equal-id="col-${namespace}${layoutKey}column-3" data-remainder-id="col-${namespace}${layoutKey}column-5"></div>
+						<div class="col-md-12 col" style="height: 100%;width: 50%;" id="col-${namespace}${layoutKey}column-5">
+							<div class="row" style="height:50%" id="row-${namespace}${layoutKey}column-5">
+								<div class="col-md-12 col sub-col" style="height: 100%;width: 100%;" id="${namespace}${layoutKey}column-5" set-width="false" set-width-id="col-${namespace}${layoutKey}column-5">
+								
+								</div>
 							</div>
-						</div>
-					</div>
-					<div class="devider vertical" id="${namespace}${layoutKey}devider-2" data-equal-id="col-${namespace}${layoutKey}column-3" data-remainder-id="col-${namespace}${layoutKey}column-5"></div>
-					<div class="col-md-12 col" style="height: 100%;width: 50%;" id="col-${namespace}${layoutKey}column-5">
-						<div class="row" style="height:50%" id="row-${namespace}${layoutKey}column-5">
-							<div class="col-md-12 col sub-col" style="height: 100%;width: 100%;" id="${namespace}${layoutKey}column-5" set-width="false" set-width-id="col-${namespace}${layoutKey}column-5">
-							
-							</div>
-						</div>
-						<div class="devider horizontal" id="${namespace}${layoutKey}devider-3" data-equal-id="row-${namespace}${layoutKey}column-5" data-remainder-id="row-${namespace}${layoutKey}column-6"></div>
-						<div class="row" style="height:50%" id="row-${namespace}${layoutKey}column-6">
-							<div class="col-md-12 col sub-col" style="height: 100%;width: 100%;" id="${namespace}${layoutKey}column-6"  set-width="false">
-							
+							<div class="devider horizontal" id="${namespace}${layoutKey}devider-3" data-equal-id="row-${namespace}${layoutKey}column-5" data-remainder-id="row-${namespace}${layoutKey}column-6"></div>
+							<div class="row" style="height:50%" id="row-${namespace}${layoutKey}column-6">
+								<div class="col-md-12 col sub-col" style="height: 100%;width: 100%;" id="${namespace}${layoutKey}column-6"  set-width="false">
+								
+								</div>
 							</div>
 						</div>
 					</div>

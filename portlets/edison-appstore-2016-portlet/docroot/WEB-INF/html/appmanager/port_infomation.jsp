@@ -529,9 +529,9 @@ AUI().ready(function() {
 									 			  .html("<span class='icon-trash'> "+Liferay.Language.get('edison-button-board-delete')+"</span>")
 									  ).appendTo($rowResult);
 					
-					/* if(data[OSP.Constants.MANDATORY]){
+					if(data[OSP.Constants.MANDATORY]){
 						$select.find("option[value=Y]").attr("selected","selected");
-					} */
+					}
 					
 					$body.append($rowResult);
 				}

@@ -26,6 +26,8 @@
 	
 	<liferay-portlet:param name="redirectName" value="${redirectName}" />
 	<liferay-portlet:param name="redirectURL" value="${redirectURL}" />
+	
+	<liferay-portlet:param name="isCopy" value="${isCopy}" />
 </liferay-portlet:actionURL>
 
 <liferay-portlet:resourceURL var="edisonFileDownloadURL" escapeXml="false" id="edisonFileDownload" copyCurrentRenderParameters="false"/>
@@ -112,7 +114,12 @@
                                     </aui:input>
                                 </c:when>
                                 <c:otherwise>
-                                    <input name="name" value="${dataTypeMap.name}" type="text" class="field long_field" readonly="readonly" />
+                                	<c:if test="${isCopy}">
+                                		<input name="<portlet:namespace/>copyName" value="${dataTypeMap.name}" type="text" class="field long_field"/>
+                                	</c:if>
+                                    <c:if test="${!isCopy}">
+                                		<input name="name" value="${dataTypeMap.name}" type="text" class="field long_field" readonly="readonly" />
+                                	</c:if>
                                 </c:otherwise>
                             </c:choose>
                         </td>
@@ -124,7 +131,12 @@
                                     <input name="name" value="1.0.0" type="text" class="field short_field" readonly="readonly" />
                                 </c:when>
                                 <c:otherwise>
-                                    <input name="name" value="${dataTypeMap.version}" type="text" class="field short_field" readonly="readonly" />
+                                	<c:if test="${isCopy}">
+                                		<input name="<portlet:namespace/>copyVersion" value="${dataTypeMap.version}" type="text" class="field short_field" />
+                                	</c:if>
+                                    <c:if test="${!isCopy}">
+                                		<input name="name" value="${dataTypeMap.version}" type="text" class="field short_field" readonly="readonly" />
+                                	</c:if>
                                 </c:otherwise>
                             </c:choose>
 

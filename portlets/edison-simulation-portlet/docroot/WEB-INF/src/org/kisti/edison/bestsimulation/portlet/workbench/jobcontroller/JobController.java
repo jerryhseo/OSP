@@ -13,6 +13,7 @@ import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import org.kisti.edison.bestsimulation.NoSuchSimulationJobDataException;
 import org.kisti.edison.bestsimulation.model.Simulation;
 import org.kisti.edison.bestsimulation.model.SimulationJob;
 import org.kisti.edison.bestsimulation.model.SimulationJobData;
@@ -105,7 +106,9 @@ public class JobController {
 		
 		try{
 			boolean isComplete = true;
-			String msg = "";
+			String successMsg = "";
+			String errorMsg = "";
+			
 			for(String simulationUuid : simulations){
 				Simulation simulation = SimulationLocalServiceUtil.getSimulationByUUID(simulationUuid);
 				if(transMode.equals("TRANS_JOB")){
@@ -114,9 +117,11 @@ public class JobController {
 					String jobTitle = simulation.getSimulationTitle()+" - "+simulationJob.getJobTitle();
 					long scienceAppId = GetterUtil.getLong(simulation.getScienceAppId());
 					boolean isTrance = this.transferJobDataToSDR(request, collectionId, simulationJob, scienceAppId, jobTitle);
-					if(!isTrance){
+					if(isTrance){
+						if(successMsg.equals("")){successMsg += jobTitle;}else{successMsg += ", "+jobTitle;}
+					}else{
 						if(isComplete){isComplete = false;}
-						if(msg.equals("")){msg += jobTitle;}else{msg += ", "+jobTitle;}
+						if(errorMsg.equals("")){errorMsg += jobTitle;}else{errorMsg += ", "+jobTitle;}
 					}
 				}else if(transMode.equals("TRANS_SIMULATION")){
 					List<SimulationJob> jobs = SimulationJobLocalServiceUtil.getJobsBySimulationUuid(simulationUuid);
@@ -125,29 +130,33 @@ public class JobController {
 							String jobTitle = simulation.getSimulationTitle()+" - "+job.getJobTitle();
 							long scienceAppId = GetterUtil.getLong(simulation.getScienceAppId());
 							boolean isTrance = this.transferJobDataToSDR(request, collectionId, job, scienceAppId, jobTitle);
-							if(!isTrance){
+							if(isTrance){
+								if(successMsg.equals("")){successMsg += jobTitle;}else{successMsg += ", "+jobTitle;}
+							}else{
 								if(isComplete){isComplete = false;}
-								if(msg.equals("")){msg += jobTitle;}else{msg += ", "+jobTitle;}
+								if(errorMsg.equals("")){errorMsg += jobTitle;}else{errorMsg += ", "+jobTitle;}
 							}
 						}
 					}
 				}
 			}
 			
-			if(isComplete){
-				resultMap.put("isComplete", true);
-				resultMap.put("msg", "Successfully Transfer JobData To SDR");
-			}else{
-				resultMap.put("isComplete", false);
-				resultMap.put("msg", "Partially Failed: "+msg);
-			}
+			resultMap.put("successMsg", successMsg);
+			resultMap.put("errorMsg", errorMsg);
+//			resultMap.put("msg", "Successfully Transfer JobData To SDR");
+//			resultMap.put("msg", "Partially Failed: "+msg);
+			
 			PrintWriter out = response.getWriter();
 			response.setContentType("application/json; charset=UTF-8");
 			out.write(new Gson().toJson(resultMap).toString());
 			out.flush();
 			out.close();
 		}catch (Exception e) {
-			e.printStackTrace();
+			if(e instanceof NoSuchSimulationJobDataException){
+				
+			}else{
+				e.printStackTrace();
+			}
 		}
 	}
 	

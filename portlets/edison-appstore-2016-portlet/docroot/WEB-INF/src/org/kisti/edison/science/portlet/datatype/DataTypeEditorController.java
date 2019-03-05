@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -81,8 +80,6 @@ import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.NoSuchFileEntryException;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
-import com.liferay.portlet.layoutsadmin.util.Sitemap;
-import com.liferay.portlet.layoutsadmin.util.SitemapUtil;
 
 @Controller
 @RequestMapping("VIEW")
@@ -163,7 +160,11 @@ public class DataTypeEditorController{
 		long dataTypeId = GetterUtil.getLong(params.get("dataTypeId"),0);
 		String noMode = dataTypeId==0?Constants.ADD:Constants.UPDATE;
 		String mode = GetterUtil.getString(params.get("mode")).equals("")?noMode:params.get("mode").toString();
+		boolean isCopy = Boolean.parseBoolean(GetterUtil.getString(params.get("isCopy"),"false"));
 		boolean editDataName = false;
+		
+		// Copy
+		model.addAttribute("isCopy", isCopy);
 		
 		//APP관리에서 넘어온 경우 Parameter SETTING
 		String searchByPrePage = GetterUtil.getString(params.get("searchByPrePage"));
@@ -305,12 +306,13 @@ public class DataTypeEditorController{
 		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(WebKeys.THEME_DISPLAY);
 		
 		String mode = CustomUtil.strNull(params.get("mode"));
+		boolean isCopy = Boolean.parseBoolean(CustomUtil.strNull(params.get("isCopy"), "false"));
 		long dataTypeId = GetterUtil.getLong(params.get("dataTypeId"),0);
 		
 		try{
 			if(mode.equals(Constants.DELETE)){
 				DataTypeLocalServiceUtil.removeDataTypeObject(dataTypeId);
-			}else if(mode.equals(Constants.COPY)){
+			}else if(mode.equals(Constants.COPY) || mode.equals("upgrade")){
 				ServiceContext sc = ServiceContextFactory.getInstance(DataType.class.getName(), request);
 				Map<String,Object> copyedDataType = DataTypeLocalServiceUtil.copyDataType(dataTypeId,themeDisplay.getUserId(),sc);
 				dataTypeId = GetterUtil.getLong(copyedDataType.get("typeId"));
@@ -351,15 +353,15 @@ public class DataTypeEditorController{
 					}
 				}
 				
-
-				
 				List<Map<String,Object>> analyzerList = returnParameterFormList(params.get("analyzerCheckbox"), GetterUtil.getString(params.get("defaultAnalyzerSelect")),false);
 				
 				String dtName = CustomUtil.strNull(params.get("dtName"));
 				String dtVersion = CustomUtil.strNull(params.get("dtVersion"),"1.0.0");
+				String copyName = CustomUtil.strNull(params.get("copyName"), dtName);
+				String copyVersion = CustomUtil.strNull(params.get("copyVersion"), dtVersion);
 				
-				if(mode.equals(Constants.ADD)){
-					if(DataTypeLocalServiceUtil.checkDataTypeObjectValiation(dtName, dtVersion)){
+				if(mode.equals(Constants.ADD) || isCopy){
+					if(DataTypeLocalServiceUtil.checkDataTypeObjectValiation(copyName, copyVersion)){
 						throw new DataTypeException("DUPLICATED");
 					}
 				}
@@ -381,9 +383,16 @@ public class DataTypeEditorController{
 //					}
 					
 					dataTypeId = GetterUtil.getLong(params.get("dataTypeId"));
+					long beforeDataTypeId = dataTypeId;
 					Map<Locale,String> description = CustomUtil.getLocalizationNotSetLocaleMap(params, "description");
-					dataTypeId = DataTypeLocalServiceUtil.modifyDataTypeObjectForEditorAnalyzer(dtName,dtVersion,description,editorList,analyzerList, sc);
-					
+					// 2019.02.15 _ Save new with changed name when copying.
+					dataTypeId = DataTypeLocalServiceUtil.modifyDataTypeObjectForEditorAnalyzer(copyName,copyVersion,description,editorList,analyzerList, sc);
+					if(isCopy){
+						// 2019.02.15 _ Delete previously copied Datatype.
+						if(beforeDataTypeId != dataTypeId){
+							DataTypeLocalServiceUtil.removeDataTypeObject(beforeDataTypeId);
+						}
+					}
 					
 					UploadPortletRequest upload = PortalUtil.getUploadPortletRequest(sc.getLiferayPortletRequest());
 					String sampleFileName = CustomUtil.strNull(upload.getFileName("sampleFile"), "");
@@ -423,7 +432,7 @@ public class DataTypeEditorController{
 			if(!mode.equals(Constants.DELETE)){
 				response.setWindowState(LiferayWindowState.MAXIMIZED);
 				
-				if(mode.equals(Constants.ADD)||mode.equals(Constants.COPY)){
+				if(mode.equals(Constants.ADD)||mode.equals(Constants.COPY)||mode.equals("upgrade")){
 					SessionMessages.add(request, EdisonMessageConstants.INSERT_SUCCESS);
 				}else if(mode.equals(Constants.UPDATE)){
 					SessionMessages.add(request, EdisonMessageConstants.UPDATE_SUCCESS);
@@ -443,7 +452,7 @@ public class DataTypeEditorController{
 			}else{
 				e.printStackTrace();
 				//Session Error Message
-				if(mode.equals(Constants.ADD)||mode.equals(Constants.COPY)){
+				if(mode.equals(Constants.ADD)||mode.equals(Constants.COPY)||mode.equals("upgrade")){
 					SessionErrors.add(request, EdisonMessageConstants.INSERT_ERROR);
 				}else if(mode.equals(Constants.UPDATE)){
 					SessionErrors.add(request, EdisonMessageConstants.UPDATE_ERROR);
@@ -453,6 +462,9 @@ public class DataTypeEditorController{
 			}
 		}finally {
 			if(!mode.equals(Constants.DELETE)){
+				if(mode.equals(Constants.COPY)){
+					response.setRenderParameter("isCopy", "true");
+				}
 				response.setRenderParameter("myRender", "dataTypeModifyRender");
 			}
 		}
@@ -596,11 +608,17 @@ public class DataTypeEditorController{
 			if(GetterUtil.getInteger(viewMap.get("numEditors"),0)!=0){
 				List<Map<String, Object>> dataTypeEditorMap = DataTypeEditorLocalServiceUtil.retrieveDataTypeEditorList(dataTypeId);
 				String editorStr = "";
+				long editorAppId = 0;
+				long editorGroupId = 0;
 				for(Map<String,Object> editorMap : dataTypeEditorMap){
 					long scienceAppId = GetterUtil.getLong(editorMap.get("editorId"));
 					ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppId);
 					editorStr = editorStr.equals("")?scienceApp.getName():editorStr+","+scienceApp.getName();
+					editorAppId = scienceApp.getScienceAppId();
+					editorGroupId = scienceApp.getGroupId();
 				}
+				jsonMap.put("editorGroupId", 		editorGroupId);
+				jsonMap.put("editorAppId", 		editorAppId);
 				jsonMap.put("editor", 		editorStr);
 			}
 			
@@ -608,11 +626,17 @@ public class DataTypeEditorController{
 			if(GetterUtil.getInteger(viewMap.get("numAnalyzers"),0)!=0){
 				List<Map<String, Object>> dataTypeAnalyzerMap = DataTypeAnalyzerLocalServiceUtil.retrieveDataTypeAnalyzerList(dataTypeId);
 				String analyzerStr = "";
+				long analyzerAppId = 0;
+				long analyzerGroupId = 0;
 				for(Map<String,Object> analyzerMap : dataTypeAnalyzerMap){
 					long scienceAppId = GetterUtil.getLong(analyzerMap.get("analyzerId"));
 					ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppId);
 					analyzerStr = analyzerStr.equals("")?scienceApp.getName():analyzerStr+","+scienceApp.getName();
+					analyzerAppId = scienceApp.getScienceAppId();
+					analyzerGroupId = scienceApp.getGroupId();
 				}
+				jsonMap.put("analyzerGroupId", 		analyzerGroupId);
+				jsonMap.put("analyzerAppId", 		analyzerAppId);
 				jsonMap.put("analyzer", 		analyzerStr);
 			}
 			

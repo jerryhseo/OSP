@@ -125,10 +125,11 @@ public class LayoutController {
 			model.addAttribute("currentUserName", themeDisplay.getUser().getScreenName());
 			model.addAttribute("nodeId", nodeId);
 			
+			response.setTitle(model.get("pageTitle").toString()+" Simulation Workbench");
+			
 			
 			IBAgent agent = new IBAgent(themeDisplay.getScopeGroup(), themeDisplay.getUser());
 			agent.ibAgentLog();
-			
 			
 			return "view";
 		}catch(Exception e){
@@ -183,6 +184,8 @@ public class LayoutController {
 				this.readDLEntry(request, response);
 			}else if( command.equalsIgnoreCase("READ_DATATYPE_SAMPLE")){
 				this.readDataTypeSample(request, response);
+			}else if( command.equalsIgnoreCase("CANCLE_JOB")){
+				this.cancleJob(request, response);
 			}
 			
 			
@@ -243,12 +246,6 @@ public class LayoutController {
 		
 		cfg.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
 		
-		
-		
-		
-		
-		
-		
 		Template template = cfg.getTemplate(templateFile);
 		PrintWriter writer = resourceResponse.getWriter();
 		try {
@@ -285,6 +282,8 @@ public class LayoutController {
 			/*Cluster*/
 			scienceApp.setCluster(CustomUtil.strNull(scienceApp.getCluster(), _DEFAULT_CLUSTER));
 			model.addAttribute("scienceApp", scienceApp);
+			
+			model.addAttribute("pageTitle", scienceApp.getName()+" v"+scienceApp.getVersion());
 			if(scienceApp.getIsStepLayout()){
 				model.addAttribute("isFlowLayout", true);
 			}else{
@@ -322,8 +321,6 @@ public class LayoutController {
 			
 			totalLayout.put("columns_", totalColumns);
 			model.addAttribute("totalLayout", totalLayout);
-			
-			System.out.println(totalLayout);
 			
 			model.addAttribute("lodingPortlets", lodingPortlets.toString());
 			model.addAttribute("workbenchLayout", workbenchLayouts);
@@ -777,6 +774,19 @@ public class LayoutController {
 		}
 		
 		ServletResponseUtil.write(httpResponse, jsonJob.toString() );
+	}
+	
+	
+	protected void cancleJob(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws IOException, SystemException {
+		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		User user = themeDisplay.getUser();
+		Group group = themeDisplay.getScopeGroup();
+		IBAgent ibAgent = new IBAgent(group, user);
+		
+		String simulationUuid = ParamUtil.getString(resourceRequest, "simulationUuid");
+		String jobUuid = ParamUtil.getString(resourceRequest, "jobUuid");
+		ibAgent.cancleJob(simulationUuid, jobUuid);
+		
 	}
 	
 	protected void readDLEntry( ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws IOException, PortletException{

@@ -54,7 +54,7 @@
 	
 	String userScreenName = user.getScreenName();
 %>
-<div class="row" id="<portlet:namespace/>canvas">
+<div class="row-fluid" id="<portlet:namespace/>canvas">
 	
 </div>
 
@@ -67,7 +67,7 @@
 					<h4 class="modal-title">Job System Log</h4>
 				</div>
 				<div class="modal-body">
-					<textarea class="form-control" id="<portlet:namespace/>log-text" style="min-width: 90%;height: 350px;resize:none;" autofocus="autofocus" readonly="readonly" >
+					<textarea class="form-control" id="<portlet:namespace/>log-text" style="min-width: 90%;height: 650px;resize:none;" autofocus="autofocus" readonly="readonly" >
 					
 					</textarea>
 				</div>
@@ -330,7 +330,7 @@ $(function(e) {
 	
 	
 	//time out - 5 sec
-	<portlet:namespace/>displayTimer = setTimeout(function(){ <portlet:namespace/>displayInit(); }, 1000*5);
+	<portlet:namespace/>displayTimer = setTimeout(function(){ <portlet:namespace/>displayInit(); }, 1000*10);
 });
 
 /***********************************************************************
@@ -339,12 +339,18 @@ $(function(e) {
 Liferay.on(OSP.Event.OSP_REGISTER_EVENTS,function( e ){
 	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
 		console.log('OSP_REGISTER_EVENTS: ['+e.portletId+', '+new Date()+']' );
-		delete <portlet:namespace/>lodingPortlets[e.portletId];
-		if(Object.keys(<portlet:namespace/>lodingPortlets).length===0&&<portlet:namespace/>displayTimer){
-			//portlet all loding check
-			<portlet:namespace/>displayInit();
+		
+		if(<portlet:namespace/>lodingPortlets.hasOwnProperty(e.portletId)){
+			delete <portlet:namespace/>lodingPortlets[e.portletId];
+			if(Object.keys(<portlet:namespace/>lodingPortlets).length===0&&<portlet:namespace/>displayTimer){
+				//portlet all loding check
+				<portlet:namespace/>displayInit();
+			}
+			<portlet:namespace/>workbench.handleRegisterEvents( e.portletId, e.data ,false);
+		}else{
+			<portlet:namespace/>workbench.handleRegisterEvents( e.portletId, e.data ,true);
 		}
-		<portlet:namespace/>workbench.handleRegisterEvents( e.portletId, e.data );
+		
 	}
 });
 
@@ -433,6 +439,14 @@ Liferay.on(OSP.Event.OSP_CREATE_JOB,function( e ){
 			<portlet:namespace/>workbench.handleCreateJob( e.portletId, e.simulationUuid, e.title, e.data, '<%=serveResourceURL.toString()%>' );
 	}
 });
+
+Liferay.on(OSP.Event.OSP_CANCEL_JOB,function( e ){
+	if( <portlet:namespace/>workbench.id() == e.targetPortlet ){
+		console.log('OSP_CANCEL_JOB: ['+e.portletId+', '+new Date()+']', e );
+		<portlet:namespace/>workbench.handleCancleJob( e.portletId, '<%=serveResourceURL.toString()%>');
+	}
+});
+
 Liferay.on(OSP.Event.OSP_DELETE_JOB,function( e ){
 	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
 		console.log('OSP_DELETE_JOB: ['+e.portletId+', '+new Date()+']');

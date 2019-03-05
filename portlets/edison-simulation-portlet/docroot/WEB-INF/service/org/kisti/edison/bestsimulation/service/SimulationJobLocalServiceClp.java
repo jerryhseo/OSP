@@ -381,11 +381,17 @@ public class SimulationJobLocalServiceClp implements SimulationJobLocalService {
 
 		_methodName68 = "executeSchedulerOfClassStatistics";
 
-		_methodParameterTypes68 = new String[] {  };
+		_methodParameterTypes68 = new String[] { "java.util.Map" };
 
 		_methodName69 = "getVirtualLabClassStatisticsList";
 
 		_methodParameterTypes69 = new String[] {
+				"java.util.Map", "java.util.Locale", "boolean"
+			};
+
+		_methodName70 = "getClassStatisticsManagementList";
+
+		_methodParameterTypes70 = new String[] {
 				"java.util.Map", "java.util.Locale", "boolean"
 			};
 	}
@@ -2713,11 +2719,12 @@ public class SimulationJobLocalServiceClp implements SimulationJobLocalService {
 	}
 
 	@Override
-	public void executeSchedulerOfClassStatistics()
+	public void executeSchedulerOfClassStatistics(java.util.Map params)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
 			_invokableLocalService.invokeMethod(_methodName68,
-				_methodParameterTypes68, new Object[] {  });
+				_methodParameterTypes68,
+				new Object[] { ClpSerializer.translateInput(params) });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -2745,6 +2752,38 @@ public class SimulationJobLocalServiceClp implements SimulationJobLocalService {
 		try {
 			returnObj = _invokableLocalService.invokeMethod(_methodName69,
 					_methodParameterTypes69,
+					new Object[] {
+						ClpSerializer.translateInput(params),
+						
+					ClpSerializer.translateInput(locale),
+						
+					excelFile
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<java.util.Map<java.lang.String, java.lang.Object>>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getClassStatisticsManagementList(
+		java.util.Map<java.lang.String, java.lang.Object> params,
+		java.util.Locale locale, boolean excelFile) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName70,
+					_methodParameterTypes70,
 					new Object[] {
 						ClpSerializer.translateInput(params),
 						
@@ -2907,4 +2946,6 @@ public class SimulationJobLocalServiceClp implements SimulationJobLocalService {
 	private String[] _methodParameterTypes68;
 	private String _methodName69;
 	private String[] _methodParameterTypes69;
+	private String _methodName70;
+	private String[] _methodParameterTypes70;
 }

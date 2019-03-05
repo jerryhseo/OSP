@@ -82,7 +82,7 @@ var print = function(param) {
                 fileItem: [{
                     name: 'Download',
                     img: '',
-                    title: 'delete file or folder',
+                    title: 'File Download',
                     fun: function(e) {
                     	var selectedItem = file_manager.explorer.find('.ui-selected');
                     	_fileManager_fileDownload(selectedItem);
@@ -321,6 +321,11 @@ var print = function(param) {
 
                     explorer.append(file_manager.tag);
                 }
+                
+                if($("#fileManagerViewType").val() === 'list'){
+                	/* tableHeader and folder(file) data info view */
+            		$(".toolbar-listview").click();
+            	}
 
                 _fn.initSelectable(explorer);
                 _fn.initDraggable(j('file, folder'));
@@ -403,6 +408,7 @@ var print = function(param) {
                         file_manager.explorer.removeClass('list-view');
                         j(".grid-view-file-info").show();
                         j(".list-view-file-info").hide();
+                        $("#fileManagerViewType").val("grid")
                     });
                     
                     // folder, file list view
@@ -410,6 +416,7 @@ var print = function(param) {
                         file_manager.explorer.addClass('list-view');
                         j(".grid-view-file-info").hide();
                         j(".list-view-file-info").show();
+                        $("#fileManagerViewType").val("list");
                     });
                     
                     _fn.sort(file_manager.files, ['type', 'name'], true);

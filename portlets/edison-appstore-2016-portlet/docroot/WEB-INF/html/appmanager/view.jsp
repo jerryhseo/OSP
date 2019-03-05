@@ -297,7 +297,7 @@
 							 '</div>';
 							 
 		$.confirm({
-			boxWidth: '32%',
+			boxWidth: '570px',
 			useBootstrap: false,
 			title: '',
 			content: confirmContent,

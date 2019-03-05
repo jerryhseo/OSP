@@ -116,7 +116,7 @@
 }
 
 .wf-box .wf-node-ports .input-ports-list .wf-port div.jtk-connected{
-	background-color: #37ec0b !important;
+	background-color: #c6cad1 !important;
 }
 
 .wf-box .wf-node-ports .output-ports-list {
@@ -252,7 +252,6 @@
 .wf-box.is-re-use-node .wf-node-header {
     background-color: hsla(32, 100%, 49%, 0.95) !important;
 }
-
 
 .wf-box.RUNNING .wf-node-header h1.wf-node-header-title,
 .wf-box.FAILED .wf-node-header h1.wf-node-header-title,

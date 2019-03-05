@@ -295,6 +295,7 @@
 			<basic name="previousVersionId" />
 			<basic name="iconId" />
 			<basic name="manualId" />
+			<basic name="manualUrl" />
 			<basic name="exeFileName" />
 			<basic name="appType" />
 			<basic name="runType" />
@@ -327,6 +328,8 @@
 			<transient name="developersMap" />
 			<transient name="manualIdCurrentLanguageId" />
 			<transient name="manualIdMap" />
+			<transient name="manualUrlCurrentLanguageId" />
+			<transient name="manualUrlMap" />
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />

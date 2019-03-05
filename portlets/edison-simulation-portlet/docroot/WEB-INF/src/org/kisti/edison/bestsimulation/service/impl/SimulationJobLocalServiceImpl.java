@@ -1658,9 +1658,9 @@ public class SimulationJobLocalServiceImpl
 		}
 	}
 	
-	public void executeSchedulerOfClassStatistics() throws SystemException {
+	public void executeSchedulerOfClassStatistics(Map params) throws SystemException {
 		try {
-			List<Object[]> virtualClassStatisticsList = simulationJobFinder.getVirtualClassListForInsertStatistics();
+			List<Object[]> virtualClassStatisticsList = simulationJobFinder.getVirtualClassListForInsertStatistics(params);
 			
 			List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
 			
@@ -1698,9 +1698,12 @@ public class SimulationJobLocalServiceImpl
 						VirtualLabClassStatisticsPK virtualLabClassStatisticsPK = new VirtualLabClassStatisticsPK(virtualLabId, classId);
 						if(hasClassStatistics){
 							virtualLabClassStatistics = VirtualLabClassStatisticsLocalServiceUtil.getVirtualLabClassStatistics(virtualLabClassStatisticsPK);
-							virtualLabClassStatistics.setLastModifiedDt(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(new Date().toString()));
+							Date currDate = new Date();
+							String currDateStr = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(currDate);
+							virtualLabClassStatistics.setLastModifiedDt(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(currDateStr));
 						} else {
 							virtualLabClassStatistics = VirtualLabClassStatisticsLocalServiceUtil.createVirtualLabClassStatistics(virtualLabClassStatisticsPK);
+							virtualLabClassStatistics.setClassCreateDt(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(classCreateDt));
 							virtualLabClassStatistics.setLastModifiedDt(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(classCreateDt));
 						}
 						virtualLabClassStatistics.setGroupId(groupId);
@@ -1711,7 +1714,6 @@ public class SimulationJobLocalServiceImpl
 						virtualLabClassStatistics.setRegisterStudentCnt(registerStudentCnt);
 						virtualLabClassStatistics.setVirtualLabUsersId(virtualLabUsersIdObj);
 						virtualLabClassStatistics.setScienceAppId(scienceAppIdObj);
-						virtualLabClassStatistics.setClassCreateDt(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(classCreateDt));
 						virtualLabClassStatistics.setVirtualLabUseYn(virtualLabUseYn);
 						virtualLabClassStatistics.setClassUseYn(classUseYn);
 						
@@ -1769,6 +1771,7 @@ public class SimulationJobLocalServiceImpl
 					Long executeStudentcount = (Long) resultArray[11];
 					Long executeCount = (Long) resultArray[12];
 					String avgerageRuntime = (String) resultArray[13];
+					String lastModifiedDt = CustomUtil.strNull(resultArray[14]);
 					
 					resultRow = new HashMap<String, Object>();
 					resultRow.put("groupId", groupId);
@@ -1792,6 +1795,7 @@ public class SimulationJobLocalServiceImpl
 					resultRow.put("executeCount", executeCount);
 					resultRow.put("executeStudentcount", executeStudentcount);
 					resultRow.put("avgerageRuntime", avgerageRuntime);
+					resultRow.put("lastModifiedDt", lastModifiedDt);
 					
 					List<String> scienceAppTitleList = new ArrayList<String>();
 
@@ -1837,4 +1841,47 @@ public class SimulationJobLocalServiceImpl
 		return returnList;
 	}
 	
+	public List<Map<String, Object>> getClassStatisticsManagementList(Map<String, Object> params, Locale locale, boolean excelFile) {
+		List<Object[]> virtualClassStatisticsList = simulationJobFinder.getClassStatisticsManagementList(params, locale);
+		
+		List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+		
+		Map <String, Object> resultRow = null;
+		if(virtualClassStatisticsList != null && virtualClassStatisticsList.size() > 0) {
+			for (int i = 0; i < virtualClassStatisticsList.size(); i++) {
+				Object[] resultArray = virtualClassStatisticsList.get(i);
+				
+				if(resultArray != null) {
+					int groupId = (Integer) resultArray[0];
+					String university = (String) resultArray[1];
+					Long virtualLabId = (Long) resultArray[2];
+					String virtualLabTitle = (String) resultArray[3];
+					String classTitle = (String) resultArray[4];
+					String virtualLabPersonName = (String) resultArray[5];
+					String classId = (String) resultArray[6];
+					String lastModifiedDt = CustomUtil.strNull(resultArray[7]);
+					
+					resultRow = new HashMap<String, Object>();
+					resultRow.put("groupId", groupId);
+					
+					String affiliation = "";
+					if(!"".equals(university)){
+						affiliation = EdisonExpndoUtil.getCommonCdSearchFieldValue(String.valueOf(university), EdisonExpando.CDNM, locale);
+					}
+					
+					resultRow.put("universityId", university);
+					resultRow.put("university", affiliation);
+					resultRow.put("virtualLabId", virtualLabId);
+					resultRow.put("virtualLabTitle", virtualLabTitle);
+					resultRow.put("classTitle", classTitle);
+					resultRow.put("virtualLabPersonName", virtualLabPersonName);
+					resultRow.put("classId", classId);
+					resultRow.put("lastModifiedDt", lastModifiedDt);
+					
+					returnList.add(resultRow);
+				}
+			}
+		}
+		return returnList;
+	}
 }

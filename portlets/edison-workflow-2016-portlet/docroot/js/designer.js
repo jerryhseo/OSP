@@ -26,6 +26,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     var connectionColor = "#11C7E7";
 
     function turnOffBeforeConnect(jpInstance) {
+    	jpInstance.beforeStartConnect = function() { return false; }
         jpInstance.beforeConnect = function() { return false; }
     }
 
@@ -38,10 +39,11 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
 
             var sourcePortName = source.getNode()["data"]["outputPorts"][source.id][OSP.Constants.NAME];
             var targetPortName = target.getNode()["data"]["inputPorts"][target.id][OSP.Constants.NAME];
-            /*Port Connect Bug fix*/
-            if (sourcePortName != source.id) {
+            
+            /* Port Connect Bug fix - Change target port name of first connected node */
+            /*if (sourcePortName != source.id) {
                 source.getNode()["data"]["outputPorts"][source.id][OSP.Constants.NAME] = source.id;
-            }
+            }*/
 
             if (targetPortName != target.id) {
                 target.getNode()["data"]["inputPorts"][target.id][OSP.Constants.NAME] = target.id;
@@ -75,9 +77,15 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                             if (sourceData.outputPorts[source.id][OSP.Constants.WF_SAMPLE]) {
                                 sourceData.outputPorts[source.id][OSP.Constants.WF_SAMPLE] = {};
                             }
+                            
+                            console.log(sourceData);
+                            console.log(targetData);
 
                             isEqualsPortType = true;
                         } else {
+                        	console.log("====================");
+                        	console.log(sourceData);
+                        	console.log(targetData);
                             isEqualsPortType = checkPortTypeForConnection(source, target, true);
                         }
                         return isEqualsPortType;
@@ -224,7 +232,12 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                 events: {
                     click: function(obj) {
                         if (!isDesigner && uiPanelInstance) {
-                            uiPanelInstance.openOutputPortData(obj)
+                        	var status = obj.node.data.status.status;
+                        	if(status != "WAITING" && status != "PAUSED"){
+                        		uiPanelInstance.openOutputPortData(obj)
+                        	} else {
+                        		toastr['warning']('', 'No execution results.');
+                        	}
                         }
                     },
                 },
@@ -258,18 +271,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
             }
         }
     }
-
-    var defaultLayout = isDesigner ? { type: "Absolute" } : {
-        type: "Hierarchical",
-        parameters: {
-            multipleRoots: true,
-            orientation: "horizontal",
-            padding: [50, 50],
-            align: "end",
-            invert: false,
-            spacing: "auto",
-        }
-    };
 
     var canvasElement = document.querySelector("#wf-workflow-canvas");
     var renderer = wfWorkflowJsPlumbInstance.render({
@@ -616,7 +617,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         wfBackgroupSave();
 //        console.log(JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" })));
     }
-
     function wfBackgroupSave() {
         var localWorkflow = modifyingWorkflow;
         var wfId = localWorkflow.workflowId;
@@ -645,7 +645,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
 
     function drawWorkFlowAppDiv(pageX, pageY, data, savedId) {
         var wfId = savedId ? savedId : getGUID();
-        var isInputPortExist = false;
         var scienceAppData = {
             runType: data.appType,
             name: data.name
@@ -666,22 +665,9 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
 //        console.log(JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" })));
     }
 
-    function addScienceAppInputPort(wfId, scienceAppId) {
-        var inputports = synchronousAjaxHelper.get("/delegate/services/app/" + scienceAppId + "/inputports");
-        return addEndPointToScienceApp(wfId, $.parseJSON(inputports), true);
-    }
-
     function getScienceAppInputPort(scienceAppId) {
         var inputports = synchronousAjaxHelper.get("/delegate/services/app/" + scienceAppId + "/inputports");
         return inputports;
-    }
-
-    function addEndPointToScienceApp(wfId, portJson, isInputPort) {
-        if (!$.isEmptyObject(portJson)) {
-            var addEndPoint = prepareEndpoint(wfId, portJson, isInputPort);
-            addEndPoint(currentJsPlumbInstance);
-            return portJson;
-        }
     }
 
     function addEndPointToController(wfId, portJson, isInputPort) {
@@ -722,17 +708,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                     },
                     endPointType).setParameter("data", port);
             });
-        }
-    }
-
-    function addScienceAppOutputPort(wfId, scienceAppId) {
-        var outputports = synchronousAjaxHelper.get("/delegate/services/app/" + scienceAppId + "/outputports");
-        var outputportsJson = $.parseJSON(outputports);
-        delete outputportsJson["temp"]; /* 중간 확인 포트 제거  */
-        if (!$.isEmptyObject(outputportsJson)) {
-            var addEndPoint = prepareEndpoint(wfId, outputportsJson, false);
-            addEndPoint(currentJsPlumbInstance);
-            return outputportsJson;
         }
     }
 
@@ -929,16 +904,18 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                         }
                     };
                     if (!isDesigner && uiPanelInstance) {
-                        if(uiPanelInstance.isReUsableNode(node)){
-                            var isReUseNode = (!!node && !!node.data && !!node.data.isReUseNode)
-                            items["items"]["open-reuse-handler"] = {
-                                name: isReUseNode ? "Do not reuse" : "ReUse",
-                                icon: isReUseNode ? "fa-ban" : "fa-recycle",
-                                callback: function(key, options) {
-                                    uiPanelInstance.setReuseNode(node, !isReUseNode)
-                                }
-                            }
-                        }
+                    	if(uiPanelInstance.isReUsableJob()){
+                    		if(uiPanelInstance.isReUsableNode(node)){
+                    			var isReUseNode = (!!node && !!node.data && !!node.data.isReUseNode)
+                    			items["items"]["open-reuse-handler"] = {
+                    				name: isReUseNode ? "Do not reuse" : "ReUse",
+                    						icon: isReUseNode ? "fa-ban" : "fa-recycle",
+                    								callback: function(key, options) {
+                    									uiPanelInstance.setReuseNode(node, !isReUseNode)
+                    								}
+                    			}
+                    		}
+                    	}
                         if(uiPanelInstance.isPauseAbleNode(node)){
                             var status = node.data.status.status
                             items["items"]["open-pause-handler"] = {
@@ -1307,29 +1284,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                 });
     }
 
-    function copyWorkflowDefinition(workflowId) {
-        resetCurrentJsPlumbInstance();
-        duplicateWorkflowDefinition(workflowId, function(workflow) {
-            var wfData = $.parseJSON(workflow["screenLogic"]);
-            if ($(currentJsPlumbInstance.getContainer()).attr("id") == "wf-workflow-canvas") {
-                $("#worfklow-definition-name").val(workflow["title"]);
-                currentJsPlumbInstance.bind("dblclick", jsPlumbDblClickCallback);
-                currentJsPlumbInstance.bind("connectionDetached", jsPlumbConnectionDetachedCallback);
-                currentJsPlumbInstance.bind("connection", jsPlumbConnectionCallback);
-            }
-
-            $.each(wfData.elements, function(i) {
-                loadScienceApp(this["id"], this["offset"], this["data"]);
-            });
-
-            $.each(wfData.connections, function(i) {
-                var sourceEndpointUuid = this["sourceUuid"];
-                var targetEndpointUuid = this["targetUuid"];
-                currentJsPlumbInstance.connect({ uuids: [sourceEndpointUuid, targetEndpointUuid] });
-            });
-        });
-    }
-
     function loadWorkflowDefinition(workflowId, fnCallback) {
         aSyncAjaxHelper.get("/delegate/services/workflows/" + workflowId,
             function(workflow) {
@@ -1367,6 +1321,8 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
 
         if (!isDesigner) {
             turnOffBeforeConnect(currentJsPlumbInstance);
+        }else{
+        	renderer.zoomToFit();
         }
     }
 
@@ -1383,8 +1339,16 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         wfPortletGlobalData.wfElements = {};
         modifyingWorkflow = undefined;
     }
+    
+    function allNodesPause(){
+    	$.each(currentJsPlumbInstance.getNodes(), function(){
+    		var node = this;
+    		uiPanelInstance.pauseNode(node, true, null, false);
+    	});
+    }
 
     return {
+    	"allNodesPause": allNodesPause,
         "addScienceApp": addScienceApp,
         "removeSicenceApps": removeSicenceApps,
         "getWorkflowDefinition": getWorkflowDefinition,

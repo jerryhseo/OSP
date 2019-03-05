@@ -136,6 +136,23 @@
 		padding: 5px 0px 5px 15px;
 		font-size: 12px;
 	}
+	
+	.tooltips .toolbar-tooltip-text{
+		visibility: hidden;
+		background-color: #868686;
+		width: max-content;
+		position: absolute;
+		text-align: center;
+		padding: 2px 5px;
+		border-radius: 5px;
+		font-size: 12px;
+		color: #fff;
+		z-index: 1;
+	}
+	
+	.tooltips:hover .toolbar-tooltip-text {
+		visibility: visible;
+	}
 </style>
 
 <aui:form name="form">
@@ -160,18 +177,34 @@
 <div class="container myfilebox">
 	<input type="hidden" id="<portlet:namespace/>thisChildFolderCnt" value="">
 	<input type="hidden" id="<portlet:namespace/>thisChildFileCnt" value="">
+	<input type="hidden" id="fileManagerViewType" value="grid">
 	
 	<nav class="navbar navbar-default">
 		<div>
 			
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="padding-left: 15px; padding-right: 15px;">
-				<ul class="nav navbar-nav">
-					<li title="Level up" class="toolbar toolbar-level-up"><a class="icon-fb-file-upload" style="font-size: 18px;"></a></li>
-					<li title="Upload" class="toolbar toolbar-upload"><a class="icon-upload" style="font-size: 18px;"></a></li>
-					<li title="New folder" class="toolbar toolbar-new-folder"><a class="icon-folder-open" style="font-size: 18px;"></a></li>
-					<li title="Grid view" class="toolbar toolbar-gridview"><a class="icon-th" style="font-size: 18px;"></a></li>
-					<li title="List view" class="toolbar toolbar-listview"><a class="icon-th-list" style="font-size: 18px;"></a></li>
+				<ul class="nav navbar-nav <portlet:namespace/>nav-bar">
+					<li class="toolbar toolbar-level-up tooltips">
+						<a class="icon-fb-file-upload" style="font-size: 18px;"></a>
+						<div class="toolbar-tooltip-text">Level Up</div>
+					</li>
+					<li class="toolbar toolbar-upload tooltips">
+						<a class="icon-upload" style="font-size: 18px;"></a>
+						<div class="toolbar-tooltip-text">Upload</div>
+					</li>
+					<li class="toolbar toolbar-new-folder tooltips">
+						<a class="icon-folder-open" style="font-size: 18px;"></a>
+						<div class="toolbar-tooltip-text">New Folder</div>
+					</li>
+					<li class="toolbar toolbar-gridview tooltips">
+						<a class="icon-th" style="font-size: 18px;"></a>
+						<div class="toolbar-tooltip-text">Grid View</div>
+					</li>
+					<li class="toolbar toolbar-listview tooltips">
+						<a class="icon-th-list" style="font-size: 18px;"></a>
+						<div class="toolbar-tooltip-text">List View</div>
+					</li>
 				</ul>
 				
 				<form class="navbar-form navbar-right" role="search">

@@ -15,20 +15,53 @@
 	cursor: pointer;
 }
 
+#<portlet:namespace/>file-list-area.list-view file{
+	font-weight: 600;
+	font-size: 12px;
+}
+
+
+.tooltips .toolbar-tooltip-text{
+	visibility: hidden;
+	background-color: #868686;
+	width: max-content;
+	position: absolute;
+	text-align: center;
+	padding: 2px 5px;
+	border-radius: 5px;
+	font-size: 12px;
+	color: #fff;
+	z-index: 1;
+}
+
+.tooltips:hover .toolbar-tooltip-text {
+	visibility: visible;
+}
+
 </style>
 <div style="border: 1px solid #f2f2f2;border-radius: 10px;">
 	<nav class="navbar navbar-default">
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="padding-right:0px;padding-left:0px;">
 			<ul class="nav navbar-nav">
 				<c:if test="${!empty zipFileId }">
-					<li title="List view" class="toolbar cursor-pointer">
-						<a href="javascript:void (0);" onclick="<portlet:namespace/>download('${zipFileId}');" class="icon-download-alt" style="font-size: 16px;"> <liferay-ui:message key="edison-simulation-monitoring-result-file-all-down"/></a>
+					<li class="toolbar toolbar-level-up cursor-pointer tooltips">
+						<a href="javascript:void (0);" onclick="<portlet:namespace/>downloadZip('${zipFileId}');" class="icon-download-alt" style="font-size: 16px;"></a>
+						<div class="toolbar-tooltip-text"><liferay-ui:message key="edison-simulation-monitoring-result-file-all-down"/></div> 
 					</li>
 				</c:if>
 				
-				<li title="Level up" class="toolbar toolbar-level-up cursor-pointer" id="<portlet:namespace/>folder-level-up"><a href="javascript:void (0);" class="icon-fb-file-upload" style="font-size: 18px;"></a></li>
-				<li title="Grid view" class="toolbar toolbar-gridview cursor-pointer"><a href="javascript:void (0);" class="icon-th" style="font-size: 18px;"></a></li>
-				<li title="List view" class="toolbar toolbar-listview cursor-pointer"><a href="javascript:void (0);" class="icon-th-list" style="font-size: 18px;"></a></li>
+				<li class="toolbar toolbar-level-up cursor-pointer tooltips" id="<portlet:namespace/>folder-level-up">
+					<a href="javascript:void (0);" class="icon-fb-file-upload" style="font-size: 18px;"></a>
+					<div class="toolbar-tooltip-text">Level Up</div>
+				</li>
+				<li class="toolbar toolbar-gridview cursor-pointer tooltips">
+					<a href="javascript:void (0);" class="icon-th" style="font-size: 18px;"></a>
+					<div class="toolbar-tooltip-text">Grid view</div>
+				</li>
+				<li class="toolbar toolbar-listview cursor-pointer tooltips">
+					<a href="javascript:void (0);" class="icon-th-list" style="font-size: 18px;"></a>
+					<div class="toolbar-tooltip-text">List view</div>
+				</li>
 			</ul>
 		</div>
 	</nav>
@@ -127,9 +160,24 @@ function <portlet:namespace/>girdBreadCrumb(folderFullPath){
 	}
 }
 
-function <portlet:namespace/>download(fileId){
+
+function <portlet:namespace/>downloadZip(fileId){
 	var url = '${icebreakerUrl}/api/file/download?id=' + fileId;
 	window.location.href = url;
+}
+
+
+function <portlet:namespace/>download(fileIds){
+	for(var index in fileIds){
+		<portlet:namespace/>downloadSetTimer(fileIds[index],index+1);
+	}
+}
+
+function <portlet:namespace/>downloadSetTimer(fileId, time){
+	setTimeout(function () { 
+		var url = '${icebreakerUrl}/api/file/download?id=' + fileId;
+		window.location.href = url;  
+	}, 100 * time);
 }
 
 </script>

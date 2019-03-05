@@ -23,4 +23,8 @@ public class Item{
         this.key = key;
         this.value = value;
     }
+    @Override
+    public String toString(){
+        return "Item [key=" + key + ", value=" + value + "]";
+    }
 }

@@ -116,8 +116,12 @@ public interface SimulationJobFinder {
 		long jobPhase, long columnId, long categoryId,
 		java.lang.String languageId);
 
-	public java.util.List<java.lang.Object[]> getVirtualClassListForInsertStatistics();
+	public java.util.List<java.lang.Object[]> getVirtualClassListForInsertStatistics(
+		java.util.Map params);
 
 	public java.util.List<java.lang.Object[]> getVirtualLabClassStatisticsList(
+		java.util.Map params, java.util.Locale locale);
+
+	public java.util.List<java.lang.Object[]> getClassStatisticsManagementList(
 		java.util.Map params, java.util.Locale locale);
 }

@@ -115,6 +115,8 @@ public class ResultFileViewer {
 				for(int i = 0; i < folderArray.size(); i++){
 					resultMap = new HashMap<String, Object>();
 					JSONObject comandObj = (JSONObject) folderArray.get(i);
+					
+					
 					resultMap.put("id", comandObj.getString("id"));
 					resultMap.put("name", comandObj.getString("name"));
 					resultMap.put("type", "directory");
@@ -127,6 +129,7 @@ public class ResultFileViewer {
 				for(int i = 0; i < filesArray.size(); i++){
 					resultMap = new HashMap<String, Object>();
 					JSONObject comandObj = (JSONObject) filesArray.get(i);
+					
 					resultMap.put("id", comandObj.getString("id"));
 					resultMap.put("name", comandObj.getString("name"));
 					resultMap.put("type", "file");

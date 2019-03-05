@@ -37,6 +37,8 @@
 
 <liferay-portlet:resourceURL var="searchRequestLibURL" escapeXml="false" id="searchRequestLib" copyCurrentRenderParameters="false"/>
 
+<liferay-portlet:resourceURL var="deployWarURL" escapeXml="false" id="deployWar" copyCurrentRenderParameters="false"/>
+
 
 <liferay-portlet:resourceURL var="addScienceAppFileURL" id="addScienceAppFile" copyCurrentRenderParameters="false">
 	<portlet:param name="appName" value="${data.name}"/>
@@ -52,6 +54,9 @@
 <liferay-portlet:resourceURL var="getClusterListURL" escapeXml="false" id="getClusterList" copyCurrentRenderParameters="false"/>
 
 <style type="text/css">
+    .exe-field-wrapper { margin-bottom: 0px !important; }
+    .exe-field-wrapper > input {display: inline !important;}
+    .deploy { float: right; margin-top: 0px !important; }
 	.aui .long_field{
 		width: 350px !important;
 	}
@@ -146,7 +151,7 @@
 				</c:if>
 			</c:if>
 			
-			<input class="button02_1" onclick="<portlet:namespace/>actionCall('<%=Constants.ADD%>');return false;" value="<liferay-ui:message key='edison-button-save'/>" type="button">
+			<input class="button02_1" onclick="<portlet:namespace/>actionCall('<%=Constants.ADD%>');" value="<liferay-ui:message key='edison-button-save'/>" type="button">
 			
 			<c:if test="${ownerThan}">
 				<input class="button02_1" onclick="<portlet:namespace/>actionCall('<%=Constants.DELETE%>');return false;" value="<liferay-ui:message key='delete'/>" type="button">
@@ -168,9 +173,15 @@
 			<tr>
 				<th><liferay-ui:message key='edison-table-list-header-file-nm' /><span class="requiredField"> *</span></th>
 				<td colspan="3">
-					<aui:input name="exeFileName" type="text" cssClass="long_field noupdate" label="" value="${data.exeFileName}">
-						<aui:validator name="required"/>
-					</aui:input>
+                    <aui:field-wrapper cssClass="exe-field-wrapper">
+    					<aui:input name="exeFileName" type="text" cssClass="long_field noupdate" label="" value="${data.exeFileName}">
+    						<aui:validator name="required"/>
+    					</aui:input>
+                        <c:if test="${!data.isPort && (isAdministrator || isSiteAdministrator) && data.sourceFileId ne null}">
+                            <aui:button cssClass="deploy btn btn-sm btn-primary" value="Deploy" 
+                                onClick="deployWar('${data.sourceFileTitle}', '${data.sourceFileId }')"/>
+                        </c:if>
+                    </aui:field-wrapper>
 				</td>
 			</tr>
 			<tr>
@@ -182,13 +193,15 @@
 				</td>
 				<th id="sourceFileTh">Source File</th>
 				<td id="sourceFileTd">
-					<input type="file" id="<portlet:namespace/>sourceFile" name="<portlet:namespace/>sourceFile" disabled="disabled">
+					<input type="file" id="<portlet:namespace/>sourceFile" name="<portlet:namespace/>sourceFile" disabled="disabled" onchange="<portlet:namespace/>disableDeploy()">
 					<c:if test="${data.sourceFileId ne null}">
 						<div class="down_date sourceFileClass"  onclick="<portlet:namespace/>fileDownload('${data.sourceFileId }')" style="cursor: pointer;display: inline-block;">
 							${data.sourceFileTitle}
 						</div>
-						<img src='${contextPath}/images/icon_dustbin.png' class="sourceFileClass noUpdateHidden" width='13' height='14' style="cursor:pointer" onClick="<portlet:namespace/>deleteFile('${data.sourceFileId}','soruceFile','sourceFileClass');"/>
+						<img src='${contextPath}/images/icon_dustbin.png' class="sourceFileClass noUpdateHidden" 
+                        width='13' height='14' style="cursor:pointer" onClick="<portlet:namespace/>deleteFile('${data.sourceFileId}','soruceFile','sourceFileClass');"/>
 					</c:if>
+                    
 				</td>
 			</tr>
 			<c:choose>
@@ -223,7 +236,7 @@
 							</aui:select>
 						</td> --%>
 					</tr>
-					<tr class="is-not-dwn-only">
+					<tr class="is-not-dwn-only data-parallel-cpu">
 						<th>Min CPU</th>
 						<td>
 							<aui:input name="minCpus" type="text" label="" cssClass="short_field runTypeDisabled" disabled="" value="${data.minCpus}">
@@ -241,7 +254,7 @@
 							</aui:input>
 						</td>
 					</tr>
-					<tr class="is-not-dwn-only">
+					<tr class="is-not-dwn-only data-parallel-cpu">
 						<th>Max CPU</th>
 						<td>
 							<aui:input name="maxCpus" type="text" label="" cssClass="short_field runTypeDisabled" disabled="" value="${data.maxCpus}">
@@ -446,19 +459,30 @@
 </div>
 
 <script type="text/javascript">
+var <portlet:namespace/>isDisableDeploy = false;
 <%
 if(mode.equals(Constants.UPDATE)){
 %>
 	$(document).ready(function () {
-		changeOpenLevel('${data.openLevel}');
+	    $('.deploy').hide();
+	    changeOpenLevel('${data.openLevel}');
 //		changeRunType('${data.runType}');
 		changeAppType('${data.appType}');
 // 		<portlet:namespace/>noUpdateDisabled('${data.status}');
 		<portlet:namespace/>getClusterList();
+		
+		if('${data.runType}' == "<%=ScienceAppConstants.APP_RUNTYPE_SEQUENTIAL%>"){
+			$("#<portlet:namespace/>minCpus").val('0');
+			$("#<portlet:namespace/>maxCpus").val('0');
+			$("#<portlet:namespace/>defaultCpus").val('0');
+			$(".data-parallel-cpu").hide();
+		}
+		
 	});
 <%} else { %>
 	$(document).ready(function () {
 		<portlet:namespace/>getClusterList();
+		$('.deploy').hide();
 	});
 <%}%>
 
@@ -583,7 +607,6 @@ AUI().ready(function() {
 	}).dialog("widget").find(".ui-dialog-titlebar").remove();
 });
 
-
 function <portlet:namespace/>gitHubCompile(){
 	
 	var gitHubUrl = $("#<portlet:namespace/>gitHubUrl").val();
@@ -636,6 +659,19 @@ function <portlet:namespace/>gitHubCompile(){
 	});
 	
 }
+
+$("#<portlet:namespace/>runType").on('change', function(){
+	var runType = this.value;
+	if(runType == "<%=ScienceAppConstants.APP_RUNTYPE_SEQUENTIAL%>"){
+		$("#<portlet:namespace/>minCpus").val('0');
+		$("#<portlet:namespace/>maxCpus").val('0');
+		$("#<portlet:namespace/>defaultCpus").val('0');
+		
+		$(".data-parallel-cpu").hide();
+	} else {
+		$(".data-parallel-cpu").show();
+	}
+});
 
 function <portlet:namespace/>actionCall(mode){
 	if(mode=='<%=Constants.ADD%>'){
@@ -804,6 +840,16 @@ function changeOpenLevel(val){
             $(this).show();
         });
     }
+	$('.deploy').hide();
+	<%
+	if(mode.equals(Constants.UPDATE)){
+    %>
+         if(val == "<%=ScienceAppConstants.OPENLEVEL_BIN%>"){
+             $('.deploy').show();    
+         }
+    <%
+    }
+	%>
 	if(val == "<%=ScienceAppConstants.OPENLEVEL_BIN%>" || val == "<%=ScienceAppConstants.OPENLEVEL_DWN%>" ){
         $("#sourceFileTh").text("Binary File");
     }else{
@@ -875,6 +921,49 @@ function changeUploadOption(val){
 		$("#selectByCompileSelect").hide();
 		$("#selectByuploadSelect").show();
 	}
+}
+
+function deployWar(fileName, fileId) {
+    if(<portlet:namespace/>isDisableDeploy) {
+        alert('You can deploy after save');
+        return false;
+    }
+    
+    if(fileName && typeof fileName === 'string' &&
+        fileName.toLowerCase().indexOf('war', this.length - 'war'.length) !== -1) {
+        bStart();
+        jQuery.ajax({
+            type: "POST",
+            url: "<%=deployWarURL%>",
+            data  : { 
+                <portlet:namespace/>fileId: fileId,
+                <portlet:namespace/>fileName: fileName,
+            },
+            dataType: 'json',
+            success: function(result) {
+                setTimeout(function() {
+                    bEnd();
+                    alert('Successfully Deployed')
+                }, 1000);
+                
+            },
+            error:function(jqXHR, textStatus, errorThrown){
+                bEnd();
+                if(jqXHR.responseText !== ''){
+                    alert(textStatus+": "+jqXHR.responseText);
+                }else{
+                    alert(textStatus+": "+errorThrown);
+                } 
+            }
+        });
+        
+    } else {
+        alert('war File Only')
+    }
+}
+
+function <portlet:namespace/>disableDeploy(){
+    <portlet:namespace/>isDisableDeploy = true;
 }
 
 function changeUploadCaseSelect(val){

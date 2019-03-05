@@ -106,18 +106,33 @@ function sdrcommon_collectionPopup(result){
         method: 'POST',
         timeout: 10000,
       }).done(function (result) {
-          if(console){
-              console.log(result);    
-          }
-          if(result.isComplete){
-              alert(Liferay.Language.get("edison-simulation-monitoring-export-job-success-msg") + "\n\n" + result.msg);
-          }else{
-              alert(Liferay.Language.get("edison-simulation-monitoring-export-job-fail-msg") + "\n\n" + result.msg);
-          }
+    	  var successMsg = result.successMsg;
+  		var errorMsg = result.errorMsg;
+  		
+  		var alertMsg = "";
+  		if(successMsg!=""){
+  			alertMsg += "Successfully Transfer JobData To SDR <br/>";
+  			alertMsg += successMsg.replace(/,/gi, ',<br/>');
+  		}
+  		
+  		if(errorMsg!=""){
+  			alertMsg += "<br/> Partially Failed <br/>";
+  			alertMsg += errorMsg.replace(/,/gi, ',<br/>');
+  		}
+  		
+  		if(alertMsg==""){
+  			alertMsg = "No data to send to SDR.";
+  		}
+  		
+  		alert(<portlet:namespace/>replaceAll(alertMsg,'<br/>','\r\n'));
       }).error(function (msg) {
           console.log(msg);
       });
 }
+
+function <portlet:namespace/>replaceAll(str, searchStr, replaceStr) {
+	  return str.split(searchStr).join(replaceStr);
+	}
 
 function <portlet:namespace/>displayJobInfo(jobUuid, scienceAppId){
     <portlet:namespace/>displayJob(jobUuid, scienceAppId);

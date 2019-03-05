@@ -605,9 +605,13 @@ throw new Error('AdminLTE requires jQuery')
     var headerHeight  = $(Selector.mainHeader).outerHeight() || 0;
     var neg           = headerHeight + footerHeight;
     var mainHeaderTopHeight = $(Selector.mainHeader).offset() ? $(Selector.mainHeader).offset().top : 0
+    // GPLUS - ADD mainHeaderTopHeight 0 overwride
+    var mainHeaderTopHeight = mainHeaderTopHeight ===0?$(Selector.wrapper).offset().top:mainHeaderTopHeight;
+    
     var windowHeight  = $(window).height() - mainHeaderTopHeight;
     var sidebarHeight = $(Selector.sidebar).height() || 0;
 
+    
     // Set the min-height of the content and sidebar based on
     // the height of the document.
     if ($('#body-div').hasClass(ClassName.fixed)) {

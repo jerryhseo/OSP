@@ -8,6 +8,11 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -69,15 +74,18 @@ import org.kisti.edison.util.RequestUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
+import com.kisti.osp.constants.OSPRepositoryTypes;
 import com.kisti.osp.icecap.model.DataType;
 import com.kisti.osp.icecap.service.DataTypeAnalyzerLocalServiceUtil;
 import com.kisti.osp.icecap.service.DataTypeEditorLocalServiceUtil;
 import com.kisti.osp.icecap.service.DataTypeLocalServiceUtil;
+import com.kisti.osp.service.OSPFileLocalServiceUtil;
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -97,6 +105,7 @@ import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.TimeZoneUtil;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -1081,6 +1090,53 @@ public class AppManagerController{
 		return returnMap;
 	}
 	
+    private Path moveFile(Path source, Path target, boolean overwrite) throws IOException{
+        CopyOption[] options;
+        System.out.println("------------ Deploy File Move --------------------");
+        System.out.println(source.toString());
+        System.out.println(target.toString());
+        Path newPath;
+        if(overwrite){
+            options = new CopyOption[]{StandardCopyOption.REPLACE_EXISTING};
+            newPath = Files.move(source, target, options);
+        }else
+            newPath = Files.move(source, target);
+
+        return newPath;
+    }
+
+	@SuppressWarnings("rawtypes")
+    @ResourceMapping(value="deployWar")
+    public void deployWar(ResourceRequest request, ResourceResponse response) throws IOException{
+        Map params = RequestUtil.getParameterMap(request);
+        try{
+            Path deployPath = Paths.get(PropsUtil.get("liferay.home"), "deploy");
+            User user = PortalUtil.getUser(request);
+            
+            long fileEntryId = GetterUtil.getLong(params.get("fileId"), 0);
+            String fileName = GetterUtil.getString(params.get("fileName"), null);
+            if(fileEntryId > 0 && StringUtils.hasText(fileName)) {
+                File targetPathFile = new File(deployPath.toString());
+                if(!targetPathFile.exists()){
+                    Files.createDirectory(deployPath);
+                }
+                Path source = Paths.get(OSPFileLocalServiceUtil.copyDLEntryFile(
+                    fileEntryId, user.getScreenName(), fileName, OSPRepositoryTypes.USER_HOME.toString(), true));
+                moveFile(OSPFileLocalServiceUtil.getRepositoryPath(user.getScreenName(), source.toString(),
+                    OSPRepositoryTypes.USER_HOME.toString()), Paths.get(deployPath.toString(), fileName), true);
+            }
+            net.sf.json.JSONObject obj = new net.sf.json.JSONObject();
+            obj.put("deploy", true);
+            
+            response.setContentType("application/json; charset=UTF-8");
+            PrintWriter out = response.getWriter();
+            out.write(obj.toString());
+            
+        }catch(Exception e){
+            e.printStackTrace();
+            handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), "Deploy War Fail");
+        }
+	}
 	
 	@ResourceMapping(value="copyScienceApp")
 	public void copyScienceApp(ResourceRequest request, ResourceResponse response) throws IOException{

@@ -209,13 +209,19 @@ public class SimulationJobFinderUtil {
 			categoryId, languageId);
 	}
 
-	public static java.util.List<java.lang.Object[]> getVirtualClassListForInsertStatistics() {
-		return getFinder().getVirtualClassListForInsertStatistics();
+	public static java.util.List<java.lang.Object[]> getVirtualClassListForInsertStatistics(
+		java.util.Map params) {
+		return getFinder().getVirtualClassListForInsertStatistics(params);
 	}
 
 	public static java.util.List<java.lang.Object[]> getVirtualLabClassStatisticsList(
 		java.util.Map params, java.util.Locale locale) {
 		return getFinder().getVirtualLabClassStatisticsList(params, locale);
+	}
+
+	public static java.util.List<java.lang.Object[]> getClassStatisticsManagementList(
+		java.util.Map params, java.util.Locale locale) {
+		return getFinder().getClassStatisticsManagementList(params, locale);
 	}
 
 	public static SimulationJobFinder getFinder() {

@@ -39,54 +39,19 @@
 
 var <portlet:namespace/>workbench = new OSP.Workbench( '<portlet:namespace/>');
 <portlet:namespace/>workbench.id('<%=portletDisplay.getId()%>');
+<portlet:namespace/>workbench.currentUserName('${screenName}');
 
 /***********************************************************************
 * Initailization section and handling Liferay events
 ***********************************************************************/
 $(function(e) {
 	bStart();
-	<portlet:namespace/>workbench.layout( new OSP.Layout(JSON.parse('<%=workbenchLayout.toString()%>')));
-	<portlet:namespace/>workbench.currentUserName('${screenName}');
 	
-	var scienceApp = new OSP.ScienceApp();
-	if('${portType}'==='inputPorts'){
-		scienceApp.deserializeInputPorts( JSON.parse('${portData}') );
-	}else if('${portType}'==='logPorts'){
-		scienceApp.deserializeLogPorts( JSON.parse('${portData}') );
-	}else if('${portType}'==='outputPorts'){
-		scienceApp.deserializeOutputPorts( JSON.parse('${portData}') );
+	if('${portData}'===''){
+		<portlet:namespace/>openerRequestPortData('${dialogId}');
+	}else{
+		<portlet:namespace/>init('${portData}');
 	}
-	
-	<portlet:namespace/>workbench.scienceApp(scienceApp);
-	
-	// Resolving workbench layout
-	$.ajax({
-		url: '<%=serveResourceURL.toString()%>',
-		type:'POST',
-		dataType:'text',
-		async: false,
-		data:{
-			<portlet:namespace/>command:'RESOLVE_TEMPLATE',
-			<portlet:namespace/>namespace: '<portlet:namespace/>',
-			<portlet:namespace/>templateDir: '/templates'
-		},
-		success: function( result ){
-			$('#<portlet:namespace/>canvas').html(result);
-			/*All Layout Grid*/
-			
-			<portlet:namespace/>workbench.resizeLayout('<portlet:namespace/>');
-			<portlet:namespace/>workbench.loadPortlets('<%=LiferayWindowState.EXCLUSIVE%>');
-		},error:function(jqXHR, textStatus, errorThrown){
-			if(jqXHR.responseText !== ''){
-				console.log("<portlet:namespace/>RESOLVE_TEMPLATE-->"+textStatus+": "+jqXHR.responseText);
-			}else{
-				console.log("<portlet:namespace/>RESOLVE_TEMPLATE-->"+textStatus+": "+errorThrown);
-			}
-		},
-		complete:function(){
-			bEnd();
-		}
-	});
 });
 
 
@@ -183,7 +148,92 @@ Liferay.on(OSP.Event.OSP_REQUEST_JOB_KEY,function( e ){
 
 /***********************************************************************
 * portlet Function 
-***********************************************************************/ 
+***********************************************************************/
+function <portlet:namespace/>openerRequestPortData(dialogId){
+	var data = Liferay.Util.getOpener().getPortDataFromDialog(dialogId,'${nodeId}','${portName}');
+	console.log(data);
+	if(typeof data === "undefined"){
+		<portlet:namespace/>openerRequestPortData(dialogId)
+	}else{
+		<portlet:namespace/>init(data);
+		return;
+	}
+}
+
+function <portlet:namespace/>init(portData){
+	$.ajax({
+		url: '<%=serveResourceURL.toString()%>',
+		type:'POST',
+		dataType: 'json',
+		async: false,
+		data:{
+			<portlet:namespace/>command:'PRODUCTION_LAYOUT',
+			<portlet:namespace/>portData: JSON.stringify(portData),
+			<portlet:namespace/>portType: '${portType}',
+			<portlet:namespace/>portName: '${portName}'
+		},
+		success: function( result ){
+			var scienceApp = new OSP.ScienceApp();
+			if('${portType}'==='inputPorts'){
+				scienceApp.deserializeInputPorts( JSON.parse(result.portData) );
+			}else if('${portType}'==='logPorts'){
+				scienceApp.deserializeLogPorts( JSON.parse(result.portData) );
+			}else if('${portType}'==='outputPorts'){
+				scienceApp.deserializeOutputPorts( JSON.parse(result.portData) );
+			}
+			
+			<portlet:namespace/>workbench.layout( new OSP.Layout(result.workbenchLayout));
+			<portlet:namespace/>workbench.scienceApp(scienceApp);
+			
+			<portlet:namespace/>gridTemplate();
+			
+		},error:function(jqXHR, textStatus, errorThrown){
+			if(jqXHR.responseText !== ''){
+				console.log("<portlet:namespace/>init-->"+textStatus+": "+jqXHR.responseText);
+			}else{
+				console.log("<portlet:namespace/>init-->"+textStatus+": "+errorThrown);
+			}
+			
+			bEnd();
+		},
+		complete:function(){
+			bEnd();
+		}
+	});
+	
+}
+
+function <portlet:namespace/>gridTemplate(){
+	// Resolving workbench layout
+	$.ajax({
+		url: '<%=serveResourceURL.toString()%>',
+		type:'POST',
+		dataType:'text',
+		async: false,
+		data:{
+			<portlet:namespace/>command:'RESOLVE_TEMPLATE',
+			<portlet:namespace/>namespace: '<portlet:namespace/>',
+			<portlet:namespace/>templateDir: '/templates'
+		},
+		success: function( result ){
+			$('#<portlet:namespace/>canvas').html(result);
+			/*All Layout Grid*/
+			
+			<portlet:namespace/>workbench.resizeLayout('<portlet:namespace/>');
+			<portlet:namespace/>workbench.loadPortlets('<%=LiferayWindowState.EXCLUSIVE%>');
+		},error:function(jqXHR, textStatus, errorThrown){
+			if(jqXHR.responseText !== ''){
+				console.log("<portlet:namespace/>RESOLVE_TEMPLATE-->"+textStatus+": "+jqXHR.responseText);
+			}else{
+				console.log("<portlet:namespace/>RESOLVE_TEMPLATE-->"+textStatus+": "+errorThrown);
+			}
+		},
+		complete:function(){
+			bEnd();
+		}
+	});
+}
+
 function <portlet:namespace/>createSimulationAndJob(){
 	var simulation  = <portlet:namespace/>workbench.newSimulation();
 	simulation.uuid('${simulationUuid}');
@@ -197,10 +247,14 @@ function <portlet:namespace/>createSimulationAndJob(){
 	job.isSubmit(true);
 	job.user('${screenName}');
 
-	var portDataJson = JSON.parse('${portData}')["${portName}"];
-	if(portDataJson.hasOwnProperty(OSP.Constants.INPUTS)){
-		var inputData = new OSP.InputData(portDataJson[OSP.Constants.INPUTS]);
-		job.inputData("${portName}",inputData);
+	
+	if('${portType}'==='inputPorts'){
+		var scienceApp = <portlet:namespace/>workbench.scienceApp();
+		var portDataJson = scienceApp.inputPort("${portName}");
+		if(portDataJson.hasOwnProperty(OSP.Constants.INPUTS)){
+			var inputData = new OSP.InputData(portDataJson[OSP.Constants.INPUTS]);
+			job.inputData("${portName}",inputData);
+		}
 	}
 	
 	simulation.workingJob(job);

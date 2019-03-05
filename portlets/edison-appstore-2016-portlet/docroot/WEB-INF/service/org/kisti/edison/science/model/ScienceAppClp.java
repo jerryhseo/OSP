@@ -100,6 +100,7 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 		attributes.put("previousVersionId", getPreviousVersionId());
 		attributes.put("iconId", getIconId());
 		attributes.put("manualId", getManualId());
+		attributes.put("manualUrl", getManualUrl());
 		attributes.put("exeFileName", getExeFileName());
 		attributes.put("appType", getAppType());
 		attributes.put("runType", getRunType());
@@ -214,6 +215,12 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 
 		if (manualId != null) {
 			setManualId(manualId);
+		}
+
+		String manualUrl = (String)attributes.get("manualUrl");
+
+		if (manualUrl != null) {
+			setManualUrl(manualUrl);
 		}
 
 		String exeFileName = (String)attributes.get("exeFileName");
@@ -897,6 +904,131 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 
 			setManualId(LocalizationUtil.updateLocalization(manualIdMap,
 					getManualId(), "ManualId",
+					LocaleUtil.toLanguageId(defaultLocale)));
+		}
+		finally {
+			if (contextClassLoader != portalClassLoader) {
+				currentThread.setContextClassLoader(contextClassLoader);
+			}
+		}
+	}
+
+	@Override
+	public String getManualUrl() {
+		return _manualUrl;
+	}
+
+	@Override
+	public String getManualUrl(Locale locale) {
+		String languageId = LocaleUtil.toLanguageId(locale);
+
+		return getManualUrl(languageId);
+	}
+
+	@Override
+	public String getManualUrl(Locale locale, boolean useDefault) {
+		String languageId = LocaleUtil.toLanguageId(locale);
+
+		return getManualUrl(languageId, useDefault);
+	}
+
+	@Override
+	public String getManualUrl(String languageId) {
+		return LocalizationUtil.getLocalization(getManualUrl(), languageId);
+	}
+
+	@Override
+	public String getManualUrl(String languageId, boolean useDefault) {
+		return LocalizationUtil.getLocalization(getManualUrl(), languageId,
+			useDefault);
+	}
+
+	@Override
+	public String getManualUrlCurrentLanguageId() {
+		return _manualUrlCurrentLanguageId;
+	}
+
+	@Override
+	public String getManualUrlCurrentValue() {
+		Locale locale = getLocale(_manualUrlCurrentLanguageId);
+
+		return getManualUrl(locale);
+	}
+
+	@Override
+	public Map<Locale, String> getManualUrlMap() {
+		return LocalizationUtil.getLocalizationMap(getManualUrl());
+	}
+
+	@Override
+	public void setManualUrl(String manualUrl) {
+		_manualUrl = manualUrl;
+
+		if (_scienceAppRemoteModel != null) {
+			try {
+				Class<?> clazz = _scienceAppRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setManualUrl", String.class);
+
+				method.invoke(_scienceAppRemoteModel, manualUrl);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
+	@Override
+	public void setManualUrl(String manualUrl, Locale locale) {
+		setManualUrl(manualUrl, locale, LocaleUtil.getDefault());
+	}
+
+	@Override
+	public void setManualUrl(String manualUrl, Locale locale,
+		Locale defaultLocale) {
+		String languageId = LocaleUtil.toLanguageId(locale);
+		String defaultLanguageId = LocaleUtil.toLanguageId(defaultLocale);
+
+		if (Validator.isNotNull(manualUrl)) {
+			setManualUrl(LocalizationUtil.updateLocalization(getManualUrl(),
+					"ManualUrl", manualUrl, languageId, defaultLanguageId));
+		}
+		else {
+			setManualUrl(LocalizationUtil.removeLocalization(getManualUrl(),
+					"ManualUrl", languageId));
+		}
+	}
+
+	@Override
+	public void setManualUrlCurrentLanguageId(String languageId) {
+		_manualUrlCurrentLanguageId = languageId;
+	}
+
+	@Override
+	public void setManualUrlMap(Map<Locale, String> manualUrlMap) {
+		setManualUrlMap(manualUrlMap, LocaleUtil.getDefault());
+	}
+
+	@Override
+	public void setManualUrlMap(Map<Locale, String> manualUrlMap,
+		Locale defaultLocale) {
+		if (manualUrlMap == null) {
+			return;
+		}
+
+		ClassLoader portalClassLoader = PortalClassLoaderUtil.getClassLoader();
+
+		Thread currentThread = Thread.currentThread();
+
+		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
+
+		try {
+			if (contextClassLoader != portalClassLoader) {
+				currentThread.setContextClassLoader(portalClassLoader);
+			}
+
+			setManualUrl(LocalizationUtil.updateLocalization(manualUrlMap,
+					getManualUrl(), "ManualUrl",
 					LocaleUtil.toLanguageId(defaultLocale)));
 		}
 		finally {
@@ -1768,6 +1900,17 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 			}
 		}
 
+		Map<Locale, String> manualUrlMap = getManualUrlMap();
+
+		for (Map.Entry<Locale, String> entry : manualUrlMap.entrySet()) {
+			Locale locale = entry.getKey();
+			String value = entry.getValue();
+
+			if (Validator.isNotNull(value)) {
+				availableLanguageIds.add(LocaleUtil.toLanguageId(locale));
+			}
+		}
+
 		Map<Locale, String> developersMap = getDevelopersMap();
 
 		for (Map.Entry<Locale, String> entry : developersMap.entrySet()) {
@@ -1826,6 +1969,16 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 			setManualId(getManualId(defaultLocale), defaultLocale, defaultLocale);
 		}
 
+		String manualUrl = getManualUrl(defaultLocale);
+
+		if (Validator.isNull(manualUrl)) {
+			setManualUrl(getManualUrl(modelDefaultLanguageId), defaultLocale);
+		}
+		else {
+			setManualUrl(getManualUrl(defaultLocale), defaultLocale,
+				defaultLocale);
+		}
+
 		String developers = getDevelopers(defaultLocale);
 
 		if (Validator.isNull(developers)) {
@@ -1861,6 +2014,7 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 		clone.setPreviousVersionId(getPreviousVersionId());
 		clone.setIconId(getIconId());
 		clone.setManualId(getManualId());
+		clone.setManualUrl(getManualUrl());
 		clone.setExeFileName(getExeFileName());
 		clone.setAppType(getAppType());
 		clone.setRunType(getRunType());
@@ -1947,7 +2101,7 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(81);
+		StringBundler sb = new StringBundler(83);
 
 		sb.append("{uuid=");
 		sb.append(getUuid());
@@ -1977,6 +2131,8 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 		sb.append(getIconId());
 		sb.append(", manualId=");
 		sb.append(getManualId());
+		sb.append(", manualUrl=");
+		sb.append(getManualUrl());
 		sb.append(", exeFileName=");
 		sb.append(getExeFileName());
 		sb.append(", appType=");
@@ -2036,7 +2192,7 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(124);
+		StringBundler sb = new StringBundler(127);
 
 		sb.append("<model><model-name>");
 		sb.append("org.kisti.edison.science.model.ScienceApp");
@@ -2097,6 +2253,10 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 		sb.append(
 			"<column><column-name>manualId</column-name><column-value><![CDATA[");
 		sb.append(getManualId());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>manualUrl</column-name><column-value><![CDATA[");
+		sb.append(getManualUrl());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>exeFileName</column-name><column-value><![CDATA[");
@@ -2225,6 +2385,8 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 	private long _iconId;
 	private String _manualId;
 	private String _manualIdCurrentLanguageId;
+	private String _manualUrl;
+	private String _manualUrlCurrentLanguageId;
 	private String _exeFileName;
 	private String _appType;
 	private String _runType;

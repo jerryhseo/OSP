@@ -380,11 +380,17 @@ public class SimulationJobLocalServiceClpInvoker {
 
 		_methodName152 = "executeSchedulerOfClassStatistics";
 
-		_methodParameterTypes152 = new String[] {  };
+		_methodParameterTypes152 = new String[] { "java.util.Map" };
 
 		_methodName153 = "getVirtualLabClassStatisticsList";
 
 		_methodParameterTypes153 = new String[] {
+				"java.util.Map", "java.util.Locale", "boolean"
+			};
+
+		_methodName154 = "getClassStatisticsManagementList";
+
+		_methodParameterTypes154 = new String[] {
 				"java.util.Map", "java.util.Locale", "boolean"
 			};
 	}
@@ -819,7 +825,7 @@ public class SimulationJobLocalServiceClpInvoker {
 
 		if (_methodName152.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes152, parameterTypes)) {
-			SimulationJobLocalServiceUtil.executeSchedulerOfClassStatistics();
+			SimulationJobLocalServiceUtil.executeSchedulerOfClassStatistics((java.util.Map)arguments[0]);
 
 			return null;
 		}
@@ -827,6 +833,13 @@ public class SimulationJobLocalServiceClpInvoker {
 		if (_methodName153.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes153, parameterTypes)) {
 			return SimulationJobLocalServiceUtil.getVirtualLabClassStatisticsList((java.util.Map<java.lang.String, java.lang.Object>)arguments[0],
+				(java.util.Locale)arguments[1],
+				((Boolean)arguments[2]).booleanValue());
+		}
+
+		if (_methodName154.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes154, parameterTypes)) {
+			return SimulationJobLocalServiceUtil.getClassStatisticsManagementList((java.util.Map<java.lang.String, java.lang.Object>)arguments[0],
 				(java.util.Locale)arguments[1],
 				((Boolean)arguments[2]).booleanValue());
 		}
@@ -972,4 +985,6 @@ public class SimulationJobLocalServiceClpInvoker {
 	private String[] _methodParameterTypes152;
 	private String _methodName153;
 	private String[] _methodParameterTypes153;
+	private String _methodName154;
+	private String[] _methodParameterTypes154;
 }

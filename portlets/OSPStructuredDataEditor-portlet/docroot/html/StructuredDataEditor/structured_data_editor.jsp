@@ -121,6 +121,12 @@ function <portlet:namespace/>refreshEditor(){
 					$('#<portlet:namespace/>canvas'),
 					'<%=request.getContextPath()%>',
 					'<%=themeDisplay.getLanguageId()%>');
+	
+	var inputs = $('#<portlet:namespace/>canvas').find('input');
+	
+	inputs.each(function(index){
+		$(this).prop('disabled', <portlet:namespace/>disabled);
+	});
 };
 
 function <portlet:namespace/>processInitAction( jsonInitData, launchCanvas, changeAlert ){

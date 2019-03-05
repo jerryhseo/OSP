@@ -171,6 +171,8 @@ var <portlet:namespace/>initLiObj    = {"simulation":true,"edit":false,"new":tru
 var <portlet:namespace/>openDataTransSimulationIds = [];
 var <portlet:namespace/>openDataTransJobId = '';
 var <portlet:namespace/>openDataTransMode = '';
+var <portlet:namespace/>connector ='';
+var <portlet:namespace/>parentNamespace = '';
 /***********************************************************************
 * Initailization section and handling Liferay events
 ***********************************************************************/
@@ -208,6 +210,7 @@ Liferay.on(OSP.Event.OSP_EVENTS_REGISTERED,function(e){
 Liferay.on(OSP.Event.OSP_RESPONSE_APP_INFO, function( e ){
 	var myId = '<%=portletDisplay.getId()%>';
 	if(e.targetPortlet === myId){
+		console.log('OSP_RESPONSE_APP_INFO: ['+e.portletId+', '+new Date()+']', e.data);
 		<portlet:namespace/>init(e.data.scienceApp);
 		<portlet:namespace/>displayChange("INIT",'',true);
 	}
@@ -255,6 +258,18 @@ Liferay.on(OSP.Event.OSP_RESPONSE_SAVE_SIMULATION_RESULT, function( e ){
 	}
 });
 
+Liferay.on(OSP.Event.OSP_RESPONSE_CANCLE_JOB_RESULT, function( e ){
+	console.log('OSP_RESPONSE_CANCLE_JOB_RESULT: ['+e.targetPortlet+', '+new Date()+']');
+	var myId = '<%=portletDisplay.getId()%>';
+	if(e.targetPortlet === myId){
+		if(e.data){
+			toastr["success"]("", Liferay.Language.get('edison-data-update-success'));
+		}else{
+			toastr["error"]("", Liferay.Language.get('edison-data-update-error'));
+		}
+	}
+});
+
 Liferay.on(OSP.Event.OSP_RESPONSE_JOB_KEY, function( e ){
 	var myId = '<%=portletDisplay.getId()%>';
 	if(e.targetPortlet === myId){
@@ -272,6 +287,8 @@ Liferay.on(OSP.Event.OSP_RESPONSE_JOB_KEY, function( e ){
 function <portlet:namespace/>init(scienceApp){
 	<portlet:namespace/>drawAppInfomation(scienceApp);
 }
+
+
 function <portlet:namespace/>drawAppInfomation(data){
 	$("#<portlet:namespace/>appName").html(cutStr(data.name(),12)).attr("title",data.name());
 	$("#<portlet:namespace/>appVersion").html("Ver "+data.version());
@@ -351,10 +368,6 @@ function <portlet:namespace/>displayChange(status,workBenchType,isEdit){
 	if(workBenchType==='SIMULATION_WITH_WORKFLOW'){
 		$("li#<portlet:namespace/>job-li-divider").css("display","none");
 	}
-}
-
-function <portlet:namespace/>jobSelect(){
-	
 }
 
 function <portlet:namespace/>liEventFire(eventKey){
@@ -448,11 +461,31 @@ function sdrcommon_collectionPopup(result){
 		method: 'POST',
 		timeout: 10000,
 	}).done(function (result) {
-		if(result.isComplete){
-			$.alert(Liferay.Language.get("edison-simulation-monitoring-export-job-success-msg")+ "<br/>" + result.msg.replace(/,/gi, ',<br/>'));
-		}else{
-			$.alert(Liferay.Language.get("edison-simulation-monitoring-export-job-fail-msg")+ "<br/>" + result.msg.replace(/,/gi, ',<br/>'));
+		var successMsg = result.successMsg;
+		var errorMsg = result.errorMsg;
+		
+		var alertMsg = "";
+		if(successMsg!=""){ 
+			alertMsg += "Successfully Transfer JobData To SDR <br/>";
+			alertMsg += successMsg.replace(/,/gi, ',<br/>');
 		}
+		
+		if(errorMsg!=""){
+			alertMsg += "<br/> Partially Failed <br/>";
+			alertMsg += errorMsg.replace(/,/gi, ',<br/>');
+		}
+		
+		if(alertMsg==""){
+			alertMsg = "No data to send to SDR.";
+		}
+		
+		$.alert(alertMsg);
+		
+// 		if(result.isComplete){
+// 			$.alert(Liferay.Language.get("edison-simulation-monitoring-export-job-success-msg")+ "<br/>" + result.msg.replace(/,/gi, ',<br/>'));
+// 		}else{
+// 			$.alert(Liferay.Language.get("edison-simulation-monitoring-export-job-fail-msg")+ "<br/>" + result.msg.replace(/,/gi, ',<br/>'));
+// 		}
 	}).error(function (msg) {
 		$.alert(Liferay.Language.get("edison-simulation-monitoring-export-job-fail-msg"));
 		console.log(msg);

@@ -91,10 +91,8 @@
             };
 
             if( !fileExplorerId ){
-                fileExplorerId = 'FileExplorer_WAR_OSPFileExplorerportlet';
-                var instanceIndex = portletId.lastIndexOf('_INSTANCE_');
-                if( instanceIndex > 0)
-                    fileExplorerId += portletId.substring(instanceIndex);
+                fileExplorerId = 'FileExplorer_WAR_OSPFileExplorerportlet_INSTANCE_'+OSP.Util.randomString(12, 'aA1');
+                console.log('FileExplorer ID of '+portletId+': '+fileExplorerId);
 
                 fileExplorerDialog = $( 
                     '<div title=\"Select a file\" id=\"'+fileExplorerId+'\"></div>');

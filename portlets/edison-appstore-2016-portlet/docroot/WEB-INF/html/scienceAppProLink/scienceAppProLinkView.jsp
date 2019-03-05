@@ -185,6 +185,7 @@ function <portlet:namespace/>initData(value, tab){
 			}
 		},error:function(data,e){
 			alert("tagScript ERROR-->"+e);
+			console.log("initDataError!")
 		}
 	});
 }
@@ -231,6 +232,7 @@ function <portlet:namespace/>updateRelateAssetStatus(checked, modelSeq){
 			
 		},error:function(data,e){
 			alert("tagScript ERROR-->"+e);
+			console.log("UpdateStatusError!")
 			$("#<portlet:namespace/>modelSeq_"+modelSeq).attr("checked", false);
 		}
 	});
@@ -336,6 +338,7 @@ function <portlet:namespace/>searchListEntry(p_currentPage){
 			}
 		},error:function(data,e){
 			alert("tagScript ERROR-->"+e);
+			console.log("searchListError!!")
 		}
 	});
 }

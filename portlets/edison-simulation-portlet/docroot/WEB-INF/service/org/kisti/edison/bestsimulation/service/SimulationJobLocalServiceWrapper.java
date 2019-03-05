@@ -742,9 +742,9 @@ public class SimulationJobLocalServiceWrapper
 	}
 
 	@Override
-	public void executeSchedulerOfClassStatistics()
+	public void executeSchedulerOfClassStatistics(java.util.Map params)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		_simulationJobLocalService.executeSchedulerOfClassStatistics();
+		_simulationJobLocalService.executeSchedulerOfClassStatistics(params);
 	}
 
 	@Override
@@ -752,6 +752,14 @@ public class SimulationJobLocalServiceWrapper
 		java.util.Map<java.lang.String, java.lang.Object> params,
 		java.util.Locale locale, boolean excelFile) {
 		return _simulationJobLocalService.getVirtualLabClassStatisticsList(params,
+			locale, excelFile);
+	}
+
+	@Override
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getClassStatisticsManagementList(
+		java.util.Map<java.lang.String, java.lang.Object> params,
+		java.util.Locale locale, boolean excelFile) {
+		return _simulationJobLocalService.getClassStatisticsManagementList(params,
 			locale, excelFile);
 	}
 

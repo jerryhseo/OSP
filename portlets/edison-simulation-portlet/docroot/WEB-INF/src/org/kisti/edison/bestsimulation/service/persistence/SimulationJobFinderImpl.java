@@ -964,9 +964,8 @@ public class SimulationJobFinderImpl extends BasePersistenceImpl<SimulationJob> 
 		return null;
 	}
 	
-	public List<Object[]> getVirtualClassListForInsertStatistics() {
+	public List<Object[]> getVirtualClassListForInsertStatistics(Map params) {
 		StringBuilder sqlSb = new StringBuilder();
-		Map params = new HashMap();
 		Session session = null;
 		try {
 			String sqlQuery = CustomSQLUtil.get("org.kisti.edison.statistics.getVirtualClassListForInsertStatistics");
@@ -1018,7 +1017,6 @@ public class SimulationJobFinderImpl extends BasePersistenceImpl<SimulationJob> 
 			params.put("languageId", locale.toString());
 			
 			String gBatisQuery = GBatisUtil.getGBatis(params, sqlSb.toString());
-			System.out.println("gBatisQuery : " + gBatisQuery);
 			SQLQuery query = session.createSQLQuery(gBatisQuery);
 			
 			query.addScalar("groupId", Type.INTEGER);//0
@@ -1035,6 +1033,40 @@ public class SimulationJobFinderImpl extends BasePersistenceImpl<SimulationJob> 
 			query.addScalar("executeUserCnt", Type.LONG);//1
 			query.addScalar("executeCnt", Type.LONG);//1
 			query.addScalar("cputime", Type.STRING);//1
+			query.addScalar("lastModifiedDt", Type.STRING);//1
+			
+			return (List<Object[]>) query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeSession(session);
+		}
+		return null;
+	}
+	
+	public List<Object[]> getClassStatisticsManagementList(Map params, Locale locale) {
+		StringBuilder sqlSb = new StringBuilder();
+		Session session = null;
+		try {
+			String sqlQuery = CustomSQLUtil.get("org.kisti.edison.statistics.getClassStatisticsManagementList");
+			
+			sqlSb.append(sqlQuery);
+			
+			String sql = sqlSb.toString();
+			
+			session = openSession();
+			params.put("languageId", locale.toString());
+			
+			String gBatisQuery = GBatisUtil.getGBatis(params, sqlSb.toString());
+			SQLQuery query = session.createSQLQuery(gBatisQuery);
+			
+			query.addScalar("groupId", Type.INTEGER);//0
+			query.addScalar("university", Type.STRING);//0
+			query.addScalar("virtualLabId", Type.LONG);//1
+			query.addScalar("virtualLabTitle", Type.STRING);//1
+			query.addScalar("classTitle", Type.STRING);//1
+			query.addScalar("virtualLabPersonName", Type.STRING);//2
+			query.addScalar("classId", Type.STRING);//4
 			query.addScalar("lastModifiedDt", Type.STRING);//1
 			
 			return (List<Object[]>) query.list();

@@ -16,7 +16,6 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -66,6 +65,10 @@ public class ModuleViewerController {
 		String status = ParamUtil.getString(request, "status", "INITIALIZED");
 		String nodeId = ParamUtil.getString(request, "nodeId");
 		String dialogId = ParamUtil.getString(request, "dialogId");
+		
+		
+		String portName = ParamUtil.getString(request, "portName");
+		
 		long userId = ParamUtil.getLong(request, "userId", 0);
 		boolean saveFlag = ParamUtil.getBoolean(request, "saveFlag",true);
 		if(userId != 0){
@@ -85,7 +88,7 @@ public class ModuleViewerController {
 		/*TEST DATA*/
 		if(portData.equals("")){
 			//No-Input Data (SDE)
-			portData = "{ \"-o\": { \"editors_\": [{ \"name\": \"SDE\", \"value\": \"StructuredDataEditor_WAR_OSPStructuredDataEditorportlet\" }], \"sample_\": { \"type_\": \"dlEntryId_\", \"relative_\": true, \"content_\": \"13283219\" }, \"defaultEditor_\": \"StructuredDataEditor_WAR_OSPStructuredDataEditorportlet\", \"mandatory_\": true, \"isWfSample_\": true, \"name_\": \"-o\", \"dataType_\": { \"name\": \"1dPhononLab_inputDect\", \"version\": \"1.0.0\" }, \"wfSample_\": { \"content_\": 14428816, \"type_\": \"dlEntryId_\", \"name_\": \"00000.txt (1)_b1c.txt\" } } }";
+//			portData = "{ \"-o\": { \"editors_\": [{ \"name\": \"SDE\", \"value\": \"StructuredDataEditor_WAR_OSPStructuredDataEditorportlet\" }], \"sample_\": { \"type_\": \"dlEntryId_\", \"relative_\": true, \"content_\": \"13283219\" }, \"defaultEditor_\": \"StructuredDataEditor_WAR_OSPStructuredDataEditorportlet\", \"mandatory_\": true, \"isWfSample_\": true, \"name_\": \"-o\", \"dataType_\": { \"name\": \"1dPhononLab_inputDect\", \"version\": \"1.0.0\" }, \"wfSample_\": { \"content_\": 14428816, \"type_\": \"dlEntryId_\", \"name_\": \"00000.txt (1)_b1c.txt\" } } }";
 			//Input Data Exist (SDE)
 //			portData = "{ \"-o\": { \"editors_\": [{ \"name\": \"SDE\", \"value\": \"StructuredDataEditor_WAR_OSPStructuredDataEditorportlet\" }], \"sample_\": { \"type_\": \"dlEntryId_\", \"relative_\": true, \"content_\": \"13283219\" }, \"defaultEditor_\": \"StructuredDataEditor_WAR_OSPStructuredDataEditorportlet\", \"mandatory_\": true, \"isWfSample_\": true, \"name_\": \"-o\", \"dataType_\": { \"name\": \"1dPhononLab_inputDect\", \"version\": \"1.0.0\" }, \"wfSample_\": { \"content_\": 14428816, \"type_\": \"dlEntryId_\", \"name_\": \"00000.txt (1)_b1c.txt\" }, \"inputs_\": { \"portName_\": \"-o\", \"order_\": 1, \"type_\": \"fileContent\", \"context_\": \"Type_of_phonon = Optical ;\\nSpring_constants = [1900 1250] ;\\nMass_of_particles = [11 30] ;\\nNumber_of_frame = 40 ;\\nWave_number = 0.9 ;\" } } }";
 			
@@ -112,45 +115,7 @@ public class ModuleViewerController {
 			jobUuid = "21a3331e-64a6-44f4-8b08-7f649e1ef126";
 		}
 		
-		JSONObject portDataJson = JSONFactoryUtil.createJSONObject(portData);
-		String defaultPortlet = "";
-		String portName = "";
-		Iterator<String> itr = portDataJson.keys();
-		while(itr.hasNext()){
-			String key = itr.next();
-			JSONObject portDataValue = portDataJson.getJSONObject(key);
-			if(portType.equals("inputPorts")){
-				defaultPortlet = portDataValue.getString("defaultEditor_");
-			}else{
-				defaultPortlet = portDataValue.getString("defaultAnalyzer_");
-			}
-			
-			portName = portDataValue.getString("name_");
-			
-		}
-		
-		
-		JSONObject moduleLayout = JSONFactoryUtil.createJSONObject();
-		JSONArray moduleColumns = JSONFactoryUtil.createJSONArray();
-		
-		JSONArray modulePortlets = JSONFactoryUtil.createJSONArray();
-		JSONObject portlet = JSONFactoryUtil.createJSONObject();
-		portlet.put("instanceId_", defaultPortlet);
-		portlet.put("portName_", portName);
-		modulePortlets.put(portlet);
-		
-		
-		JSONObject moduleColumn = JSONFactoryUtil.createJSONObject();
-		moduleColumn.put("portlets_", modulePortlets);
-		moduleColumn.put("currentPortlet_", defaultPortlet);
-		moduleColumn.put("id_", "column-1");
-		moduleColumns.put(moduleColumn);
-		
-		moduleLayout.put("columns_", moduleColumns);
-		
-		model.addAttribute("workbenchLayout", moduleLayout);
 		model.addAttribute("portType", portType);
-		model.addAttribute("portData", StringEscapeUtils.escapeJavaScript(portData));
 		model.addAttribute("portName", portName);
 		model.addAttribute("simulationUuid", simulationUuid);
 		model.addAttribute("jobUuid", jobUuid);
@@ -170,7 +135,9 @@ public class ModuleViewerController {
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 		
 		try{
-			if( command.equalsIgnoreCase("RESOLVE_TEMPLATE")){
+			if( command.equalsIgnoreCase("PRODUCTION_LAYOUT")){
+				this.productionLayout(request, response);
+			}else if( command.equalsIgnoreCase("RESOLVE_TEMPLATE")){
 				this.resolveLayoutTemplate(request, response);
 			}else if( command.equalsIgnoreCase("GET_DATA_STRUCTURE")){
 				this.getDataStructure(request, response);
@@ -190,7 +157,63 @@ public class ModuleViewerController {
 	}
 	
 	
+	private void productionLayout(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws PortletException{
+		String portData = ParamUtil.getString(resourceRequest, "portData", "");
+		String portType = ParamUtil.getString(resourceRequest, "portType", "inputPorts");
+		String portName = ParamUtil.getString(resourceRequest, "portName");
+		
+		try{
+			JSONObject portDataJson = JSONFactoryUtil.createJSONObject(portData);
+			String defaultPortlet = "";
+			Iterator<String> itr = portDataJson.keys();
+			while(itr.hasNext()){
+				String key = itr.next();
+				JSONObject portDataValue = portDataJson.getJSONObject(key);
+				if(portType.equals("inputPorts")){
+					defaultPortlet = portDataValue.getString("defaultEditor_"); 
+				}else{
+					defaultPortlet = portDataValue.getString("defaultAnalyzer_");
+				}
+			}
+			
+			
+			JSONObject moduleLayout = JSONFactoryUtil.createJSONObject();
+			JSONArray moduleColumns = JSONFactoryUtil.createJSONArray();
+			
+			JSONArray modulePortlets = JSONFactoryUtil.createJSONArray();
+			JSONObject portlet = JSONFactoryUtil.createJSONObject();
+			portlet.put("instanceId_", defaultPortlet);
+			portlet.put("portName_", portName);
+			modulePortlets.put(portlet);
+			
+			
+			JSONObject moduleColumn = JSONFactoryUtil.createJSONObject();
+			moduleColumn.put("portlets_", modulePortlets);
+			moduleColumn.put("currentPortlet_", defaultPortlet);
+			moduleColumn.put("id_", "column-1");
+			moduleColumns.put(moduleColumn);
+			
+			moduleLayout.put("columns_", moduleColumns);
+			
+			JSONObject result = JSONFactoryUtil.createJSONObject();
+			result.put("workbenchLayout", moduleLayout);
+			result.put("portData", portData);
+			
+//			System.out.println(moduleLayout);
+//			System.out.println(portData);
+//			System.out.println(StringEscapeUtils.escapeJavaScript(portData));
+			
+			HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(resourceResponse);
+			ServletResponseUtil.write(httpResponse, result.toString());
+		}catch (Exception e) {
+			_log.error("[ERROR] prodictionLayout()");
+			throw new PortletException();
+		}
+	}
+	
+	
 	private void resolveLayoutTemplate(  ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws IOException, PortletException, PortalException, SystemException{
+		/*Grid Template*/
 		String templateDir = ParamUtil.getString(resourceRequest, "templateDir");
 		String namespace = ParamUtil.getString(resourceRequest, "namespace");
 		

@@ -62,7 +62,7 @@ public class SearchConditionImpl extends SearchConditionBaseImpl{
   public static final String SORT_FIELD_NAME = "name"; 
   
   public SearchConditionImpl(){
-    setBlockSize(10);
+    setBlockSize(5);
     setListSize(10);
     setCurrentPage(1);
     setSortOrder(SORT_ORDER_DESC());

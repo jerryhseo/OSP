@@ -33,6 +33,9 @@
 
 <style type="text/css">
 .buttonbox0802{margin:0 auto; overflow:hidden;  padding-bottom:3px; text-align:center; float:right;}
+#addVirtualClassStudentForm .puptitle{
+	font-size: 16px;
+}
 </style>
 
 <script type="text/javascript">
@@ -963,21 +966,21 @@ function <portlet:namespace/>fileDownload(p_fileEntryId){
 					<tr class="puptrline">
 						<td class="puptitle"><liferay-ui:message key='edison-virtuallab-code' /></td>
 						<td class="puptxt">
-							<input id="<portlet:namespace/>userStudentNumber" name="<portlet:namespace/>userStudentNumber" class="dialogInput" type="text" maxlength="27" style="width:140px; margin-bottom:0px;" onkeyup="studentNumberOnkeyup(this.value)"/>
+							<input id="<portlet:namespace/>userStudentNumber" name="<portlet:namespace/>userStudentNumber" class="dialogInput form-control" type="text" maxlength="27" style="width:140px; margin-bottom:0px;" onkeyup="studentNumberOnkeyup(this.value)"/>
 						</td>
 						<td class="puptitle"><liferay-ui:message key='name' /></td>
 						<td class="puptxt">
-							<input id="<portlet:namespace/>userName" name="<portlet:namespace/>userName" class="dialogInput" type="text" maxlength="10" style="width:140px; margin-bottom:0px;"/>
+							<input id="<portlet:namespace/>userName" name="<portlet:namespace/>userName" class="dialogInput form-control" type="text" maxlength="10" style="width:140px; margin-bottom:0px;"/>
 						</td>
 					</tr>
 					<tr class="puptrline">
 						<td class="puptitle"><liferay-ui:message key='edison-table-list-header-userid' /></td>
 						<td class="puptxt">
-							<input id="<portlet:namespace/>userScreenName" name="<portlet:namespace/>userScreenName" class="dialogInput" type="text" readonly="readonly" style="width:140px; margin:1px 0;"/>
+							<input id="<portlet:namespace/>userScreenName" name="<portlet:namespace/>userScreenName" class="dialogInput form-control" type="text" readonly="readonly" style="width:140px; margin:1px 0;"/>
 						</td>
 						<td class="puptitle"><liferay-ui:message key='edison-create-account-field-title-password' /></td>
 						<td class="puptxt">
-							<input id="<portlet:namespace/>userPassword" name="<portlet:namespace/>userPassword" class="dialogInput" type="password" readonly="readonly" style="width:140px; margin-bottom:0px;"/>
+							<input id="<portlet:namespace/>userPassword" name="<portlet:namespace/>userPassword" class="dialogInput form-control" type="password" readonly="readonly" style="width:140px; margin-bottom:0px;"/>
 						</td>
 					</tr>
 					<tr class="puptrline">
@@ -986,7 +989,7 @@ function <portlet:namespace/>fileDownload(p_fileEntryId){
 				</tbody>
 			</table>
 		</div>
-		<div style="text-align: right; margin:0px 25px 30px 0px;">
+		<div style="text-align: right; margin:15px 25px 15px 0px;">
 			<input id="virtualLab_creation_button" name="virtualLab_creation_button" type="button" value="<liferay-ui:message key='edison-virtuallab-student-registration' />" class="btn btn-default" onclick="studentCreate()"/>
 		</div>
 	</form>
