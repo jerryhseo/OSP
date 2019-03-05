@@ -34,6 +34,7 @@
                 portlet = $('#'+namespace).parent();
             }
 
+            //portlet = $('#workbench-layout-area');
             return portlet;
         };
 

@@ -60,11 +60,7 @@ var <portlet:namespace/>config = {
 var <portlet:namespace/>visualizer;
 $('#<portlet:namespace/>canvas').load(function(){
 	<portlet:namespace/>visualizer = OSP.Visualizer(<portlet:namespace/>config);
-<<<<<<< HEAD
 	<portlet:namespace/>processInitAction( JSON.parse( '<%=visualizerConfig.initData%>'), true );
-=======
-	<portlet:namespace/>processInitAction( JSON.parse( '<%=visualizerConfig.initData%>'), false );
->>>>>>> branch 'edison-service' of http://yona.gplusit.co.kr:9000/EDISON/EDISON_2017
 });
 
 /***********************************************************************
