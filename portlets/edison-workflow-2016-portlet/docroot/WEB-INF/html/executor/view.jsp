@@ -136,7 +136,7 @@ var contextPath = '${contextPath}';
         <!-- App Name -->
         <div class="logo">
           <div class="logo-lg">
-            <h3 style="font-size: 17px;" id="<portlet:namespace/>appName">Workflow Executor</h3>
+            <h3 style="font-size: 17px; margin-top: 18px;" id="<portlet:namespace/>appName">Workflow Executor</h3>
             <h5 id="<portlet:namespace/>appVersion"></h5>
           </div>
           <div class="logo-sm">
