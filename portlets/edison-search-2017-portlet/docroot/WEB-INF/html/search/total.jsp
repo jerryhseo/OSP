@@ -50,8 +50,8 @@
   <liferay-portlet:param name="action" value="collectionDetail"/>
 </liferay-portlet:renderURL>
 
-<div class="nav-tabs-custom" style="${isSingleSearch ? 'display:none;' : ''}">
-    <ul id="<portlet:namespace/>search-tab-button" class="nav nav-tabs">
+<div class="nav-tabs-custom">
+    <ul id="<portlet:namespace/>search-tab-button" class="nav nav-tabs" style="${isSingleSearch ? 'display:none;' : ''}">
         <li class="active" onclick="<portlet:namespace/>toggleTab(this);"><a id="total-tab-button"
             href="#<portlet:namespace/>total-search-tab" data-toggle="tab"> <liferay-ui:message
                     key="edison-search-total" /><span class="hidden-xs hidden-sm">(${searchResults.appCount + searchResults.contentCount + searchResults.projectCount + searchResults.dataCount})</span>

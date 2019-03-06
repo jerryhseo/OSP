@@ -305,7 +305,7 @@
         <portlet:namespace/>searchSubmit(e);
     }else{
       e.preventDefault();
-      alert("검색어가 입력되지 않았습니다.");
+      alert("<liferay-ui:message key='edison-search-no-search-keyword' />");
     }
   }
 
