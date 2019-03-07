@@ -654,6 +654,7 @@ public class LayoutController {
 	}
 	
 	private String copyJobInitDataConvertor(String jobOwenerName, String userScreenName, String jobInitData){
+		String resuntInitData = jobInitData;
 		if(jobOwenerName.equals("")){
 			return jobInitData;
 		}
@@ -664,19 +665,18 @@ public class LayoutController {
 		
 		try {
 			JSONArray jobInitDatas = JSONFactoryUtil.createJSONArray(jobInitData);
+			JSONArray copyedInitDatas = JSONFactoryUtil.createJSONArray();
 			for(int i=0; i<jobInitDatas.length();i++){
 				JSONObject jobData = jobInitDatas.getJSONObject(i);
-				
 				JSONObject newJobData = OSPFileLocalServiceUtil.setJobDataWithFileFormInputData(jobOwenerName, jobData, userScreenName);
-				
-				jobInitDatas.getJSONArray(i).put(newJobData);
+				copyedInitDatas.put(newJobData);
 			}
+			resuntInitData = copyedInitDatas.toString();
 			
-			jobInitData = jobInitDatas.toString();
 		} catch (PortalException | SystemException | IOException e) {
 			e.printStackTrace();
 		} finally {
-			return jobInitData;
+			return resuntInitData;
 		}
 	}
 	
