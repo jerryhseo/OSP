@@ -60,7 +60,7 @@ var <portlet:namespace/>config = {
 var <portlet:namespace/>visualizer;
 $('#<portlet:namespace/>canvas').load(function(){
 	<portlet:namespace/>visualizer = OSP.Visualizer(<portlet:namespace/>config);
-	<portlet:namespace/>processInitAction( JSON.parse( '<%=visualizerConfig.initData%>'), false );
+	<portlet:namespace/>processInitAction( JSON.parse( '<%=visualizerConfig.initData%>'), true );
 });
 
 /***********************************************************************

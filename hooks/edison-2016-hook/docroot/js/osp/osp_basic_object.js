@@ -7,6 +7,7 @@
         w.OSP = {};
 
     w.OSP.Constants = {
+        VERSION: '20190228-GA01',
         ACTION: 'action_',
         ARRAY_KEYS: 'arrayKeys_',
         ASSIGNED_PORTS: 'assignedPorts_',
@@ -272,6 +273,7 @@
     }; // End of Constants
 
     w.OSP.Event = {
+        VERSION: '20190228-GA01',
         OSP_CANCEL_CLICKED: 'OSP_CANCEL_CLICKED',
         OSP_CANCEL_JOB: 'OSP_CANCEL_JOB',
         OSP_CANCEL_SIMULATION: 'OSP_CANCEL_SIMULATION',	 
@@ -457,6 +459,7 @@
     }; // End of Event
 
     w.OSP.Enumeration = {
+        VERSION: '20190228-GA01',
         WorkbenchType: {
             SIMULATION_WITH_APP: 'SIMULATION_WITH_APP',
             SIMULATION_RERUN: 'SIMULATION_RERUN',

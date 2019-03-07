@@ -3445,7 +3445,6 @@
                     clearTimeout(timer);
                     timer = null;
                 }
-                console.log('====HandshakeCallback: ', Workbench.namespace(), portlet, limit);
                 timer = setTimeout(
                     function() {
                         if (!portlet.status() && limit < 10) {
@@ -3456,7 +3455,7 @@
                             limit = 0;
                         }
                     },
-                    10
+                    100
                 );
             };
 

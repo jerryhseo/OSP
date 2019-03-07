@@ -102,6 +102,24 @@ Liferay.on(OSP.Event.OSP_DATA_CHANGED, function(e){
 	if( myId !== e.targetPortlet )	return;
 	
 	<portlet:namespace/>receivedEvent( OSP.Event.OSP_DATA_CHANGED, e);
+	
+	let portlets = <portlet:namespace/>simulatorData.portlets;
+	let params = {};
+	params.changeAlert = false;
+	for( var i in portlets ){
+		let portlet = portlets[i];
+		let event = 'OSP_LOAD_DATA';
+		if( portlet !== e.portletId ){
+			let eventData = {
+					portletId: myId,
+					targetPortlet: portlet,
+					data: e.data,
+					params: params
+			};
+			<portlet:namespace/>sentEvent(event, eventData);
+			Liferay.fire( event, eventData );
+		}
+	}
 });
 
 Liferay.on(OSP.Event.OSP_REQUEST_SAMPLE_CONTENT, function(e){
@@ -159,8 +177,7 @@ function <portlet:namespace/>eventClick(){
 function <portlet:namespace/>sentEvent(event, eventData){
 	console.log('sentEvent: ', event, eventData );
 	var sentContent = $('<pre></pre>');
-	sentContent.append(event+'\n');
-	sentContent.append(JSON.stringify(eventData, null, 4));
+	sentContent.text(event+'\n'+JSON.stringify(eventData, null, 4));
 	$('#<portlet:namespace/>sent').prepend(sentContent);
 }
 
@@ -173,8 +190,7 @@ function <portlet:namespace/>receivedEvent( event, e ){
 	};
 	
 	var content = $('<pre></pre>');
-	content.append(event+'\n');
-	content.append(JSON.stringify(eventData, null, 4));
+	content.text(event+'\n'+JSON.stringify(eventData, null, 4));
 	$('#<portlet:namespace/>received').prepend(content);
 }
 

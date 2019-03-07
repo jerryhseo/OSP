@@ -212,8 +212,8 @@
 			// page blocking
 			focusInput: true,
 
-            // elements that can receive focus
-            focusableElements: ':input:enabled:visible',
+			// elements that can receive focus
+			focusableElements: ':input:enabled:visible',
 
 			// suppresses the use of overlay styles on FF/Linux (due to performance issues with opacity)
 			// no longer needed in 2012
@@ -248,7 +248,8 @@
 		var pageBlockEls = [];
 
 		function install(el, opts) {
-			var css, themedCSS;
+			var css;
+			var themedCSS;
 			var full = (el == window);
 			var msg = (opts && opts.message !== undefined ? opts.message : undefined);
 			opts = $.extend({}, $.blockUI.defaults, opts || {});
@@ -290,7 +291,10 @@
 			// layer1 is the iframe layer which is used to supress bleed through of underlying content
 			// layer2 is the overlay layer which has opacity and a wait cursor (by default)
 			// layer3 is the message content that is displayed while blocking
-			var lyr1, lyr2, lyr3, s;
+			var lyr1;
+			var lyr2;
+			var lyr3;
+			var s;
 			if (msie || opts.forceIframe)
 				lyr1 = $('<iframe class="blockUI" style="z-index:'+ (z++) +';display:none;border:none;margin:0;padding:0;position:absolute;width:100%;height:100%;top:0;left:0" src="'+opts.iframeSrc+'"></iframe>');
 			else

@@ -1,8 +1,8 @@
-(function (global, factory) {
+(function(global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 	typeof define === 'function' && define.amd ? define(['exports'], factory) :
 	(factory((global.THREE = global.THREE || {})));
-}(this, (function (exports) { 'use strict';
+}(this, (function(exports) { 'use strict';
 
 	// Polyfills
 
@@ -17,7 +17,7 @@
 		// Missing in IE
 		// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isInteger
 
-		Number.isInteger = function ( value ) {
+		Number.isInteger = function( value ) {
 
 			return typeof value === 'number' && isFinite( value ) && Math.floor( value ) === value;
 
@@ -31,7 +31,7 @@
 
 		// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/sign
 
-		Math.sign = function ( x ) {
+		Math.sign = function( x ) {
 
 			return ( x < 0 ) ? - 1 : ( x > 0 ) ? 1 : + x;
 
@@ -46,7 +46,7 @@
 
 		Object.defineProperty( Function.prototype, 'name', {
 
-			get: function () {
+			get: function() {
 
 				return this.toString().match( /^\s*function\s*([^\(\s]*)/ )[ 1 ];
 
@@ -61,9 +61,9 @@
 		// Missing in IE
 		// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
 
-		( function () {
+		( function() {
 
-			Object.assign = function ( target ) {
+			Object.assign = function( target ) {
 
 				'use strict';
 
@@ -111,7 +111,7 @@
 
 	Object.assign( EventDispatcher.prototype, {
 
-		addEventListener: function ( type, listener ) {
+		addEventListener: function( type, listener ) {
 
 			if ( this._listeners === undefined ) this._listeners = {};
 
@@ -131,7 +131,7 @@
 
 		},
 
-		hasEventListener: function ( type, listener ) {
+		hasEventListener: function( type, listener ) {
 
 			if ( this._listeners === undefined ) return false;
 
@@ -141,7 +141,7 @@
 
 		},
 
-		removeEventListener: function ( type, listener ) {
+		removeEventListener: function( type, listener ) {
 
 			if ( this._listeners === undefined ) return;
 
@@ -162,7 +162,7 @@
 
 		},
 
-		dispatchEvent: function ( event ) {
+		dispatchEvent: function( event ) {
 
 			if ( this._listeners === undefined ) return;
 
@@ -323,7 +323,7 @@
 		DEG2RAD: Math.PI / 180,
 		RAD2DEG: 180 / Math.PI,
 
-		generateUUID: function () {
+		generateUUID: function() {
 
 			// http://www.broofa.com/Tools/Math.uuid.htm
 
@@ -360,7 +360,7 @@
 
 		}(),
 
-		clamp: function ( value, min, max ) {
+		clamp: function( value, min, max ) {
 
 			return Math.max( min, Math.min( max, value ) );
 
@@ -369,7 +369,7 @@
 		// compute euclidian modulo of m % n
 		// https://en.wikipedia.org/wiki/Modulo_operation
 
-		euclideanModulo: function ( n, m ) {
+		euclideanModulo: function( n, m ) {
 
 			return ( ( n % m ) + m ) % m;
 
@@ -377,7 +377,7 @@
 
 		// Linear mapping from range <a1, a2> to range <b1, b2>
 
-		mapLinear: function ( x, a1, a2, b1, b2 ) {
+		mapLinear: function( x, a1, a2, b1, b2 ) {
 
 			return b1 + ( x - a1 ) * ( b2 - b1 ) / ( a2 - a1 );
 
@@ -385,7 +385,7 @@
 
 		// https://en.wikipedia.org/wiki/Linear_interpolation
 
-		lerp: function ( x, y, t ) {
+		lerp: function( x, y, t ) {
 
 			return ( 1 - t ) * x + t * y;
 
@@ -393,7 +393,7 @@
 
 		// http://en.wikipedia.org/wiki/Smoothstep
 
-		smoothstep: function ( x, min, max ) {
+		smoothstep: function( x, min, max ) {
 
 			if ( x <= min ) return 0;
 			if ( x >= max ) return 1;
@@ -404,7 +404,7 @@
 
 		},
 
-		smootherstep: function ( x, min, max ) {
+		smootherstep: function( x, min, max ) {
 
 			if ( x <= min ) return 0;
 			if ( x >= max ) return 1;
@@ -417,7 +417,7 @@
 
 		// Random integer from <low, high> interval
 
-		randInt: function ( low, high ) {
+		randInt: function( low, high ) {
 
 			return low + Math.floor( Math.random() * ( high - low + 1 ) );
 
@@ -425,7 +425,7 @@
 
 		// Random float from <low, high> interval
 
-		randFloat: function ( low, high ) {
+		randFloat: function( low, high ) {
 
 			return low + Math.random() * ( high - low );
 
@@ -433,37 +433,37 @@
 
 		// Random float from <-range/2, range/2> interval
 
-		randFloatSpread: function ( range ) {
+		randFloatSpread: function( range ) {
 
 			return range * ( 0.5 - Math.random() );
 
 		},
 
-		degToRad: function ( degrees ) {
+		degToRad: function( degrees ) {
 
 			return degrees * _Math.DEG2RAD;
 
 		},
 
-		radToDeg: function ( radians ) {
+		radToDeg: function( radians ) {
 
 			return radians * _Math.RAD2DEG;
 
 		},
 
-		isPowerOfTwo: function ( value ) {
+		isPowerOfTwo: function( value ) {
 
 			return ( value & ( value - 1 ) ) === 0 && value !== 0;
 
 		},
 
-		nearestPowerOfTwo: function ( value ) {
+		nearestPowerOfTwo: function( value ) {
 
 			return Math.pow( 2, Math.round( Math.log( value ) / Math.LN2 ) );
 
 		},
 
-		nextPowerOfTwo: function ( value ) {
+		nextPowerOfTwo: function( value ) {
 
 			value --;
 			value |= value >> 1;
@@ -497,13 +497,13 @@
 
 		"width" : {
 
-			get: function () {
+			get: function() {
 
 				return this.x;
 
 			},
 
-			set: function ( value ) {
+			set: function( value ) {
 
 				this.x = value;
 
@@ -513,13 +513,13 @@
 
 		"height" : {
 
-			get: function () {
+			get: function() {
 
 				return this.y;
 
 			},
 
-			set: function ( value ) {
+			set: function( value ) {
 
 				this.y = value;
 
@@ -533,7 +533,7 @@
 
 		isVector2: true,
 
-		set: function ( x, y ) {
+		set: function( x, y ) {
 
 			this.x = x;
 			this.y = y;
@@ -542,7 +542,7 @@
 
 		},
 
-		setScalar: function ( scalar ) {
+		setScalar: function( scalar ) {
 
 			this.x = scalar;
 			this.y = scalar;
@@ -551,7 +551,7 @@
 
 		},
 
-		setX: function ( x ) {
+		setX: function( x ) {
 
 			this.x = x;
 
@@ -559,7 +559,7 @@
 
 		},
 
-		setY: function ( y ) {
+		setY: function( y ) {
 
 			this.y = y;
 
@@ -567,7 +567,7 @@
 
 		},
 
-		setComponent: function ( index, value ) {
+		setComponent: function( index, value ) {
 
 			switch ( index ) {
 
@@ -581,7 +581,7 @@
 
 		},
 
-		getComponent: function ( index ) {
+		getComponent: function( index ) {
 
 			switch ( index ) {
 
@@ -593,13 +593,13 @@
 
 		},
 
-		clone: function () {
+		clone: function() {
 
 			return new this.constructor( this.x, this.y );
 
 		},
 
-		copy: function ( v ) {
+		copy: function( v ) {
 
 			this.x = v.x;
 			this.y = v.y;
@@ -608,7 +608,7 @@
 
 		},
 
-		add: function ( v, w ) {
+		add: function( v, w ) {
 
 			if ( w !== undefined ) {
 
@@ -624,7 +624,7 @@
 
 		},
 
-		addScalar: function ( s ) {
+		addScalar: function( s ) {
 
 			this.x += s;
 			this.y += s;
@@ -633,7 +633,7 @@
 
 		},
 
-		addVectors: function ( a, b ) {
+		addVectors: function( a, b ) {
 
 			this.x = a.x + b.x;
 			this.y = a.y + b.y;
@@ -642,7 +642,7 @@
 
 		},
 
-		addScaledVector: function ( v, s ) {
+		addScaledVector: function( v, s ) {
 
 			this.x += v.x * s;
 			this.y += v.y * s;
@@ -651,7 +651,7 @@
 
 		},
 
-		sub: function ( v, w ) {
+		sub: function( v, w ) {
 
 			if ( w !== undefined ) {
 
@@ -667,7 +667,7 @@
 
 		},
 
-		subScalar: function ( s ) {
+		subScalar: function( s ) {
 
 			this.x -= s;
 			this.y -= s;
@@ -676,7 +676,7 @@
 
 		},
 
-		subVectors: function ( a, b ) {
+		subVectors: function( a, b ) {
 
 			this.x = a.x - b.x;
 			this.y = a.y - b.y;
@@ -685,7 +685,7 @@
 
 		},
 
-		multiply: function ( v ) {
+		multiply: function( v ) {
 
 			this.x *= v.x;
 			this.y *= v.y;
@@ -694,7 +694,7 @@
 
 		},
 
-		multiplyScalar: function ( scalar ) {
+		multiplyScalar: function( scalar ) {
 
 			this.x *= scalar;
 			this.y *= scalar;
@@ -703,7 +703,7 @@
 
 		},
 
-		divide: function ( v ) {
+		divide: function( v ) {
 
 			this.x /= v.x;
 			this.y /= v.y;
@@ -712,13 +712,13 @@
 
 		},
 
-		divideScalar: function ( scalar ) {
+		divideScalar: function( scalar ) {
 
 			return this.multiplyScalar( 1 / scalar );
 
 		},
 
-		min: function ( v ) {
+		min: function( v ) {
 
 			this.x = Math.min( this.x, v.x );
 			this.y = Math.min( this.y, v.y );
@@ -727,7 +727,7 @@
 
 		},
 
-		max: function ( v ) {
+		max: function( v ) {
 
 			this.x = Math.max( this.x, v.x );
 			this.y = Math.max( this.y, v.y );
@@ -736,7 +736,7 @@
 
 		},
 
-		clamp: function ( min, max ) {
+		clamp: function( min, max ) {
 
 			// assumes min < max, componentwise
 
@@ -747,7 +747,7 @@
 
 		},
 
-		clampScalar: function () {
+		clampScalar: function() {
 
 			var min = new Vector2();
 			var max = new Vector2();
@@ -763,7 +763,7 @@
 
 		}(),
 
-		clampLength: function ( min, max ) {
+		clampLength: function( min, max ) {
 
 			var length = this.length();
 
@@ -771,7 +771,7 @@
 
 		},
 
-		floor: function () {
+		floor: function() {
 
 			this.x = Math.floor( this.x );
 			this.y = Math.floor( this.y );
@@ -780,7 +780,7 @@
 
 		},
 
-		ceil: function () {
+		ceil: function() {
 
 			this.x = Math.ceil( this.x );
 			this.y = Math.ceil( this.y );
@@ -789,7 +789,7 @@
 
 		},
 
-		round: function () {
+		round: function() {
 
 			this.x = Math.round( this.x );
 			this.y = Math.round( this.y );
@@ -798,7 +798,7 @@
 
 		},
 
-		roundToZero: function () {
+		roundToZero: function() {
 
 			this.x = ( this.x < 0 ) ? Math.ceil( this.x ) : Math.floor( this.x );
 			this.y = ( this.y < 0 ) ? Math.ceil( this.y ) : Math.floor( this.y );
@@ -807,7 +807,7 @@
 
 		},
 
-		negate: function () {
+		negate: function() {
 
 			this.x = - this.x;
 			this.y = - this.y;
@@ -816,19 +816,19 @@
 
 		},
 
-		dot: function ( v ) {
+		dot: function( v ) {
 
 			return this.x * v.x + this.y * v.y;
 
 		},
 
-		lengthSq: function () {
+		lengthSq: function() {
 
 			return this.x * this.x + this.y * this.y;
 
 		},
 
-		length: function () {
+		length: function() {
 
 			return Math.sqrt( this.x * this.x + this.y * this.y );
 
@@ -840,13 +840,13 @@
 
 		},
 
-		normalize: function () {
+		normalize: function() {
 
 			return this.divideScalar( this.length() || 1 );
 
 		},
 
-		angle: function () {
+		angle: function() {
 
 			// computes the angle in radians with respect to the positive x-axis
 
@@ -858,32 +858,32 @@
 
 		},
 
-		distanceTo: function ( v ) {
+		distanceTo: function( v ) {
 
 			return Math.sqrt( this.distanceToSquared( v ) );
 
 		},
 
-		distanceToSquared: function ( v ) {
+		distanceToSquared: function( v ) {
 
 			var dx = this.x - v.x, dy = this.y - v.y;
 			return dx * dx + dy * dy;
 
 		},
 
-		distanceToManhattan: function ( v ) {
+		distanceToManhattan: function( v ) {
 
 			return Math.abs( this.x - v.x ) + Math.abs( this.y - v.y );
 
 		},
 
-		setLength: function ( length ) {
+		setLength: function( length ) {
 
 			return this.normalize().multiplyScalar( length );
 
 		},
 
-		lerp: function ( v, alpha ) {
+		lerp: function( v, alpha ) {
 
 			this.x += ( v.x - this.x ) * alpha;
 			this.y += ( v.y - this.y ) * alpha;
@@ -892,19 +892,19 @@
 
 		},
 
-		lerpVectors: function ( v1, v2, alpha ) {
+		lerpVectors: function( v1, v2, alpha ) {
 
 			return this.subVectors( v2, v1 ).multiplyScalar( alpha ).add( v1 );
 
 		},
 
-		equals: function ( v ) {
+		equals: function( v ) {
 
 			return ( ( v.x === this.x ) && ( v.y === this.y ) );
 
 		},
 
-		fromArray: function ( array, offset ) {
+		fromArray: function( array, offset ) {
 
 			if ( offset === undefined ) offset = 0;
 
@@ -915,7 +915,7 @@
 
 		},
 
-		toArray: function ( array, offset ) {
+		toArray: function( array, offset ) {
 
 			if ( array === undefined ) array = [];
 			if ( offset === undefined ) offset = 0;
@@ -927,7 +927,7 @@
 
 		},
 
-		fromBufferAttribute: function ( attribute, index, offset ) {
+		fromBufferAttribute: function( attribute, index, offset ) {
 
 			if ( offset !== undefined ) {
 
@@ -942,7 +942,7 @@
 
 		},
 
-		rotateAround: function ( center, angle ) {
+		rotateAround: function( center, angle ) {
 
 			var c = Math.cos( angle ), s = Math.sin( angle );
 
@@ -1014,7 +1014,7 @@
 
 	Object.defineProperty( Texture.prototype, "needsUpdate", {
 
-		set: function ( value ) {
+		set: function( value ) {
 
 			if ( value === true ) this.version ++;
 
@@ -1028,13 +1028,13 @@
 
 		isTexture: true,
 
-		clone: function () {
+		clone: function() {
 
 			return new this.constructor().copy( this );
 
 		},
 
-		copy: function ( source ) {
+		copy: function( source ) {
 
 			this.name = source.name;
 
@@ -1067,7 +1067,7 @@
 
 		},
 
-		toJSON: function ( meta ) {
+		toJSON: function( meta ) {
 
 			if ( meta.textures[ this.uuid ] !== undefined ) {
 
@@ -1159,13 +1159,13 @@
 
 		},
 
-		dispose: function () {
+		dispose: function() {
 
 			this.dispatchEvent( { type: 'dispose' } );
 
 		},
 
-		transformUv: function ( uv ) {
+		transformUv: function( uv ) {
 
 			if ( this.mapping !== UVMapping ) return;
 
@@ -1265,7 +1265,7 @@
 
 		isVector4: true,
 
-		set: function ( x, y, z, w ) {
+		set: function( x, y, z, w ) {
 
 			this.x = x;
 			this.y = y;
@@ -1276,7 +1276,7 @@
 
 		},
 
-		setScalar: function ( scalar ) {
+		setScalar: function( scalar ) {
 
 			this.x = scalar;
 			this.y = scalar;
@@ -1287,7 +1287,7 @@
 
 		},
 
-		setX: function ( x ) {
+		setX: function( x ) {
 
 			this.x = x;
 
@@ -1295,7 +1295,7 @@
 
 		},
 
-		setY: function ( y ) {
+		setY: function( y ) {
 
 			this.y = y;
 
@@ -1303,7 +1303,7 @@
 
 		},
 
-		setZ: function ( z ) {
+		setZ: function( z ) {
 
 			this.z = z;
 
@@ -1311,7 +1311,7 @@
 
 		},
 
-		setW: function ( w ) {
+		setW: function( w ) {
 
 			this.w = w;
 
@@ -1319,7 +1319,7 @@
 
 		},
 
-		setComponent: function ( index, value ) {
+		setComponent: function( index, value ) {
 
 			switch ( index ) {
 
@@ -1335,7 +1335,7 @@
 
 		},
 
-		getComponent: function ( index ) {
+		getComponent: function( index ) {
 
 			switch ( index ) {
 
@@ -1349,13 +1349,13 @@
 
 		},
 
-		clone: function () {
+		clone: function() {
 
 			return new this.constructor( this.x, this.y, this.z, this.w );
 
 		},
 
-		copy: function ( v ) {
+		copy: function( v ) {
 
 			this.x = v.x;
 			this.y = v.y;
@@ -1366,7 +1366,7 @@
 
 		},
 
-		add: function ( v, w ) {
+		add: function( v, w ) {
 
 			if ( w !== undefined ) {
 
@@ -1384,7 +1384,7 @@
 
 		},
 
-		addScalar: function ( s ) {
+		addScalar: function( s ) {
 
 			this.x += s;
 			this.y += s;
@@ -1395,7 +1395,7 @@
 
 		},
 
-		addVectors: function ( a, b ) {
+		addVectors: function( a, b ) {
 
 			this.x = a.x + b.x;
 			this.y = a.y + b.y;
@@ -1406,7 +1406,7 @@
 
 		},
 
-		addScaledVector: function ( v, s ) {
+		addScaledVector: function( v, s ) {
 
 			this.x += v.x * s;
 			this.y += v.y * s;
@@ -1417,7 +1417,7 @@
 
 		},
 
-		sub: function ( v, w ) {
+		sub: function( v, w ) {
 
 			if ( w !== undefined ) {
 
@@ -1435,7 +1435,7 @@
 
 		},
 
-		subScalar: function ( s ) {
+		subScalar: function( s ) {
 
 			this.x -= s;
 			this.y -= s;
@@ -1446,7 +1446,7 @@
 
 		},
 
-		subVectors: function ( a, b ) {
+		subVectors: function( a, b ) {
 
 			this.x = a.x - b.x;
 			this.y = a.y - b.y;
@@ -1457,7 +1457,7 @@
 
 		},
 
-		multiplyScalar: function ( scalar ) {
+		multiplyScalar: function( scalar ) {
 
 			this.x *= scalar;
 			this.y *= scalar;
@@ -1468,7 +1468,7 @@
 
 		},
 
-		applyMatrix4: function ( m ) {
+		applyMatrix4: function( m ) {
 
 			var x = this.x, y = this.y, z = this.z, w = this.w;
 			var e = m.elements;
@@ -1482,13 +1482,13 @@
 
 		},
 
-		divideScalar: function ( scalar ) {
+		divideScalar: function( scalar ) {
 
 			return this.multiplyScalar( 1 / scalar );
 
 		},
 
-		setAxisAngleFromQuaternion: function ( q ) {
+		setAxisAngleFromQuaternion: function( q ) {
 
 			// http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToAngle/index.htm
 
@@ -1516,13 +1516,16 @@
 
 		},
 
-		setAxisAngleFromRotationMatrix: function ( m ) {
+		setAxisAngleFromRotationMatrix: function( m ) {
 
 			// http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToAngle/index.htm
 
 			// assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
 
-			var angle, x, y, z,		// variables for result
+			var angle;
+			var x;
+			var y;
+			var z,		// variables for result
 				epsilon = 0.01,		// margin to allow for rounding errors
 				epsilon2 = 0.1,		// margin to distinguish between 0 and 180 degrees
 
@@ -1646,7 +1649,7 @@
 
 		},
 
-		min: function ( v ) {
+		min: function( v ) {
 
 			this.x = Math.min( this.x, v.x );
 			this.y = Math.min( this.y, v.y );
@@ -1657,7 +1660,7 @@
 
 		},
 
-		max: function ( v ) {
+		max: function( v ) {
 
 			this.x = Math.max( this.x, v.x );
 			this.y = Math.max( this.y, v.y );
@@ -1668,7 +1671,7 @@
 
 		},
 
-		clamp: function ( min, max ) {
+		clamp: function( min, max ) {
 
 			// assumes min < max, componentwise
 
@@ -1681,9 +1684,10 @@
 
 		},
 
-		clampScalar: function () {
+		clampScalar: function() {
 
-			var min, max;
+			var min;
+			var max;
 
 			return function clampScalar( minVal, maxVal ) {
 
@@ -1703,7 +1707,7 @@
 
 		}(),
 
-		clampLength: function ( min, max ) {
+		clampLength: function( min, max ) {
 
 			var length = this.length();
 
@@ -1711,7 +1715,7 @@
 
 		},
 
-		floor: function () {
+		floor: function() {
 
 			this.x = Math.floor( this.x );
 			this.y = Math.floor( this.y );
@@ -1722,7 +1726,7 @@
 
 		},
 
-		ceil: function () {
+		ceil: function() {
 
 			this.x = Math.ceil( this.x );
 			this.y = Math.ceil( this.y );
@@ -1733,7 +1737,7 @@
 
 		},
 
-		round: function () {
+		round: function() {
 
 			this.x = Math.round( this.x );
 			this.y = Math.round( this.y );
@@ -1744,7 +1748,7 @@
 
 		},
 
-		roundToZero: function () {
+		roundToZero: function() {
 
 			this.x = ( this.x < 0 ) ? Math.ceil( this.x ) : Math.floor( this.x );
 			this.y = ( this.y < 0 ) ? Math.ceil( this.y ) : Math.floor( this.y );
@@ -1755,7 +1759,7 @@
 
 		},
 
-		negate: function () {
+		negate: function() {
 
 			this.x = - this.x;
 			this.y = - this.y;
@@ -1766,43 +1770,43 @@
 
 		},
 
-		dot: function ( v ) {
+		dot: function( v ) {
 
 			return this.x * v.x + this.y * v.y + this.z * v.z + this.w * v.w;
 
 		},
 
-		lengthSq: function () {
+		lengthSq: function() {
 
 			return this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w;
 
 		},
 
-		length: function () {
+		length: function() {
 
 			return Math.sqrt( this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w );
 
 		},
 
-		lengthManhattan: function () {
+		lengthManhattan: function() {
 
 			return Math.abs( this.x ) + Math.abs( this.y ) + Math.abs( this.z ) + Math.abs( this.w );
 
 		},
 
-		normalize: function () {
+		normalize: function() {
 
 			return this.divideScalar( this.length() || 1 );
 
 		},
 
-		setLength: function ( length ) {
+		setLength: function( length ) {
 
 			return this.normalize().multiplyScalar( length );
 
 		},
 
-		lerp: function ( v, alpha ) {
+		lerp: function( v, alpha ) {
 
 			this.x += ( v.x - this.x ) * alpha;
 			this.y += ( v.y - this.y ) * alpha;
@@ -1813,19 +1817,19 @@
 
 		},
 
-		lerpVectors: function ( v1, v2, alpha ) {
+		lerpVectors: function( v1, v2, alpha ) {
 
 			return this.subVectors( v2, v1 ).multiplyScalar( alpha ).add( v1 );
 
 		},
 
-		equals: function ( v ) {
+		equals: function( v ) {
 
 			return ( ( v.x === this.x ) && ( v.y === this.y ) && ( v.z === this.z ) && ( v.w === this.w ) );
 
 		},
 
-		fromArray: function ( array, offset ) {
+		fromArray: function( array, offset ) {
 
 			if ( offset === undefined ) offset = 0;
 
@@ -1838,7 +1842,7 @@
 
 		},
 
-		toArray: function ( array, offset ) {
+		toArray: function( array, offset ) {
 
 			if ( array === undefined ) array = [];
 			if ( offset === undefined ) offset = 0;
@@ -1852,7 +1856,7 @@
 
 		},
 
-		fromBufferAttribute: function ( attribute, index, offset ) {
+		fromBufferAttribute: function( attribute, index, offset ) {
 
 			if ( offset !== undefined ) {
 
@@ -1910,7 +1914,7 @@
 
 		isWebGLRenderTarget: true,
 
-		setSize: function ( width, height ) {
+		setSize: function( width, height ) {
 
 			if ( this.width !== width || this.height !== height ) {
 
@@ -1926,13 +1930,13 @@
 
 		},
 
-		clone: function () {
+		clone: function() {
 
 			return new this.constructor().copy( this );
 
 		},
 
-		copy: function ( source ) {
+		copy: function( source ) {
 
 			this.width = source.width;
 			this.height = source.height;
@@ -1949,7 +1953,7 @@
 
 		},
 
-		dispose: function () {
+		dispose: function() {
 
 			this.dispatchEvent( { type: 'dispose' } );
 
@@ -1993,13 +1997,13 @@
 
 	Object.assign( Quaternion, {
 
-		slerp: function ( qa, qb, qm, t ) {
+		slerp: function( qa, qb, qm, t ) {
 
 			return qm.copy( qa ).slerp( qb, t );
 
 		},
 
-		slerpFlat: function ( dst, dstOffset, src0, srcOffset0, src1, srcOffset1, t ) {
+		slerpFlat: function( dst, dstOffset, src0, srcOffset0, src1, srcOffset1, t ) {
 
 			// fuzz-free, array-based Quaternion SLERP operation
 
@@ -2067,13 +2071,13 @@
 
 		x: {
 
-			get: function () {
+			get: function() {
 
 				return this._x;
 
 			},
 
-			set: function ( value ) {
+			set: function( value ) {
 
 				this._x = value;
 				this.onChangeCallback();
@@ -2084,13 +2088,13 @@
 
 		y: {
 
-			get: function () {
+			get: function() {
 
 				return this._y;
 
 			},
 
-			set: function ( value ) {
+			set: function( value ) {
 
 				this._y = value;
 				this.onChangeCallback();
@@ -2101,13 +2105,13 @@
 
 		z: {
 
-			get: function () {
+			get: function() {
 
 				return this._z;
 
 			},
 
-			set: function ( value ) {
+			set: function( value ) {
 
 				this._z = value;
 				this.onChangeCallback();
@@ -2118,13 +2122,13 @@
 
 		w: {
 
-			get: function () {
+			get: function() {
 
 				return this._w;
 
 			},
 
-			set: function ( value ) {
+			set: function( value ) {
 
 				this._w = value;
 				this.onChangeCallback();
@@ -2137,7 +2141,7 @@
 
 	Object.assign( Quaternion.prototype, {
 
-		set: function ( x, y, z, w ) {
+		set: function( x, y, z, w ) {
 
 			this._x = x;
 			this._y = y;
@@ -2150,13 +2154,13 @@
 
 		},
 
-		clone: function () {
+		clone: function() {
 
 			return new this.constructor( this._x, this._y, this._z, this._w );
 
 		},
 
-		copy: function ( quaternion ) {
+		copy: function( quaternion ) {
 
 			this._x = quaternion.x;
 			this._y = quaternion.y;
@@ -2169,7 +2173,7 @@
 
 		},
 
-		setFromEuler: function ( euler, update ) {
+		setFromEuler: function( euler, update ) {
 
 			if ( ! ( euler && euler.isEuler ) ) {
 
@@ -2244,7 +2248,7 @@
 
 		},
 
-		setFromAxisAngle: function ( axis, angle ) {
+		setFromAxisAngle: function( axis, angle ) {
 
 			// http://www.euclideanspace.com/maths/geometry/rotations/conversions/angleToQuaternion/index.htm
 
@@ -2263,7 +2267,7 @@
 
 		},
 
-		setFromRotationMatrix: function ( m ) {
+		setFromRotationMatrix: function( m ) {
 
 			// http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm
 
@@ -2322,7 +2326,7 @@
 
 		},
 
-		setFromUnitVectors: function () {
+		setFromUnitVectors: function() {
 
 			// assumes direction vectors vFrom and vTo are normalized
 
@@ -2368,13 +2372,13 @@
 
 		}(),
 
-		inverse: function () {
+		inverse: function() {
 
 			return this.conjugate().normalize();
 
 		},
 
-		conjugate: function () {
+		conjugate: function() {
 
 			this._x *= - 1;
 			this._y *= - 1;
@@ -2386,25 +2390,25 @@
 
 		},
 
-		dot: function ( v ) {
+		dot: function( v ) {
 
 			return this._x * v._x + this._y * v._y + this._z * v._z + this._w * v._w;
 
 		},
 
-		lengthSq: function () {
+		lengthSq: function() {
 
 			return this._x * this._x + this._y * this._y + this._z * this._z + this._w * this._w;
 
 		},
 
-		length: function () {
+		length: function() {
 
 			return Math.sqrt( this._x * this._x + this._y * this._y + this._z * this._z + this._w * this._w );
 
 		},
 
-		normalize: function () {
+		normalize: function() {
 
 			var l = this.length();
 
@@ -2432,7 +2436,7 @@
 
 		},
 
-		multiply: function ( q, p ) {
+		multiply: function( q, p ) {
 
 			if ( p !== undefined ) {
 
@@ -2445,13 +2449,13 @@
 
 		},
 
-		premultiply: function ( q ) {
+		premultiply: function( q ) {
 
 			return this.multiplyQuaternions( q, this );
 
 		},
 
-		multiplyQuaternions: function ( a, b ) {
+		multiplyQuaternions: function( a, b ) {
 
 			// from http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/code/index.htm
 
@@ -2469,7 +2473,7 @@
 
 		},
 
-		slerp: function ( qb, t ) {
+		slerp: function( qb, t ) {
 
 			if ( t === 0 ) return this;
 			if ( t === 1 ) return this.copy( qb );
@@ -2534,13 +2538,13 @@
 
 		},
 
-		equals: function ( quaternion ) {
+		equals: function( quaternion ) {
 
 			return ( quaternion._x === this._x ) && ( quaternion._y === this._y ) && ( quaternion._z === this._z ) && ( quaternion._w === this._w );
 
 		},
 
-		fromArray: function ( array, offset ) {
+		fromArray: function( array, offset ) {
 
 			if ( offset === undefined ) offset = 0;
 
@@ -2555,7 +2559,7 @@
 
 		},
 
-		toArray: function ( array, offset ) {
+		toArray: function( array, offset ) {
 
 			if ( array === undefined ) array = [];
 			if ( offset === undefined ) offset = 0;
@@ -2569,7 +2573,7 @@
 
 		},
 
-		onChange: function ( callback ) {
+		onChange: function( callback ) {
 
 			this.onChangeCallback = callback;
 
@@ -2577,7 +2581,7 @@
 
 		},
 
-		onChangeCallback: function () {}
+		onChangeCallback: function() {}
 
 	} );
 
@@ -2602,7 +2606,7 @@
 
 		isVector3: true,
 
-		set: function ( x, y, z ) {
+		set: function( x, y, z ) {
 
 			this.x = x;
 			this.y = y;
@@ -2612,7 +2616,7 @@
 
 		},
 
-		setScalar: function ( scalar ) {
+		setScalar: function( scalar ) {
 
 			this.x = scalar;
 			this.y = scalar;
@@ -2622,7 +2626,7 @@
 
 		},
 
-		setX: function ( x ) {
+		setX: function( x ) {
 
 			this.x = x;
 
@@ -2630,7 +2634,7 @@
 
 		},
 
-		setY: function ( y ) {
+		setY: function( y ) {
 
 			this.y = y;
 
@@ -2638,7 +2642,7 @@
 
 		},
 
-		setZ: function ( z ) {
+		setZ: function( z ) {
 
 			this.z = z;
 
@@ -2646,7 +2650,7 @@
 
 		},
 
-		setComponent: function ( index, value ) {
+		setComponent: function( index, value ) {
 
 			switch ( index ) {
 
@@ -2661,7 +2665,7 @@
 
 		},
 
-		getComponent: function ( index ) {
+		getComponent: function( index ) {
 
 			switch ( index ) {
 
@@ -2674,13 +2678,13 @@
 
 		},
 
-		clone: function () {
+		clone: function() {
 
 			return new this.constructor( this.x, this.y, this.z );
 
 		},
 
-		copy: function ( v ) {
+		copy: function( v ) {
 
 			this.x = v.x;
 			this.y = v.y;
@@ -2690,7 +2694,7 @@
 
 		},
 
-		add: function ( v, w ) {
+		add: function( v, w ) {
 
 			if ( w !== undefined ) {
 
@@ -2707,7 +2711,7 @@
 
 		},
 
-		addScalar: function ( s ) {
+		addScalar: function( s ) {
 
 			this.x += s;
 			this.y += s;
@@ -2717,7 +2721,7 @@
 
 		},
 
-		addVectors: function ( a, b ) {
+		addVectors: function( a, b ) {
 
 			this.x = a.x + b.x;
 			this.y = a.y + b.y;
@@ -2727,7 +2731,7 @@
 
 		},
 
-		addScaledVector: function ( v, s ) {
+		addScaledVector: function( v, s ) {
 
 			this.x += v.x * s;
 			this.y += v.y * s;
@@ -2737,7 +2741,7 @@
 
 		},
 
-		sub: function ( v, w ) {
+		sub: function( v, w ) {
 
 			if ( w !== undefined ) {
 
@@ -2754,7 +2758,7 @@
 
 		},
 
-		subScalar: function ( s ) {
+		subScalar: function( s ) {
 
 			this.x -= s;
 			this.y -= s;
@@ -2764,7 +2768,7 @@
 
 		},
 
-		subVectors: function ( a, b ) {
+		subVectors: function( a, b ) {
 
 			this.x = a.x - b.x;
 			this.y = a.y - b.y;
@@ -2774,7 +2778,7 @@
 
 		},
 
-		multiply: function ( v, w ) {
+		multiply: function( v, w ) {
 
 			if ( w !== undefined ) {
 
@@ -2791,7 +2795,7 @@
 
 		},
 
-		multiplyScalar: function ( scalar ) {
+		multiplyScalar: function( scalar ) {
 
 			this.x *= scalar;
 			this.y *= scalar;
@@ -2801,7 +2805,7 @@
 
 		},
 
-		multiplyVectors: function ( a, b ) {
+		multiplyVectors: function( a, b ) {
 
 			this.x = a.x * b.x;
 			this.y = a.y * b.y;
@@ -2811,7 +2815,7 @@
 
 		},
 
-		applyEuler: function () {
+		applyEuler: function() {
 
 			var quaternion = new Quaternion();
 
@@ -2829,7 +2833,7 @@
 
 		}(),
 
-		applyAxisAngle: function () {
+		applyAxisAngle: function() {
 
 			var quaternion = new Quaternion();
 
@@ -2841,7 +2845,7 @@
 
 		}(),
 
-		applyMatrix3: function ( m ) {
+		applyMatrix3: function( m ) {
 
 			var x = this.x, y = this.y, z = this.z;
 			var e = m.elements;
@@ -2854,7 +2858,7 @@
 
 		},
 
-		applyMatrix4: function ( m ) {
+		applyMatrix4: function( m ) {
 
 			var x = this.x, y = this.y, z = this.z;
 			var e = m.elements;
@@ -2869,7 +2873,7 @@
 
 		},
 
-		applyQuaternion: function ( q ) {
+		applyQuaternion: function( q ) {
 
 			var x = this.x, y = this.y, z = this.z;
 			var qx = q.x, qy = q.y, qz = q.z, qw = q.w;
@@ -2891,7 +2895,7 @@
 
 		},
 
-		project: function () {
+		project: function() {
 
 			var matrix = new Matrix4();
 
@@ -2904,7 +2908,7 @@
 
 		}(),
 
-		unproject: function () {
+		unproject: function() {
 
 			var matrix = new Matrix4();
 
@@ -2917,7 +2921,7 @@
 
 		}(),
 
-		transformDirection: function ( m ) {
+		transformDirection: function( m ) {
 
 			// input: THREE.Matrix4 affine matrix
 			// vector interpreted as a direction
@@ -2933,7 +2937,7 @@
 
 		},
 
-		divide: function ( v ) {
+		divide: function( v ) {
 
 			this.x /= v.x;
 			this.y /= v.y;
@@ -2943,13 +2947,13 @@
 
 		},
 
-		divideScalar: function ( scalar ) {
+		divideScalar: function( scalar ) {
 
 			return this.multiplyScalar( 1 / scalar );
 
 		},
 
-		min: function ( v ) {
+		min: function( v ) {
 
 			this.x = Math.min( this.x, v.x );
 			this.y = Math.min( this.y, v.y );
@@ -2959,7 +2963,7 @@
 
 		},
 
-		max: function ( v ) {
+		max: function( v ) {
 
 			this.x = Math.max( this.x, v.x );
 			this.y = Math.max( this.y, v.y );
@@ -2969,7 +2973,7 @@
 
 		},
 
-		clamp: function ( min, max ) {
+		clamp: function( min, max ) {
 
 			// assumes min < max, componentwise
 
@@ -2981,7 +2985,7 @@
 
 		},
 
-		clampScalar: function () {
+		clampScalar: function() {
 
 			var min = new Vector3();
 			var max = new Vector3();
@@ -2997,7 +3001,7 @@
 
 		}(),
 
-		clampLength: function ( min, max ) {
+		clampLength: function( min, max ) {
 
 			var length = this.length();
 
@@ -3005,7 +3009,7 @@
 
 		},
 
-		floor: function () {
+		floor: function() {
 
 			this.x = Math.floor( this.x );
 			this.y = Math.floor( this.y );
@@ -3015,7 +3019,7 @@
 
 		},
 
-		ceil: function () {
+		ceil: function() {
 
 			this.x = Math.ceil( this.x );
 			this.y = Math.ceil( this.y );
@@ -3025,7 +3029,7 @@
 
 		},
 
-		round: function () {
+		round: function() {
 
 			this.x = Math.round( this.x );
 			this.y = Math.round( this.y );
@@ -3035,7 +3039,7 @@
 
 		},
 
-		roundToZero: function () {
+		roundToZero: function() {
 
 			this.x = ( this.x < 0 ) ? Math.ceil( this.x ) : Math.floor( this.x );
 			this.y = ( this.y < 0 ) ? Math.ceil( this.y ) : Math.floor( this.y );
@@ -3045,7 +3049,7 @@
 
 		},
 
-		negate: function () {
+		negate: function() {
 
 			this.x = - this.x;
 			this.y = - this.y;
@@ -3055,7 +3059,7 @@
 
 		},
 
-		dot: function ( v ) {
+		dot: function( v ) {
 
 			return this.x * v.x + this.y * v.y + this.z * v.z;
 
@@ -3063,37 +3067,37 @@
 
 		// TODO lengthSquared?
 
-		lengthSq: function () {
+		lengthSq: function() {
 
 			return this.x * this.x + this.y * this.y + this.z * this.z;
 
 		},
 
-		length: function () {
+		length: function() {
 
 			return Math.sqrt( this.x * this.x + this.y * this.y + this.z * this.z );
 
 		},
 
-		lengthManhattan: function () {
+		lengthManhattan: function() {
 
 			return Math.abs( this.x ) + Math.abs( this.y ) + Math.abs( this.z );
 
 		},
 
-		normalize: function () {
+		normalize: function() {
 
 			return this.divideScalar( this.length() || 1 );
 
 		},
 
-		setLength: function ( length ) {
+		setLength: function( length ) {
 
 			return this.normalize().multiplyScalar( length );
 
 		},
 
-		lerp: function ( v, alpha ) {
+		lerp: function( v, alpha ) {
 
 			this.x += ( v.x - this.x ) * alpha;
 			this.y += ( v.y - this.y ) * alpha;
@@ -3103,13 +3107,13 @@
 
 		},
 
-		lerpVectors: function ( v1, v2, alpha ) {
+		lerpVectors: function( v1, v2, alpha ) {
 
 			return this.subVectors( v2, v1 ).multiplyScalar( alpha ).add( v1 );
 
 		},
 
-		cross: function ( v, w ) {
+		cross: function( v, w ) {
 
 			if ( w !== undefined ) {
 
@@ -3128,7 +3132,7 @@
 
 		},
 
-		crossVectors: function ( a, b ) {
+		crossVectors: function( a, b ) {
 
 			var ax = a.x, ay = a.y, az = a.z;
 			var bx = b.x, by = b.y, bz = b.z;
@@ -3141,7 +3145,7 @@
 
 		},
 
-		projectOnVector: function ( vector ) {
+		projectOnVector: function( vector ) {
 
 			var scalar = vector.dot( this ) / vector.lengthSq();
 
@@ -3149,7 +3153,7 @@
 
 		},
 
-		projectOnPlane: function () {
+		projectOnPlane: function() {
 
 			var v1 = new Vector3();
 
@@ -3163,7 +3167,7 @@
 
 		}(),
 
-		reflect: function () {
+		reflect: function() {
 
 			// reflect incident vector off plane orthogonal to normal
 			// normal is assumed to have unit length
@@ -3178,7 +3182,7 @@
 
 		}(),
 
-		angleTo: function ( v ) {
+		angleTo: function( v ) {
 
 			var theta = this.dot( v ) / ( Math.sqrt( this.lengthSq() * v.lengthSq() ) );
 
@@ -3188,13 +3192,13 @@
 
 		},
 
-		distanceTo: function ( v ) {
+		distanceTo: function( v ) {
 
 			return Math.sqrt( this.distanceToSquared( v ) );
 
 		},
 
-		distanceToSquared: function ( v ) {
+		distanceToSquared: function( v ) {
 
 			var dx = this.x - v.x, dy = this.y - v.y, dz = this.z - v.z;
 
@@ -3202,13 +3206,13 @@
 
 		},
 
-		distanceToManhattan: function ( v ) {
+		distanceToManhattan: function( v ) {
 
 			return Math.abs( this.x - v.x ) + Math.abs( this.y - v.y ) + Math.abs( this.z - v.z );
 
 		},
 
-		setFromSpherical: function ( s ) {
+		setFromSpherical: function( s ) {
 
 			var sinPhiRadius = Math.sin( s.phi ) * s.radius;
 
@@ -3220,7 +3224,7 @@
 
 		},
 
-		setFromCylindrical: function ( c ) {
+		setFromCylindrical: function( c ) {
 
 			this.x = c.radius * Math.sin( c.theta );
 			this.y = c.y;
@@ -3230,7 +3234,7 @@
 
 		},
 
-		setFromMatrixPosition: function ( m ) {
+		setFromMatrixPosition: function( m ) {
 
 			var e = m.elements;
 
@@ -3242,7 +3246,7 @@
 
 		},
 
-		setFromMatrixScale: function ( m ) {
+		setFromMatrixScale: function( m ) {
 
 			var sx = this.setFromMatrixColumn( m, 0 ).length();
 			var sy = this.setFromMatrixColumn( m, 1 ).length();
@@ -3256,19 +3260,19 @@
 
 		},
 
-		setFromMatrixColumn: function ( m, index ) {
+		setFromMatrixColumn: function( m, index ) {
 
 			return this.fromArray( m.elements, index * 4 );
 
 		},
 
-		equals: function ( v ) {
+		equals: function( v ) {
 
 			return ( ( v.x === this.x ) && ( v.y === this.y ) && ( v.z === this.z ) );
 
 		},
 
-		fromArray: function ( array, offset ) {
+		fromArray: function( array, offset ) {
 
 			if ( offset === undefined ) offset = 0;
 
@@ -3280,7 +3284,7 @@
 
 		},
 
-		toArray: function ( array, offset ) {
+		toArray: function( array, offset ) {
 
 			if ( array === undefined ) array = [];
 			if ( offset === undefined ) offset = 0;
@@ -3293,7 +3297,7 @@
 
 		},
 
-		fromBufferAttribute: function ( attribute, index, offset ) {
+		fromBufferAttribute: function( attribute, index, offset ) {
 
 			if ( offset !== undefined ) {
 
@@ -3347,7 +3351,7 @@
 
 		isMatrix4: true,
 
-		set: function ( n11, n12, n13, n14, n21, n22, n23, n24, n31, n32, n33, n34, n41, n42, n43, n44 ) {
+		set: function( n11, n12, n13, n14, n21, n22, n23, n24, n31, n32, n33, n34, n41, n42, n43, n44 ) {
 
 			var te = this.elements;
 
@@ -3360,7 +3364,7 @@
 
 		},
 
-		identity: function () {
+		identity: function() {
 
 			this.set(
 
@@ -3375,13 +3379,13 @@
 
 		},
 
-		clone: function () {
+		clone: function() {
 
 			return new Matrix4().fromArray( this.elements );
 
 		},
 
-		copy: function ( m ) {
+		copy: function( m ) {
 
 			var te = this.elements;
 			var me = m.elements;
@@ -3395,7 +3399,7 @@
 
 		},
 
-		copyPosition: function ( m ) {
+		copyPosition: function( m ) {
 
 			var te = this.elements, me = m.elements;
 
@@ -3407,7 +3411,7 @@
 
 		},
 
-		extractBasis: function ( xAxis, yAxis, zAxis ) {
+		extractBasis: function( xAxis, yAxis, zAxis ) {
 
 			xAxis.setFromMatrixColumn( this, 0 );
 			yAxis.setFromMatrixColumn( this, 1 );
@@ -3417,7 +3421,7 @@
 
 		},
 
-		makeBasis: function ( xAxis, yAxis, zAxis ) {
+		makeBasis: function( xAxis, yAxis, zAxis ) {
 
 			this.set(
 				xAxis.x, yAxis.x, zAxis.x, 0,
@@ -3430,7 +3434,7 @@
 
 		},
 
-		extractRotation: function () {
+		extractRotation: function() {
 
 			var v1 = new Vector3();
 
@@ -3461,7 +3465,7 @@
 
 		}(),
 
-		makeRotationFromEuler: function ( euler ) {
+		makeRotationFromEuler: function( euler ) {
 
 			if ( ! ( euler && euler.isEuler ) ) {
 
@@ -3589,7 +3593,7 @@
 
 		},
 
-		makeRotationFromQuaternion: function ( q ) {
+		makeRotationFromQuaternion: function( q ) {
 
 			var te = this.elements;
 
@@ -3626,7 +3630,7 @@
 
 		},
 
-		lookAt: function () {
+		lookAt: function() {
 
 			var x = new Vector3();
 			var y = new Vector3();
@@ -3681,7 +3685,7 @@
 
 		}(),
 
-		multiply: function ( m, n ) {
+		multiply: function( m, n ) {
 
 			if ( n !== undefined ) {
 
@@ -3694,13 +3698,13 @@
 
 		},
 
-		premultiply: function ( m ) {
+		premultiply: function( m ) {
 
 			return this.multiplyMatrices( m, this );
 
 		},
 
-		multiplyMatrices: function ( a, b ) {
+		multiplyMatrices: function( a, b ) {
 
 			var ae = a.elements;
 			var be = b.elements;
@@ -3740,7 +3744,7 @@
 
 		},
 
-		multiplyScalar: function ( s ) {
+		multiplyScalar: function( s ) {
 
 			var te = this.elements;
 
@@ -3753,7 +3757,7 @@
 
 		},
 
-		applyToBufferAttribute: function () {
+		applyToBufferAttribute: function() {
 
 			var v1 = new Vector3();
 
@@ -3777,7 +3781,7 @@
 
 		}(),
 
-		determinant: function () {
+		determinant: function() {
 
 			var te = this.elements;
 
@@ -3827,7 +3831,7 @@
 
 		},
 
-		transpose: function () {
+		transpose: function() {
 
 			var te = this.elements;
 			var tmp;
@@ -3844,7 +3848,7 @@
 
 		},
 
-		setPosition: function ( v ) {
+		setPosition: function( v ) {
 
 			var te = this.elements;
 
@@ -3856,7 +3860,7 @@
 
 		},
 
-		getInverse: function ( m, throwOnDegenerate ) {
+		getInverse: function( m, throwOnDegenerate ) {
 
 			// based on http://www.euclideanspace.com/maths/algebra/matrix/functions/inverse/fourD/index.htm
 			var te = this.elements,
@@ -3918,7 +3922,7 @@
 
 		},
 
-		scale: function ( v ) {
+		scale: function( v ) {
 
 			var te = this.elements;
 			var x = v.x, y = v.y, z = v.z;
@@ -3932,7 +3936,7 @@
 
 		},
 
-		getMaxScaleOnAxis: function () {
+		getMaxScaleOnAxis: function() {
 
 			var te = this.elements;
 
@@ -3944,7 +3948,7 @@
 
 		},
 
-		makeTranslation: function ( x, y, z ) {
+		makeTranslation: function( x, y, z ) {
 
 			this.set(
 
@@ -3959,7 +3963,7 @@
 
 		},
 
-		makeRotationX: function ( theta ) {
+		makeRotationX: function( theta ) {
 
 			var c = Math.cos( theta ), s = Math.sin( theta );
 
@@ -3976,7 +3980,7 @@
 
 		},
 
-		makeRotationY: function ( theta ) {
+		makeRotationY: function( theta ) {
 
 			var c = Math.cos( theta ), s = Math.sin( theta );
 
@@ -3993,7 +3997,7 @@
 
 		},
 
-		makeRotationZ: function ( theta ) {
+		makeRotationZ: function( theta ) {
 
 			var c = Math.cos( theta ), s = Math.sin( theta );
 
@@ -4010,7 +4014,7 @@
 
 		},
 
-		makeRotationAxis: function ( axis, angle ) {
+		makeRotationAxis: function( axis, angle ) {
 
 			// Based on http://www.gamedev.net/reference/articles/article1199.asp
 
@@ -4033,7 +4037,7 @@
 
 		},
 
-		makeScale: function ( x, y, z ) {
+		makeScale: function( x, y, z ) {
 
 			this.set(
 
@@ -4048,7 +4052,7 @@
 
 		},
 
-		makeShear: function ( x, y, z ) {
+		makeShear: function( x, y, z ) {
 
 			this.set(
 
@@ -4063,7 +4067,7 @@
 
 		},
 
-		compose: function ( position, quaternion, scale ) {
+		compose: function( position, quaternion, scale ) {
 
 			this.makeRotationFromQuaternion( quaternion );
 			this.scale( scale );
@@ -4073,7 +4077,7 @@
 
 		},
 
-		decompose: function () {
+		decompose: function() {
 
 			var vector = new Vector3();
 			var matrix = new Matrix4();
@@ -4125,7 +4129,7 @@
 
 		}(),
 
-		makePerspective: function ( left, right, top, bottom, near, far ) {
+		makePerspective: function( left, right, top, bottom, near, far ) {
 
 			if ( far === undefined ) {
 
@@ -4151,7 +4155,7 @@
 
 		},
 
-		makeOrthographic: function ( left, right, top, bottom, near, far ) {
+		makeOrthographic: function( left, right, top, bottom, near, far ) {
 
 			var te = this.elements;
 			var w = 1.0 / ( right - left );
@@ -4171,7 +4175,7 @@
 
 		},
 
-		equals: function ( matrix ) {
+		equals: function( matrix ) {
 
 			var te = this.elements;
 			var me = matrix.elements;
@@ -4186,7 +4190,7 @@
 
 		},
 
-		fromArray: function ( array, offset ) {
+		fromArray: function( array, offset ) {
 
 			if ( offset === undefined ) offset = 0;
 
@@ -4200,7 +4204,7 @@
 
 		},
 
-		toArray: function ( array, offset ) {
+		toArray: function( array, offset ) {
 
 			if ( array === undefined ) array = [];
 			if ( offset === undefined ) offset = 0;
@@ -4279,13 +4283,13 @@
 
 	Object.defineProperty( CubeTexture.prototype, 'images', {
 
-		get: function () {
+		get: function() {
 
 			return this.image;
 
 		},
 
-		set: function ( value ) {
+		set: function( value ) {
 
 			this.image = value;
 
@@ -4684,7 +4688,7 @@
 
 	}
 
-	StructuredUniform.prototype.setValue = function ( gl, value ) {
+	StructuredUniform.prototype.setValue = function( gl, value ) {
 
 		// Note: Don't need an extra 'renderer' parameter, since samplers
 		// are not allowed in structured uniforms.
@@ -4794,7 +4798,7 @@
 
 	}
 
-	WebGLUniforms.prototype.setValue = function ( gl, name, value ) {
+	WebGLUniforms.prototype.setValue = function( gl, name, value ) {
 
 		var u = this.map[ name ];
 
@@ -4802,7 +4806,7 @@
 
 	};
 
-	WebGLUniforms.prototype.setOptional = function ( gl, object, name ) {
+	WebGLUniforms.prototype.setOptional = function( gl, object, name ) {
 
 		var v = object[ name ];
 
@@ -4813,7 +4817,7 @@
 
 	// Static interface
 
-	WebGLUniforms.upload = function ( gl, seq, values, renderer ) {
+	WebGLUniforms.upload = function( gl, seq, values, renderer ) {
 
 		for ( var i = 0, n = seq.length; i !== n; ++ i ) {
 
@@ -4831,7 +4835,7 @@
 
 	};
 
-	WebGLUniforms.seqWithValue = function ( seq, values ) {
+	WebGLUniforms.seqWithValue = function( seq, values ) {
 
 		var r = [];
 
@@ -4894,7 +4898,7 @@
 
 		r: 1, g: 1, b: 1,
 
-		set: function ( value ) {
+		set: function( value ) {
 
 			if ( value && value.isColor ) {
 
@@ -4914,7 +4918,7 @@
 
 		},
 
-		setScalar: function ( scalar ) {
+		setScalar: function( scalar ) {
 
 			this.r = scalar;
 			this.g = scalar;
@@ -4924,7 +4928,7 @@
 
 		},
 
-		setHex: function ( hex ) {
+		setHex: function( hex ) {
 
 			hex = Math.floor( hex );
 
@@ -4936,7 +4940,7 @@
 
 		},
 
-		setRGB: function ( r, g, b ) {
+		setRGB: function( r, g, b ) {
 
 			this.r = r;
 			this.g = g;
@@ -4946,7 +4950,7 @@
 
 		},
 
-		setHSL: function () {
+		setHSL: function() {
 
 			function hue2rgb( p, q, t ) {
 
@@ -4987,7 +4991,7 @@
 
 		}(),
 
-		setStyle: function ( style ) {
+		setStyle: function( style ) {
 
 			function handleAlpha( string ) {
 
@@ -5117,13 +5121,13 @@
 
 		},
 
-		clone: function () {
+		clone: function() {
 
 			return new this.constructor( this.r, this.g, this.b );
 
 		},
 
-		copy: function ( color ) {
+		copy: function( color ) {
 
 			this.r = color.r;
 			this.g = color.g;
@@ -5133,7 +5137,7 @@
 
 		},
 
-		copyGammaToLinear: function ( color, gammaFactor ) {
+		copyGammaToLinear: function( color, gammaFactor ) {
 
 			if ( gammaFactor === undefined ) gammaFactor = 2.0;
 
@@ -5145,7 +5149,7 @@
 
 		},
 
-		copyLinearToGamma: function ( color, gammaFactor ) {
+		copyLinearToGamma: function( color, gammaFactor ) {
 
 			if ( gammaFactor === undefined ) gammaFactor = 2.0;
 
@@ -5159,7 +5163,7 @@
 
 		},
 
-		convertGammaToLinear: function () {
+		convertGammaToLinear: function() {
 
 			var r = this.r, g = this.g, b = this.b;
 
@@ -5171,7 +5175,7 @@
 
 		},
 
-		convertLinearToGamma: function () {
+		convertLinearToGamma: function() {
 
 			this.r = Math.sqrt( this.r );
 			this.g = Math.sqrt( this.g );
@@ -5181,19 +5185,19 @@
 
 		},
 
-		getHex: function () {
+		getHex: function() {
 
 			return ( this.r * 255 ) << 16 ^ ( this.g * 255 ) << 8 ^ ( this.b * 255 ) << 0;
 
 		},
 
-		getHexString: function () {
+		getHexString: function() {
 
 			return ( '000000' + this.getHex().toString( 16 ) ).slice( - 6 );
 
 		},
 
-		getHSL: function ( optionalTarget ) {
+		getHSL: function( optionalTarget ) {
 
 			// h,s,l ranges are in 0.0 - 1.0
 
@@ -5204,7 +5208,8 @@
 			var max = Math.max( r, g, b );
 			var min = Math.min( r, g, b );
 
-			var hue, saturation;
+			var hue;
+			var saturation;
 			var lightness = ( min + max ) / 2.0;
 
 			if ( min === max ) {
@@ -5238,13 +5243,13 @@
 
 		},
 
-		getStyle: function () {
+		getStyle: function() {
 
 			return 'rgb(' + ( ( this.r * 255 ) | 0 ) + ',' + ( ( this.g * 255 ) | 0 ) + ',' + ( ( this.b * 255 ) | 0 ) + ')';
 
 		},
 
-		offsetHSL: function ( h, s, l ) {
+		offsetHSL: function( h, s, l ) {
 
 			var hsl = this.getHSL();
 
@@ -5256,7 +5261,7 @@
 
 		},
 
-		add: function ( color ) {
+		add: function( color ) {
 
 			this.r += color.r;
 			this.g += color.g;
@@ -5266,7 +5271,7 @@
 
 		},
 
-		addColors: function ( color1, color2 ) {
+		addColors: function( color1, color2 ) {
 
 			this.r = color1.r + color2.r;
 			this.g = color1.g + color2.g;
@@ -5276,7 +5281,7 @@
 
 		},
 
-		addScalar: function ( s ) {
+		addScalar: function( s ) {
 
 			this.r += s;
 			this.g += s;
@@ -5296,7 +5301,7 @@
 
 		},
 
-		multiply: function ( color ) {
+		multiply: function( color ) {
 
 			this.r *= color.r;
 			this.g *= color.g;
@@ -5306,7 +5311,7 @@
 
 		},
 
-		multiplyScalar: function ( s ) {
+		multiplyScalar: function( s ) {
 
 			this.r *= s;
 			this.g *= s;
@@ -5316,7 +5321,7 @@
 
 		},
 
-		lerp: function ( color, alpha ) {
+		lerp: function( color, alpha ) {
 
 			this.r += ( color.r - this.r ) * alpha;
 			this.g += ( color.g - this.g ) * alpha;
@@ -5326,13 +5331,13 @@
 
 		},
 
-		equals: function ( c ) {
+		equals: function( c ) {
 
 			return ( c.r === this.r ) && ( c.g === this.g ) && ( c.b === this.b );
 
 		},
 
-		fromArray: function ( array, offset ) {
+		fromArray: function( array, offset ) {
 
 			if ( offset === undefined ) offset = 0;
 
@@ -5344,7 +5349,7 @@
 
 		},
 
-		toArray: function ( array, offset ) {
+		toArray: function( array, offset ) {
 
 			if ( array === undefined ) array = [];
 			if ( offset === undefined ) offset = 0;
@@ -5357,7 +5362,7 @@
 
 		},
 
-		toJSON: function () {
+		toJSON: function() {
 
 			return this.getHex();
 
@@ -5543,7 +5548,7 @@
 
 	var UniformsUtils = {
 
-		merge: function ( uniforms ) {
+		merge: function( uniforms ) {
 
 			var merged = {};
 
@@ -5563,7 +5568,7 @@
 
 		},
 
-		clone: function ( uniforms_src ) {
+		clone: function( uniforms_src ) {
 
 			var uniforms_dst = {};
 
@@ -5616,7 +5621,7 @@
 
 	var beginnormal_vertex = "\nvec3 objectNormal = vec3( normal );\n";
 
-	var bsdfs = "float punctualLightIntensityToIrradianceFactor( const in float lightDistance, const in float cutoffDistance, const in float decayExponent ) {\n\tif( decayExponent > 0.0 ) {\n#if defined ( PHYSICALLY_CORRECT_LIGHTS )\n\t\tfloat distanceFalloff = 1.0 / max( pow( lightDistance, decayExponent ), 0.01 );\n\t\tfloat maxDistanceCutoffFactor = pow2( saturate( 1.0 - pow4( lightDistance / cutoffDistance ) ) );\n\t\treturn distanceFalloff * maxDistanceCutoffFactor;\n#else\n\t\treturn pow( saturate( -lightDistance / cutoffDistance + 1.0 ), decayExponent );\n#endif\n\t}\n\treturn 1.0;\n}\nvec3 BRDF_Diffuse_Lambert( const in vec3 diffuseColor ) {\n\treturn RECIPROCAL_PI * diffuseColor;\n}\nvec3 F_Schlick( const in vec3 specularColor, const in float dotLH ) {\n\tfloat fresnel = exp2( ( -5.55473 * dotLH - 6.98316 ) * dotLH );\n\treturn ( 1.0 - specularColor ) * fresnel + specularColor;\n}\nfloat G_GGX_Smith( const in float alpha, const in float dotNL, const in float dotNV ) {\n\tfloat a2 = pow2( alpha );\n\tfloat gl = dotNL + sqrt( a2 + ( 1.0 - a2 ) * pow2( dotNL ) );\n\tfloat gv = dotNV + sqrt( a2 + ( 1.0 - a2 ) * pow2( dotNV ) );\n\treturn 1.0 / ( gl * gv );\n}\nfloat G_GGX_SmithCorrelated( const in float alpha, const in float dotNL, const in float dotNV ) {\n\tfloat a2 = pow2( alpha );\n\tfloat gv = dotNL * sqrt( a2 + ( 1.0 - a2 ) * pow2( dotNV ) );\n\tfloat gl = dotNV * sqrt( a2 + ( 1.0 - a2 ) * pow2( dotNL ) );\n\treturn 0.5 / max( gv + gl, EPSILON );\n}\nfloat D_GGX( const in float alpha, const in float dotNH ) {\n\tfloat a2 = pow2( alpha );\n\tfloat denom = pow2( dotNH ) * ( a2 - 1.0 ) + 1.0;\n\treturn RECIPROCAL_PI * a2 / pow2( denom );\n}\nvec3 BRDF_Specular_GGX( const in IncidentLight incidentLight, const in GeometricContext geometry, const in vec3 specularColor, const in float roughness ) {\n\tfloat alpha = pow2( roughness );\n\tvec3 halfDir = normalize( incidentLight.direction + geometry.viewDir );\n\tfloat dotNL = saturate( dot( geometry.normal, incidentLight.direction ) );\n\tfloat dotNV = saturate( dot( geometry.normal, geometry.viewDir ) );\n\tfloat dotNH = saturate( dot( geometry.normal, halfDir ) );\n\tfloat dotLH = saturate( dot( incidentLight.direction, halfDir ) );\n\tvec3 F = F_Schlick( specularColor, dotLH );\n\tfloat G = G_GGX_SmithCorrelated( alpha, dotNL, dotNV );\n\tfloat D = D_GGX( alpha, dotNH );\n\treturn F * ( G * D );\n}\nvec2 LTC_Uv( const in vec3 N, const in vec3 V, const in float roughness ) {\n\tconst float LUT_SIZE  = 64.0;\n\tconst float LUT_SCALE = ( LUT_SIZE - 1.0 ) / LUT_SIZE;\n\tconst float LUT_BIAS  = 0.5 / LUT_SIZE;\n\tfloat theta = acos( dot( N, V ) );\n\tvec2 uv = vec2(\n\t\tsqrt( saturate( roughness ) ),\n\t\tsaturate( theta / ( 0.5 * PI ) ) );\n\tuv = uv * LUT_SCALE + LUT_BIAS;\n\treturn uv;\n}\nfloat LTC_ClippedSphereFormFactor( const in vec3 f ) {\n\tfloat l = length( f );\n\treturn max( ( l * l + f.z ) / ( l + 1.0 ), 0.0 );\n}\nvec3 LTC_EdgeVectorFormFactor( const in vec3 v1, const in vec3 v2 ) {\n\tfloat x = dot( v1, v2 );\n\tfloat y = abs( x );\n\tfloat a = 0.86267 + (0.49788 + 0.01436 * y ) * y;\n\tfloat b = 3.45068 + (4.18814 + y) * y;\n\tfloat v = a / b;\n\tfloat theta_sintheta = (x > 0.0) ? v : 0.5 * inversesqrt( 1.0 - x * x ) - v;\n\treturn cross( v1, v2 ) * theta_sintheta;\n}\nvec3 LTC_Evaluate( const in vec3 N, const in vec3 V, const in vec3 P, const in mat3 mInv, const in vec3 rectCoords[ 4 ] ) {\n\tvec3 v1 = rectCoords[ 1 ] - rectCoords[ 0 ];\n\tvec3 v2 = rectCoords[ 3 ] - rectCoords[ 0 ];\n\tvec3 lightNormal = cross( v1, v2 );\n\tif( dot( lightNormal, P - rectCoords[ 0 ] ) < 0.0 ) return vec3( 0.0 );\n\tvec3 T1, T2;\n\tT1 = normalize( V - N * dot( V, N ) );\n\tT2 = - cross( N, T1 );\n\tmat3 mat = mInv * transpose( mat3( T1, T2, N ) );\n\tvec3 coords[ 4 ];\n\tcoords[ 0 ] = mat * ( rectCoords[ 0 ] - P );\n\tcoords[ 1 ] = mat * ( rectCoords[ 1 ] - P );\n\tcoords[ 2 ] = mat * ( rectCoords[ 2 ] - P );\n\tcoords[ 3 ] = mat * ( rectCoords[ 3 ] - P );\n\tcoords[ 0 ] = normalize( coords[ 0 ] );\n\tcoords[ 1 ] = normalize( coords[ 1 ] );\n\tcoords[ 2 ] = normalize( coords[ 2 ] );\n\tcoords[ 3 ] = normalize( coords[ 3 ] );\n\tvec3 vectorFormFactor = vec3( 0.0 );\n\tvectorFormFactor += LTC_EdgeVectorFormFactor( coords[ 0 ], coords[ 1 ] );\n\tvectorFormFactor += LTC_EdgeVectorFormFactor( coords[ 1 ], coords[ 2 ] );\n\tvectorFormFactor += LTC_EdgeVectorFormFactor( coords[ 2 ], coords[ 3 ] );\n\tvectorFormFactor += LTC_EdgeVectorFormFactor( coords[ 3 ], coords[ 0 ] );\n\tvec3 result = vec3( LTC_ClippedSphereFormFactor( vectorFormFactor ) );\n\treturn result;\n}\nvec3 BRDF_Specular_GGX_Environment( const in GeometricContext geometry, const in vec3 specularColor, const in float roughness ) {\n\tfloat dotNV = saturate( dot( geometry.normal, geometry.viewDir ) );\n\tconst vec4 c0 = vec4( - 1, - 0.0275, - 0.572, 0.022 );\n\tconst vec4 c1 = vec4( 1, 0.0425, 1.04, - 0.04 );\n\tvec4 r = roughness * c0 + c1;\n\tfloat a004 = min( r.x * r.x, exp2( - 9.28 * dotNV ) ) * r.x + r.y;\n\tvec2 AB = vec2( -1.04, 1.04 ) * a004 + r.zw;\n\treturn specularColor * AB.x + AB.y;\n}\nfloat G_BlinnPhong_Implicit( ) {\n\treturn 0.25;\n}\nfloat D_BlinnPhong( const in float shininess, const in float dotNH ) {\n\treturn RECIPROCAL_PI * ( shininess * 0.5 + 1.0 ) * pow( dotNH, shininess );\n}\nvec3 BRDF_Specular_BlinnPhong( const in IncidentLight incidentLight, const in GeometricContext geometry, const in vec3 specularColor, const in float shininess ) {\n\tvec3 halfDir = normalize( incidentLight.direction + geometry.viewDir );\n\tfloat dotNH = saturate( dot( geometry.normal, halfDir ) );\n\tfloat dotLH = saturate( dot( incidentLight.direction, halfDir ) );\n\tvec3 F = F_Schlick( specularColor, dotLH );\n\tfloat G = G_BlinnPhong_Implicit( );\n\tfloat D = D_BlinnPhong( shininess, dotNH );\n\treturn F * ( G * D );\n}\nfloat GGXRoughnessToBlinnExponent( const in float ggxRoughness ) {\n\treturn ( 2.0 / pow2( ggxRoughness + 0.0001 ) - 2.0 );\n}\nfloat BlinnExponentToGGXRoughness( const in float blinnExponent ) {\n\treturn sqrt( 2.0 / ( blinnExponent + 2.0 ) );\n}\n";
+	var bsdfs = "float punctualLightIntensityToIrradianceFactor( const in float lightDistance, const in float cutoffDistance, const in float decayExponent ) {\n\tif ( decayExponent > 0.0 ) {\n#if defined ( PHYSICALLY_CORRECT_LIGHTS )\n\t\tfloat distanceFalloff = 1.0 / max( pow( lightDistance, decayExponent ), 0.01 );\n\t\tfloat maxDistanceCutoffFactor = pow2( saturate( 1.0 - pow4( lightDistance / cutoffDistance ) ) );\n\t\treturn distanceFalloff * maxDistanceCutoffFactor;\n#else\n\t\treturn pow( saturate( -lightDistance / cutoffDistance + 1.0 ), decayExponent );\n#endif\n\t}\n\treturn 1.0;\n}\nvec3 BRDF_Diffuse_Lambert( const in vec3 diffuseColor ) {\n\treturn RECIPROCAL_PI * diffuseColor;\n}\nvec3 F_Schlick( const in vec3 specularColor, const in float dotLH ) {\n\tfloat fresnel = exp2( ( -5.55473 * dotLH - 6.98316 ) * dotLH );\n\treturn ( 1.0 - specularColor ) * fresnel + specularColor;\n}\nfloat G_GGX_Smith( const in float alpha, const in float dotNL, const in float dotNV ) {\n\tfloat a2 = pow2( alpha );\n\tfloat gl = dotNL + sqrt( a2 + ( 1.0 - a2 ) * pow2( dotNL ) );\n\tfloat gv = dotNV + sqrt( a2 + ( 1.0 - a2 ) * pow2( dotNV ) );\n\treturn 1.0 / ( gl * gv );\n}\nfloat G_GGX_SmithCorrelated( const in float alpha, const in float dotNL, const in float dotNV ) {\n\tfloat a2 = pow2( alpha );\n\tfloat gv = dotNL * sqrt( a2 + ( 1.0 - a2 ) * pow2( dotNV ) );\n\tfloat gl = dotNV * sqrt( a2 + ( 1.0 - a2 ) * pow2( dotNL ) );\n\treturn 0.5 / max( gv + gl, EPSILON );\n}\nfloat D_GGX( const in float alpha, const in float dotNH ) {\n\tfloat a2 = pow2( alpha );\n\tfloat denom = pow2( dotNH ) * ( a2 - 1.0 ) + 1.0;\n\treturn RECIPROCAL_PI * a2 / pow2( denom );\n}\nvec3 BRDF_Specular_GGX( const in IncidentLight incidentLight, const in GeometricContext geometry, const in vec3 specularColor, const in float roughness ) {\n\tfloat alpha = pow2( roughness );\n\tvec3 halfDir = normalize( incidentLight.direction + geometry.viewDir );\n\tfloat dotNL = saturate( dot( geometry.normal, incidentLight.direction ) );\n\tfloat dotNV = saturate( dot( geometry.normal, geometry.viewDir ) );\n\tfloat dotNH = saturate( dot( geometry.normal, halfDir ) );\n\tfloat dotLH = saturate( dot( incidentLight.direction, halfDir ) );\n\tvec3 F = F_Schlick( specularColor, dotLH );\n\tfloat G = G_GGX_SmithCorrelated( alpha, dotNL, dotNV );\n\tfloat D = D_GGX( alpha, dotNH );\n\treturn F * ( G * D );\n}\nvec2 LTC_Uv( const in vec3 N, const in vec3 V, const in float roughness ) {\n\tconst float LUT_SIZE  = 64.0;\n\tconst float LUT_SCALE = ( LUT_SIZE - 1.0 ) / LUT_SIZE;\n\tconst float LUT_BIAS  = 0.5 / LUT_SIZE;\n\tfloat theta = acos( dot( N, V ) );\n\tvec2 uv = vec2(\n\t\tsqrt( saturate( roughness ) ),\n\t\tsaturate( theta / ( 0.5 * PI ) ) );\n\tuv = uv * LUT_SCALE + LUT_BIAS;\n\treturn uv;\n}\nfloat LTC_ClippedSphereFormFactor( const in vec3 f ) {\n\tfloat l = length( f );\n\treturn max( ( l * l + f.z ) / ( l + 1.0 ), 0.0 );\n}\nvec3 LTC_EdgeVectorFormFactor( const in vec3 v1, const in vec3 v2 ) {\n\tfloat x = dot( v1, v2 );\n\tfloat y = abs( x );\n\tfloat a = 0.86267 + (0.49788 + 0.01436 * y ) * y;\n\tfloat b = 3.45068 + (4.18814 + y) * y;\n\tfloat v = a / b;\n\tfloat theta_sintheta = (x > 0.0) ? v : 0.5 * inversesqrt( 1.0 - x * x ) - v;\n\treturn cross( v1, v2 ) * theta_sintheta;\n}\nvec3 LTC_Evaluate( const in vec3 N, const in vec3 V, const in vec3 P, const in mat3 mInv, const in vec3 rectCoords[ 4 ] ) {\n\tvec3 v1 = rectCoords[ 1 ] - rectCoords[ 0 ];\n\tvec3 v2 = rectCoords[ 3 ] - rectCoords[ 0 ];\n\tvec3 lightNormal = cross( v1, v2 );\n\tif ( dot( lightNormal, P - rectCoords[ 0 ] ) < 0.0 ) return vec3( 0.0 );\n\tvec3 T1, T2;\n\tT1 = normalize( V - N * dot( V, N ) );\n\tT2 = - cross( N, T1 );\n\tmat3 mat = mInv * transpose( mat3( T1, T2, N ) );\n\tvec3 coords[ 4 ];\n\tcoords[ 0 ] = mat * ( rectCoords[ 0 ] - P );\n\tcoords[ 1 ] = mat * ( rectCoords[ 1 ] - P );\n\tcoords[ 2 ] = mat * ( rectCoords[ 2 ] - P );\n\tcoords[ 3 ] = mat * ( rectCoords[ 3 ] - P );\n\tcoords[ 0 ] = normalize( coords[ 0 ] );\n\tcoords[ 1 ] = normalize( coords[ 1 ] );\n\tcoords[ 2 ] = normalize( coords[ 2 ] );\n\tcoords[ 3 ] = normalize( coords[ 3 ] );\n\tvec3 vectorFormFactor = vec3( 0.0 );\n\tvectorFormFactor += LTC_EdgeVectorFormFactor( coords[ 0 ], coords[ 1 ] );\n\tvectorFormFactor += LTC_EdgeVectorFormFactor( coords[ 1 ], coords[ 2 ] );\n\tvectorFormFactor += LTC_EdgeVectorFormFactor( coords[ 2 ], coords[ 3 ] );\n\tvectorFormFactor += LTC_EdgeVectorFormFactor( coords[ 3 ], coords[ 0 ] );\n\tvec3 result = vec3( LTC_ClippedSphereFormFactor( vectorFormFactor ) );\n\treturn result;\n}\nvec3 BRDF_Specular_GGX_Environment( const in GeometricContext geometry, const in vec3 specularColor, const in float roughness ) {\n\tfloat dotNV = saturate( dot( geometry.normal, geometry.viewDir ) );\n\tconst vec4 c0 = vec4( - 1, - 0.0275, - 0.572, 0.022 );\n\tconst vec4 c1 = vec4( 1, 0.0425, 1.04, - 0.04 );\n\tvec4 r = roughness * c0 + c1;\n\tfloat a004 = min( r.x * r.x, exp2( - 9.28 * dotNV ) ) * r.x + r.y;\n\tvec2 AB = vec2( -1.04, 1.04 ) * a004 + r.zw;\n\treturn specularColor * AB.x + AB.y;\n}\nfloat G_BlinnPhong_Implicit( ) {\n\treturn 0.25;\n}\nfloat D_BlinnPhong( const in float shininess, const in float dotNH ) {\n\treturn RECIPROCAL_PI * ( shininess * 0.5 + 1.0 ) * pow( dotNH, shininess );\n}\nvec3 BRDF_Specular_BlinnPhong( const in IncidentLight incidentLight, const in GeometricContext geometry, const in vec3 specularColor, const in float shininess ) {\n\tvec3 halfDir = normalize( incidentLight.direction + geometry.viewDir );\n\tfloat dotNH = saturate( dot( geometry.normal, halfDir ) );\n\tfloat dotLH = saturate( dot( incidentLight.direction, halfDir ) );\n\tvec3 F = F_Schlick( specularColor, dotLH );\n\tfloat G = G_BlinnPhong_Implicit( );\n\tfloat D = D_BlinnPhong( shininess, dotNH );\n\treturn F * ( G * D );\n}\nfloat GGXRoughnessToBlinnExponent( const in float ggxRoughness ) {\n\treturn ( 2.0 / pow2( ggxRoughness + 0.0001 ) - 2.0 );\n}\nfloat BlinnExponentToGGXRoughness( const in float blinnExponent ) {\n\treturn sqrt( 2.0 / ( blinnExponent + 2.0 ) );\n}\n";
 
 	var bumpmap_pars_fragment = "#ifdef USE_BUMPMAP\n\tuniform sampler2D bumpMap;\n\tuniform float bumpScale;\n\tvec2 dHdxy_fwd() {\n\t\tvec2 dSTdx = dFdx( vUv );\n\t\tvec2 dSTdy = dFdy( vUv );\n\t\tfloat Hll = bumpScale * texture2D( bumpMap, vUv ).x;\n\t\tfloat dBx = bumpScale * texture2D( bumpMap, vUv + dSTdx ).x - Hll;\n\t\tfloat dBy = bumpScale * texture2D( bumpMap, vUv + dSTdy ).x - Hll;\n\t\treturn vec2( dBx, dBy );\n\t}\n\tvec3 perturbNormalArb( vec3 surf_pos, vec3 surf_norm, vec2 dHdxy ) {\n\t\tvec3 vSigmaX = vec3( dFdx( surf_pos.x ), dFdx( surf_pos.y ), dFdx( surf_pos.z ) );\n\t\tvec3 vSigmaY = vec3( dFdy( surf_pos.x ), dFdy( surf_pos.y ), dFdy( surf_pos.z ) );\n\t\tvec3 vN = surf_norm;\n\t\tvec3 R1 = cross( vSigmaY, vN );\n\t\tvec3 R2 = cross( vN, vSigmaX );\n\t\tfloat fDet = dot( vSigmaX, R1 );\n\t\tvec3 vGrad = sign( fDet ) * ( dHdxy.x * R1 + dHdxy.y * R2 );\n\t\treturn normalize( abs( fDet ) * surf_norm - vGrad );\n\t}\n#endif\n";
 
@@ -5638,7 +5643,7 @@
 
 	var common = "#define PI 3.14159265359\n#define PI2 6.28318530718\n#define PI_HALF 1.5707963267949\n#define RECIPROCAL_PI 0.31830988618\n#define RECIPROCAL_PI2 0.15915494\n#define LOG2 1.442695\n#define EPSILON 1e-6\n#define saturate(a) clamp( a, 0.0, 1.0 )\n#define whiteCompliment(a) ( 1.0 - saturate( a ) )\nfloat pow2( const in float x ) { return x*x; }\nfloat pow3( const in float x ) { return x*x*x; }\nfloat pow4( const in float x ) { float x2 = x*x; return x2*x2; }\nfloat average( const in vec3 color ) { return dot( color, vec3( 0.3333 ) ); }\nhighp float rand( const in vec2 uv ) {\n\tconst highp float a = 12.9898, b = 78.233, c = 43758.5453;\n\thighp float dt = dot( uv.xy, vec2( a,b ) ), sn = mod( dt, PI );\n\treturn fract(sin(sn) * c);\n}\nstruct IncidentLight {\n\tvec3 color;\n\tvec3 direction;\n\tbool visible;\n};\nstruct ReflectedLight {\n\tvec3 directDiffuse;\n\tvec3 directSpecular;\n\tvec3 indirectDiffuse;\n\tvec3 indirectSpecular;\n};\nstruct GeometricContext {\n\tvec3 position;\n\tvec3 normal;\n\tvec3 viewDir;\n};\nvec3 transformDirection( in vec3 dir, in mat4 matrix ) {\n\treturn normalize( ( matrix * vec4( dir, 0.0 ) ).xyz );\n}\nvec3 inverseTransformDirection( in vec3 dir, in mat4 matrix ) {\n\treturn normalize( ( vec4( dir, 0.0 ) * matrix ).xyz );\n}\nvec3 projectOnPlane(in vec3 point, in vec3 pointOnPlane, in vec3 planeNormal ) {\n\tfloat distance = dot( planeNormal, point - pointOnPlane );\n\treturn - distance * planeNormal + point;\n}\nfloat sideOfPlane( in vec3 point, in vec3 pointOnPlane, in vec3 planeNormal ) {\n\treturn sign( dot( point - pointOnPlane, planeNormal ) );\n}\nvec3 linePlaneIntersect( in vec3 pointOnLine, in vec3 lineDirection, in vec3 pointOnPlane, in vec3 planeNormal ) {\n\treturn lineDirection * ( dot( planeNormal, pointOnPlane - pointOnLine ) / dot( planeNormal, lineDirection ) ) + pointOnLine;\n}\nmat3 transpose( const in mat3 v ) {\n\tmat3 tmp;\n\ttmp[0] = vec3(v[0].x, v[1].x, v[2].x);\n\ttmp[1] = vec3(v[0].y, v[1].y, v[2].y);\n\ttmp[2] = vec3(v[0].z, v[1].z, v[2].z);\n\treturn tmp;\n}\n";
 
-	var cube_uv_reflection_fragment = "#ifdef ENVMAP_TYPE_CUBE_UV\n#define cubeUV_textureSize (1024.0)\nint getFaceFromDirection(vec3 direction) {\n\tvec3 absDirection = abs(direction);\n\tint face = -1;\n\tif( absDirection.x > absDirection.z ) {\n\t\tif(absDirection.x > absDirection.y )\n\t\t\tface = direction.x > 0.0 ? 0 : 3;\n\t\telse\n\t\t\tface = direction.y > 0.0 ? 1 : 4;\n\t}\n\telse {\n\t\tif(absDirection.z > absDirection.y )\n\t\t\tface = direction.z > 0.0 ? 2 : 5;\n\t\telse\n\t\t\tface = direction.y > 0.0 ? 1 : 4;\n\t}\n\treturn face;\n}\n#define cubeUV_maxLods1  (log2(cubeUV_textureSize*0.25) - 1.0)\n#define cubeUV_rangeClamp (exp2((6.0 - 1.0) * 2.0))\nvec2 MipLevelInfo( vec3 vec, float roughnessLevel, float roughness ) {\n\tfloat scale = exp2(cubeUV_maxLods1 - roughnessLevel);\n\tfloat dxRoughness = dFdx(roughness);\n\tfloat dyRoughness = dFdy(roughness);\n\tvec3 dx = dFdx( vec * scale * dxRoughness );\n\tvec3 dy = dFdy( vec * scale * dyRoughness );\n\tfloat d = max( dot( dx, dx ), dot( dy, dy ) );\n\td = clamp(d, 1.0, cubeUV_rangeClamp);\n\tfloat mipLevel = 0.5 * log2(d);\n\treturn vec2(floor(mipLevel), fract(mipLevel));\n}\n#define cubeUV_maxLods2 (log2(cubeUV_textureSize*0.25) - 2.0)\n#define cubeUV_rcpTextureSize (1.0 / cubeUV_textureSize)\nvec2 getCubeUV(vec3 direction, float roughnessLevel, float mipLevel) {\n\tmipLevel = roughnessLevel > cubeUV_maxLods2 - 3.0 ? 0.0 : mipLevel;\n\tfloat a = 16.0 * cubeUV_rcpTextureSize;\n\tvec2 exp2_packed = exp2( vec2( roughnessLevel, mipLevel ) );\n\tvec2 rcp_exp2_packed = vec2( 1.0 ) / exp2_packed;\n\tfloat powScale = exp2_packed.x * exp2_packed.y;\n\tfloat scale = rcp_exp2_packed.x * rcp_exp2_packed.y * 0.25;\n\tfloat mipOffset = 0.75*(1.0 - rcp_exp2_packed.y) * rcp_exp2_packed.x;\n\tbool bRes = mipLevel == 0.0;\n\tscale =  bRes && (scale < a) ? a : scale;\n\tvec3 r;\n\tvec2 offset;\n\tint face = getFaceFromDirection(direction);\n\tfloat rcpPowScale = 1.0 / powScale;\n\tif( face == 0) {\n\t\tr = vec3(direction.x, -direction.z, direction.y);\n\t\toffset = vec2(0.0+mipOffset,0.75 * rcpPowScale);\n\t\toffset.y = bRes && (offset.y < 2.0*a) ? a : offset.y;\n\t}\n\telse if( face == 1) {\n\t\tr = vec3(direction.y, direction.x, direction.z);\n\t\toffset = vec2(scale+mipOffset, 0.75 * rcpPowScale);\n\t\toffset.y = bRes && (offset.y < 2.0*a) ? a : offset.y;\n\t}\n\telse if( face == 2) {\n\t\tr = vec3(direction.z, direction.x, direction.y);\n\t\toffset = vec2(2.0*scale+mipOffset, 0.75 * rcpPowScale);\n\t\toffset.y = bRes && (offset.y < 2.0*a) ? a : offset.y;\n\t}\n\telse if( face == 3) {\n\t\tr = vec3(direction.x, direction.z, direction.y);\n\t\toffset = vec2(0.0+mipOffset,0.5 * rcpPowScale);\n\t\toffset.y = bRes && (offset.y < 2.0*a) ? 0.0 : offset.y;\n\t}\n\telse if( face == 4) {\n\t\tr = vec3(direction.y, direction.x, -direction.z);\n\t\toffset = vec2(scale+mipOffset, 0.5 * rcpPowScale);\n\t\toffset.y = bRes && (offset.y < 2.0*a) ? 0.0 : offset.y;\n\t}\n\telse {\n\t\tr = vec3(direction.z, -direction.x, direction.y);\n\t\toffset = vec2(2.0*scale+mipOffset, 0.5 * rcpPowScale);\n\t\toffset.y = bRes && (offset.y < 2.0*a) ? 0.0 : offset.y;\n\t}\n\tr = normalize(r);\n\tfloat texelOffset = 0.5 * cubeUV_rcpTextureSize;\n\tvec2 s = ( r.yz / abs( r.x ) + vec2( 1.0 ) ) * 0.5;\n\tvec2 base = offset + vec2( texelOffset );\n\treturn base + s * ( scale - 2.0 * texelOffset );\n}\n#define cubeUV_maxLods3 (log2(cubeUV_textureSize*0.25) - 3.0)\nvec4 textureCubeUV(vec3 reflectedDirection, float roughness ) {\n\tfloat roughnessVal = roughness* cubeUV_maxLods3;\n\tfloat r1 = floor(roughnessVal);\n\tfloat r2 = r1 + 1.0;\n\tfloat t = fract(roughnessVal);\n\tvec2 mipInfo = MipLevelInfo(reflectedDirection, r1, roughness);\n\tfloat s = mipInfo.y;\n\tfloat level0 = mipInfo.x;\n\tfloat level1 = level0 + 1.0;\n\tlevel1 = level1 > 5.0 ? 5.0 : level1;\n\tlevel0 += min( floor( s + 0.5 ), 5.0 );\n\tvec2 uv_10 = getCubeUV(reflectedDirection, r1, level0);\n\tvec4 color10 = envMapTexelToLinear(texture2D(envMap, uv_10));\n\tvec2 uv_20 = getCubeUV(reflectedDirection, r2, level0);\n\tvec4 color20 = envMapTexelToLinear(texture2D(envMap, uv_20));\n\tvec4 result = mix(color10, color20, t);\n\treturn vec4(result.rgb, 1.0);\n}\n#endif\n";
+	var cube_uv_reflection_fragment = "#ifdef ENVMAP_TYPE_CUBE_UV\n#define cubeUV_textureSize (1024.0)\nint getFaceFromDirection(vec3 direction) {\n\tvec3 absDirection = abs(direction);\n\tint face = -1;\n\tif ( absDirection.x > absDirection.z ) {\n\t\tif (absDirection.x > absDirection.y )\n\t\t\tface = direction.x > 0.0 ? 0 : 3;\n\t\telse\n\t\t\tface = direction.y > 0.0 ? 1 : 4;\n\t}\n\telse {\n\t\tif (absDirection.z > absDirection.y )\n\t\t\tface = direction.z > 0.0 ? 2 : 5;\n\t\telse\n\t\t\tface = direction.y > 0.0 ? 1 : 4;\n\t}\n\treturn face;\n}\n#define cubeUV_maxLods1  (log2(cubeUV_textureSize*0.25) - 1.0)\n#define cubeUV_rangeClamp (exp2((6.0 - 1.0) * 2.0))\nvec2 MipLevelInfo( vec3 vec, float roughnessLevel, float roughness ) {\n\tfloat scale = exp2(cubeUV_maxLods1 - roughnessLevel);\n\tfloat dxRoughness = dFdx(roughness);\n\tfloat dyRoughness = dFdy(roughness);\n\tvec3 dx = dFdx( vec * scale * dxRoughness );\n\tvec3 dy = dFdy( vec * scale * dyRoughness );\n\tfloat d = max( dot( dx, dx ), dot( dy, dy ) );\n\td = clamp(d, 1.0, cubeUV_rangeClamp);\n\tfloat mipLevel = 0.5 * log2(d);\n\treturn vec2(floor(mipLevel), fract(mipLevel));\n}\n#define cubeUV_maxLods2 (log2(cubeUV_textureSize*0.25) - 2.0)\n#define cubeUV_rcpTextureSize (1.0 / cubeUV_textureSize)\nvec2 getCubeUV(vec3 direction, float roughnessLevel, float mipLevel) {\n\tmipLevel = roughnessLevel > cubeUV_maxLods2 - 3.0 ? 0.0 : mipLevel;\n\tfloat a = 16.0 * cubeUV_rcpTextureSize;\n\tvec2 exp2_packed = exp2( vec2( roughnessLevel, mipLevel ) );\n\tvec2 rcp_exp2_packed = vec2( 1.0 ) / exp2_packed;\n\tfloat powScale = exp2_packed.x * exp2_packed.y;\n\tfloat scale = rcp_exp2_packed.x * rcp_exp2_packed.y * 0.25;\n\tfloat mipOffset = 0.75*(1.0 - rcp_exp2_packed.y) * rcp_exp2_packed.x;\n\tbool bRes = mipLevel == 0.0;\n\tscale =  bRes && (scale < a) ? a : scale;\n\tvec3 r;\n\tvec2 offset;\n\tint face = getFaceFromDirection(direction);\n\tfloat rcpPowScale = 1.0 / powScale;\n\tif ( face == 0) {\n\t\tr = vec3(direction.x, -direction.z, direction.y);\n\t\toffset = vec2(0.0+mipOffset,0.75 * rcpPowScale);\n\t\toffset.y = bRes && (offset.y < 2.0*a) ? a : offset.y;\n\t}\n\telse if ( face == 1) {\n\t\tr = vec3(direction.y, direction.x, direction.z);\n\t\toffset = vec2(scale+mipOffset, 0.75 * rcpPowScale);\n\t\toffset.y = bRes && (offset.y < 2.0*a) ? a : offset.y;\n\t}\n\telse if ( face == 2) {\n\t\tr = vec3(direction.z, direction.x, direction.y);\n\t\toffset = vec2(2.0*scale+mipOffset, 0.75 * rcpPowScale);\n\t\toffset.y = bRes && (offset.y < 2.0*a) ? a : offset.y;\n\t}\n\telse if ( face == 3) {\n\t\tr = vec3(direction.x, direction.z, direction.y);\n\t\toffset = vec2(0.0+mipOffset,0.5 * rcpPowScale);\n\t\toffset.y = bRes && (offset.y < 2.0*a) ? 0.0 : offset.y;\n\t}\n\telse if ( face == 4) {\n\t\tr = vec3(direction.y, direction.x, -direction.z);\n\t\toffset = vec2(scale+mipOffset, 0.5 * rcpPowScale);\n\t\toffset.y = bRes && (offset.y < 2.0*a) ? 0.0 : offset.y;\n\t}\n\telse {\n\t\tr = vec3(direction.z, -direction.x, direction.y);\n\t\toffset = vec2(2.0*scale+mipOffset, 0.5 * rcpPowScale);\n\t\toffset.y = bRes && (offset.y < 2.0*a) ? 0.0 : offset.y;\n\t}\n\tr = normalize(r);\n\tfloat texelOffset = 0.5 * cubeUV_rcpTextureSize;\n\tvec2 s = ( r.yz / abs( r.x ) + vec2( 1.0 ) ) * 0.5;\n\tvec2 base = offset + vec2( texelOffset );\n\treturn base + s * ( scale - 2.0 * texelOffset );\n}\n#define cubeUV_maxLods3 (log2(cubeUV_textureSize*0.25) - 3.0)\nvec4 textureCubeUV(vec3 reflectedDirection, float roughness ) {\n\tfloat roughnessVal = roughness* cubeUV_maxLods3;\n\tfloat r1 = floor(roughnessVal);\n\tfloat r2 = r1 + 1.0;\n\tfloat t = fract(roughnessVal);\n\tvec2 mipInfo = MipLevelInfo(reflectedDirection, r1, roughness);\n\tfloat s = mipInfo.y;\n\tfloat level0 = mipInfo.x;\n\tfloat level1 = level0 + 1.0;\n\tlevel1 = level1 > 5.0 ? 5.0 : level1;\n\tlevel0 += min( floor( s + 0.5 ), 5.0 );\n\tvec2 uv_10 = getCubeUV(reflectedDirection, r1, level0);\n\tvec4 color10 = envMapTexelToLinear(texture2D(envMap, uv_10));\n\tvec2 uv_20 = getCubeUV(reflectedDirection, r2, level0);\n\tvec4 color20 = envMapTexelToLinear(texture2D(envMap, uv_20));\n\tvec4 result = mix(color10, color20, t);\n\treturn vec4(result.rgb, 1.0);\n}\n#endif\n";
 
 	var defaultnormal_vertex = "vec3 transformedNormal = normalMatrix * objectNormal;\n#ifdef FLIP_SIDED\n\ttransformedNormal = - transformedNormal;\n#endif\n";
 
@@ -6161,7 +6166,7 @@
 
 	Object.assign( Box2.prototype, {
 
-		set: function ( min, max ) {
+		set: function( min, max ) {
 
 			this.min.copy( min );
 			this.max.copy( max );
@@ -6170,7 +6175,7 @@
 
 		},
 
-		setFromPoints: function ( points ) {
+		setFromPoints: function( points ) {
 
 			this.makeEmpty();
 
@@ -6184,7 +6189,7 @@
 
 		},
 
-		setFromCenterAndSize: function () {
+		setFromCenterAndSize: function() {
 
 			var v1 = new Vector2();
 
@@ -6200,13 +6205,13 @@
 
 		}(),
 
-		clone: function () {
+		clone: function() {
 
 			return new this.constructor().copy( this );
 
 		},
 
-		copy: function ( box ) {
+		copy: function( box ) {
 
 			this.min.copy( box.min );
 			this.max.copy( box.max );
@@ -6215,7 +6220,7 @@
 
 		},
 
-		makeEmpty: function () {
+		makeEmpty: function() {
 
 			this.min.x = this.min.y = + Infinity;
 			this.max.x = this.max.y = - Infinity;
@@ -6224,7 +6229,7 @@
 
 		},
 
-		isEmpty: function () {
+		isEmpty: function() {
 
 			// this is a more robust check for empty than ( volume <= 0 ) because volume can get positive with two negative axes
 
@@ -6232,21 +6237,21 @@
 
 		},
 
-		getCenter: function ( optionalTarget ) {
+		getCenter: function( optionalTarget ) {
 
 			var result = optionalTarget || new Vector2();
 			return this.isEmpty() ? result.set( 0, 0 ) : result.addVectors( this.min, this.max ).multiplyScalar( 0.5 );
 
 		},
 
-		getSize: function ( optionalTarget ) {
+		getSize: function( optionalTarget ) {
 
 			var result = optionalTarget || new Vector2();
 			return this.isEmpty() ? result.set( 0, 0 ) : result.subVectors( this.max, this.min );
 
 		},
 
-		expandByPoint: function ( point ) {
+		expandByPoint: function( point ) {
 
 			this.min.min( point );
 			this.max.max( point );
@@ -6255,7 +6260,7 @@
 
 		},
 
-		expandByVector: function ( vector ) {
+		expandByVector: function( vector ) {
 
 			this.min.sub( vector );
 			this.max.add( vector );
@@ -6264,7 +6269,7 @@
 
 		},
 
-		expandByScalar: function ( scalar ) {
+		expandByScalar: function( scalar ) {
 
 			this.min.addScalar( - scalar );
 			this.max.addScalar( scalar );
@@ -6273,21 +6278,21 @@
 
 		},
 
-		containsPoint: function ( point ) {
+		containsPoint: function( point ) {
 
 			return point.x < this.min.x || point.x > this.max.x ||
 				point.y < this.min.y || point.y > this.max.y ? false : true;
 
 		},
 
-		containsBox: function ( box ) {
+		containsBox: function( box ) {
 
 			return this.min.x <= box.min.x && box.max.x <= this.max.x &&
 				this.min.y <= box.min.y && box.max.y <= this.max.y;
 
 		},
 
-		getParameter: function ( point, optionalTarget ) {
+		getParameter: function( point, optionalTarget ) {
 
 			// This can potentially have a divide by zero if the box
 			// has a size dimension of 0.
@@ -6301,7 +6306,7 @@
 
 		},
 
-		intersectsBox: function ( box ) {
+		intersectsBox: function( box ) {
 
 			// using 4 splitting planes to rule out intersections
 
@@ -6310,14 +6315,14 @@
 
 		},
 
-		clampPoint: function ( point, optionalTarget ) {
+		clampPoint: function( point, optionalTarget ) {
 
 			var result = optionalTarget || new Vector2();
 			return result.copy( point ).clamp( this.min, this.max );
 
 		},
 
-		distanceToPoint: function () {
+		distanceToPoint: function() {
 
 			var v1 = new Vector2();
 
@@ -6330,7 +6335,7 @@
 
 		}(),
 
-		intersect: function ( box ) {
+		intersect: function( box ) {
 
 			this.min.max( box.min );
 			this.max.min( box.max );
@@ -6339,7 +6344,7 @@
 
 		},
 
-		union: function ( box ) {
+		union: function( box ) {
 
 			this.min.min( box.min );
 			this.max.max( box.max );
@@ -6348,7 +6353,7 @@
 
 		},
 
-		translate: function ( offset ) {
+		translate: function( offset ) {
 
 			this.min.add( offset );
 			this.max.add( offset );
@@ -6357,7 +6362,7 @@
 
 		},
 
-		equals: function ( box ) {
+		equals: function( box ) {
 
 			return box.min.equals( this.min ) && box.max.equals( this.max );
 
@@ -6375,10 +6380,15 @@
 		var gl = renderer.context;
 		var state = renderer.state;
 
-		var vertexBuffer, elementBuffer;
-		var shader, program, attributes, uniforms;
+		var vertexBuffer;
+		var elementBuffer;
+		var shader;
+		var program;
+		var attributes;
+		var uniforms;
 
-		var tempTexture, occlusionTexture;
+		var tempTexture;
+		var occlusionTexture;
 
 		function init() {
 
@@ -6544,7 +6554,7 @@
 		 *         reads these back and calculates occlusion.
 		 */
 
-		this.render = function ( scene, camera, viewport ) {
+		this.render = function( scene, camera, viewport ) {
 
 			if ( flares.length === 0 ) return;
 
@@ -6758,8 +6768,11 @@
 		var gl = renderer.context;
 		var state = renderer.state;
 
-		var vertexBuffer, elementBuffer;
-		var program, attributes, uniforms;
+		var vertexBuffer;
+		var elementBuffer;
+		var program;
+		var attributes;
+		var uniforms;
 
 		var texture;
 
@@ -6835,7 +6848,7 @@
 
 		}
 
-		this.render = function ( scene, camera ) {
+		this.render = function( scene, camera ) {
 
 			if ( sprites.length === 0 ) return;
 
@@ -7197,9 +7210,9 @@
 
 		isMaterial: true,
 
-		onBeforeCompile: function () {},
+		onBeforeCompile: function() {},
 
-		setValues: function ( values ) {
+		setValues: function( values ) {
 
 			if ( values === undefined ) return;
 
@@ -7246,7 +7259,7 @@
 
 		},
 
-		toJSON: function ( meta ) {
+		toJSON: function( meta ) {
 
 			var isRoot = meta === undefined;
 
@@ -7384,13 +7397,13 @@
 
 		},
 
-		clone: function () {
+		clone: function() {
 
 			return new this.constructor().copy( this );
 
 		},
 
-		copy: function ( source ) {
+		copy: function( source ) {
 
 			this.name = source.name;
 
@@ -7455,7 +7468,7 @@
 
 		},
 
-		dispose: function () {
+		dispose: function() {
 
 			this.dispatchEvent( { type: 'dispose' } );
 
@@ -7545,7 +7558,7 @@
 
 	ShaderMaterial.prototype.isShaderMaterial = true;
 
-	ShaderMaterial.prototype.copy = function ( source ) {
+	ShaderMaterial.prototype.copy = function( source ) {
 
 		Material.prototype.copy.call( this, source );
 
@@ -7573,7 +7586,7 @@
 
 	};
 
-	ShaderMaterial.prototype.toJSON = function ( meta ) {
+	ShaderMaterial.prototype.toJSON = function( meta ) {
 
 		var data = Material.prototype.toJSON.call( this, meta );
 
@@ -7642,7 +7655,7 @@
 
 	MeshDepthMaterial.prototype.isMeshDepthMaterial = true;
 
-	MeshDepthMaterial.prototype.copy = function ( source ) {
+	MeshDepthMaterial.prototype.copy = function( source ) {
 
 		Material.prototype.copy.call( this, source );
 
@@ -7682,7 +7695,7 @@
 
 		isBox3: true,
 
-		set: function ( min, max ) {
+		set: function( min, max ) {
 
 			this.min.copy( min );
 			this.max.copy( max );
@@ -7691,7 +7704,7 @@
 
 		},
 
-		setFromArray: function ( array ) {
+		setFromArray: function( array ) {
 
 			var minX = + Infinity;
 			var minY = + Infinity;
@@ -7724,7 +7737,7 @@
 
 		},
 
-		setFromBufferAttribute: function ( attribute ) {
+		setFromBufferAttribute: function( attribute ) {
 
 			var minX = + Infinity;
 			var minY = + Infinity;
@@ -7757,7 +7770,7 @@
 
 		},
 
-		setFromPoints: function ( points ) {
+		setFromPoints: function( points ) {
 
 			this.makeEmpty();
 
@@ -7771,7 +7784,7 @@
 
 		},
 
-		setFromCenterAndSize: function () {
+		setFromCenterAndSize: function() {
 
 			var v1 = new Vector3();
 
@@ -7788,7 +7801,7 @@
 
 		}(),
 
-		setFromObject: function ( object ) {
+		setFromObject: function( object ) {
 
 			this.makeEmpty();
 
@@ -7796,13 +7809,13 @@
 
 		},
 
-		clone: function () {
+		clone: function() {
 
 			return new this.constructor().copy( this );
 
 		},
 
-		copy: function ( box ) {
+		copy: function( box ) {
 
 			this.min.copy( box.min );
 			this.max.copy( box.max );
@@ -7811,7 +7824,7 @@
 
 		},
 
-		makeEmpty: function () {
+		makeEmpty: function() {
 
 			this.min.x = this.min.y = this.min.z = + Infinity;
 			this.max.x = this.max.y = this.max.z = - Infinity;
@@ -7820,7 +7833,7 @@
 
 		},
 
-		isEmpty: function () {
+		isEmpty: function() {
 
 			// this is a more robust check for empty than ( volume <= 0 ) because volume can get positive with two negative axes
 
@@ -7828,21 +7841,21 @@
 
 		},
 
-		getCenter: function ( optionalTarget ) {
+		getCenter: function( optionalTarget ) {
 
 			var result = optionalTarget || new Vector3();
 			return this.isEmpty() ? result.set( 0, 0, 0 ) : result.addVectors( this.min, this.max ).multiplyScalar( 0.5 );
 
 		},
 
-		getSize: function ( optionalTarget ) {
+		getSize: function( optionalTarget ) {
 
 			var result = optionalTarget || new Vector3();
 			return this.isEmpty() ? result.set( 0, 0, 0 ) : result.subVectors( this.max, this.min );
 
 		},
 
-		expandByPoint: function ( point ) {
+		expandByPoint: function( point ) {
 
 			this.min.min( point );
 			this.max.max( point );
@@ -7851,7 +7864,7 @@
 
 		},
 
-		expandByVector: function ( vector ) {
+		expandByVector: function( vector ) {
 
 			this.min.sub( vector );
 			this.max.add( vector );
@@ -7860,7 +7873,7 @@
 
 		},
 
-		expandByScalar: function ( scalar ) {
+		expandByScalar: function( scalar ) {
 
 			this.min.addScalar( - scalar );
 			this.max.addScalar( scalar );
@@ -7869,7 +7882,7 @@
 
 		},
 
-		expandByObject: function () {
+		expandByObject: function() {
 
 			// Computes the world-axis-aligned bounding box of an object (including its children),
 			// accounting for both the object's, and children's, world transforms
@@ -7882,9 +7895,10 @@
 
 				object.updateMatrixWorld( true );
 
-				object.traverse( function ( node ) {
+				object.traverse( function( node ) {
 
-					var i, l;
+					var i;
+					var l;
 
 					var geometry = node.geometry;
 
@@ -7931,7 +7945,7 @@
 
 		}(),
 
-		containsPoint: function ( point ) {
+		containsPoint: function( point ) {
 
 			return point.x < this.min.x || point.x > this.max.x ||
 				point.y < this.min.y || point.y > this.max.y ||
@@ -7939,7 +7953,7 @@
 
 		},
 
-		containsBox: function ( box ) {
+		containsBox: function( box ) {
 
 			return this.min.x <= box.min.x && box.max.x <= this.max.x &&
 				this.min.y <= box.min.y && box.max.y <= this.max.y &&
@@ -7947,7 +7961,7 @@
 
 		},
 
-		getParameter: function ( point, optionalTarget ) {
+		getParameter: function( point, optionalTarget ) {
 
 			// This can potentially have a divide by zero if the box
 			// has a size dimension of 0.
@@ -7962,7 +7976,7 @@
 
 		},
 
-		intersectsBox: function ( box ) {
+		intersectsBox: function( box ) {
 
 			// using 6 splitting planes to rule out intersections.
 			return box.max.x < this.min.x || box.min.x > this.max.x ||
@@ -7971,7 +7985,7 @@
 
 		},
 
-		intersectsSphere: ( function () {
+		intersectsSphere: ( function() {
 
 			var closestPoint = new Vector3();
 
@@ -7987,12 +8001,13 @@
 
 		} )(),
 
-		intersectsPlane: function ( plane ) {
+		intersectsPlane: function( plane ) {
 
 			// We compute the minimum and maximum dot product values. If those values
 			// are on the same side (back or front) of the plane, then there is no intersection.
 
-			var min, max;
+			var min;
+			var max;
 
 			if ( plane.normal.x > 0 ) {
 
@@ -8034,14 +8049,14 @@
 
 		},
 
-		clampPoint: function ( point, optionalTarget ) {
+		clampPoint: function( point, optionalTarget ) {
 
 			var result = optionalTarget || new Vector3();
 			return result.copy( point ).clamp( this.min, this.max );
 
 		},
 
-		distanceToPoint: function () {
+		distanceToPoint: function() {
 
 			var v1 = new Vector3();
 
@@ -8054,7 +8069,7 @@
 
 		}(),
 
-		getBoundingSphere: function () {
+		getBoundingSphere: function() {
 
 			var v1 = new Vector3();
 
@@ -8072,19 +8087,19 @@
 
 		}(),
 
-		intersect: function ( box ) {
+		intersect: function( box ) {
 
 			this.min.max( box.min );
 			this.max.min( box.max );
 
 			// ensure that if there is no overlap, the result is fully empty, not slightly empty with non-inf/+inf values that will cause subsequence intersects to erroneously return valid values.
-			if( this.isEmpty() ) this.makeEmpty();
+			if ( this.isEmpty() ) this.makeEmpty();
 
 			return this;
 
 		},
 
-		union: function ( box ) {
+		union: function( box ) {
 
 			this.min.min( box.min );
 			this.max.max( box.max );
@@ -8093,7 +8108,7 @@
 
 		},
 
-		applyMatrix4: function () {
+		applyMatrix4: function() {
 
 			var points = [
 				new Vector3(),
@@ -8109,7 +8124,7 @@
 			return function applyMatrix4( matrix ) {
 
 				// transform of empty box is an empty box.
-				if( this.isEmpty() ) return this;
+				if ( this.isEmpty() ) return this;
 
 				// NOTE: I am using a binary pattern to specify all 2^3 combinations below
 				points[ 0 ].set( this.min.x, this.min.y, this.min.z ).applyMatrix4( matrix ); // 000
@@ -8129,7 +8144,7 @@
 
 		}(),
 
-		translate: function ( offset ) {
+		translate: function( offset ) {
 
 			this.min.add( offset );
 			this.max.add( offset );
@@ -8138,7 +8153,7 @@
 
 		},
 
-		equals: function ( box ) {
+		equals: function( box ) {
 
 			return box.min.equals( this.min ) && box.max.equals( this.max );
 
@@ -8160,7 +8175,7 @@
 
 	Object.assign( Sphere.prototype, {
 
-		set: function ( center, radius ) {
+		set: function( center, radius ) {
 
 			this.center.copy( center );
 			this.radius = radius;
@@ -8169,7 +8184,7 @@
 
 		},
 
-		setFromPoints: function () {
+		setFromPoints: function() {
 
 			var box = new Box3();
 
@@ -8203,13 +8218,13 @@
 
 		}(),
 
-		clone: function () {
+		clone: function() {
 
 			return new this.constructor().copy( this );
 
 		},
 
-		copy: function ( sphere ) {
+		copy: function( sphere ) {
 
 			this.center.copy( sphere.center );
 			this.radius = sphere.radius;
@@ -8218,25 +8233,25 @@
 
 		},
 
-		empty: function () {
+		empty: function() {
 
 			return ( this.radius <= 0 );
 
 		},
 
-		containsPoint: function ( point ) {
+		containsPoint: function( point ) {
 
 			return ( point.distanceToSquared( this.center ) <= ( this.radius * this.radius ) );
 
 		},
 
-		distanceToPoint: function ( point ) {
+		distanceToPoint: function( point ) {
 
 			return ( point.distanceTo( this.center ) - this.radius );
 
 		},
 
-		intersectsSphere: function ( sphere ) {
+		intersectsSphere: function( sphere ) {
 
 			var radiusSum = this.radius + sphere.radius;
 
@@ -8244,13 +8259,13 @@
 
 		},
 
-		intersectsBox: function ( box ) {
+		intersectsBox: function( box ) {
 
 			return box.intersectsSphere( this );
 
 		},
 
-		intersectsPlane: function ( plane ) {
+		intersectsPlane: function( plane ) {
 
 			// We use the following equation to compute the signed distance from
 			// the center of the sphere to the plane.
@@ -8264,7 +8279,7 @@
 
 		},
 
-		clampPoint: function ( point, optionalTarget ) {
+		clampPoint: function( point, optionalTarget ) {
 
 			var deltaLengthSq = this.center.distanceToSquared( point );
 
@@ -8283,7 +8298,7 @@
 
 		},
 
-		getBoundingBox: function ( optionalTarget ) {
+		getBoundingBox: function( optionalTarget ) {
 
 			var box = optionalTarget || new Box3();
 
@@ -8294,7 +8309,7 @@
 
 		},
 
-		applyMatrix4: function ( matrix ) {
+		applyMatrix4: function( matrix ) {
 
 			this.center.applyMatrix4( matrix );
 			this.radius = this.radius * matrix.getMaxScaleOnAxis();
@@ -8303,7 +8318,7 @@
 
 		},
 
-		translate: function ( offset ) {
+		translate: function( offset ) {
 
 			this.center.add( offset );
 
@@ -8311,7 +8326,7 @@
 
 		},
 
-		equals: function ( sphere ) {
+		equals: function( sphere ) {
 
 			return sphere.center.equals( this.center ) && ( sphere.radius === this.radius );
 
@@ -8348,7 +8363,7 @@
 
 		isMatrix3: true,
 
-		set: function ( n11, n12, n13, n21, n22, n23, n31, n32, n33 ) {
+		set: function( n11, n12, n13, n21, n22, n23, n31, n32, n33 ) {
 
 			var te = this.elements;
 
@@ -8360,7 +8375,7 @@
 
 		},
 
-		identity: function () {
+		identity: function() {
 
 			this.set(
 
@@ -8374,13 +8389,13 @@
 
 		},
 
-		clone: function () {
+		clone: function() {
 
 			return new this.constructor().fromArray( this.elements );
 
 		},
 
-		copy: function ( m ) {
+		copy: function( m ) {
 
 			var te = this.elements;
 			var me = m.elements;
@@ -8393,7 +8408,7 @@
 
 		},
 
-		setFromMatrix4: function ( m ) {
+		setFromMatrix4: function( m ) {
 
 			var me = m.elements;
 
@@ -8409,7 +8424,7 @@
 
 		},
 
-		applyToBufferAttribute: function () {
+		applyToBufferAttribute: function() {
 
 			var v1 = new Vector3();
 
@@ -8433,19 +8448,19 @@
 
 		}(),
 
-		multiply: function ( m ) {
+		multiply: function( m ) {
 
 			return this.multiplyMatrices( this, m );
 
 		},
 
-		premultiply: function ( m ) {
+		premultiply: function( m ) {
 
 			return this.multiplyMatrices( m, this );
 
 		},
 
-		multiplyMatrices: function ( a, b ) {
+		multiplyMatrices: function( a, b ) {
 
 			var ae = a.elements;
 			var be = b.elements;
@@ -8475,7 +8490,7 @@
 
 		},
 
-		multiplyScalar: function ( s ) {
+		multiplyScalar: function( s ) {
 
 			var te = this.elements;
 
@@ -8487,7 +8502,7 @@
 
 		},
 
-		determinant: function () {
+		determinant: function() {
 
 			var te = this.elements;
 
@@ -8499,7 +8514,7 @@
 
 		},
 
-		getInverse: function ( matrix, throwOnDegenerate ) {
+		getInverse: function( matrix, throwOnDegenerate ) {
 
 			if ( matrix && matrix.isMatrix4 ) {
 
@@ -8556,9 +8571,10 @@
 
 		},
 
-		transpose: function () {
+		transpose: function() {
 
-			var tmp, m = this.elements;
+			var tmp;
+			var m = this.elements;
 
 			tmp = m[ 1 ]; m[ 1 ] = m[ 3 ]; m[ 3 ] = tmp;
 			tmp = m[ 2 ]; m[ 2 ] = m[ 6 ]; m[ 6 ] = tmp;
@@ -8568,13 +8584,13 @@
 
 		},
 
-		getNormalMatrix: function ( matrix4 ) {
+		getNormalMatrix: function( matrix4 ) {
 
 			return this.setFromMatrix4( matrix4 ).getInverse( this ).transpose();
 
 		},
 
-		transposeIntoArray: function ( r ) {
+		transposeIntoArray: function( r ) {
 
 			var m = this.elements;
 
@@ -8592,7 +8608,7 @@
 
 		},
 
-		equals: function ( matrix ) {
+		equals: function( matrix ) {
 
 			var te = this.elements;
 			var me = matrix.elements;
@@ -8607,7 +8623,7 @@
 
 		},
 
-		fromArray: function ( array, offset ) {
+		fromArray: function( array, offset ) {
 
 			if ( offset === undefined ) offset = 0;
 
@@ -8621,7 +8637,7 @@
 
 		},
 
-		toArray: function ( array, offset ) {
+		toArray: function( array, offset ) {
 
 			if ( array === undefined ) array = [];
 			if ( offset === undefined ) offset = 0;
@@ -8659,7 +8675,7 @@
 
 	Object.assign( Plane.prototype, {
 
-		set: function ( normal, constant ) {
+		set: function( normal, constant ) {
 
 			this.normal.copy( normal );
 			this.constant = constant;
@@ -8668,7 +8684,7 @@
 
 		},
 
-		setComponents: function ( x, y, z, w ) {
+		setComponents: function( x, y, z, w ) {
 
 			this.normal.set( x, y, z );
 			this.constant = w;
@@ -8677,7 +8693,7 @@
 
 		},
 
-		setFromNormalAndCoplanarPoint: function ( normal, point ) {
+		setFromNormalAndCoplanarPoint: function( normal, point ) {
 
 			this.normal.copy( normal );
 			this.constant = - point.dot( this.normal );	// must be this.normal, not normal, as this.normal is normalized
@@ -8686,7 +8702,7 @@
 
 		},
 
-		setFromCoplanarPoints: function () {
+		setFromCoplanarPoints: function() {
 
 			var v1 = new Vector3();
 			var v2 = new Vector3();
@@ -8705,13 +8721,13 @@
 
 		}(),
 
-		clone: function () {
+		clone: function() {
 
 			return new this.constructor().copy( this );
 
 		},
 
-		copy: function ( plane ) {
+		copy: function( plane ) {
 
 			this.normal.copy( plane.normal );
 			this.constant = plane.constant;
@@ -8720,7 +8736,7 @@
 
 		},
 
-		normalize: function () {
+		normalize: function() {
 
 			// Note: will lead to a divide by zero if the plane is invalid.
 
@@ -8732,7 +8748,7 @@
 
 		},
 
-		negate: function () {
+		negate: function() {
 
 			this.constant *= - 1;
 			this.normal.negate();
@@ -8741,25 +8757,25 @@
 
 		},
 
-		distanceToPoint: function ( point ) {
+		distanceToPoint: function( point ) {
 
 			return this.normal.dot( point ) + this.constant;
 
 		},
 
-		distanceToSphere: function ( sphere ) {
+		distanceToSphere: function( sphere ) {
 
 			return this.distanceToPoint( sphere.center ) - sphere.radius;
 
 		},
 
-		projectPoint: function ( point, optionalTarget ) {
+		projectPoint: function( point, optionalTarget ) {
 
 			return this.orthoPoint( point, optionalTarget ).sub( point ).negate();
 
 		},
 
-		orthoPoint: function ( point, optionalTarget ) {
+		orthoPoint: function( point, optionalTarget ) {
 
 			var perpendicularMagnitude = this.distanceToPoint( point );
 
@@ -8768,7 +8784,7 @@
 
 		},
 
-		intersectLine: function () {
+		intersectLine: function() {
 
 			var v1 = new Vector3();
 
@@ -8808,7 +8824,7 @@
 
 		}(),
 
-		intersectsLine: function ( line ) {
+		intersectsLine: function( line ) {
 
 			// Note: this tests if a line intersects the plane, not whether it (or its end-points) are coplanar with it.
 
@@ -8819,26 +8835,26 @@
 
 		},
 
-		intersectsBox: function ( box ) {
+		intersectsBox: function( box ) {
 
 			return box.intersectsPlane( this );
 
 		},
 
-		intersectsSphere: function ( sphere ) {
+		intersectsSphere: function( sphere ) {
 
 			return sphere.intersectsPlane( this );
 
 		},
 
-		coplanarPoint: function ( optionalTarget ) {
+		coplanarPoint: function( optionalTarget ) {
 
 			var result = optionalTarget || new Vector3();
 			return result.copy( this.normal ).multiplyScalar( - this.constant );
 
 		},
 
-		applyMatrix4: function () {
+		applyMatrix4: function() {
 
 			var v1 = new Vector3();
 			var m1 = new Matrix3();
@@ -8861,7 +8877,7 @@
 
 		}(),
 
-		translate: function ( offset ) {
+		translate: function( offset ) {
 
 			this.constant = this.constant - offset.dot( this.normal );
 
@@ -8869,7 +8885,7 @@
 
 		},
 
-		equals: function ( plane ) {
+		equals: function( plane ) {
 
 			return plane.normal.equals( this.normal ) && ( plane.constant === this.constant );
 
@@ -8900,7 +8916,7 @@
 
 	Object.assign( Frustum.prototype, {
 
-		set: function ( p0, p1, p2, p3, p4, p5 ) {
+		set: function( p0, p1, p2, p3, p4, p5 ) {
 
 			var planes = this.planes;
 
@@ -8915,13 +8931,13 @@
 
 		},
 
-		clone: function () {
+		clone: function() {
 
 			return new this.constructor().copy( this );
 
 		},
 
-		copy: function ( frustum ) {
+		copy: function( frustum ) {
 
 			var planes = this.planes;
 
@@ -8935,7 +8951,7 @@
 
 		},
 
-		setFromMatrix: function ( m ) {
+		setFromMatrix: function( m ) {
 
 			var planes = this.planes;
 			var me = m.elements;
@@ -8955,7 +8971,7 @@
 
 		},
 
-		intersectsObject: function () {
+		intersectsObject: function() {
 
 			var sphere = new Sphere();
 
@@ -8975,7 +8991,7 @@
 
 		}(),
 
-		intersectsSprite: function () {
+		intersectsSprite: function() {
 
 			var sphere = new Sphere();
 
@@ -8991,7 +9007,7 @@
 
 		}(),
 
-		intersectsSphere: function ( sphere ) {
+		intersectsSphere: function( sphere ) {
 
 			var planes = this.planes;
 			var center = sphere.center;
@@ -9013,7 +9029,7 @@
 
 		},
 
-		intersectsBox: function () {
+		intersectsBox: function() {
 
 			var p1 = new Vector3(),
 				p2 = new Vector3();
@@ -9052,7 +9068,7 @@
 
 		}(),
 
-		containsPoint: function ( point ) {
+		containsPoint: function( point ) {
 
 			var planes = this.planes;
 
@@ -9167,7 +9183,7 @@
 		this.renderReverseSided = true;
 		this.renderSingleSided = true;
 
-		this.render = function ( scene, camera ) {
+		this.render = function( scene, camera ) {
 
 			if ( scope.enabled === false ) return;
 			if ( scope.autoUpdate === false && scope.needsUpdate === false ) return;
@@ -9623,7 +9639,7 @@
 		function remove( attribute ) {
 
 			if ( attribute.isInterleavedBufferAttribute ) attribute = attribute.data;
-			
+
 			var data = buffers[ attribute.uuid ];
 
 			if ( data ) {
@@ -9689,13 +9705,13 @@
 
 		x: {
 
-			get: function () {
+			get: function() {
 
 				return this._x;
 
 			},
 
-			set: function ( value ) {
+			set: function( value ) {
 
 				this._x = value;
 				this.onChangeCallback();
@@ -9706,13 +9722,13 @@
 
 		y: {
 
-			get: function () {
+			get: function() {
 
 				return this._y;
 
 			},
 
-			set: function ( value ) {
+			set: function( value ) {
 
 				this._y = value;
 				this.onChangeCallback();
@@ -9723,13 +9739,13 @@
 
 		z: {
 
-			get: function () {
+			get: function() {
 
 				return this._z;
 
 			},
 
-			set: function ( value ) {
+			set: function( value ) {
 
 				this._z = value;
 				this.onChangeCallback();
@@ -9740,13 +9756,13 @@
 
 		order: {
 
-			get: function () {
+			get: function() {
 
 				return this._order;
 
 			},
 
-			set: function ( value ) {
+			set: function( value ) {
 
 				this._order = value;
 				this.onChangeCallback();
@@ -9761,7 +9777,7 @@
 
 		isEuler: true,
 
-		set: function ( x, y, z, order ) {
+		set: function( x, y, z, order ) {
 
 			this._x = x;
 			this._y = y;
@@ -9774,13 +9790,13 @@
 
 		},
 
-		clone: function () {
+		clone: function() {
 
 			return new this.constructor( this._x, this._y, this._z, this._order );
 
 		},
 
-		copy: function ( euler ) {
+		copy: function( euler ) {
 
 			this._x = euler._x;
 			this._y = euler._y;
@@ -9793,7 +9809,7 @@
 
 		},
 
-		setFromRotationMatrix: function ( m, order, update ) {
+		setFromRotationMatrix: function( m, order, update ) {
 
 			var clamp = _Math.clamp;
 
@@ -9916,7 +9932,7 @@
 
 		},
 
-		setFromQuaternion: function () {
+		setFromQuaternion: function() {
 
 			var matrix = new Matrix4();
 
@@ -9930,13 +9946,13 @@
 
 		}(),
 
-		setFromVector3: function ( v, order ) {
+		setFromVector3: function( v, order ) {
 
 			return this.set( v.x, v.y, v.z, order || this._order );
 
 		},
 
-		reorder: function () {
+		reorder: function() {
 
 			// WARNING: this discards revolution information -bhouston
 
@@ -9952,13 +9968,13 @@
 
 		}(),
 
-		equals: function ( euler ) {
+		equals: function( euler ) {
 
 			return ( euler._x === this._x ) && ( euler._y === this._y ) && ( euler._z === this._z ) && ( euler._order === this._order );
 
 		},
 
-		fromArray: function ( array ) {
+		fromArray: function( array ) {
 
 			this._x = array[ 0 ];
 			this._y = array[ 1 ];
@@ -9971,7 +9987,7 @@
 
 		},
 
-		toArray: function ( array, offset ) {
+		toArray: function( array, offset ) {
 
 			if ( array === undefined ) array = [];
 			if ( offset === undefined ) offset = 0;
@@ -9985,7 +10001,7 @@
 
 		},
 
-		toVector3: function ( optionalResult ) {
+		toVector3: function( optionalResult ) {
 
 			if ( optionalResult ) {
 
@@ -9999,7 +10015,7 @@
 
 		},
 
-		onChange: function ( callback ) {
+		onChange: function( callback ) {
 
 			this.onChangeCallback = callback;
 
@@ -10007,7 +10023,7 @@
 
 		},
 
-		onChangeCallback: function () {}
+		onChangeCallback: function() {}
 
 	} );
 
@@ -10023,31 +10039,31 @@
 
 	Object.assign( Layers.prototype, {
 
-		set: function ( channel ) {
+		set: function( channel ) {
 
 			this.mask = 1 << channel | 0;
 
 		},
 
-		enable: function ( channel ) {
+		enable: function( channel ) {
 
 			this.mask |= 1 << channel | 0;
 
 		},
 
-		toggle: function ( channel ) {
+		toggle: function( channel ) {
 
 			this.mask ^= 1 << channel | 0;
 
 		},
 
-		disable: function ( channel ) {
+		disable: function( channel ) {
 
 			this.mask &= ~ ( 1 << channel | 0 );
 
 		},
 
-		test: function ( layers ) {
+		test: function( layers ) {
 
 			return ( this.mask & layers.mask ) !== 0;
 
@@ -10149,10 +10165,10 @@
 
 		isObject3D: true,
 
-		onBeforeRender: function () {},
-		onAfterRender: function () {},
+		onBeforeRender: function() {},
+		onAfterRender: function() {},
 
-		applyMatrix: function ( matrix ) {
+		applyMatrix: function( matrix ) {
 
 			this.matrix.multiplyMatrices( matrix, this.matrix );
 
@@ -10160,7 +10176,7 @@
 
 		},
 
-		applyQuaternion: function ( q ) {
+		applyQuaternion: function( q ) {
 
 			this.quaternion.premultiply( q );
 
@@ -10168,7 +10184,7 @@
 
 		},
 
-		setRotationFromAxisAngle: function ( axis, angle ) {
+		setRotationFromAxisAngle: function( axis, angle ) {
 
 			// assumes axis is normalized
 
@@ -10176,13 +10192,13 @@
 
 		},
 
-		setRotationFromEuler: function ( euler ) {
+		setRotationFromEuler: function( euler ) {
 
 			this.quaternion.setFromEuler( euler, true );
 
 		},
 
-		setRotationFromMatrix: function ( m ) {
+		setRotationFromMatrix: function( m ) {
 
 			// assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
 
@@ -10190,7 +10206,7 @@
 
 		},
 
-		setRotationFromQuaternion: function ( q ) {
+		setRotationFromQuaternion: function( q ) {
 
 			// assumes q is normalized
 
@@ -10198,7 +10214,7 @@
 
 		},
 
-		rotateOnAxis: function () {
+		rotateOnAxis: function() {
 
 			// rotate object on axis in object space
 			// axis is assumed to be normalized
@@ -10217,7 +10233,7 @@
 
 		}(),
 
-		rotateX: function () {
+		rotateX: function() {
 
 			var v1 = new Vector3( 1, 0, 0 );
 
@@ -10229,7 +10245,7 @@
 
 		}(),
 
-		rotateY: function () {
+		rotateY: function() {
 
 			var v1 = new Vector3( 0, 1, 0 );
 
@@ -10241,7 +10257,7 @@
 
 		}(),
 
-		rotateZ: function () {
+		rotateZ: function() {
 
 			var v1 = new Vector3( 0, 0, 1 );
 
@@ -10253,7 +10269,7 @@
 
 		}(),
 
-		translateOnAxis: function () {
+		translateOnAxis: function() {
 
 			// translate object by distance along axis in object space
 			// axis is assumed to be normalized
@@ -10272,7 +10288,7 @@
 
 		}(),
 
-		translateX: function () {
+		translateX: function() {
 
 			var v1 = new Vector3( 1, 0, 0 );
 
@@ -10284,7 +10300,7 @@
 
 		}(),
 
-		translateY: function () {
+		translateY: function() {
 
 			var v1 = new Vector3( 0, 1, 0 );
 
@@ -10296,7 +10312,7 @@
 
 		}(),
 
-		translateZ: function () {
+		translateZ: function() {
 
 			var v1 = new Vector3( 0, 0, 1 );
 
@@ -10308,13 +10324,13 @@
 
 		}(),
 
-		localToWorld: function ( vector ) {
+		localToWorld: function( vector ) {
 
 			return vector.applyMatrix4( this.matrixWorld );
 
 		},
 
-		worldToLocal: function () {
+		worldToLocal: function() {
 
 			var m1 = new Matrix4();
 
@@ -10326,7 +10342,7 @@
 
 		}(),
 
-		lookAt: function () {
+		lookAt: function() {
 
 			// This method does not support objects with rotated and/or translated parent(s)
 
@@ -10350,7 +10366,7 @@
 
 		}(),
 
-		add: function ( object ) {
+		add: function( object ) {
 
 			if ( arguments.length > 1 ) {
 
@@ -10394,7 +10410,7 @@
 
 		},
 
-		remove: function ( object ) {
+		remove: function( object ) {
 
 			if ( arguments.length > 1 ) {
 
@@ -10421,22 +10437,22 @@
 			}
 
 			return this;
-			
+
 		},
 
-		getObjectById: function ( id ) {
+		getObjectById: function( id ) {
 
 			return this.getObjectByProperty( 'id', id );
 
 		},
 
-		getObjectByName: function ( name ) {
+		getObjectByName: function( name ) {
 
 			return this.getObjectByProperty( 'name', name );
 
 		},
 
-		getObjectByProperty: function ( name, value ) {
+		getObjectByProperty: function( name, value ) {
 
 			if ( this[ name ] === value ) return this;
 
@@ -10457,7 +10473,7 @@
 
 		},
 
-		getWorldPosition: function ( optionalTarget ) {
+		getWorldPosition: function( optionalTarget ) {
 
 			var result = optionalTarget || new Vector3();
 
@@ -10467,7 +10483,7 @@
 
 		},
 
-		getWorldQuaternion: function () {
+		getWorldQuaternion: function() {
 
 			var position = new Vector3();
 			var scale = new Vector3();
@@ -10486,7 +10502,7 @@
 
 		}(),
 
-		getWorldRotation: function () {
+		getWorldRotation: function() {
 
 			var quaternion = new Quaternion();
 
@@ -10502,7 +10518,7 @@
 
 		}(),
 
-		getWorldScale: function () {
+		getWorldScale: function() {
 
 			var position = new Vector3();
 			var quaternion = new Quaternion();
@@ -10521,7 +10537,7 @@
 
 		}(),
 
-		getWorldDirection: function () {
+		getWorldDirection: function() {
 
 			var quaternion = new Quaternion();
 
@@ -10537,9 +10553,9 @@
 
 		}(),
 
-		raycast: function () {},
+		raycast: function() {},
 
-		traverse: function ( callback ) {
+		traverse: function( callback ) {
 
 			callback( this );
 
@@ -10553,7 +10569,7 @@
 
 		},
 
-		traverseVisible: function ( callback ) {
+		traverseVisible: function( callback ) {
 
 			if ( this.visible === false ) return;
 
@@ -10569,7 +10585,7 @@
 
 		},
 
-		traverseAncestors: function ( callback ) {
+		traverseAncestors: function( callback ) {
 
 			var parent = this.parent;
 
@@ -10583,7 +10599,7 @@
 
 		},
 
-		updateMatrix: function () {
+		updateMatrix: function() {
 
 			this.matrix.compose( this.position, this.quaternion, this.scale );
 
@@ -10591,7 +10607,7 @@
 
 		},
 
-		updateMatrixWorld: function ( force ) {
+		updateMatrixWorld: function( force ) {
 
 			if ( this.matrixAutoUpdate ) this.updateMatrix();
 
@@ -10625,7 +10641,7 @@
 
 		},
 
-		toJSON: function ( meta ) {
+		toJSON: function( meta ) {
 
 			// meta is '' when called from JSON.stringify
 			var isRootObject = ( meta === undefined || meta === '' );
@@ -10761,13 +10777,13 @@
 
 		},
 
-		clone: function ( recursive ) {
+		clone: function( recursive ) {
 
 			return new this.constructor().copy( this, recursive );
 
 		},
 
-		copy: function ( source, recursive ) {
+		copy: function( source, recursive ) {
 
 			if ( recursive === undefined ) recursive = true;
 
@@ -10836,7 +10852,7 @@
 
 		isCamera: true,
 
-		copy: function ( source, recursive ) {
+		copy: function( source, recursive ) {
 
 			Object3D.prototype.copy.call( this, source, recursive );
 
@@ -10847,7 +10863,7 @@
 
 		},
 
-		getWorldDirection: function () {
+		getWorldDirection: function() {
 
 			var quaternion = new Quaternion();
 
@@ -10863,7 +10879,7 @@
 
 		}(),
 
-		updateMatrixWorld: function ( force ) {
+		updateMatrixWorld: function( force ) {
 
 			Object3D.prototype.updateMatrixWorld.call( this, force );
 
@@ -10871,7 +10887,7 @@
 
 		},
 
-		clone: function () {
+		clone: function() {
 
 			return new this.constructor().copy( this );
 
@@ -10911,7 +10927,7 @@
 
 		isOrthographicCamera: true,
 
-		copy: function ( source, recursive ) {
+		copy: function( source, recursive ) {
 
 			Camera.prototype.copy.call( this, source, recursive );
 
@@ -10951,7 +10967,7 @@
 
 		},
 
-		updateProjectionMatrix: function () {
+		updateProjectionMatrix: function() {
 
 			var dx = ( this.right - this.left ) / ( 2 * this.zoom );
 			var dy = ( this.top - this.bottom ) / ( 2 * this.zoom );
@@ -10981,7 +10997,7 @@
 
 		},
 
-		toJSON: function ( meta ) {
+		toJSON: function( meta ) {
 
 			var data = Object3D.prototype.toJSON.call( this, meta );
 
@@ -11037,7 +11053,7 @@
 
 		isPerspectiveCamera: true,
 
-		copy: function ( source, recursive ) {
+		copy: function( source, recursive ) {
 
 			Camera.prototype.copy.call( this, source, recursive );
 
@@ -11066,7 +11082,7 @@
 		 *
 		 * Values for focal length and film gauge must have the same unit.
 		 */
-		setFocalLength: function ( focalLength ) {
+		setFocalLength: function( focalLength ) {
 
 			// see http://www.bobatkins.com/photography/technical/field_of_view.html
 			var vExtentSlope = 0.5 * this.getFilmHeight() / focalLength;
@@ -11079,7 +11095,7 @@
 		/**
 		 * Calculates the focal length from the current .fov and .filmGauge.
 		 */
-		getFocalLength: function () {
+		getFocalLength: function() {
 
 			var vExtentSlope = Math.tan( _Math.DEG2RAD * 0.5 * this.fov );
 
@@ -11087,21 +11103,21 @@
 
 		},
 
-		getEffectiveFOV: function () {
+		getEffectiveFOV: function() {
 
 			return _Math.RAD2DEG * 2 * Math.atan(
 					Math.tan( _Math.DEG2RAD * 0.5 * this.fov ) / this.zoom );
 
 		},
 
-		getFilmWidth: function () {
+		getFilmWidth: function() {
 
 			// film not completely covered in portrait format (aspect < 1)
 			return this.filmGauge * Math.min( this.aspect, 1 );
 
 		},
 
-		getFilmHeight: function () {
+		getFilmHeight: function() {
 
 			// film not completely covered in landscape format (aspect > 1)
 			return this.filmGauge / Math.max( this.aspect, 1 );
@@ -11143,7 +11159,7 @@
 		 *
 		 *   Note there is no reason monitors have to be the same size or in a grid.
 		 */
-		setViewOffset: function ( fullWidth, fullHeight, x, y, width, height ) {
+		setViewOffset: function( fullWidth, fullHeight, x, y, width, height ) {
 
 			this.aspect = fullWidth / fullHeight;
 
@@ -11160,14 +11176,14 @@
 
 		},
 
-		clearViewOffset: function () {
+		clearViewOffset: function() {
 
 			this.view = null;
 			this.updateProjectionMatrix();
 
 		},
 
-		updateProjectionMatrix: function () {
+		updateProjectionMatrix: function() {
 
 			var near = this.near,
 				top = near * Math.tan(
@@ -11196,7 +11212,7 @@
 
 		},
 
-		toJSON: function ( meta ) {
+		toJSON: function( meta ) {
 
 			var data = Object3D.prototype.toJSON.call( this, meta );
 
@@ -11243,13 +11259,13 @@
 
 	Object.assign( Face3.prototype, {
 
-		clone: function () {
+		clone: function() {
 
 			return new this.constructor().copy( this );
 
 		},
 
-		copy: function ( source ) {
+		copy: function( source ) {
 
 			this.a = source.a;
 			this.b = source.b;
@@ -11331,7 +11347,7 @@
 
 		isGeometry: true,
 
-		applyMatrix: function ( matrix ) {
+		applyMatrix: function( matrix ) {
 
 			var normalMatrix = new Matrix3().getNormalMatrix( matrix );
 
@@ -11374,7 +11390,7 @@
 
 		},
 
-		rotateX: function () {
+		rotateX: function() {
 
 			// rotate geometry around world x-axis
 
@@ -11392,7 +11408,7 @@
 
 		}(),
 
-		rotateY: function () {
+		rotateY: function() {
 
 			// rotate geometry around world y-axis
 
@@ -11410,7 +11426,7 @@
 
 		}(),
 
-		rotateZ: function () {
+		rotateZ: function() {
 
 			// rotate geometry around world z-axis
 
@@ -11428,7 +11444,7 @@
 
 		}(),
 
-		translate: function () {
+		translate: function() {
 
 			// translate geometry
 
@@ -11446,7 +11462,7 @@
 
 		}(),
 
-		scale: function () {
+		scale: function() {
 
 			// scale geometry
 
@@ -11464,7 +11480,7 @@
 
 		}(),
 
-		lookAt: function () {
+		lookAt: function() {
 
 			var obj = new Object3D();
 
@@ -11480,7 +11496,7 @@
 
 		}(),
 
-		fromBufferGeometry: function ( geometry ) {
+		fromBufferGeometry: function( geometry ) {
 
 			var scope = this;
 
@@ -11619,7 +11635,7 @@
 
 		},
 
-		center: function () {
+		center: function() {
 
 			this.computeBoundingBox();
 
@@ -11631,7 +11647,7 @@
 
 		},
 
-		normalize: function () {
+		normalize: function() {
 
 			this.computeBoundingSphere();
 
@@ -11654,7 +11670,7 @@
 
 		},
 
-		computeFaceNormals: function () {
+		computeFaceNormals: function() {
 
 			var cb = new Vector3(), ab = new Vector3();
 
@@ -11678,11 +11694,16 @@
 
 		},
 
-		computeVertexNormals: function ( areaWeighted ) {
+		computeVertexNormals: function( areaWeighted ) {
 
 			if ( areaWeighted === undefined ) areaWeighted = true;
 
-			var v, vl, f, fl, face, vertices;
+			var v;
+			var vl;
+			var f;
+			var fl;
+			var face;
+			var vertices;
 
 			vertices = new Array( this.vertices.length );
 
@@ -11697,7 +11718,9 @@
 				// vertex normals weighted by triangle areas
 				// http://www.iquilezles.org/www/articles/normals/normals.htm
 
-				var vA, vB, vC;
+				var vA;
+				var vB;
+				var vC;
 				var cb = new Vector3(), ab = new Vector3();
 
 				for ( f = 0, fl = this.faces.length; f < fl; f ++ ) {
@@ -11770,9 +11793,11 @@
 
 		},
 
-		computeFlatVertexNormals: function () {
+		computeFlatVertexNormals: function() {
 
-			var f, fl, face;
+			var f;
+			var fl;
+			var face;
 
 			this.computeFaceNormals();
 
@@ -11806,9 +11831,13 @@
 
 		},
 
-		computeMorphNormals: function () {
+		computeMorphNormals: function() {
 
-			var i, il, f, fl, face;
+			var i;
+			var il;
+			var f;
+			var fl;
+			var face;
 
 			// save original normals
 			// - create temp variables on first access
@@ -11864,7 +11893,8 @@
 					var dstNormalsFace = this.morphNormals[ i ].faceNormals;
 					var dstNormalsVertex = this.morphNormals[ i ].vertexNormals;
 
-					var faceNormal, vertexNormals;
+					var faceNormal;
+					var vertexNormals;
 
 					for ( f = 0, fl = this.faces.length; f < fl; f ++ ) {
 
@@ -11891,7 +11921,8 @@
 
 				// store morph normals
 
-				var faceNormal, vertexNormals;
+				var faceNormal;
+				var vertexNormals;
 
 				for ( f = 0, fl = this.faces.length; f < fl; f ++ ) {
 
@@ -11923,7 +11954,7 @@
 
 		},
 
-		computeLineDistances: function () {
+		computeLineDistances: function() {
 
 			var d = 0;
 			var vertices = this.vertices;
@@ -11942,7 +11973,7 @@
 
 		},
 
-		computeBoundingBox: function () {
+		computeBoundingBox: function() {
 
 			if ( this.boundingBox === null ) {
 
@@ -11954,7 +11985,7 @@
 
 		},
 
-		computeBoundingSphere: function () {
+		computeBoundingSphere: function() {
 
 			if ( this.boundingSphere === null ) {
 
@@ -11966,7 +11997,7 @@
 
 		},
 
-		merge: function ( geometry, matrix, materialIndexOffset ) {
+		merge: function( geometry, matrix, materialIndexOffset ) {
 
 			if ( ! ( geometry && geometry.isGeometry ) ) {
 
@@ -12086,7 +12117,7 @@
 
 		},
 
-		mergeMesh: function ( mesh ) {
+		mergeMesh: function( mesh ) {
 
 			if ( ! ( mesh && mesh.isMesh ) ) {
 
@@ -12107,16 +12138,21 @@
 		 * and faces' vertices are updated.
 		 */
 
-		mergeVertices: function () {
+		mergeVertices: function() {
 
 			var verticesMap = {}; // Hashmap for looking up vertices by position coordinates (and making sure they are unique)
 			var unique = [], changes = [];
 
-			var v, key;
+			var v;
+			var key;
 			var precisionPoints = 4; // number of decimal points, e.g. 4 for epsilon of 0.0001
 			var precision = Math.pow( 10, precisionPoints );
-			var i, il, face;
-			var indices, j, jl;
+			var i;
+			var il;
+			var face;
+			var indices;
+			var j;
+			var jl;
 
 			for ( i = 0, il = this.vertices.length; i < il; i ++ ) {
 
@@ -12190,7 +12226,7 @@
 
 		},
 
-		sortFacesByMaterialIndex: function () {
+		sortFacesByMaterialIndex: function() {
 
 			var faces = this.faces;
 			var length = faces.length;
@@ -12218,7 +12254,8 @@
 			var uvs1 = this.faceVertexUvs[ 0 ];
 			var uvs2 = this.faceVertexUvs[ 1 ];
 
-			var newUvs1, newUvs2;
+			var newUvs1;
+			var newUvs2;
 
 			if ( uvs1 && uvs1.length === length ) newUvs1 = [];
 			if ( uvs2 && uvs2.length === length ) newUvs2 = [];
@@ -12237,7 +12274,7 @@
 
 		},
 
-		toJSON: function () {
+		toJSON: function() {
 
 			var data = {
 				metadata: {
@@ -12430,7 +12467,7 @@
 
 		},
 
-		clone: function () {
+		clone: function() {
 
 			/*
 			 // Handle primitives
@@ -12460,9 +12497,14 @@
 
 		},
 
-		copy: function ( source ) {
+		copy: function( source ) {
 
-			var i, il, j, jl, k, kl;
+			var i;
+			var il;
+			var j;
+			var jl;
+			var k;
+			var kl;
 
 			// reset
 
@@ -12694,7 +12736,7 @@
 
 		},
 
-		dispose: function () {
+		dispose: function() {
 
 			this.dispatchEvent( { type: 'dispose' } );
 
@@ -12725,7 +12767,7 @@
 		this.dynamic = false;
 		this.updateRange = { offset: 0, count: - 1 };
 
-		this.onUploadCallback = function () {};
+		this.onUploadCallback = function() {};
 
 		this.version = 0;
 
@@ -12733,7 +12775,7 @@
 
 	Object.defineProperty( BufferAttribute.prototype, 'needsUpdate', {
 
-		set: function ( value ) {
+		set: function( value ) {
 
 			if ( value === true ) this.version ++;
 
@@ -12745,7 +12787,7 @@
 
 		isBufferAttribute: true,
 
-		setArray: function ( array ) {
+		setArray: function( array ) {
 
 			if ( Array.isArray( array ) ) {
 
@@ -12758,7 +12800,7 @@
 
 		},
 
-		setDynamic: function ( value ) {
+		setDynamic: function( value ) {
 
 			this.dynamic = value;
 
@@ -12766,7 +12808,7 @@
 
 		},
 
-		copy: function ( source ) {
+		copy: function( source ) {
 
 			this.array = new source.array.constructor( source.array );
 			this.itemSize = source.itemSize;
@@ -12779,7 +12821,7 @@
 
 		},
 
-		copyAt: function ( index1, attribute, index2 ) {
+		copyAt: function( index1, attribute, index2 ) {
 
 			index1 *= this.itemSize;
 			index2 *= attribute.itemSize;
@@ -12794,7 +12836,7 @@
 
 		},
 
-		copyArray: function ( array ) {
+		copyArray: function( array ) {
 
 			this.array.set( array );
 
@@ -12802,7 +12844,7 @@
 
 		},
 
-		copyColorsArray: function ( colors ) {
+		copyColorsArray: function( colors ) {
 
 			var array = this.array, offset = 0;
 
@@ -12827,7 +12869,7 @@
 
 		},
 
-		copyIndicesArray: function ( indices ) {
+		copyIndicesArray: function( indices ) {
 
 			var array = this.array, offset = 0;
 
@@ -12845,7 +12887,7 @@
 
 		},
 
-		copyVector2sArray: function ( vectors ) {
+		copyVector2sArray: function( vectors ) {
 
 			var array = this.array, offset = 0;
 
@@ -12869,7 +12911,7 @@
 
 		},
 
-		copyVector3sArray: function ( vectors ) {
+		copyVector3sArray: function( vectors ) {
 
 			var array = this.array, offset = 0;
 
@@ -12894,7 +12936,7 @@
 
 		},
 
-		copyVector4sArray: function ( vectors ) {
+		copyVector4sArray: function( vectors ) {
 
 			var array = this.array, offset = 0;
 
@@ -12920,7 +12962,7 @@
 
 		},
 
-		set: function ( value, offset ) {
+		set: function( value, offset ) {
 
 			if ( offset === undefined ) offset = 0;
 
@@ -12930,13 +12972,13 @@
 
 		},
 
-		getX: function ( index ) {
+		getX: function( index ) {
 
 			return this.array[ index * this.itemSize ];
 
 		},
 
-		setX: function ( index, x ) {
+		setX: function( index, x ) {
 
 			this.array[ index * this.itemSize ] = x;
 
@@ -12944,13 +12986,13 @@
 
 		},
 
-		getY: function ( index ) {
+		getY: function( index ) {
 
 			return this.array[ index * this.itemSize + 1 ];
 
 		},
 
-		setY: function ( index, y ) {
+		setY: function( index, y ) {
 
 			this.array[ index * this.itemSize + 1 ] = y;
 
@@ -12958,13 +13000,13 @@
 
 		},
 
-		getZ: function ( index ) {
+		getZ: function( index ) {
 
 			return this.array[ index * this.itemSize + 2 ];
 
 		},
 
-		setZ: function ( index, z ) {
+		setZ: function( index, z ) {
 
 			this.array[ index * this.itemSize + 2 ] = z;
 
@@ -12972,13 +13014,13 @@
 
 		},
 
-		getW: function ( index ) {
+		getW: function( index ) {
 
 			return this.array[ index * this.itemSize + 3 ];
 
 		},
 
-		setW: function ( index, w ) {
+		setW: function( index, w ) {
 
 			this.array[ index * this.itemSize + 3 ] = w;
 
@@ -12986,7 +13028,7 @@
 
 		},
 
-		setXY: function ( index, x, y ) {
+		setXY: function( index, x, y ) {
 
 			index *= this.itemSize;
 
@@ -12997,7 +13039,7 @@
 
 		},
 
-		setXYZ: function ( index, x, y, z ) {
+		setXYZ: function( index, x, y, z ) {
 
 			index *= this.itemSize;
 
@@ -13009,7 +13051,7 @@
 
 		},
 
-		setXYZW: function ( index, x, y, z, w ) {
+		setXYZW: function( index, x, y, z, w ) {
 
 			index *= this.itemSize;
 
@@ -13022,7 +13064,7 @@
 
 		},
 
-		onUpload: function ( callback ) {
+		onUpload: function( callback ) {
 
 			this.onUploadCallback = callback;
 
@@ -13030,7 +13072,7 @@
 
 		},
 
-		clone: function () {
+		clone: function() {
 
 			return new this.constructor( this.array, this.itemSize ).copy( this );
 
@@ -13166,7 +13208,7 @@
 
 	Object.assign( DirectGeometry.prototype, {
 
-		computeGroups: function ( geometry ) {
+		computeGroups: function( geometry ) {
 
 			var group;
 			var groups = [];
@@ -13211,7 +13253,7 @@
 
 		},
 
-		fromGeometry: function ( geometry ) {
+		fromGeometry: function( geometry ) {
 
 			var faces = geometry.faces;
 			var vertices = geometry.vertices;
@@ -13438,13 +13480,13 @@
 
 		isBufferGeometry: true,
 
-		getIndex: function () {
+		getIndex: function() {
 
 			return this.index;
 
 		},
 
-		setIndex: function ( index ) {
+		setIndex: function( index ) {
 
 			if ( Array.isArray( index ) ) {
 
@@ -13458,7 +13500,7 @@
 
 		},
 
-		addAttribute: function ( name, attribute ) {
+		addAttribute: function( name, attribute ) {
 
 			if ( ! ( attribute && attribute.isBufferAttribute ) && ! ( attribute && attribute.isInterleavedBufferAttribute ) ) {
 
@@ -13485,13 +13527,13 @@
 
 		},
 
-		getAttribute: function ( name ) {
+		getAttribute: function( name ) {
 
 			return this.attributes[ name ];
 
 		},
 
-		removeAttribute: function ( name ) {
+		removeAttribute: function( name ) {
 
 			delete this.attributes[ name ];
 
@@ -13499,7 +13541,7 @@
 
 		},
 
-		addGroup: function ( start, count, materialIndex ) {
+		addGroup: function( start, count, materialIndex ) {
 
 			this.groups.push( {
 
@@ -13511,20 +13553,20 @@
 
 		},
 
-		clearGroups: function () {
+		clearGroups: function() {
 
 			this.groups = [];
 
 		},
 
-		setDrawRange: function ( start, count ) {
+		setDrawRange: function( start, count ) {
 
 			this.drawRange.start = start;
 			this.drawRange.count = count;
 
 		},
 
-		applyMatrix: function ( matrix ) {
+		applyMatrix: function( matrix ) {
 
 			var position = this.attributes.position;
 
@@ -13562,7 +13604,7 @@
 
 		},
 
-		rotateX: function () {
+		rotateX: function() {
 
 			// rotate geometry around world x-axis
 
@@ -13580,7 +13622,7 @@
 
 		}(),
 
-		rotateY: function () {
+		rotateY: function() {
 
 			// rotate geometry around world y-axis
 
@@ -13598,7 +13640,7 @@
 
 		}(),
 
-		rotateZ: function () {
+		rotateZ: function() {
 
 			// rotate geometry around world z-axis
 
@@ -13616,7 +13658,7 @@
 
 		}(),
 
-		translate: function () {
+		translate: function() {
 
 			// translate geometry
 
@@ -13634,7 +13676,7 @@
 
 		}(),
 
-		scale: function () {
+		scale: function() {
 
 			// scale geometry
 
@@ -13652,7 +13694,7 @@
 
 		}(),
 
-		lookAt: function () {
+		lookAt: function() {
 
 			var obj = new Object3D();
 
@@ -13668,7 +13710,7 @@
 
 		}(),
 
-		center: function () {
+		center: function() {
 
 			this.computeBoundingBox();
 
@@ -13680,7 +13722,7 @@
 
 		},
 
-		setFromObject: function ( object ) {
+		setFromObject: function( object ) {
 
 			// console.log( 'THREE.BufferGeometry.setFromObject(). Converting', object, this );
 
@@ -13728,7 +13770,7 @@
 
 		},
 
-		updateFromObject: function ( object ) {
+		updateFromObject: function( object ) {
 
 			var geometry = object.geometry;
 
@@ -13855,7 +13897,7 @@
 
 		},
 
-		fromGeometry: function ( geometry ) {
+		fromGeometry: function( geometry ) {
 
 			geometry.__directGeometry = new DirectGeometry().fromGeometry( geometry );
 
@@ -13863,7 +13905,7 @@
 
 		},
 
-		fromDirectGeometry: function ( geometry ) {
+		fromDirectGeometry: function( geometry ) {
 
 			var positions = new Float32Array( geometry.vertices.length * 3 );
 			this.addAttribute( 'position', new BufferAttribute( positions, 3 ).copyVector3sArray( geometry.vertices ) );
@@ -13963,7 +14005,7 @@
 
 		},
 
-		computeBoundingBox: function () {
+		computeBoundingBox: function() {
 
 			if ( this.boundingBox === null ) {
 
@@ -13991,7 +14033,7 @@
 
 		},
 
-		computeBoundingSphere: function () {
+		computeBoundingSphere: function() {
 
 			var box = new Box3();
 			var vector = new Vector3();
@@ -14041,13 +14083,13 @@
 
 		}(),
 
-		computeFaceNormals: function () {
+		computeFaceNormals: function() {
 
 			// backwards compatibility
 
 		},
 
-		computeVertexNormals: function () {
+		computeVertexNormals: function() {
 
 			var index = this.index;
 			var attributes = this.attributes;
@@ -14077,7 +14119,9 @@
 
 				var normals = attributes.normal.array;
 
-				var vA, vB, vC;
+				var vA;
+				var vB;
+				var vC;
 				var pA = new Vector3(), pB = new Vector3(), pC = new Vector3();
 				var cb = new Vector3(), ab = new Vector3();
 
@@ -14168,7 +14212,7 @@
 
 		},
 
-		merge: function ( geometry, offset ) {
+		merge: function( geometry, offset ) {
 
 			if ( ! ( geometry && geometry.isBufferGeometry ) ) {
 
@@ -14205,11 +14249,14 @@
 
 		},
 
-		normalizeNormals: function () {
+		normalizeNormals: function() {
 
 			var normals = this.attributes.normal;
 
-			var x, y, z, n;
+			var x;
+			var y;
+			var z;
+			var n;
 
 			for ( var i = 0, il = normals.count; i < il; i ++ ) {
 
@@ -14225,7 +14272,7 @@
 
 		},
 
-		toNonIndexed: function () {
+		toNonIndexed: function() {
 
 			if ( this.index === null ) {
 
@@ -14270,7 +14317,7 @@
 
 		},
 
-		toJSON: function () {
+		toJSON: function() {
 
 			var data = {
 				metadata: {
@@ -14355,7 +14402,7 @@
 
 		},
 
-		clone: function () {
+		clone: function() {
 
 			/*
 			 // Handle primitives
@@ -14385,9 +14432,11 @@
 
 		},
 
-		copy: function ( source ) {
+		copy: function( source ) {
 
-			var name, i, l;
+			var name;
+			var i;
+			var l;
 
 			// reset
 
@@ -14482,7 +14531,7 @@
 
 		},
 
-		dispose: function () {
+		dispose: function() {
 
 			this.dispatchEvent( { type: 'dispose' } );
 
@@ -14588,7 +14637,8 @@
 			var vertexCounter = 0;
 			var groupCount = 0;
 
-			var ix, iy;
+			var ix;
+			var iy;
 
 			var vector = new Vector3();
 
@@ -14737,7 +14787,8 @@
 		var segment_width = width / gridX;
 		var segment_height = height / gridY;
 
-		var ix, iy;
+		var ix;
+		var iy;
 
 		// buffers
 
@@ -14879,7 +14930,7 @@
 
 	MeshBasicMaterial.prototype.isMeshBasicMaterial = true;
 
-	MeshBasicMaterial.prototype.copy = function ( source ) {
+	MeshBasicMaterial.prototype.copy = function( source ) {
 
 		Material.prototype.copy.call( this, source );
 
@@ -14927,7 +14978,7 @@
 
 	Object.assign( Ray.prototype, {
 
-		set: function ( origin, direction ) {
+		set: function( origin, direction ) {
 
 			this.origin.copy( origin );
 			this.direction.copy( direction );
@@ -14936,13 +14987,13 @@
 
 		},
 
-		clone: function () {
+		clone: function() {
 
 			return new this.constructor().copy( this );
 
 		},
 
-		copy: function ( ray ) {
+		copy: function( ray ) {
 
 			this.origin.copy( ray.origin );
 			this.direction.copy( ray.direction );
@@ -14951,7 +15002,7 @@
 
 		},
 
-		at: function ( t, optionalTarget ) {
+		at: function( t, optionalTarget ) {
 
 			var result = optionalTarget || new Vector3();
 
@@ -14959,7 +15010,7 @@
 
 		},
 
-		lookAt: function ( v ) {
+		lookAt: function( v ) {
 
 			this.direction.copy( v ).sub( this.origin ).normalize();
 
@@ -14967,7 +15018,7 @@
 
 		},
 
-		recast: function () {
+		recast: function() {
 
 			var v1 = new Vector3();
 
@@ -14981,7 +15032,7 @@
 
 		}(),
 
-		closestPointToPoint: function ( point, optionalTarget ) {
+		closestPointToPoint: function( point, optionalTarget ) {
 
 			var result = optionalTarget || new Vector3();
 			result.subVectors( point, this.origin );
@@ -14997,13 +15048,13 @@
 
 		},
 
-		distanceToPoint: function ( point ) {
+		distanceToPoint: function( point ) {
 
 			return Math.sqrt( this.distanceSqToPoint( point ) );
 
 		},
 
-		distanceSqToPoint: function () {
+		distanceSqToPoint: function() {
 
 			var v1 = new Vector3();
 
@@ -15027,7 +15078,7 @@
 
 		}(),
 
-		distanceSqToSegment: function () {
+		distanceSqToSegment: function() {
 
 			var segCenter = new Vector3();
 			var segDir = new Vector3();
@@ -15052,7 +15103,10 @@
 				var b1 = - diff.dot( segDir );
 				var c = diff.lengthSq();
 				var det = Math.abs( 1 - a01 * a01 );
-				var s0, s1, sqrDist, extDet;
+				var s0;
+				var s1;
+				var sqrDist;
+				var extDet;
 
 				if ( det > 0 ) {
 
@@ -15154,7 +15208,7 @@
 
 		}(),
 
-		intersectSphere: function () {
+		intersectSphere: function() {
 
 			var v1 = new Vector3();
 
@@ -15190,13 +15244,13 @@
 
 		}(),
 
-		intersectsSphere: function ( sphere ) {
+		intersectsSphere: function( sphere ) {
 
 			return this.distanceToPoint( sphere.center ) <= sphere.radius;
 
 		},
 
-		distanceToPlane: function ( plane ) {
+		distanceToPlane: function( plane ) {
 
 			var denominator = plane.normal.dot( this.direction );
 
@@ -15223,7 +15277,7 @@
 
 		},
 
-		intersectPlane: function ( plane, optionalTarget ) {
+		intersectPlane: function( plane, optionalTarget ) {
 
 			var t = this.distanceToPlane( plane );
 
@@ -15237,7 +15291,7 @@
 
 		},
 
-		intersectsPlane: function ( plane ) {
+		intersectsPlane: function( plane ) {
 
 			// check if the ray lies on the plane first
 
@@ -15263,9 +15317,14 @@
 
 		},
 
-		intersectBox: function ( box, optionalTarget ) {
+		intersectBox: function( box, optionalTarget ) {
 
-			var tmin, tmax, tymin, tymax, tzmin, tzmax;
+			var tmin;
+			var tmax;
+			var tymin;
+			var tymax;
+			var tzmin;
+			var tzmax;
 
 			var invdirx = 1 / this.direction.x,
 				invdiry = 1 / this.direction.y,
@@ -15332,7 +15391,7 @@
 
 		},
 
-		intersectsBox: ( function () {
+		intersectsBox: ( function() {
 
 			var v = new Vector3();
 
@@ -15344,7 +15403,7 @@
 
 		} )(),
 
-		intersectTriangle: function () {
+		intersectTriangle: function() {
 
 			// Compute the offset origin, edges, and normal.
 			var diff = new Vector3();
@@ -15427,7 +15486,7 @@
 
 		}(),
 
-		applyMatrix4: function ( matrix4 ) {
+		applyMatrix4: function( matrix4 ) {
 
 			this.origin.applyMatrix4( matrix4 );
 			this.direction.transformDirection( matrix4 );
@@ -15436,7 +15495,7 @@
 
 		},
 
-		equals: function ( ray ) {
+		equals: function( ray ) {
 
 			return ray.origin.equals( this.origin ) && ray.direction.equals( this.direction );
 
@@ -15457,7 +15516,7 @@
 
 	Object.assign( Line3.prototype, {
 
-		set: function ( start, end ) {
+		set: function( start, end ) {
 
 			this.start.copy( start );
 			this.end.copy( end );
@@ -15466,13 +15525,13 @@
 
 		},
 
-		clone: function () {
+		clone: function() {
 
 			return new this.constructor().copy( this );
 
 		},
 
-		copy: function ( line ) {
+		copy: function( line ) {
 
 			this.start.copy( line.start );
 			this.end.copy( line.end );
@@ -15481,33 +15540,33 @@
 
 		},
 
-		getCenter: function ( optionalTarget ) {
+		getCenter: function( optionalTarget ) {
 
 			var result = optionalTarget || new Vector3();
 			return result.addVectors( this.start, this.end ).multiplyScalar( 0.5 );
 
 		},
 
-		delta: function ( optionalTarget ) {
+		delta: function( optionalTarget ) {
 
 			var result = optionalTarget || new Vector3();
 			return result.subVectors( this.end, this.start );
 
 		},
 
-		distanceSq: function () {
+		distanceSq: function() {
 
 			return this.start.distanceToSquared( this.end );
 
 		},
 
-		distance: function () {
+		distance: function() {
 
 			return this.start.distanceTo( this.end );
 
 		},
 
-		at: function ( t, optionalTarget ) {
+		at: function( t, optionalTarget ) {
 
 			var result = optionalTarget || new Vector3();
 
@@ -15515,7 +15574,7 @@
 
 		},
 
-		closestPointToPointParameter: function () {
+		closestPointToPointParameter: function() {
 
 			var startP = new Vector3();
 			var startEnd = new Vector3();
@@ -15542,7 +15601,7 @@
 
 		}(),
 
-		closestPointToPoint: function ( point, clampToLine, optionalTarget ) {
+		closestPointToPoint: function( point, clampToLine, optionalTarget ) {
 
 			var t = this.closestPointToPointParameter( point, clampToLine );
 
@@ -15552,7 +15611,7 @@
 
 		},
 
-		applyMatrix4: function ( matrix ) {
+		applyMatrix4: function( matrix ) {
 
 			this.start.applyMatrix4( matrix );
 			this.end.applyMatrix4( matrix );
@@ -15561,7 +15620,7 @@
 
 		},
 
-		equals: function ( line ) {
+		equals: function( line ) {
 
 			return line.start.equals( this.start ) && line.end.equals( this.end );
 
@@ -15584,7 +15643,7 @@
 
 	Object.assign( Triangle, {
 
-		normal: function () {
+		normal: function() {
 
 			var v0 = new Vector3();
 
@@ -15611,7 +15670,7 @@
 
 		// static/instance method to calculate barycentric coordinates
 		// based on: http://www.blackpawn.com/texts/pointinpoly/default.html
-		barycoordFromPoint: function () {
+		barycoordFromPoint: function() {
 
 			var v0 = new Vector3();
 			var v1 = new Vector3();
@@ -15653,7 +15712,7 @@
 
 		}(),
 
-		containsPoint: function () {
+		containsPoint: function() {
 
 			var v1 = new Vector3();
 
@@ -15671,7 +15730,7 @@
 
 	Object.assign( Triangle.prototype, {
 
-		set: function ( a, b, c ) {
+		set: function( a, b, c ) {
 
 			this.a.copy( a );
 			this.b.copy( b );
@@ -15681,7 +15740,7 @@
 
 		},
 
-		setFromPointsAndIndices: function ( points, i0, i1, i2 ) {
+		setFromPointsAndIndices: function( points, i0, i1, i2 ) {
 
 			this.a.copy( points[ i0 ] );
 			this.b.copy( points[ i1 ] );
@@ -15691,13 +15750,13 @@
 
 		},
 
-		clone: function () {
+		clone: function() {
 
 			return new this.constructor().copy( this );
 
 		},
 
-		copy: function ( triangle ) {
+		copy: function( triangle ) {
 
 			this.a.copy( triangle.a );
 			this.b.copy( triangle.b );
@@ -15707,7 +15766,7 @@
 
 		},
 
-		area: function () {
+		area: function() {
 
 			var v0 = new Vector3();
 			var v1 = new Vector3();
@@ -15723,20 +15782,20 @@
 
 		}(),
 
-		midpoint: function ( optionalTarget ) {
+		midpoint: function( optionalTarget ) {
 
 			var result = optionalTarget || new Vector3();
 			return result.addVectors( this.a, this.b ).add( this.c ).multiplyScalar( 1 / 3 );
 
 		},
 
-		normal: function ( optionalTarget ) {
+		normal: function( optionalTarget ) {
 
 			return Triangle.normal( this.a, this.b, this.c, optionalTarget );
 
 		},
 
-		plane: function ( optionalTarget ) {
+		plane: function( optionalTarget ) {
 
 			var result = optionalTarget || new Plane();
 
@@ -15744,19 +15803,19 @@
 
 		},
 
-		barycoordFromPoint: function ( point, optionalTarget ) {
+		barycoordFromPoint: function( point, optionalTarget ) {
 
 			return Triangle.barycoordFromPoint( point, this.a, this.b, this.c, optionalTarget );
 
 		},
 
-		containsPoint: function ( point ) {
+		containsPoint: function( point ) {
 
 			return Triangle.containsPoint( point, this.a, this.b, this.c );
 
 		},
 
-		closestPointToPoint: function () {
+		closestPointToPoint: function() {
 
 			var plane = new Plane();
 			var edgeList = [ new Line3(), new Line3(), new Line3() ];
@@ -15775,7 +15834,7 @@
 
 				// check if the projection lies within the triangle
 
-				if( this.containsPoint( projectedPoint ) === true ) {
+				if ( this.containsPoint( projectedPoint ) === true ) {
 
 					// if so, this is the closest point
 
@@ -15789,13 +15848,13 @@
 					edgeList[ 1 ].set( this.b, this.c );
 					edgeList[ 2 ].set( this.c, this.a );
 
-					for( var i = 0; i < edgeList.length; i ++ ) {
+					for ( var i = 0; i < edgeList.length; i ++ ) {
 
 						edgeList[ i ].closestPointToPoint( projectedPoint, true, closestPoint );
 
 						var distance = projectedPoint.distanceToSquared( closestPoint );
 
-						if( distance < minDistance ) {
+						if ( distance < minDistance ) {
 
 							minDistance = distance;
 
@@ -15813,7 +15872,7 @@
 
 		}(),
 
-		equals: function ( triangle ) {
+		equals: function( triangle ) {
 
 			return triangle.a.equals( this.a ) && triangle.b.equals( this.b ) && triangle.c.equals( this.c );
 
@@ -15849,13 +15908,13 @@
 
 		isMesh: true,
 
-		setDrawMode: function ( value ) {
+		setDrawMode: function( value ) {
 
 			this.drawMode = value;
 
 		},
 
-		copy: function ( source ) {
+		copy: function( source ) {
 
 			Object3D.prototype.copy.call( this, source );
 
@@ -15865,10 +15924,12 @@
 
 		},
 
-		updateMorphTargets: function () {
+		updateMorphTargets: function() {
 
 			var geometry = this.geometry;
-			var m, ml, name;
+			var m;
+			var ml;
+			var name;
 
 			if ( geometry.isBufferGeometry ) {
 
@@ -15921,7 +15982,7 @@
 
 		},
 
-		raycast: ( function () {
+		raycast: ( function() {
 
 			var inverseMatrix = new Matrix4();
 			var ray = new Ray();
@@ -16053,11 +16114,14 @@
 
 				if ( geometry.isBufferGeometry ) {
 
-					var a, b, c;
+					var a;
+					var b;
+					var c;
 					var index = geometry.index;
 					var position = geometry.attributes.position;
 					var uv = geometry.attributes.uv;
-					var i, l;
+					var i;
+					var l;
 
 					if ( index !== null ) {
 
@@ -16105,7 +16169,9 @@
 
 				} else if ( geometry.isGeometry ) {
 
-					var fvA, fvB, fvC;
+					var fvA;
+					var fvB;
+					var fvC;
 					var isMultiMaterial = Array.isArray( material );
 
 					var vertices = geometry.vertices;
@@ -16188,7 +16254,7 @@
 
 		}() ),
 
-		clone: function () {
+		clone: function() {
 
 			return new this.constructor( this.geometry, this.material ).copy( this );
 
@@ -16205,8 +16271,10 @@
 		var clearColor = new Color( 0x000000 );
 		var clearAlpha = 0;
 
-		var planeCamera, planeMesh;
-		var boxCamera, boxMesh;
+		var planeCamera;
+		var planeMesh;
+		var boxCamera;
+		var boxMesh;
 
 		function render( scene, camera, forceClear ) {
 
@@ -16293,24 +16361,24 @@
 
 		return {
 
-			getClearColor: function () {
+			getClearColor: function() {
 
 				return clearColor;
 
 			},
-			setClearColor: function ( color, alpha ) {
+			setClearColor: function( color, alpha ) {
 
 				clearColor.set( color );
 				clearAlpha = alpha !== undefined ? alpha : 1;
 				setClear( clearColor, clearAlpha );
 
 			},
-			getClearAlpha: function () {
+			getClearAlpha: function() {
 
 				return clearAlpha;
 
 			},
-			setClearAlpha: function ( alpha ) {
+			setClearAlpha: function( alpha ) {
 
 				clearAlpha = alpha;
 				setClear( clearColor, clearAlpha );
@@ -16387,7 +16455,8 @@
 
 		function push( object, geometry, material, z, group ) {
 
-			var array, index;
+			var array;
+			var index;
 
 			// allocate the next position in the appropriate array
 
@@ -16514,7 +16583,8 @@
 
 		}
 
-		var type, bytesPerElement;
+		var type;
+		var bytesPerElement;
 
 		function setIndex( value ) {
 
@@ -16827,7 +16897,7 @@
 
 		return {
 
-			get: function ( light ) {
+			get: function( light ) {
 
 				if ( lights[ light.id ] !== undefined ) {
 
@@ -17289,7 +17359,8 @@
 
 		var program = gl.createProgram();
 
-		var prefixVertex, prefixFragment;
+		var prefixVertex;
+		var prefixFragment;
 
 		if ( material.isRawShaderMaterial ) {
 
@@ -17776,7 +17847,7 @@
 
 		}
 
-		this.getParameters = function ( material, lights, fog, nClipPlanes, nClipIntersection, object ) {
+		this.getParameters = function( material, lights, fog, nClipPlanes, nClipIntersection, object ) {
 
 			var shaderID = shaderIDs[ material.type ];
 
@@ -17880,7 +17951,7 @@
 
 		};
 
-		this.getProgramCode = function ( material, parameters ) {
+		this.getProgramCode = function( material, parameters ) {
 
 			var array = [];
 
@@ -17920,7 +17991,7 @@
 
 		};
 
-		this.acquireProgram = function ( material, shader, parameters, code ) {
+		this.acquireProgram = function( material, shader, parameters, code ) {
 
 			var program;
 
@@ -17951,7 +18022,7 @@
 
 		};
 
-		this.releaseProgram = function ( program ) {
+		this.releaseProgram = function( program ) {
 
 			if ( -- program.usedTimes === 0 ) {
 
@@ -18256,7 +18327,8 @@
 
 						} else {
 
-							var mipmap, mipmaps = cubeImage[ i ].mipmaps;
+							var mipmap;
+							var mipmaps = cubeImage[ i ].mipmaps;
 
 							for ( var j = 0, jl = mipmaps.length; j < jl; j ++ ) {
 
@@ -18401,7 +18473,8 @@
 
 			setTextureParameters( _gl.TEXTURE_2D, texture, isPowerOfTwoImage );
 
-			var mipmap, mipmaps = texture.mipmaps;
+			var mipmap;
+			var mipmaps = texture.mipmaps;
 
 			if ( texture.isDepthTexture ) {
 
@@ -18823,7 +18896,7 @@
 
 			return {
 
-				setMask: function ( colorMask ) {
+				setMask: function( colorMask ) {
 
 					if ( currentColorMask !== colorMask && ! locked ) {
 
@@ -18834,13 +18907,13 @@
 
 				},
 
-				setLocked: function ( lock ) {
+				setLocked: function( lock ) {
 
 					locked = lock;
 
 				},
 
-				setClear: function ( r, g, b, a, premultipliedAlpha ) {
+				setClear: function( r, g, b, a, premultipliedAlpha ) {
 
 					if ( premultipliedAlpha === true ) {
 
@@ -18859,7 +18932,7 @@
 
 				},
 
-				reset: function () {
+				reset: function() {
 
 					locked = false;
 
@@ -18882,7 +18955,7 @@
 
 			return {
 
-				setTest: function ( depthTest ) {
+				setTest: function( depthTest ) {
 
 					if ( depthTest ) {
 
@@ -18896,7 +18969,7 @@
 
 				},
 
-				setMask: function ( depthMask ) {
+				setMask: function( depthMask ) {
 
 					if ( currentDepthMask !== depthMask && ! locked ) {
 
@@ -18907,7 +18980,7 @@
 
 				},
 
-				setFunc: function ( depthFunc ) {
+				setFunc: function( depthFunc ) {
 
 					if ( currentDepthFunc !== depthFunc ) {
 
@@ -18973,13 +19046,13 @@
 
 				},
 
-				setLocked: function ( lock ) {
+				setLocked: function( lock ) {
 
 					locked = lock;
 
 				},
 
-				setClear: function ( depth ) {
+				setClear: function( depth ) {
 
 					if ( currentDepthClear !== depth ) {
 
@@ -18990,7 +19063,7 @@
 
 				},
 
-				reset: function () {
+				reset: function() {
 
 					locked = false;
 
@@ -19019,7 +19092,7 @@
 
 			return {
 
-				setTest: function ( stencilTest ) {
+				setTest: function( stencilTest ) {
 
 					if ( stencilTest ) {
 
@@ -19033,7 +19106,7 @@
 
 				},
 
-				setMask: function ( stencilMask ) {
+				setMask: function( stencilMask ) {
 
 					if ( currentStencilMask !== stencilMask && ! locked ) {
 
@@ -19044,7 +19117,7 @@
 
 				},
 
-				setFunc: function ( stencilFunc, stencilRef, stencilMask ) {
+				setFunc: function( stencilFunc, stencilRef, stencilMask ) {
 
 					if ( currentStencilFunc !== stencilFunc ||
 					     currentStencilRef 	!== stencilRef 	||
@@ -19060,7 +19133,7 @@
 
 				},
 
-				setOp: function ( stencilFail, stencilZFail, stencilZPass ) {
+				setOp: function( stencilFail, stencilZFail, stencilZPass ) {
 
 					if ( currentStencilFail	 !== stencilFail 	||
 					     currentStencilZFail !== stencilZFail ||
@@ -19076,13 +19149,13 @@
 
 				},
 
-				setLocked: function ( lock ) {
+				setLocked: function( lock ) {
 
 					locked = lock;
 
 				},
 
-				setClear: function ( stencil ) {
+				setClear: function( stencil ) {
 
 					if ( currentStencilClear !== stencil ) {
 
@@ -19093,7 +19166,7 @@
 
 				},
 
-				reset: function () {
+				reset: function() {
 
 					locked = false;
 
@@ -19904,7 +19977,8 @@
 
 		//
 
-		var currentSize, currentPixelRatio;
+		var currentSize;
+		var currentPixelRatio;
 
 		function onVRDisplayPresentChange() {
 
@@ -19934,19 +20008,19 @@
 		this.enabled = false;
 		this.standing = false;
 
-		this.getDevice = function () {
+		this.getDevice = function() {
 
 			return device;
 
 		};
 
-		this.setDevice = function ( value ) {
+		this.setDevice = function( value ) {
 
 			if ( value !== undefined ) device = value;
 
 		};
 
-		this.getCamera = function ( camera ) {
+		this.getCamera = function( camera ) {
 
 			if ( device === null ) return camera;
 
@@ -20056,13 +20130,13 @@
 
 		};
 
-		this.getStandingMatrix = function () {
+		this.getStandingMatrix = function() {
 
 			return standingMatrix;
 
 		};
 
-		this.submitFrame = function () {
+		this.submitFrame = function() {
 
 			if ( device && device.isPresenting ) device.submitFrame();
 
@@ -20080,7 +20154,7 @@
 
 		return {
 
-			get: function ( name ) {
+			get: function( name ) {
 
 				if ( extensions[ name ] !== undefined ) {
 
@@ -20286,7 +20360,7 @@
 			}
 
 			scope.numPlanes = nPlanes;
-			
+
 			return dstArray;
 
 		}
@@ -20507,7 +20581,7 @@
 
 			if ( _gl.getShaderPrecisionFormat === undefined ) {
 
-				_gl.getShaderPrecisionFormat = function () {
+				_gl.getShaderPrecisionFormat = function() {
 
 					return { 'rangeMin': 1, 'rangeMax': 1, 'precision': 1 };
 
@@ -20613,44 +20687,44 @@
 
 		// API
 
-		this.getContext = function () {
+		this.getContext = function() {
 
 			return _gl;
 
 		};
 
-		this.getContextAttributes = function () {
+		this.getContextAttributes = function() {
 
 			return _gl.getContextAttributes();
 
 		};
 
-		this.forceContextLoss = function () {
+		this.forceContextLoss = function() {
 
 			var extension = extensions.get( 'WEBGL_lose_context' );
 			if ( extension ) extension.loseContext();
 
 		};
 
-		this.getMaxAnisotropy = function () {
+		this.getMaxAnisotropy = function() {
 
 			return capabilities.getMaxAnisotropy();
 
 		};
 
-		this.getPrecision = function () {
+		this.getPrecision = function() {
 
 			return capabilities.precision;
 
 		};
 
-		this.getPixelRatio = function () {
+		this.getPixelRatio = function() {
 
 			return _pixelRatio;
 
 		};
 
-		this.setPixelRatio = function ( value ) {
+		this.setPixelRatio = function( value ) {
 
 			if ( value === undefined ) return;
 
@@ -20660,7 +20734,7 @@
 
 		};
 
-		this.getSize = function () {
+		this.getSize = function() {
 
 			return {
 				width: _width,
@@ -20669,7 +20743,7 @@
 
 		};
 
-		this.setSize = function ( width, height, updateStyle ) {
+		this.setSize = function( width, height, updateStyle ) {
 
 			var device = vr.getDevice();
 
@@ -20697,7 +20771,7 @@
 
 		};
 
-		this.getDrawingBufferSize = function () {
+		this.getDrawingBufferSize = function() {
 
 			return {
 				width: _width * _pixelRatio,
@@ -20706,7 +20780,7 @@
 
 		};
 
-		this.setDrawingBufferSize = function ( width, height, pixelRatio ) {
+		this.setDrawingBufferSize = function( width, height, pixelRatio ) {
 
 			_width = width;
 			_height = height;
@@ -20720,21 +20794,21 @@
 
 		};
 
-		this.setViewport = function ( x, y, width, height ) {
+		this.setViewport = function( x, y, width, height ) {
 
 			_viewport.set( x, _height - y - height, width, height );
 			state.viewport( _currentViewport.copy( _viewport ).multiplyScalar( _pixelRatio ) );
 
 		};
 
-		this.setScissor = function ( x, y, width, height ) {
+		this.setScissor = function( x, y, width, height ) {
 
 			_scissor.set( x, _height - y - height, width, height );
 			state.scissor( _currentScissor.copy( _scissor ).multiplyScalar( _pixelRatio ) );
 
 		};
 
-		this.setScissorTest = function ( boolean ) {
+		this.setScissorTest = function( boolean ) {
 
 			state.setScissorTest( _scissorTest = boolean );
 
@@ -20747,7 +20821,7 @@
 		this.getClearAlpha = background.getClearAlpha;
 		this.setClearAlpha = background.setClearAlpha;
 
-		this.clear = function ( color, depth, stencil ) {
+		this.clear = function( color, depth, stencil ) {
 
 			var bits = 0;
 
@@ -20759,25 +20833,25 @@
 
 		};
 
-		this.clearColor = function () {
+		this.clearColor = function() {
 
 			this.clear( true, false, false );
 
 		};
 
-		this.clearDepth = function () {
+		this.clearDepth = function() {
 
 			this.clear( false, true, false );
 
 		};
 
-		this.clearStencil = function () {
+		this.clearStencil = function() {
 
 			this.clear( false, false, true );
 
 		};
 
-		this.clearTarget = function ( renderTarget, color, depth, stencil ) {
+		this.clearTarget = function( renderTarget, color, depth, stencil ) {
 
 			this.setRenderTarget( renderTarget );
 			this.clear( color, depth, stencil );
@@ -20788,7 +20862,7 @@
 
 		this.resetGLState = resetGLState;
 
-		this.dispose = function () {
+		this.dispose = function() {
 
 			_canvas.removeEventListener( 'webglcontextlost', onContextLost, false );
 
@@ -20849,7 +20923,7 @@
 
 		function renderObjectImmediate( object, program, material ) {
 
-			object.render( function ( object ) {
+			object.render( function( object ) {
 
 				_this.renderBufferImmediate( object, program, material );
 
@@ -20857,7 +20931,7 @@
 
 		}
 
-		this.renderBufferImmediate = function ( object, program, material ) {
+		this.renderBufferImmediate = function( object, program, material ) {
 
 			state.initAttributes();
 
@@ -20957,7 +21031,7 @@
 
 		}
 
-		this.renderBufferDirect = function ( camera, fog, geometry, material, object, group ) {
+		this.renderBufferDirect = function( camera, fog, geometry, material, object, group ) {
 
 			state.setMaterial( material );
 
@@ -21300,11 +21374,11 @@
 
 		// Compile
 
-		this.compile = function ( scene, camera ) {
+		this.compile = function( scene, camera ) {
 
 			lights = [];
 
-			scene.traverse( function ( object ) {
+			scene.traverse( function( object ) {
 
 				if ( object.isLight ) {
 
@@ -21316,7 +21390,7 @@
 
 			setupLights( lights, camera );
 
-			scene.traverse( function ( object ) {
+			scene.traverse( function( object ) {
 
 				if ( object.material ) {
 
@@ -21342,7 +21416,7 @@
 
 		// Rendering
 
-		this.animate = function ( callback ) {
+		this.animate = function( callback ) {
 
 			function onFrame() {
 
@@ -21356,7 +21430,7 @@
 
 		};
 
-		this.render = function ( scene, camera, renderTarget, forceClear ) {
+		this.render = function( scene, camera, renderTarget, forceClear ) {
 
 			if ( ! ( camera && camera.isCamera ) ) {
 
@@ -22529,7 +22603,10 @@
 
 		function setupLights( lights, camera ) {
 
-			var l, ll, light, shadow,
+			var l;
+			var ll;
+			var light;
+			var shadow,
 				r = 0, g = 0, b = 0,
 				color,
 				intensity,
@@ -22724,7 +22801,7 @@
 
 		// GL state setting
 
-		this.setFaceCulling = function ( cullFace, frontFaceDirection ) {
+		this.setFaceCulling = function( cullFace, frontFaceDirection ) {
 
 			state.setCullFace( cullFace );
 			state.setFlipSided( frontFaceDirection === FrontFaceDirectionCW );
@@ -22752,7 +22829,7 @@
 		this.allocTextureUnit = allocTextureUnit;
 
 		// this.setTexture2D = setTexture2D;
-		this.setTexture2D = ( function () {
+		this.setTexture2D = ( function() {
 
 			var warned = false;
 
@@ -22778,7 +22855,7 @@
 
 		}() );
 
-		this.setTexture = ( function () {
+		this.setTexture = ( function() {
 
 			var warned = false;
 
@@ -22797,7 +22874,7 @@
 
 		}() );
 
-		this.setTextureCube = ( function () {
+		this.setTextureCube = ( function() {
 
 			var warned = false;
 
@@ -22839,13 +22916,13 @@
 
 		}() );
 
-		this.getRenderTarget = function () {
+		this.getRenderTarget = function() {
 
 			return _currentRenderTarget;
 
 		};
 
-		this.setRenderTarget = function ( renderTarget ) {
+		this.setRenderTarget = function( renderTarget ) {
 
 			_currentRenderTarget = renderTarget;
 
@@ -22909,7 +22986,7 @@
 
 		};
 
-		this.readRenderTargetPixels = function ( renderTarget, x, y, width, height, buffer ) {
+		this.readRenderTargetPixels = function( renderTarget, x, y, width, height, buffer ) {
 
 			if ( ! ( renderTarget && renderTarget.isWebGLRenderTarget ) ) {
 
@@ -23130,13 +23207,13 @@
 
 	FogExp2.prototype.isFogExp2 = true;
 
-	FogExp2.prototype.clone = function () {
+	FogExp2.prototype.clone = function() {
 
 		return new FogExp2( this.color.getHex(), this.density );
 
 	};
 
-	FogExp2.prototype.toJSON = function ( meta ) {
+	FogExp2.prototype.toJSON = function( meta ) {
 
 		return {
 			type: 'FogExp2',
@@ -23164,13 +23241,13 @@
 
 	Fog.prototype.isFog = true;
 
-	Fog.prototype.clone = function () {
+	Fog.prototype.clone = function() {
 
 		return new Fog( this.color.getHex(), this.near, this.far );
 
 	};
 
-	Fog.prototype.toJSON = function ( meta ) {
+	Fog.prototype.toJSON = function( meta ) {
 
 		return {
 			type: 'Fog',
@@ -23203,7 +23280,7 @@
 
 		constructor: Scene,
 
-		copy: function ( source, recursive ) {
+		copy: function( source, recursive ) {
 
 			Object3D.prototype.copy.call( this, source, recursive );
 
@@ -23218,7 +23295,7 @@
 
 		},
 
-		toJSON: function ( meta ) {
+		toJSON: function( meta ) {
 
 			var data = Object3D.prototype.toJSON.call( this, meta );
 
@@ -23259,7 +23336,7 @@
 
 		isLensFlare: true,
 
-		copy: function ( source ) {
+		copy: function( source ) {
 
 			Object3D.prototype.copy.call( this, source );
 
@@ -23276,7 +23353,7 @@
 
 		},
 
-		add: function ( texture, size, distance, blending, color, opacity ) {
+		add: function( texture, size, distance, blending, color, opacity ) {
 
 			if ( size === undefined ) size = - 1;
 			if ( distance === undefined ) distance = 0;
@@ -23305,9 +23382,10 @@
 		 * Set myLensFlare.customUpdateCallback to alter the flares in your project specific way.
 		 */
 
-		updateLensFlares: function () {
+		updateLensFlares: function() {
 
-			var f, fl = this.lensFlares.length;
+			var f;
+			var fl = this.lensFlares.length;
 			var flare;
 			var vecX = - this.positionScreen.x * 2;
 			var vecY = - this.positionScreen.y * 2;
@@ -23363,7 +23441,7 @@
 	SpriteMaterial.prototype.constructor = SpriteMaterial;
 	SpriteMaterial.prototype.isSpriteMaterial = true;
 
-	SpriteMaterial.prototype.copy = function ( source ) {
+	SpriteMaterial.prototype.copy = function( source ) {
 
 		Material.prototype.copy.call( this, source );
 
@@ -23397,7 +23475,7 @@
 
 		isSprite: true,
 
-		raycast: ( function () {
+		raycast: ( function() {
 
 			var intersectPoint = new Vector3();
 			var worldPosition = new Vector3();
@@ -23430,7 +23508,7 @@
 
 		}() ),
 
-		clone: function () {
+		clone: function() {
 
 			return new this.constructor( this.material ).copy( this );
 
@@ -23463,7 +23541,7 @@
 
 		constructor: LOD,
 
-		copy: function ( source ) {
+		copy: function( source ) {
 
 			Object3D.prototype.copy.call( this, source, false );
 
@@ -23481,7 +23559,7 @@
 
 		},
 
-		addLevel: function ( object, distance ) {
+		addLevel: function( object, distance ) {
 
 			if ( distance === undefined ) distance = 0;
 
@@ -23505,7 +23583,7 @@
 
 		},
 
-		getObjectForDistance: function ( distance ) {
+		getObjectForDistance: function( distance ) {
 
 			var levels = this.levels;
 
@@ -23523,7 +23601,7 @@
 
 		},
 
-		raycast: ( function () {
+		raycast: ( function() {
 
 			var matrixPosition = new Vector3();
 
@@ -23539,7 +23617,7 @@
 
 		}() ),
 
-		update: function () {
+		update: function() {
 
 			var v1 = new Vector3();
 			var v2 = new Vector3();
@@ -23584,7 +23662,7 @@
 
 		}(),
 
-		toJSON: function ( meta ) {
+		toJSON: function( meta ) {
 
 			var data = Object3D.prototype.toJSON.call( this, meta );
 
@@ -23657,7 +23735,7 @@
 
 	Object.assign( Skeleton.prototype, {
 
-		calculateInverses: function () {
+		calculateInverses: function() {
 
 			this.boneInverses = [];
 
@@ -23677,9 +23755,11 @@
 
 		},
 
-		pose: function () {
+		pose: function() {
 
-			var bone, i, il;
+			var bone;
+			var i;
+			var il;
 
 			// recover the bind-time world matrices
 
@@ -23722,7 +23802,7 @@
 
 		},
 
-		update: ( function () {
+		update: ( function() {
 
 			var offsetMatrix = new Matrix4();
 			var identityMatrix = new Matrix4();
@@ -23757,7 +23837,7 @@
 
 		} )(),
 
-		clone: function () {
+		clone: function() {
 
 			return new Skeleton( this.bones, this.boneInverses );
 
@@ -23818,10 +23898,11 @@
 
 		isSkinnedMesh: true,
 
-		initBones: function () {
+		initBones: function() {
 
 			var bones = [], bone, gbone;
-			var i, il;
+			var i;
+			var il;
 
 			if ( this.geometry && this.geometry.bones !== undefined ) {
 
@@ -23878,7 +23959,7 @@
 
 		},
 
-		bind: function ( skeleton, bindMatrix ) {
+		bind: function( skeleton, bindMatrix ) {
 
 			this.skeleton = skeleton;
 
@@ -23897,15 +23978,16 @@
 
 		},
 
-		pose: function () {
+		pose: function() {
 
 			this.skeleton.pose();
 
 		},
 
-		normalizeSkinWeights: function () {
+		normalizeSkinWeights: function() {
 
-			var scale, i;
+			var scale;
+			var i;
 
 			if ( this.geometry && this.geometry.isGeometry ) {
 
@@ -23960,7 +24042,7 @@
 
 		},
 
-		updateMatrixWorld: function ( force ) {
+		updateMatrixWorld: function( force ) {
 
 			Mesh.prototype.updateMatrixWorld.call( this, force );
 
@@ -23980,7 +24062,7 @@
 
 		},
 
-		clone: function () {
+		clone: function() {
 
 			return new this.constructor( this.geometry, this.material ).copy( this );
 
@@ -24025,7 +24107,7 @@
 
 	LineBasicMaterial.prototype.isLineBasicMaterial = true;
 
-	LineBasicMaterial.prototype.copy = function ( source ) {
+	LineBasicMaterial.prototype.copy = function( source ) {
 
 		Material.prototype.copy.call( this, source );
 
@@ -24067,7 +24149,7 @@
 
 		isLine: true,
 
-		raycast: ( function () {
+		raycast: ( function() {
 
 			var inverseMatrix = new Matrix4();
 			var ray = new Ray();
@@ -24216,7 +24298,7 @@
 
 		}() ),
 
-		clone: function () {
+		clone: function() {
 
 			return new this.constructor( this.geometry, this.material ).copy( this );
 
@@ -24302,7 +24384,7 @@
 
 	PointsMaterial.prototype.isPointsMaterial = true;
 
-	PointsMaterial.prototype.copy = function ( source ) {
+	PointsMaterial.prototype.copy = function( source ) {
 
 		Material.prototype.copy.call( this, source );
 
@@ -24338,7 +24420,7 @@
 
 		isPoints: true,
 
-		raycast: ( function () {
+		raycast: ( function() {
 
 			var inverseMatrix = new Matrix4();
 			var ray = new Ray();
@@ -24446,7 +24528,7 @@
 
 		}() ),
 
-		clone: function () {
+		clone: function() {
 
 			return new this.constructor( this.geometry, this.material ).copy( this );
 
@@ -24597,9 +24679,14 @@
 
 		// helper variables
 
-		var i, j, l, o, ol;
+		var i;
+		var j;
+		var l;
+		var o;
+		var ol;
 		var edge = [ 0, 0 ], edges = {}, e, edge1, edge2;
-		var key, keys = [ 'a', 'b', 'c' ];
+		var key;
+		var keys = [ 'a', 'b', 'c' ];
 		var vertex;
 
 		// different logic for Geometry and BufferGeometry
@@ -24649,9 +24736,14 @@
 
 		} else if ( geometry && geometry.isBufferGeometry ) {
 
-			var position, indices, groups;
-			var group, start, count;
-			var index1, index2;
+			var position;
+			var indices;
+			var groups;
+			var group;
+			var start;
+			var count;
+			var index1;
+			var index2;
 
 			vertex = new Vector3();
 
@@ -24811,7 +24903,8 @@
 		var p0 = new Vector3(), p1 = new Vector3();
 		var pu = new Vector3(), pv = new Vector3();
 
-		var i, j;
+		var i;
+		var j;
 
 		// generate vertices, normals and uvs
 
@@ -25018,7 +25111,8 @@
 
 			var v = [];
 
-			var i, j;
+			var i;
+			var j;
 
 			// construct all of the vertices for this subdivision
 
@@ -25563,7 +25657,8 @@
 		var normal = new Vector3();
 		var uv = new Vector2();
 
-		var i, j;
+		var i;
+		var j;
 
 		// buffer
 
@@ -25763,7 +25858,8 @@
 
 		// helper variables
 
-		var i, j;
+		var i;
+		var j;
 
 		var vertex = new Vector3();
 		var normal = new Vector3();
@@ -25948,7 +26044,8 @@
 		var vertex = new Vector3();
 		var normal = new Vector3();
 
-		var j, i;
+		var j;
+		var i;
 
 		// generate vertices, normals and uvs
 
@@ -26026,7 +26123,7 @@
 
 		// calculate area of the contour polygon
 
-		area: function ( contour ) {
+		area: function( contour ) {
 
 			var n = contour.length;
 			var a = 0.0;
@@ -26041,7 +26138,7 @@
 
 		},
 
-		triangulate: ( function () {
+		triangulate: ( function() {
 
 			/**
 			 * This code is a quick port of code written in C++ which was submitted to
@@ -26060,8 +26157,14 @@
 			function snip( contour, u, v, w, n, verts ) {
 
 				var p;
-				var ax, ay, bx, by;
-				var cx, cy, px, py;
+				var ax;
+				var ay;
+				var bx;
+				var by;
+				var cx;
+				var cy;
+				var px;
+				var py;
 
 				ax = contour[ verts[ u ] ].x;
 				ay = contour[ verts[ u ] ].y;
@@ -26074,9 +26177,21 @@
 
 				if ( ( bx - ax ) * ( cy - ay ) - ( by - ay ) * ( cx - ax ) <= 0 ) return false;
 
-				var aX, aY, bX, bY, cX, cY;
-				var apx, apy, bpx, bpy, cpx, cpy;
-				var cCROSSap, bCROSScp, aCROSSbp;
+				var aX;
+				var aY;
+				var bX;
+				var bY;
+				var cX;
+				var cY;
+				var apx;
+				var apy;
+				var bpx;
+				var bpy;
+				var cpx;
+				var cpy;
+				var cCROSSap;
+				var bCROSScp;
+				var aCROSSbp;
 
 				aX = cx - bx;  aY = cy - by;
 				bX = ax - cx;  bY = ay - cy;
@@ -26123,7 +26238,9 @@
 
 				/* we want a counter-clockwise polygon in verts */
 
-				var u, v, w;
+				var u;
+				var v;
+				var w;
 
 				if ( ShapeUtils.area( contour ) > 0.0 ) {
 
@@ -26167,7 +26284,11 @@
 
 					if ( snip( contour, u, v, w, nv, verts ) ) {
 
-						var a, b, c, s, t;
+						var a;
+					var b;
+					var c;
+					var s;
+					var t;
 
 						/* true names of the vertices */
 
@@ -26209,7 +26330,7 @@
 
 		} )(),
 
-		triangulateShape: function ( contour, holes ) {
+		triangulateShape: function( contour, holes ) {
 
 			function removeDupEndPts(points) {
 
@@ -26345,8 +26466,14 @@
 					}
 
 					// they are collinear segments, which might overlap
-					var seg1min, seg1max, seg1minVal, seg1maxVal;
-					var seg2min, seg2max, seg2minVal, seg2maxVal;
+					var seg1min;
+					var seg1max;
+					var seg1minVal;
+					var seg1maxVal;
+					var seg2min;
+					var seg2max;
+					var seg2minVal;
+					var seg2maxVal;
 					if ( seg1dx !== 0 ) {
 
 						// the segments are NOT on a vertical line
@@ -26521,7 +26648,9 @@
 				function intersectsShapeEdge( inShapePt, inHolePt ) {
 
 					// checks for intersections with shape edges
-					var sIdx, nextIdx, intersection;
+					var sIdx;
+					var nextIdx;
+					var intersection;
 					for ( sIdx = 0; sIdx < shape.length; sIdx ++ ) {
 
 						nextIdx = sIdx + 1; nextIdx %= shape.length;
@@ -26539,7 +26668,8 @@
 				function intersectsHoleEdge( inShapePt, inHolePt ) {
 
 					// checks for intersections with hole edges
-					var ihIdx, chkHole,
+					var ihIdx;
+					var chkHole,
 						hIdx, nextIdx, intersection;
 					for ( ihIdx = 0; ihIdx < indepHoles.length; ihIdx ++ ) {
 
@@ -26557,7 +26687,8 @@
 
 				}
 
-				var holeIndex, shapeIndex,
+				var holeIndex;
+				var shapeIndex,
 					shapePt, holePt,
 					holeIdx, cutKey, failedCuts = [],
 					tmpShape1, tmpShape2,
@@ -26639,7 +26770,10 @@
 			}
 
 
-			var i, il, f, face,
+			var i;
+			var il;
+			var f;
+			var face,
 				key, index,
 				allPointsMap = {};
 
@@ -26703,7 +26837,7 @@
 
 		},
 
-		isClockWise: function ( pts ) {
+		isClockWise: function( pts ) {
 
 			return ShapeUtils.area( pts ) < 0;
 
@@ -26789,7 +26923,7 @@
 	ExtrudeBufferGeometry.prototype = Object.create( BufferGeometry.prototype );
 	ExtrudeBufferGeometry.prototype.constructor = ExtrudeBufferGeometry;
 
-	ExtrudeBufferGeometry.prototype.getArrays = function () {
+	ExtrudeBufferGeometry.prototype.getArrays = function() {
 
 		var positionAttribute = this.getAttribute( "position" );
 		var verticesArray = positionAttribute ? Array.prototype.slice.call( positionAttribute.array ) : [];
@@ -26808,7 +26942,7 @@
 
 	};
 
-	ExtrudeBufferGeometry.prototype.addShapeList = function ( shapes, options ) {
+	ExtrudeBufferGeometry.prototype.addShapeList = function( shapes, options ) {
 
 		var sl = shapes.length;
 		options.arrays = this.getArrays();
@@ -26826,7 +26960,7 @@
 
 	};
 
-	ExtrudeBufferGeometry.prototype.addShape = function ( shape, options ) {
+	ExtrudeBufferGeometry.prototype.addShape = function( shape, options ) {
 
 		var arrays = options.arrays ? options.arrays : this.getArrays();
 		var verticesArray = arrays.position;
@@ -26849,12 +26983,16 @@
 		var steps = options.steps !== undefined ? options.steps : 1;
 
 		var extrudePath = options.extrudePath;
-		var extrudePts, extrudeByPath = false;
+		var extrudePts;
+		var extrudeByPath = false;
 
 		// Use default WorldUVGenerator if no UV generators are specified.
 		var uvgen = options.UVGenerator !== undefined ? options.UVGenerator : ExtrudeGeometry.WorldUVGenerator;
 
-		var splineTube, binormal, normal, position2;
+		var splineTube;
+		var binormal;
+		var normal;
+		var position2;
 		if ( extrudePath ) {
 
 			extrudePts = extrudePath.getSpacedPoints( steps );
@@ -26888,7 +27026,9 @@
 
 		// Variables initialization
 
-		var ahole, h, hl; // looping of holes
+		var ahole;
+		var h;
+		var hl; // looping of holes
 		var scope = this;
 
 		var shapePoints = shape.extractPoints( curveSegments );
@@ -26942,7 +27082,10 @@
 
 		}
 
-		var b, bs, t, z,
+		var b;
+		var bs;
+		var t;
+		var z,
 			vert, vlen = vertices.length,
 			face, flen = faces.length;
 
@@ -26959,7 +27102,9 @@
 			// inPt' is the intersection of the two lines parallel to the two
 			//  adjacent edges of inPt at a distance of 1 unit on the left side.
 
-			var v_trans_x, v_trans_y, shrink_by; // resulting translation vector for inPt
+			var v_trans_x;
+			var v_trans_y;
+			var shrink_by; // resulting translation vector for inPt
 
 			// good reading for geometry algorithms (here: line-line intersection)
 			// http://geomalgorithms.com/a05-_intersect-1.html
@@ -27352,7 +27497,8 @@
 
 		function sidewalls( contour, layeroffset ) {
 
-			var j, k;
+			var j;
+			var k;
 			i = contour.length;
 
 			while ( -- i >= 0 ) {
@@ -27461,7 +27607,7 @@
 
 	ExtrudeGeometry.WorldUVGenerator = {
 
-		generateTopUV: function ( geometry, vertices, indexA, indexB, indexC ) {
+		generateTopUV: function( geometry, vertices, indexA, indexB, indexC ) {
 
 			var a_x = vertices[ indexA * 3 ];
 			var a_y = vertices[ indexA * 3 + 1 ];
@@ -27478,7 +27624,7 @@
 
 		},
 
-		generateSideWallUV: function ( geometry, vertices, indexA, indexB, indexC, indexD ) {
+		generateSideWallUV: function( geometry, vertices, indexA, indexB, indexC, indexD ) {
 
 			var a_x = vertices[ indexA * 3 ];
 			var a_y = vertices[ indexA * 3 + 1 ];
@@ -27655,7 +27801,8 @@
 
 		var thetaEnd = thetaStart + thetaLength;
 
-		var ix, iy;
+		var ix;
+		var iy;
 
 		var index = 0;
 		var grid = [];
@@ -27807,7 +27954,8 @@
 		var radiusStep = ( ( outerRadius - innerRadius ) / phiSegments );
 		var vertex = new Vector3();
 		var uv = new Vector2();
-		var j, i;
+		var j;
+		var i;
 
 		// generate vertices, normals and uvs
 
@@ -27947,7 +28095,8 @@
 		var inverseSegments = 1.0 / segments;
 		var vertex = new Vector3();
 		var uv = new Vector2();
-		var i, j;
+		var i;
+		var j;
 
 		// generate vertices and uvs
 
@@ -28153,7 +28302,9 @@
 
 		function addShape( shape ) {
 
-			var i, l, shapeHole;
+			var i;
+			var l;
+			var shapeHole;
 
 			var indexOffset = vertices.length / 3;
 			var points = shape.extractPoints( curveSegments );
@@ -28253,7 +28404,8 @@
 
 		var thresholdDot = Math.cos( _Math.DEG2RAD * thresholdAngle );
 		var edge = [ 0, 0 ], edges = {}, edge1, edge2;
-		var key, keys = [ 'a', 'b', 'c' ];
+		var key;
+		var keys = [ 'a', 'b', 'c' ];
 
 		// prepare source geometry
 
@@ -28432,7 +28584,8 @@
 
 		function generateTorso() {
 
-			var x, y;
+			var x;
+			var y;
 			var normal = new Vector3();
 			var vertex = new Vector3();
 
@@ -28528,7 +28681,9 @@
 
 		function generateCap( top ) {
 
-			var x, centerIndexStart, centerIndexEnd;
+			var x;
+			var centerIndexStart;
+			var centerIndexEnd;
 
 			var uv = new Vector2();
 			var vertex = new Vector3();
@@ -28751,7 +28906,8 @@
 
 		// helper variables
 
-		var i, s;
+		var i;
+		var s;
 		var vertex = new Vector3();
 		var uv = new Vector2();
 
@@ -28879,10 +29035,10 @@
 		Object.defineProperties( this, {
 			opacity: {
 				enumerable: true,
-				get: function () {
+				get: function() {
 					return this.uniforms.opacity.value;
 				},
-				set: function ( value ) {
+				set: function( value ) {
 					this.uniforms.opacity.value = value;
 				}
 			}
@@ -29028,7 +29184,7 @@
 
 	MeshStandardMaterial.prototype.isMeshStandardMaterial = true;
 
-	MeshStandardMaterial.prototype.copy = function ( source ) {
+	MeshStandardMaterial.prototype.copy = function( source ) {
 
 		Material.prototype.copy.call( this, source );
 
@@ -29114,7 +29270,7 @@
 
 	MeshPhysicalMaterial.prototype.isMeshPhysicalMaterial = true;
 
-	MeshPhysicalMaterial.prototype.copy = function ( source ) {
+	MeshPhysicalMaterial.prototype.copy = function( source ) {
 
 		MeshStandardMaterial.prototype.copy.call( this, source );
 
@@ -29238,7 +29394,7 @@
 
 	MeshPhongMaterial.prototype.isMeshPhongMaterial = true;
 
-	MeshPhongMaterial.prototype.copy = function ( source ) {
+	MeshPhongMaterial.prototype.copy = function( source ) {
 
 		Material.prototype.copy.call( this, source );
 
@@ -29317,7 +29473,7 @@
 
 	MeshToonMaterial.prototype.isMeshToonMaterial = true;
 
-	MeshToonMaterial.prototype.copy = function ( source ) {
+	MeshToonMaterial.prototype.copy = function( source ) {
 
 		MeshPhongMaterial.prototype.copy.call( this, source );
 
@@ -29388,7 +29544,7 @@
 
 	MeshNormalMaterial.prototype.isMeshNormalMaterial = true;
 
-	MeshNormalMaterial.prototype.copy = function ( source ) {
+	MeshNormalMaterial.prototype.copy = function( source ) {
 
 		Material.prototype.copy.call( this, source );
 
@@ -29498,7 +29654,7 @@
 
 	MeshLambertMaterial.prototype.isMeshLambertMaterial = true;
 
-	MeshLambertMaterial.prototype.copy = function ( source ) {
+	MeshLambertMaterial.prototype.copy = function( source ) {
 
 		Material.prototype.copy.call( this, source );
 
@@ -29578,7 +29734,7 @@
 
 	LineDashedMaterial.prototype.isLineDashedMaterial = true;
 
-	LineDashedMaterial.prototype.copy = function ( source ) {
+	LineDashedMaterial.prototype.copy = function( source ) {
 
 		Material.prototype.copy.call( this, source );
 
@@ -29625,7 +29781,7 @@
 
 		files: {},
 
-		add: function ( key, file ) {
+		add: function( key, file ) {
 
 			if ( this.enabled === false ) return;
 
@@ -29635,7 +29791,7 @@
 
 		},
 
-		get: function ( key ) {
+		get: function( key ) {
 
 			if ( this.enabled === false ) return;
 
@@ -29645,13 +29801,13 @@
 
 		},
 
-		remove: function ( key ) {
+		remove: function( key ) {
 
 			delete this.files[ key ];
 
 		},
 
-		clear: function () {
+		clear: function() {
 
 			this.files = {};
 
@@ -29674,7 +29830,7 @@
 		this.onProgress = onProgress;
 		this.onError = onError;
 
-		this.itemStart = function ( url ) {
+		this.itemStart = function( url ) {
 
 			itemsTotal ++;
 
@@ -29692,7 +29848,7 @@
 
 		};
 
-		this.itemEnd = function ( url ) {
+		this.itemEnd = function( url ) {
 
 			itemsLoaded ++;
 
@@ -29716,7 +29872,7 @@
 
 		};
 
-		this.itemError = function ( url ) {
+		this.itemError = function( url ) {
 
 			if ( scope.onError !== undefined ) {
 
@@ -29742,7 +29898,7 @@
 
 	Object.assign( FileLoader.prototype, {
 
-		load: function ( url, onLoad, onProgress, onError ) {
+		load: function( url, onLoad, onProgress, onError ) {
 
 			if ( url === undefined ) url = '';
 
@@ -29756,7 +29912,7 @@
 
 				scope.manager.itemStart( url );
 
-				setTimeout( function () {
+				setTimeout( function() {
 
 					if ( onLoad ) onLoad( cached );
 
@@ -29833,7 +29989,7 @@
 					}
 
 					// Wait for next browser tick
-					window.setTimeout( function () {
+					window.setTimeout( function() {
 
 						if ( onLoad ) onLoad( response );
 
@@ -29844,7 +30000,7 @@
 				} catch ( error ) {
 
 					// Wait for next browser tick
-					window.setTimeout( function () {
+					window.setTimeout( function() {
 
 						if ( onError ) onError( error );
 
@@ -29860,7 +30016,7 @@
 				var request = new XMLHttpRequest();
 				request.open( 'GET', url, true );
 
-				request.addEventListener( 'load', function ( event ) {
+				request.addEventListener( 'load', function( event ) {
 
 					var response = event.target.response;
 
@@ -29896,7 +30052,7 @@
 
 				if ( onProgress !== undefined ) {
 
-					request.addEventListener( 'progress', function ( event ) {
+					request.addEventListener( 'progress', function( event ) {
 
 						onProgress( event );
 
@@ -29904,7 +30060,7 @@
 
 				}
 
-				request.addEventListener( 'error', function ( event ) {
+				request.addEventListener( 'error', function( event ) {
 
 					if ( onError ) onError( event );
 
@@ -29934,35 +30090,35 @@
 
 		},
 
-		setPath: function ( value ) {
+		setPath: function( value ) {
 
 			this.path = value;
 			return this;
 
 		},
 
-		setResponseType: function ( value ) {
+		setResponseType: function( value ) {
 
 			this.responseType = value;
 			return this;
 
 		},
 
-		setWithCredentials: function ( value ) {
+		setWithCredentials: function( value ) {
 
 			this.withCredentials = value;
 			return this;
 
 		},
 
-		setMimeType: function ( value ) {
+		setMimeType: function( value ) {
 
 			this.mimeType = value;
 			return this;
 
 		},
 
-		setRequestHeader: function ( value ) {
+		setRequestHeader: function( value ) {
 
 			this.requestHeader = value;
 			return this;
@@ -29988,7 +30144,7 @@
 
 	Object.assign( CompressedTextureLoader.prototype, {
 
-		load: function ( url, onLoad, onProgress, onError ) {
+		load: function( url, onLoad, onProgress, onError ) {
 
 			var scope = this;
 
@@ -30003,7 +30159,7 @@
 
 			function loadTexture( i ) {
 
-				loader.load( url[ i ], function ( buffer ) {
+				loader.load( url[ i ], function( buffer ) {
 
 					var texDatas = scope._parser( buffer, true );
 
@@ -30046,7 +30202,7 @@
 
 				// compressed cubemap texture stored in a single DDS file
 
-				loader.load( url, function ( buffer ) {
+				loader.load( url, function( buffer ) {
 
 					var texDatas = scope._parser( buffer, true );
 
@@ -30096,7 +30252,7 @@
 
 		},
 
-		setPath: function ( value ) {
+		setPath: function( value ) {
 
 			this.path = value;
 			return this;
@@ -30122,7 +30278,7 @@
 
 	Object.assign( DataTextureLoader.prototype, {
 
-		load: function ( url, onLoad, onProgress, onError ) {
+		load: function( url, onLoad, onProgress, onError ) {
 
 			var scope = this;
 
@@ -30131,7 +30287,7 @@
 			var loader = new FileLoader( this.manager );
 			loader.setResponseType( 'arraybuffer' );
 
-			loader.load( url, function ( buffer ) {
+			loader.load( url, function( buffer ) {
 
 				var texData = scope._parser( buffer );
 
@@ -30205,7 +30361,7 @@
 
 	Object.assign( ImageLoader.prototype, {
 
-		load: function ( url, onLoad, onProgress, onError ) {
+		load: function( url, onLoad, onProgress, onError ) {
 
 			if ( url === undefined ) url = '';
 
@@ -30219,7 +30375,7 @@
 
 				scope.manager.itemStart( url );
 
-				setTimeout( function () {
+				setTimeout( function() {
 
 					if ( onLoad ) onLoad( cached );
 
@@ -30233,7 +30389,7 @@
 
 			var image = document.createElementNS( 'http://www.w3.org/1999/xhtml', 'img' );
 
-			image.addEventListener( 'load', function () {
+			image.addEventListener( 'load', function() {
 
 				Cache.add( url, this );
 
@@ -30244,14 +30400,14 @@
 			}, false );
 
 			/*
-			image.addEventListener( 'progress', function ( event ) {
+			image.addEventListener( 'progress', function( event ) {
 
 				if ( onProgress ) onProgress( event );
 
 			}, false );
 			*/
 
-			image.addEventListener( 'error', function ( event ) {
+			image.addEventListener( 'error', function( event ) {
 
 				if ( onError ) onError( event );
 
@@ -30274,14 +30430,14 @@
 
 		},
 
-		setCrossOrigin: function ( value ) {
+		setCrossOrigin: function( value ) {
 
 			this.crossOrigin = value;
 			return this;
 
 		},
 
-		setPath: function ( value ) {
+		setPath: function( value ) {
 
 			this.path = value;
 			return this;
@@ -30302,7 +30458,7 @@
 
 	Object.assign( CubeTextureLoader.prototype, {
 
-		load: function ( urls, onLoad, onProgress, onError ) {
+		load: function( urls, onLoad, onProgress, onError ) {
 
 			var texture = new CubeTexture();
 
@@ -30314,7 +30470,7 @@
 
 			function loadTexture( i ) {
 
-				loader.load( urls[ i ], function ( image ) {
+				loader.load( urls[ i ], function( image ) {
 
 					texture.images[ i ] = image;
 
@@ -30342,14 +30498,14 @@
 
 		},
 
-		setCrossOrigin: function ( value ) {
+		setCrossOrigin: function( value ) {
 
 			this.crossOrigin = value;
 			return this;
 
 		},
 
-		setPath: function ( value ) {
+		setPath: function( value ) {
 
 			this.path = value;
 			return this;
@@ -30370,14 +30526,14 @@
 
 	Object.assign( TextureLoader.prototype, {
 
-		load: function ( url, onLoad, onProgress, onError ) {
+		load: function( url, onLoad, onProgress, onError ) {
 
 			var loader = new ImageLoader( this.manager );
 			loader.setCrossOrigin( this.crossOrigin );
 			loader.setPath( this.path );
 
 			var texture = new Texture();
-			texture.image = loader.load( url, function () {
+			texture.image = loader.load( url, function() {
 
 				// JPEGs can't have an alpha channel, so memory can be saved by storing them as RGB.
 				var isJPEG = url.search( /\.(jpg|jpeg)$/ ) > 0 || url.search( /^data\:image\/jpeg/ ) === 0;
@@ -30397,14 +30553,14 @@
 
 		},
 
-		setCrossOrigin: function ( value ) {
+		setCrossOrigin: function( value ) {
 
 			this.crossOrigin = value;
 			return this;
 
 		},
 
-		setPath: function ( value ) {
+		setPath: function( value ) {
 
 			this.path = value;
 			return this;
@@ -30437,7 +30593,7 @@
 
 		isLight: true,
 
-		copy: function ( source ) {
+		copy: function( source ) {
 
 			Object3D.prototype.copy.call( this, source );
 
@@ -30448,7 +30604,7 @@
 
 		},
 
-		toJSON: function ( meta ) {
+		toJSON: function( meta ) {
 
 			var data = Object3D.prototype.toJSON.call( this, meta );
 
@@ -30495,7 +30651,7 @@
 
 		isHemisphereLight: true,
 
-		copy: function ( source ) {
+		copy: function( source ) {
 
 			Light.prototype.copy.call( this, source );
 
@@ -30527,7 +30683,7 @@
 
 	Object.assign( LightShadow.prototype, {
 
-		copy: function ( source ) {
+		copy: function( source ) {
 
 			this.camera = source.camera.clone();
 
@@ -30540,13 +30696,13 @@
 
 		},
 
-		clone: function () {
+		clone: function() {
 
 			return new this.constructor().copy( this );
 
 		},
 
-		toJSON: function () {
+		toJSON: function() {
 
 			var object = {};
 
@@ -30579,7 +30735,7 @@
 
 		isSpotLightShadow: true,
 
-		update: function ( light ) {
+		update: function( light ) {
 
 			var camera = this.camera;
 
@@ -30616,12 +30772,12 @@
 		this.target = new Object3D();
 
 		Object.defineProperty( this, 'power', {
-			get: function () {
+			get: function() {
 				// intensity = power per solid angle.
 				// ref: equation (17) from http://www.frostbite.com/wp-content/uploads/2014/11/course_notes_moving_frostbite_to_pbr.pdf
 				return this.intensity * Math.PI;
 			},
-			set: function ( power ) {
+			set: function( power ) {
 				// intensity = power per solid angle.
 				// ref: equation (17) from http://www.frostbite.com/wp-content/uploads/2014/11/course_notes_moving_frostbite_to_pbr.pdf
 				this.intensity = power / Math.PI;
@@ -30643,7 +30799,7 @@
 
 		isSpotLight: true,
 
-		copy: function ( source ) {
+		copy: function( source ) {
 
 			Light.prototype.copy.call( this, source );
 
@@ -30674,13 +30830,13 @@
 		this.type = 'PointLight';
 
 		Object.defineProperty( this, 'power', {
-			get: function () {
+			get: function() {
 				// intensity = power per solid angle.
 				// ref: equation (15) from http://www.frostbite.com/wp-content/uploads/2014/11/course_notes_moving_frostbite_to_pbr.pdf
 				return this.intensity * 4 * Math.PI;
 
 			},
-			set: function ( power ) {
+			set: function( power ) {
 				// intensity = power per solid angle.
 				// ref: equation (15) from http://www.frostbite.com/wp-content/uploads/2014/11/course_notes_moving_frostbite_to_pbr.pdf
 				this.intensity = power / ( 4 * Math.PI );
@@ -30700,7 +30856,7 @@
 
 		isPointLight: true,
 
-		copy: function ( source ) {
+		copy: function( source ) {
 
 			Light.prototype.copy.call( this, source );
 
@@ -30757,7 +30913,7 @@
 
 		isDirectionalLight: true,
 
-		copy: function ( source ) {
+		copy: function( source ) {
 
 			Light.prototype.copy.call( this, source );
 
@@ -30824,7 +30980,7 @@
 
 		isRectAreaLight: true,
 
-		copy: function ( source ) {
+		copy: function( source ) {
 
 			Light.prototype.copy.call( this, source );
 
@@ -30835,7 +30991,7 @@
 
 		},
 
-		toJSON: function ( meta ) {
+		toJSON: function( meta ) {
 
 			var data = Light.prototype.toJSON.call( this, meta );
 
@@ -30857,7 +31013,7 @@
 	var AnimationUtils = {
 
 		// same as Array.prototype.slice, but also works on typed arrays
-		arraySlice: function ( array, from, to ) {
+		arraySlice: function( array, from, to ) {
 
 			if ( AnimationUtils.isTypedArray( array ) ) {
 
@@ -30872,7 +31028,7 @@
 		},
 
 		// converts an array to a specific type
-		convertArray: function ( array, type, forceClone ) {
+		convertArray: function( array, type, forceClone ) {
 
 			if ( ! array || // let 'undefined' and 'null' pass
 					! forceClone && array.constructor === type ) return array;
@@ -30887,7 +31043,7 @@
 
 		},
 
-		isTypedArray: function ( object ) {
+		isTypedArray: function( object ) {
 
 			return ArrayBuffer.isView( object ) &&
 					! ( object instanceof DataView );
@@ -30895,7 +31051,7 @@
 		},
 
 		// returns an array by which times and values can be sorted
-		getKeyframeOrder: function ( times ) {
+		getKeyframeOrder: function( times ) {
 
 			function compareTime( i, j ) {
 
@@ -30914,7 +31070,7 @@
 		},
 
 		// uses the array previously returned by 'getKeyframeOrder' to sort data
-		sortedArray: function ( values, stride, order ) {
+		sortedArray: function( values, stride, order ) {
 
 			var nValues = values.length;
 			var result = new values.constructor( nValues );
@@ -30936,7 +31092,7 @@
 		},
 
 		// function for parsing AOS keyframe formats
-		flattenJSON: function ( jsonKeys, times, values, valuePropertyName ) {
+		flattenJSON: function( jsonKeys, times, values, valuePropertyName ) {
 
 			var i = 1, key = jsonKeys[ 0 ];
 
@@ -31494,28 +31650,28 @@
 
 		DefaultInterpolation: InterpolateLinear,
 
-		InterpolantFactoryMethodDiscrete: function ( result ) {
+		InterpolantFactoryMethodDiscrete: function( result ) {
 
 			return new DiscreteInterpolant(
 					this.times, this.values, this.getValueSize(), result );
 
 		},
 
-		InterpolantFactoryMethodLinear: function ( result ) {
+		InterpolantFactoryMethodLinear: function( result ) {
 
 			return new LinearInterpolant(
 					this.times, this.values, this.getValueSize(), result );
 
 		},
 
-		InterpolantFactoryMethodSmooth: function ( result ) {
+		InterpolantFactoryMethodSmooth: function( result ) {
 
 			return new CubicInterpolant(
 					this.times, this.values, this.getValueSize(), result );
 
 		},
 
-		setInterpolation: function ( interpolation ) {
+		setInterpolation: function( interpolation ) {
 
 			var factoryMethod;
 
@@ -31570,7 +31726,7 @@
 
 		},
 
-		getInterpolation: function () {
+		getInterpolation: function() {
 
 			switch ( this.createInterpolant ) {
 
@@ -31590,14 +31746,14 @@
 
 		},
 
-		getValueSize: function () {
+		getValueSize: function() {
 
 			return this.values.length / this.times.length;
 
 		},
 
 		// move all keyframes either forwards or backwards in time
-		shift: function ( timeOffset ) {
+		shift: function( timeOffset ) {
 
 			if ( timeOffset !== 0.0 ) {
 
@@ -31616,7 +31772,7 @@
 		},
 
 		// scale all keyframe times by a factor (useful for frame <-> seconds conversions)
-		scale: function ( timeScale ) {
+		scale: function( timeScale ) {
 
 			if ( timeScale !== 1.0 ) {
 
@@ -31636,7 +31792,7 @@
 
 		// removes keyframes before and after animation without changing any values within the range [startTime, endTime].
 		// IMPORTANT: We do not shift around keys to the start of the track time, because for interpolated keys this will change their values
-		trim: function ( startTime, endTime ) {
+		trim: function( startTime, endTime ) {
 
 			var times = this.times,
 				nKeys = times.length,
@@ -31665,7 +31821,7 @@
 		},
 
 		// ensure we do not get a GarbageInGarbageOut situation, make sure tracks are at least minimally viable
-		validate: function () {
+		validate: function() {
 
 			var valid = true;
 
@@ -31743,7 +31899,7 @@
 
 		// removes equivalent sequential keys as common in morph target sequences
 		// (0,0,0,0,1,1,1,0,0,0,0,0,0,0) --> (0,0,1,1,0,0)
-		optimize: function () {
+		optimize: function() {
 
 			var times = this.times,
 				values = this.values,
@@ -32124,7 +32280,7 @@
 
 		parse: function( json ) {
 
-			if( json.type === undefined ) {
+			if ( json.type === undefined ) {
 
 				throw new Error( "track type undefined, can not parse" );
 
@@ -32269,7 +32425,7 @@
 
 	Object.assign( AnimationClip, {
 
-		parse: function ( json ) {
+		parse: function( json ) {
 
 			var tracks = [],
 				jsonTracks = json.tracks,
@@ -32285,7 +32441,7 @@
 
 		},
 
-		toJSON: function ( clip ) {
+		toJSON: function( clip ) {
 
 			var tracks = [],
 				clipTracks = clip.tracks;
@@ -32308,7 +32464,7 @@
 
 		},
 
-		CreateFromMorphTargetSequence: function ( name, morphTargetSequence, fps, noLoop ) {
+		CreateFromMorphTargetSequence: function( name, morphTargetSequence, fps, noLoop ) {
 
 			var numMorphTargets = morphTargetSequence.length;
 			var tracks = [];
@@ -32350,7 +32506,7 @@
 
 		},
 
-		findByName: function ( objectOrClipArray, name ) {
+		findByName: function( objectOrClipArray, name ) {
 
 			var clipArray = objectOrClipArray;
 
@@ -32375,7 +32531,7 @@
 
 		},
 
-		CreateClipsFromMorphTargetSequences: function ( morphTargets, fps, noLoop ) {
+		CreateClipsFromMorphTargetSequences: function( morphTargets, fps, noLoop ) {
 
 			var animationToMorphTargets = {};
 
@@ -32420,7 +32576,7 @@
 		},
 
 		// parse the animation.hierarchy format
-		parseAnimation: function ( animation, bones ) {
+		parseAnimation: function( animation, bones ) {
 
 			if ( ! animation ) {
 
@@ -32429,7 +32585,7 @@
 
 			}
 
-			var addNonemptyTrack = function ( trackType, trackName, animationKeys, propertyName, destTracks ) {
+			var addNonemptyTrack = function( trackType, trackName, animationKeys, propertyName, destTracks ) {
 
 				// only return track if there are actually keys.
 				if ( animationKeys.length !== 0 ) {
@@ -32547,7 +32703,7 @@
 
 	Object.assign( AnimationClip.prototype, {
 
-		resetDuration: function () {
+		resetDuration: function() {
 
 			var tracks = this.tracks, duration = 0;
 
@@ -32563,7 +32719,7 @@
 
 		},
 
-		trim: function () {
+		trim: function() {
 
 			for ( var i = 0; i < this.tracks.length; i ++ ) {
 
@@ -32575,7 +32731,7 @@
 
 		},
 
-		optimize: function () {
+		optimize: function() {
 
 			for ( var i = 0; i < this.tracks.length; i ++ ) {
 
@@ -32602,12 +32758,12 @@
 
 	Object.assign( MaterialLoader.prototype, {
 
-		load: function ( url, onLoad, onProgress, onError ) {
+		load: function( url, onLoad, onProgress, onError ) {
 
 			var scope = this;
 
 			var loader = new FileLoader( scope.manager );
-			loader.load( url, function ( text ) {
+			loader.load( url, function( text ) {
 
 				onLoad( scope.parse( JSON.parse( text ) ) );
 
@@ -32615,13 +32771,13 @@
 
 		},
 
-		setTextures: function ( value ) {
+		setTextures: function( value ) {
 
 			this.textures = value;
 
 		},
 
-		parse: function ( json ) {
+		parse: function( json ) {
 
 			var textures = this.textures;
 
@@ -32748,12 +32904,12 @@
 
 	Object.assign( BufferGeometryLoader.prototype, {
 
-		load: function ( url, onLoad, onProgress, onError ) {
+		load: function( url, onLoad, onProgress, onError ) {
 
 			var scope = this;
 
 			var loader = new FileLoader( scope.manager );
-			loader.load( url, function ( text ) {
+			loader.load( url, function( text ) {
 
 				onLoad( scope.parse( JSON.parse( text ) ) );
 
@@ -32761,7 +32917,7 @@
 
 		},
 
-		parse: function ( json ) {
+		parse: function( json ) {
 
 			var geometry = new BufferGeometry();
 
@@ -32840,9 +32996,9 @@
 
 	function Loader() {
 
-		this.onLoadStart = function () {};
-		this.onLoadProgress = function () {};
-		this.onLoadComplete = function () {};
+		this.onLoadStart = function() {};
+		this.onLoadProgress = function() {};
+		this.onLoadComplete = function() {};
 
 	}
 
@@ -32850,13 +33006,13 @@
 
 		handlers: [],
 
-		add: function ( regex, loader ) {
+		add: function( regex, loader ) {
 
 			this.handlers.push( regex, loader );
 
 		},
 
-		get: function ( file ) {
+		get: function( file ) {
 
 			var handlers = this.handlers;
 
@@ -32883,7 +33039,7 @@
 
 		crossOrigin: undefined,
 
-		extractUrlBase: function ( url ) {
+		extractUrlBase: function( url ) {
 
 			var parts = url.split( '/' );
 
@@ -32895,7 +33051,7 @@
 
 		},
 
-		initMaterials: function ( materials, texturePath, crossOrigin ) {
+		initMaterials: function( materials, texturePath, crossOrigin ) {
 
 			var array = [];
 
@@ -32909,7 +33065,7 @@
 
 		},
 
-		createMaterial: ( function () {
+		createMaterial: ( function() {
 
 			var BlendingMode = {
 				NoBlending: NoBlending,
@@ -33187,7 +33343,7 @@
 
 	Object.assign( JSONLoader.prototype, {
 
-		load: function ( url, onLoad, onProgress, onError ) {
+		load: function( url, onLoad, onProgress, onError ) {
 
 			var scope = this;
 
@@ -33195,7 +33351,7 @@
 
 			var loader = new FileLoader( this.manager );
 			loader.setWithCredentials( this.withCredentials );
-			loader.load( url, function ( text ) {
+			loader.load( url, function( text ) {
 
 				var json = JSON.parse( text );
 				var metadata = json.metadata;
@@ -33231,13 +33387,13 @@
 
 		},
 
-		setTexturePath: function ( value ) {
+		setTexturePath: function( value ) {
 
 			this.texturePath = value;
 
 		},
 
-		parse: ( function () {
+		parse: ( function() {
 
 			function parseModel( json, geometry ) {
 
@@ -33247,7 +33403,9 @@
 
 				}
 
-				var i, j, fi,
+				var i;
+			var j;
+			var fi,
 
 					offset, zLength,
 
@@ -33680,7 +33838,7 @@
 
 			}
 
-			return function ( json, texturePath ) {
+			return function( json, texturePath ) {
 
 				if ( json.data !== undefined ) {
 
@@ -33740,7 +33898,7 @@
 
 	Object.assign( ObjectLoader.prototype, {
 
-		load: function ( url, onLoad, onProgress, onError ) {
+		load: function( url, onLoad, onProgress, onError ) {
 
 			if ( this.texturePath === '' ) {
 
@@ -33751,7 +33909,7 @@
 			var scope = this;
 
 			var loader = new FileLoader( scope.manager );
-			loader.load( url, function ( text ) {
+			loader.load( url, function( text ) {
 
 				var json = null;
 
@@ -33784,23 +33942,23 @@
 
 		},
 
-		setTexturePath: function ( value ) {
+		setTexturePath: function( value ) {
 
 			this.texturePath = value;
 
 		},
 
-		setCrossOrigin: function ( value ) {
+		setCrossOrigin: function( value ) {
 
 			this.crossOrigin = value;
 
 		},
 
-		parse: function ( json, onLoad ) {
+		parse: function( json, onLoad ) {
 
 			var geometries = this.parseGeometries( json.geometries );
 
-			var images = this.parseImages( json.images, function () {
+			var images = this.parseImages( json.images, function() {
 
 				if ( onLoad !== undefined ) onLoad( object );
 
@@ -33827,7 +33985,7 @@
 
 		},
 
-		parseGeometries: function ( json ) {
+		parseGeometries: function( json ) {
 
 			var geometries = {};
 
@@ -34027,7 +34185,7 @@
 
 		},
 
-		parseMaterials: function ( json, textures ) {
+		parseMaterials: function( json, textures ) {
 
 			var materials = {};
 
@@ -34068,7 +34226,7 @@
 
 		},
 
-		parseAnimations: function ( json ) {
+		parseAnimations: function( json ) {
 
 			var animations = [];
 
@@ -34084,7 +34242,7 @@
 
 		},
 
-		parseImages: function ( json, onLoad ) {
+		parseImages: function( json, onLoad ) {
 
 			var scope = this;
 			var images = {};
@@ -34093,11 +34251,11 @@
 
 				scope.manager.itemStart( url );
 
-				return loader.load( url, function () {
+				return loader.load( url, function() {
 
 					scope.manager.itemEnd( url );
 
-				}, undefined, function () {
+				}, undefined, function() {
 
 					scope.manager.itemEnd( url );
 					scope.manager.itemError( url );
@@ -34128,7 +34286,7 @@
 
 		},
 
-		parseTextures: function ( json, images ) {
+		parseTextures: function( json, images ) {
 
 			function parseConstant( value, type ) {
 
@@ -34194,7 +34352,7 @@
 
 		},
 
-		parseObject: function () {
+		parseObject: function() {
 
 			var matrix = new Matrix4();
 
@@ -34627,7 +34785,7 @@
 		// Virtual base class method to overwrite and implement in subclasses
 		//	- t [0 .. 1]
 
-		getPoint: function () {
+		getPoint: function() {
 
 			console.warn( 'THREE.Curve: .getPoint() not implemented.' );
 			return null;
@@ -34637,7 +34795,7 @@
 		// Get point at relative position in curve according to arc length
 		// - u [0 .. 1]
 
-		getPointAt: function ( u ) {
+		getPointAt: function( u ) {
 
 			var t = this.getUtoTmapping( u );
 			return this.getPoint( t );
@@ -34646,7 +34804,7 @@
 
 		// Get sequence of points using getPoint( t )
 
-		getPoints: function ( divisions ) {
+		getPoints: function( divisions ) {
 
 			if ( divisions === undefined ) divisions = 5;
 
@@ -34664,7 +34822,7 @@
 
 		// Get sequence of points using getPointAt( u )
 
-		getSpacedPoints: function ( divisions ) {
+		getSpacedPoints: function( divisions ) {
 
 			if ( divisions === undefined ) divisions = 5;
 
@@ -34682,7 +34840,7 @@
 
 		// Get total curve arc length
 
-		getLength: function () {
+		getLength: function() {
 
 			var lengths = this.getLengths();
 			return lengths[ lengths.length - 1 ];
@@ -34691,7 +34849,7 @@
 
 		// Get list of cumulative segment lengths
 
-		getLengths: function ( divisions ) {
+		getLengths: function( divisions ) {
 
 			if ( divisions === undefined ) divisions = this.arcLengthDivisions;
 
@@ -34706,8 +34864,10 @@
 			this.needsUpdate = false;
 
 			var cache = [];
-			var current, last = this.getPoint( 0 );
-			var p, sum = 0;
+			var current;
+			var last = this.getPoint( 0 );
+			var p;
+			var sum = 0;
 
 			cache.push( 0 );
 
@@ -34726,7 +34886,7 @@
 
 		},
 
-		updateArcLengths: function () {
+		updateArcLengths: function() {
 
 			this.needsUpdate = true;
 			this.getLengths();
@@ -34735,7 +34895,7 @@
 
 		// Given u ( 0 .. 1 ), get a t to find p. This gives you points which are equidistant
 
-		getUtoTmapping: function ( u, distance ) {
+		getUtoTmapping: function( u, distance ) {
 
 			var arcLengths = this.getLengths();
 
@@ -34814,7 +34974,7 @@
 		// 2 points a small delta apart will be used to find its gradient
 		// which seems to give a reasonable approximation
 
-		getTangent: function ( t ) {
+		getTangent: function( t ) {
 
 			var delta = 0.0001;
 			var t1 = t - delta;
@@ -34833,14 +34993,14 @@
 
 		},
 
-		getTangentAt: function ( u ) {
+		getTangentAt: function( u ) {
 
 			var t = this.getUtoTmapping( u );
 			return this.getTangent( t );
 
 		},
 
-		computeFrenetFrames: function ( segments, closed ) {
+		computeFrenetFrames: function( segments, closed ) {
 
 			// see http://www.cs.indiana.edu/pub/techreports/TR425.pdf
 
@@ -34853,7 +35013,9 @@
 			var vec = new Vector3();
 			var mat = new Matrix4();
 
-			var i, u, theta;
+			var i;
+			var u;
+			var theta;
 
 			// compute the tangent vectors for each segment on the curve
 
@@ -34973,7 +35135,7 @@
 
 	LineCurve.prototype.isLineCurve = true;
 
-	LineCurve.prototype.getPoint = function ( t ) {
+	LineCurve.prototype.getPoint = function( t ) {
 
 		if ( t === 1 ) {
 
@@ -34990,13 +35152,13 @@
 
 	// Line curve is linear, so we can overwrite default getPointAt
 
-	LineCurve.prototype.getPointAt = function ( u ) {
+	LineCurve.prototype.getPointAt = function( u ) {
 
 		return this.getPoint( u );
 
 	};
 
-	LineCurve.prototype.getTangent = function ( t ) {
+	LineCurve.prototype.getTangent = function( t ) {
 
 		var tangent = this.v2.clone().sub( this.v1 );
 
@@ -35028,13 +35190,13 @@
 
 		constructor: CurvePath,
 
-		add: function ( curve ) {
+		add: function( curve ) {
 
 			this.curves.push( curve );
 
 		},
 
-		closePath: function () {
+		closePath: function() {
 
 			// Add a line curve if start and end of lines are not connected
 			var startPoint = this.curves[ 0 ].getPoint( 0 );
@@ -35057,7 +35219,7 @@
 		// 3. Get t for the curve
 		// 4. Return curve.getPointAt(t')
 
-		getPoint: function ( t ) {
+		getPoint: function( t ) {
 
 			var d = t * this.getLength();
 			var curveLengths = this.getCurveLengths();
@@ -35093,7 +35255,7 @@
 		// THREE.Curve, getLength() depends on getPoint() but in THREE.CurvePath
 		// getPoint() depends on getLength
 
-		getLength: function () {
+		getLength: function() {
 
 			var lens = this.getCurveLengths();
 			return lens[ lens.length - 1 ];
@@ -35101,7 +35263,7 @@
 		},
 
 		// cacheLengths must be recalculated.
-		updateArcLengths: function () {
+		updateArcLengths: function() {
 
 			this.needsUpdate = true;
 			this.cacheLengths = null;
@@ -35112,7 +35274,7 @@
 		// Compute lengths and cache them
 		// We cannot overwrite getLengths() because UtoT mapping uses it.
 
-		getCurveLengths: function () {
+		getCurveLengths: function() {
 
 			// We use cache values if curves and cache array are same length
 
@@ -35140,7 +35302,7 @@
 
 		},
 
-		getSpacedPoints: function ( divisions ) {
+		getSpacedPoints: function( divisions ) {
 
 			if ( divisions === undefined ) divisions = 40;
 
@@ -35162,7 +35324,7 @@
 
 		},
 
-		getPoints: function ( divisions ) {
+		getPoints: function( divisions ) {
 
 			divisions = divisions || 12;
 
@@ -35207,7 +35369,7 @@
 
 		/// Generate geometry from path points (for Line or Points objects)
 
-		createPointsGeometry: function ( divisions ) {
+		createPointsGeometry: function( divisions ) {
 
 			var pts = this.getPoints( divisions );
 			return this.createGeometry( pts );
@@ -35216,14 +35378,14 @@
 
 		// Generate geometry from equidistant sampling along the path
 
-		createSpacedPointsGeometry: function ( divisions ) {
+		createSpacedPointsGeometry: function( divisions ) {
 
 			var pts = this.getSpacedPoints( divisions );
 			return this.createGeometry( pts );
 
 		},
 
-		createGeometry: function ( points ) {
+		createGeometry: function( points ) {
 
 			var geometry = new Geometry();
 
@@ -35264,7 +35426,7 @@
 
 	EllipseCurve.prototype.isEllipseCurve = true;
 
-	EllipseCurve.prototype.getPoint = function ( t ) {
+	EllipseCurve.prototype.getPoint = function( t ) {
 
 		var twoPi = Math.PI * 2;
 		var deltaAngle = this.aEndAngle - this.aStartAngle;
@@ -35337,7 +35499,7 @@
 
 	SplineCurve.prototype.isSplineCurve = true;
 
-	SplineCurve.prototype.getPoint = function ( t ) {
+	SplineCurve.prototype.getPoint = function( t ) {
 
 		var points = this.points;
 		var point = ( points.length - 1 ) * t;
@@ -35371,7 +35533,7 @@
 	CubicBezierCurve.prototype = Object.create( Curve.prototype );
 	CubicBezierCurve.prototype.constructor = CubicBezierCurve;
 
-	CubicBezierCurve.prototype.getPoint = function ( t ) {
+	CubicBezierCurve.prototype.getPoint = function( t ) {
 
 		var v0 = this.v0, v1 = this.v1, v2 = this.v2, v3 = this.v3;
 
@@ -35395,7 +35557,7 @@
 	QuadraticBezierCurve.prototype = Object.create( Curve.prototype );
 	QuadraticBezierCurve.prototype.constructor = QuadraticBezierCurve;
 
-	QuadraticBezierCurve.prototype.getPoint = function ( t ) {
+	QuadraticBezierCurve.prototype.getPoint = function( t ) {
 
 		var v0 = this.v0, v1 = this.v1, v2 = this.v2;
 
@@ -35408,7 +35570,7 @@
 
 	var PathPrototype = Object.assign( Object.create( CurvePath.prototype ), {
 
-		fromPoints: function ( vectors ) {
+		fromPoints: function( vectors ) {
 
 			this.moveTo( vectors[ 0 ].x, vectors[ 0 ].y );
 
@@ -35420,13 +35582,13 @@
 
 		},
 
-		moveTo: function ( x, y ) {
+		moveTo: function( x, y ) {
 
 			this.currentPoint.set( x, y ); // TODO consider referencing vectors instead of copying?
 
 		},
 
-		lineTo: function ( x, y ) {
+		lineTo: function( x, y ) {
 
 			var curve = new LineCurve( this.currentPoint.clone(), new Vector2( x, y ) );
 			this.curves.push( curve );
@@ -35435,7 +35597,7 @@
 
 		},
 
-		quadraticCurveTo: function ( aCPx, aCPy, aX, aY ) {
+		quadraticCurveTo: function( aCPx, aCPy, aX, aY ) {
 
 			var curve = new QuadraticBezierCurve(
 				this.currentPoint.clone(),
@@ -35449,7 +35611,7 @@
 
 		},
 
-		bezierCurveTo: function ( aCP1x, aCP1y, aCP2x, aCP2y, aX, aY ) {
+		bezierCurveTo: function( aCP1x, aCP1y, aCP2x, aCP2y, aX, aY ) {
 
 			var curve = new CubicBezierCurve(
 				this.currentPoint.clone(),
@@ -35464,7 +35626,7 @@
 
 		},
 
-		splineThru: function ( pts /*Array of Vector*/ ) {
+		splineThru: function( pts /*Array of Vector*/ ) {
 
 			var npts = [ this.currentPoint.clone() ].concat( pts );
 
@@ -35475,7 +35637,7 @@
 
 		},
 
-		arc: function ( aX, aY, aRadius, aStartAngle, aEndAngle, aClockwise ) {
+		arc: function( aX, aY, aRadius, aStartAngle, aEndAngle, aClockwise ) {
 
 			var x0 = this.currentPoint.x;
 			var y0 = this.currentPoint.y;
@@ -35485,13 +35647,13 @@
 
 		},
 
-		absarc: function ( aX, aY, aRadius, aStartAngle, aEndAngle, aClockwise ) {
+		absarc: function( aX, aY, aRadius, aStartAngle, aEndAngle, aClockwise ) {
 
 			this.absellipse( aX, aY, aRadius, aRadius, aStartAngle, aEndAngle, aClockwise );
 
 		},
 
-		ellipse: function ( aX, aY, xRadius, yRadius, aStartAngle, aEndAngle, aClockwise, aRotation ) {
+		ellipse: function( aX, aY, xRadius, yRadius, aStartAngle, aEndAngle, aClockwise, aRotation ) {
 
 			var x0 = this.currentPoint.x;
 			var y0 = this.currentPoint.y;
@@ -35500,7 +35662,7 @@
 
 		},
 
-		absellipse: function ( aX, aY, xRadius, yRadius, aStartAngle, aEndAngle, aClockwise, aRotation ) {
+		absellipse: function( aX, aY, xRadius, yRadius, aStartAngle, aEndAngle, aClockwise, aRotation ) {
 
 			var curve = new EllipseCurve( aX, aY, xRadius, yRadius, aStartAngle, aEndAngle, aClockwise, aRotation );
 
@@ -35570,7 +35732,7 @@
 
 		constructor: Shape,
 
-		getPointsHoles: function ( divisions ) {
+		getPointsHoles: function( divisions ) {
 
 			var holesPts = [];
 
@@ -35586,7 +35748,7 @@
 
 		// Get points of shape and holes (keypoints based on segments parameter)
 
-		extractAllPoints: function ( divisions ) {
+		extractAllPoints: function( divisions ) {
 
 			return {
 
@@ -35597,7 +35759,7 @@
 
 		},
 
-		extractPoints: function ( divisions ) {
+		extractPoints: function( divisions ) {
 
 			return this.extractAllPoints( divisions );
 
@@ -35619,7 +35781,7 @@
 
 	Object.assign( ShapePath.prototype, {
 
-		moveTo: function ( x, y ) {
+		moveTo: function( x, y ) {
 
 			this.currentPath = new Path();
 			this.subPaths.push( this.currentPath );
@@ -35627,31 +35789,31 @@
 
 		},
 
-		lineTo: function ( x, y ) {
+		lineTo: function( x, y ) {
 
 			this.currentPath.lineTo( x, y );
 
 		},
 
-		quadraticCurveTo: function ( aCPx, aCPy, aX, aY ) {
+		quadraticCurveTo: function( aCPx, aCPy, aX, aY ) {
 
 			this.currentPath.quadraticCurveTo( aCPx, aCPy, aX, aY );
 
 		},
 
-		bezierCurveTo: function ( aCP1x, aCP1y, aCP2x, aCP2y, aX, aY ) {
+		bezierCurveTo: function( aCP1x, aCP1y, aCP2x, aCP2y, aX, aY ) {
 
 			this.currentPath.bezierCurveTo( aCP1x, aCP1y, aCP2x, aCP2y, aX, aY );
 
 		},
 
-		splineThru: function ( pts ) {
+		splineThru: function( pts ) {
 
 			this.currentPath.splineThru( pts );
 
 		},
 
-		toShapes: function ( isCCW, noHoles ) {
+		toShapes: function( isCCW, noHoles ) {
 
 			function toShapesNoHoles( inSubpaths ) {
 
@@ -35739,7 +35901,10 @@
 			if ( noHoles === true )	return	toShapesNoHoles( subPaths );
 
 
-			var solid, tmpPath, tmpShape, shapes = [];
+			var solid;
+			var tmpPath;
+			var tmpShape;
+			var shapes = [];
 
 			if ( subPaths.length === 1 ) {
 
@@ -35895,7 +36060,7 @@
 
 		isFont: true,
 
-		generateShapes: function ( text, size, divisions ) {
+		generateShapes: function( text, size, divisions ) {
 
 			function createPaths( text ) {
 
@@ -35939,7 +36104,17 @@
 				var path = new ShapePath();
 
 				var pts = [];
-				var x, y, cpx, cpy, cpx0, cpy0, cpx1, cpy1, cpx2, cpy2, laste;
+				var x;
+			var y;
+			var cpx;
+			var cpy;
+			var cpx0;
+			var cpy0;
+			var cpx1;
+			var cpy1;
+			var cpx2;
+			var cpy2;
+			var laste;
 
 				if ( glyph.o ) {
 
@@ -36071,12 +36246,12 @@
 
 	Object.assign( FontLoader.prototype, {
 
-		load: function ( url, onLoad, onProgress, onError ) {
+		load: function( url, onLoad, onProgress, onError ) {
 
 			var scope = this;
 
 			var loader = new FileLoader( this.manager );
-			loader.load( url, function ( text ) {
+			loader.load( url, function( text ) {
 
 				var json;
 
@@ -36099,7 +36274,7 @@
 
 		},
 
-		parse: function ( json ) {
+		parse: function( json ) {
 
 			return new Font( json );
 
@@ -36111,7 +36286,7 @@
 
 	var AudioContext = {
 
-		getContext: function () {
+		getContext: function() {
 
 			if ( context === undefined ) {
 
@@ -36123,7 +36298,7 @@
 
 		},
 
-		setContext: function ( value ) {
+		setContext: function( value ) {
 
 			context = value;
 
@@ -36143,15 +36318,15 @@
 
 	Object.assign( AudioLoader.prototype, {
 
-		load: function ( url, onLoad, onProgress, onError ) {
+		load: function( url, onLoad, onProgress, onError ) {
 
 			var loader = new FileLoader( this.manager );
 			loader.setResponseType( 'arraybuffer' );
-			loader.load( url, function ( buffer ) {
+			loader.load( url, function( buffer ) {
 
 				var context = AudioContext.getContext();
 
-				context.decodeAudioData( buffer, function ( audioBuffer ) {
+				context.decodeAudioData( buffer, function( audioBuffer ) {
 
 					onLoad( audioBuffer );
 
@@ -36187,9 +36362,16 @@
 
 	Object.assign( StereoCamera.prototype, {
 
-		update: ( function () {
+		update: ( function() {
 
-			var instance, focus, fov, aspect, near, far, zoom, eyeSep;
+			var instance;
+			var focus;
+			var fov;
+			var aspect;
+			var near;
+			var far;
+			var zoom;
+			var eyeSep;
 
 			var eyeRight = new Matrix4();
 			var eyeLeft = new Matrix4();
@@ -36217,7 +36399,8 @@
 					eyeSep = this.eyeSep / 2;
 					var eyeSepOnProjection = eyeSep * near / focus;
 					var ymax = ( near * Math.tan( _Math.DEG2RAD * fov * 0.5 ) ) / zoom;
-					var xmin, xmax;
+					var xmin;
+					var xmax;
 
 					// translate xOffset
 
@@ -36305,7 +36488,7 @@
 		this.renderTarget = new WebGLRenderTargetCube( cubeResolution, cubeResolution, options );
 		this.renderTarget.texture.name = "CubeCamera";
 
-		this.updateCubeMap = function ( renderer, scene ) {
+		this.updateCubeMap = function( renderer, scene ) {
 
 			if ( this.parent === null ) this.updateMatrixWorld();
 
@@ -36366,13 +36549,13 @@
 
 		constructor: AudioListener,
 
-		getInput: function () {
+		getInput: function() {
 
 			return this.gain;
 
 		},
 
-		removeFilter: function ( ) {
+		removeFilter: function( ) {
 
 			if ( this.filter !== null ) {
 
@@ -36385,13 +36568,13 @@
 
 		},
 
-		getFilter: function () {
+		getFilter: function() {
 
 			return this.filter;
 
 		},
 
-		setFilter: function ( value ) {
+		setFilter: function( value ) {
 
 			if ( this.filter !== null ) {
 
@@ -36410,19 +36593,19 @@
 
 		},
 
-		getMasterVolume: function () {
+		getMasterVolume: function() {
 
 			return this.gain.gain.value;
 
 		},
 
-		setMasterVolume: function ( value ) {
+		setMasterVolume: function( value ) {
 
 			this.gain.gain.value = value;
 
 		},
 
-		updateMatrixWorld: ( function () {
+		updateMatrixWorld: ( function() {
 
 			var position = new Vector3();
 			var quaternion = new Quaternion();
@@ -36500,13 +36683,13 @@
 
 		constructor: Audio,
 
-		getOutput: function () {
+		getOutput: function() {
 
 			return this.gain;
 
 		},
 
-		setNodeSource: function ( audioNode ) {
+		setNodeSource: function( audioNode ) {
 
 			this.hasPlaybackControl = false;
 			this.sourceType = 'audioNode';
@@ -36517,7 +36700,7 @@
 
 		},
 
-		setBuffer: function ( audioBuffer ) {
+		setBuffer: function( audioBuffer ) {
 
 			this.buffer = audioBuffer;
 			this.sourceType = 'buffer';
@@ -36528,7 +36711,7 @@
 
 		},
 
-		play: function () {
+		play: function() {
 
 			if ( this.isPlaying === true ) {
 
@@ -36560,7 +36743,7 @@
 
 		},
 
-		pause: function () {
+		pause: function() {
 
 			if ( this.hasPlaybackControl === false ) {
 
@@ -36577,7 +36760,7 @@
 
 		},
 
-		stop: function () {
+		stop: function() {
 
 			if ( this.hasPlaybackControl === false ) {
 
@@ -36594,7 +36777,7 @@
 
 		},
 
-		connect: function () {
+		connect: function() {
 
 			if ( this.filters.length > 0 ) {
 
@@ -36618,7 +36801,7 @@
 
 		},
 
-		disconnect: function () {
+		disconnect: function() {
 
 			if ( this.filters.length > 0 ) {
 
@@ -36642,13 +36825,13 @@
 
 		},
 
-		getFilters: function () {
+		getFilters: function() {
 
 			return this.filters;
 
 		},
 
-		setFilters: function ( value ) {
+		setFilters: function( value ) {
 
 			if ( ! value ) value = [];
 
@@ -36668,19 +36851,19 @@
 
 		},
 
-		getFilter: function () {
+		getFilter: function() {
 
 			return this.getFilters()[ 0 ];
 
 		},
 
-		setFilter: function ( filter ) {
+		setFilter: function( filter ) {
 
 			return this.setFilters( filter ? [ filter ] : [] );
 
 		},
 
-		setPlaybackRate: function ( value ) {
+		setPlaybackRate: function( value ) {
 
 			if ( this.hasPlaybackControl === false ) {
 
@@ -36701,19 +36884,19 @@
 
 		},
 
-		getPlaybackRate: function () {
+		getPlaybackRate: function() {
 
 			return this.playbackRate;
 
 		},
 
-		onEnded: function () {
+		onEnded: function() {
 
 			this.isPlaying = false;
 
 		},
 
-		getLoop: function () {
+		getLoop: function() {
 
 			if ( this.hasPlaybackControl === false ) {
 
@@ -36726,7 +36909,7 @@
 
 		},
 
-		setLoop: function ( value ) {
+		setLoop: function( value ) {
 
 			if ( this.hasPlaybackControl === false ) {
 
@@ -36747,13 +36930,13 @@
 
 		},
 
-		getVolume: function () {
+		getVolume: function() {
 
 			return this.gain.gain.value;
 
 		},
-		
-		setVolume: function ( value ) {
+
+		setVolume: function( value ) {
 
 			this.gain.gain.value = value;
 
@@ -36780,61 +36963,61 @@
 
 		constructor: PositionalAudio,
 
-		getOutput: function () {
+		getOutput: function() {
 
 			return this.panner;
 
 		},
 
-		getRefDistance: function () {
+		getRefDistance: function() {
 
 			return this.panner.refDistance;
 
 		},
 
-		setRefDistance: function ( value ) {
+		setRefDistance: function( value ) {
 
 			this.panner.refDistance = value;
 
 		},
 
-		getRolloffFactor: function () {
+		getRolloffFactor: function() {
 
 			return this.panner.rolloffFactor;
 
 		},
 
-		setRolloffFactor: function ( value ) {
+		setRolloffFactor: function( value ) {
 
 			this.panner.rolloffFactor = value;
 
 		},
 
-		getDistanceModel: function () {
+		getDistanceModel: function() {
 
 			return this.panner.distanceModel;
 
 		},
 
-		setDistanceModel: function ( value ) {
+		setDistanceModel: function( value ) {
 
 			this.panner.distanceModel = value;
 
 		},
 
-		getMaxDistance: function () {
+		getMaxDistance: function() {
 
 			return this.panner.maxDistance;
 
 		},
 
-		setMaxDistance: function ( value ) {
+		setMaxDistance: function( value ) {
 
 			this.panner.maxDistance = value;
 
 		},
 
-		updateMatrixWorld: ( function () {
+		updateMatrixWorld: ( function() {
 
 			var position = new Vector3();
 
@@ -36870,7 +37053,7 @@
 
 	Object.assign( AudioAnalyser.prototype, {
 
-		getFrequencyData: function () {
+		getFrequencyData: function() {
 
 			this.analyser.getByteFrequencyData( this.data );
 
@@ -36878,7 +37061,7 @@
 
 		},
 
-		getAverageFrequency: function () {
+		getAverageFrequency: function() {
 
 			var value = 0, data = this.getFrequencyData();
 
@@ -36953,7 +37136,7 @@
 	Object.assign( PropertyMixer.prototype, {
 
 		// accumulate data in the 'incoming' region into 'accu<i>'
-		accumulate: function ( accuIndex, weight ) {
+		accumulate: function( accuIndex, weight ) {
 
 			// note: happily accumulating nothing when weight = 0, the caller knows
 			// the weight and shouldn't have made the call in the first place
@@ -36991,7 +37174,7 @@
 		},
 
 		// apply the state of 'accu<i>' to the binding when accus differ
-		apply: function ( accuIndex ) {
+		apply: function( accuIndex ) {
 
 			var stride = this.valueSize,
 				buffer = this.buffer,
@@ -37030,7 +37213,7 @@
 		},
 
 		// remember the state of the bound property and copy it to both accus
-		saveOriginalState: function () {
+		saveOriginalState: function() {
 
 			var binding = this.binding;
 
@@ -37053,7 +37236,7 @@
 		},
 
 		// apply the state previously taken via 'saveOriginalState' to the binding
-		restoreOriginalState: function () {
+		restoreOriginalState: function() {
 
 			var originalValueOffset = this.valueSize * 3;
 			this.binding.setValue( this.buffer, originalValueOffset );
@@ -37063,7 +37246,7 @@
 
 		// mix functions
 
-		_select: function ( buffer, dstOffset, srcOffset, t, stride ) {
+		_select: function( buffer, dstOffset, srcOffset, t, stride ) {
 
 			if ( t >= 0.5 ) {
 
@@ -37077,13 +37260,13 @@
 
 		},
 
-		_slerp: function ( buffer, dstOffset, srcOffset, t ) {
+		_slerp: function( buffer, dstOffset, srcOffset, t ) {
 
 			Quaternion.slerpFlat( buffer, dstOffset, buffer, dstOffset, buffer, srcOffset, t );
 
 		},
 
-		_lerp: function ( buffer, dstOffset, srcOffset, t, stride ) {
+		_lerp: function( buffer, dstOffset, srcOffset, t, stride ) {
 
 			var s = 1 - t;
 
@@ -37120,7 +37303,7 @@
 
 	Object.assign( Composite.prototype, {
 
-		getValue: function ( array, offset ) {
+		getValue: function( array, offset ) {
 
 			this.bind(); // bind all binding
 
@@ -37132,7 +37315,7 @@
 
 		},
 
-		setValue: function ( array, offset ) {
+		setValue: function( array, offset ) {
 
 			var bindings = this._bindings;
 
@@ -37145,7 +37328,7 @@
 
 		},
 
-		bind: function () {
+		bind: function() {
 
 			var bindings = this._bindings;
 
@@ -37158,7 +37341,7 @@
 
 		},
 
-		unbind: function () {
+		unbind: function() {
 
 			var bindings = this._bindings;
 
@@ -37189,7 +37372,7 @@
 
 		Composite: Composite,
 
-		create: function ( root, path, parsedPath ) {
+		create: function( root, path, parsedPath ) {
 
 			if ( ! ( root && root.isAnimationObjectGroup ) ) {
 
@@ -37210,13 +37393,13 @@
 		 * @param  {string} name Node name to be sanitized.
 		 * @return {string}
 		 */
-		sanitizeNodeName: function ( name ) {
+		sanitizeNodeName: function( name ) {
 
 			return name.replace( /\s/g, '_' ).replace( /[^\w-]/g, '' );
 
 		},
 
-		parseTrackName: function () {
+		parseTrackName: function() {
 
 			// Parent directories, delimited by '/' or ':'. Currently unused, but must
 			// be matched to parse the rest of the track name.
@@ -37244,7 +37427,7 @@
 
 			var supportedObjectNames = [ 'material', 'materials', 'bones' ];
 
-			return function ( trackName ) {
+			return function( trackName ) {
 
 					var matches = trackRe.exec( trackName );
 
@@ -37294,7 +37477,7 @@
 
 		}(),
 
-		findNode: function ( root, nodeName ) {
+		findNode: function( root, nodeName ) {
 
 			if ( ! nodeName || nodeName === "" || nodeName === "root" || nodeName === "." || nodeName === - 1 || nodeName === root.name || nodeName === root.uuid ) {
 
@@ -37305,7 +37488,7 @@
 			// search into skeleton bones.
 			if ( root.skeleton ) {
 
-				var searchSkeleton = function ( skeleton ) {
+				var searchSkeleton = function( skeleton ) {
 
 					for ( var i = 0; i < skeleton.bones.length; i ++ ) {
 
@@ -37336,7 +37519,7 @@
 			// search into node subtree.
 			if ( root.children ) {
 
-				var searchNodeSubtree = function ( children ) {
+				var searchNodeSubtree = function( children ) {
 
 					for ( var i = 0; i < children.length; i ++ ) {
 
@@ -37377,8 +37560,8 @@
 	Object.assign( PropertyBinding.prototype, { // prototype, continued
 
 		// these are used to "bind" a nonexistent property
-		_getValue_unavailable: function () {},
-		_setValue_unavailable: function () {},
+		_getValue_unavailable: function() {},
+		_setValue_unavailable: function() {},
 
 		BindingType: {
 			Direct: 0,
@@ -37569,7 +37752,7 @@
 		},
 
 		// create getter / setter pair for a property in the scene graph
-		bind: function () {
+		bind: function() {
 
 			var targetObject = this.node,
 				parsedPath = this.parsedPath,
@@ -37806,7 +37989,7 @@
 
 		},
 
-		unbind: function () {
+		unbind: function() {
 
 			this.node = null;
 
@@ -38125,7 +38308,7 @@
 
 		// Internal interface used by befriended PropertyBinding.Composite:
 
-		subscribe_: function ( path, parsedPath ) {
+		subscribe_: function( path, parsedPath ) {
 
 			// returns an array of bindings for the given path that is changed
 			// according to the contained objects in the group
@@ -38162,7 +38345,7 @@
 
 		},
 
-		unsubscribe_: function ( path ) {
+		unsubscribe_: function( path ) {
 
 			// tells the group to forget about a property path and no longer
 			// update the array previously obtained with 'subscribe_'
@@ -38376,7 +38559,7 @@
 			fadeOutAction.fadeOut( duration );
 			this.fadeIn( duration );
 
-			if( warp ) {
+			if ( warp ) {
 
 				var fadeInDuration = this._clip.duration,
 					fadeOutDuration = fadeOutAction._clip.duration,
@@ -38881,7 +39064,7 @@
 
 	Object.assign( AnimationMixer.prototype, EventDispatcher.prototype, {
 
-		_bindAction: function ( action, prototypeAction ) {
+		_bindAction: function( action, prototypeAction ) {
 
 			var root = action._localRoot || this._root,
 				tracks = action._clip.tracks,
@@ -38948,7 +39131,7 @@
 
 		},
 
-		_activateAction: function ( action ) {
+		_activateAction: function( action ) {
 
 			if ( ! this._isActiveAction( action ) ) {
 
@@ -38990,7 +39173,7 @@
 
 		},
 
-		_deactivateAction: function ( action ) {
+		_deactivateAction: function( action ) {
 
 			if ( this._isActiveAction( action ) ) {
 
@@ -39018,7 +39201,7 @@
 
 		// Memory manager
 
-		_initMemoryManager: function () {
+		_initMemoryManager: function() {
 
 			this._actions = []; // 'nActiveActions' followed by inactive ones
 			this._nActiveActions = 0;
@@ -39063,14 +39246,14 @@
 
 		// Memory management for AnimationAction objects
 
-		_isActiveAction: function ( action ) {
+		_isActiveAction: function( action ) {
 
 			var index = action._cacheIndex;
 			return index !== null && index < this._nActiveActions;
 
 		},
 
-		_addInactiveAction: function ( action, clipUuid, rootUuid ) {
+		_addInactiveAction: function( action, clipUuid, rootUuid ) {
 
 			var actions = this._actions,
 				actionsByClip = this._actionsByClip,
@@ -39105,7 +39288,7 @@
 
 		},
 
-		_removeInactiveAction: function ( action ) {
+		_removeInactiveAction: function( action ) {
 
 			var actions = this._actions,
 				lastInactiveAction = actions[ actions.length - 1 ],
@@ -39150,7 +39333,7 @@
 
 		},
 
-		_removeInactiveBindingsForAction: function ( action ) {
+		_removeInactiveBindingsForAction: function( action ) {
 
 			var bindings = action._propertyBindings;
 			for ( var i = 0, n = bindings.length; i !== n; ++ i ) {
@@ -39167,7 +39350,7 @@
 
 		},
 
-		_lendAction: function ( action ) {
+		_lendAction: function( action ) {
 
 			// [ active actions |  inactive actions  ]
 			// [  active actions >| inactive actions ]
@@ -39190,7 +39373,7 @@
 
 		},
 
-		_takeBackAction: function ( action ) {
+		_takeBackAction: function( action ) {
 
 			// [  active actions  | inactive actions ]
 			// [ active actions |< inactive actions  ]
@@ -39215,7 +39398,7 @@
 
 		// Memory management for PropertyMixer objects
 
-		_addInactiveBinding: function ( binding, rootUuid, trackName ) {
+		_addInactiveBinding: function( binding, rootUuid, trackName ) {
 
 			var bindingsByRoot = this._bindingsByRootAndName,
 				bindingByName = bindingsByRoot[ rootUuid ],
@@ -39236,7 +39419,7 @@
 
 		},
 
-		_removeInactiveBinding: function ( binding ) {
+		_removeInactiveBinding: function( binding ) {
 
 			var bindings = this._bindings,
 				propBinding = binding.binding,
@@ -39264,7 +39447,7 @@
 
 		},
 
-		_lendBinding: function ( binding ) {
+		_lendBinding: function( binding ) {
 
 			var bindings = this._bindings,
 				prevIndex = binding._cacheIndex,
@@ -39281,7 +39464,7 @@
 
 		},
 
-		_takeBackBinding: function ( binding ) {
+		_takeBackBinding: function( binding ) {
 
 			var bindings = this._bindings,
 				prevIndex = binding._cacheIndex,
@@ -39301,7 +39484,7 @@
 
 		// Memory management of Interpolants for weight and time scale
 
-		_lendControlInterpolant: function () {
+		_lendControlInterpolant: function() {
 
 			var interpolants = this._controlInterpolants,
 				lastActiveIndex = this._nActiveControlInterpolants ++,
@@ -39322,7 +39505,7 @@
 
 		},
 
-		_takeBackControlInterpolant: function ( interpolant ) {
+		_takeBackControlInterpolant: function( interpolant ) {
 
 			var interpolants = this._controlInterpolants,
 				prevIndex = interpolant.__cacheIndex,
@@ -39344,7 +39527,7 @@
 		// return an action for a clip optionally using a custom root target
 		// object (this method allocates a lot of dynamic memory in case a
 		// previously unknown clip/root combination is specified)
-		clipAction: function ( clip, optionalRoot ) {
+		clipAction: function( clip, optionalRoot ) {
 
 			var root = optionalRoot || this._root,
 				rootUuid = root.uuid,
@@ -39394,7 +39577,7 @@
 		},
 
 		// get an existing action
-		existingAction: function ( clip, optionalRoot ) {
+		existingAction: function( clip, optionalRoot ) {
 
 			var root = optionalRoot || this._root,
 				rootUuid = root.uuid,
@@ -39417,7 +39600,7 @@
 		},
 
 		// deactivates all previously scheduled actions
-		stopAllAction: function () {
+		stopAllAction: function() {
 
 			var actions = this._actions,
 				nActions = this._nActiveActions,
@@ -39444,7 +39627,7 @@
 		},
 
 		// advance the time and update apply the animation
-		update: function ( deltaTime ) {
+		update: function( deltaTime ) {
 
 			deltaTime *= this.timeScale;
 
@@ -39482,14 +39665,14 @@
 		},
 
 		// return this mixer's root target object
-		getRoot: function () {
+		getRoot: function() {
 
 			return this._root;
 
 		},
 
 		// free all resources specific to a particular clip
-		uncacheClip: function ( clip ) {
+		uncacheClip: function( clip ) {
 
 			var actions = this._actions,
 				clipUuid = clip.uuid,
@@ -39531,7 +39714,7 @@
 		},
 
 		// free all resources specific to a particular root target object
-		uncacheRoot: function ( root ) {
+		uncacheRoot: function( root ) {
 
 			var rootUuid = root.uuid,
 				actionsByClip = this._actionsByClip;
@@ -39568,7 +39751,7 @@
 		},
 
 		// remove a targeted clip from the cache
-		uncacheAction: function ( clip, optionalRoot ) {
+		uncacheAction: function( clip, optionalRoot ) {
 
 			var action = this.existingAction( clip, optionalRoot );
 
@@ -39600,7 +39783,7 @@
 
 	}
 
-	Uniform.prototype.clone = function () {
+	Uniform.prototype.clone = function() {
 
 		return new Uniform( this.value.clone === undefined ? this.value : this.value.clone() );
 
@@ -39625,7 +39808,7 @@
 
 		isInstancedBufferGeometry: true,
 
-		addGroup: function ( start, count, materialIndex ) {
+		addGroup: function( start, count, materialIndex ) {
 
 			this.groups.push( {
 
@@ -39637,7 +39820,7 @@
 
 		},
 
-		copy: function ( source ) {
+		copy: function( source ) {
 
 			var index = source.index;
 
@@ -39691,7 +39874,7 @@
 
 		count: {
 
-			get: function () {
+			get: function() {
 
 				return this.data.count;
 
@@ -39701,7 +39884,7 @@
 
 		array: {
 
-			get: function () {
+			get: function() {
 
 				return this.data.array;
 
@@ -39715,7 +39898,7 @@
 
 		isInterleavedBufferAttribute: true,
 
-		setX: function ( index, x ) {
+		setX: function( index, x ) {
 
 			this.data.array[ index * this.data.stride + this.offset ] = x;
 
@@ -39723,7 +39906,7 @@
 
 		},
 
-		setY: function ( index, y ) {
+		setY: function( index, y ) {
 
 			this.data.array[ index * this.data.stride + this.offset + 1 ] = y;
 
@@ -39731,7 +39914,7 @@
 
 		},
 
-		setZ: function ( index, z ) {
+		setZ: function( index, z ) {
 
 			this.data.array[ index * this.data.stride + this.offset + 2 ] = z;
 
@@ -39739,7 +39922,7 @@
 
 		},
 
-		setW: function ( index, w ) {
+		setW: function( index, w ) {
 
 			this.data.array[ index * this.data.stride + this.offset + 3 ] = w;
 
@@ -39747,31 +39930,31 @@
 
 		},
 
-		getX: function ( index ) {
+		getX: function( index ) {
 
 			return this.data.array[ index * this.data.stride + this.offset ];
 
 		},
 
-		getY: function ( index ) {
+		getY: function( index ) {
 
 			return this.data.array[ index * this.data.stride + this.offset + 1 ];
 
 		},
 
-		getZ: function ( index ) {
+		getZ: function( index ) {
 
 			return this.data.array[ index * this.data.stride + this.offset + 2 ];
 
 		},
 
-		getW: function ( index ) {
+		getW: function( index ) {
 
 			return this.data.array[ index * this.data.stride + this.offset + 3 ];
 
 		},
 
-		setXY: function ( index, x, y ) {
+		setXY: function( index, x, y ) {
 
 			index = index * this.data.stride + this.offset;
 
@@ -39782,7 +39965,7 @@
 
 		},
 
-		setXYZ: function ( index, x, y, z ) {
+		setXYZ: function( index, x, y, z ) {
 
 			index = index * this.data.stride + this.offset;
 
@@ -39794,7 +39977,7 @@
 
 		},
 
-		setXYZW: function ( index, x, y, z, w ) {
+		setXYZW: function( index, x, y, z, w ) {
 
 			index = index * this.data.stride + this.offset;
 
@@ -39824,7 +40007,7 @@
 		this.dynamic = false;
 		this.updateRange = { offset: 0, count: - 1 };
 
-		this.onUploadCallback = function () {};
+		this.onUploadCallback = function() {};
 
 		this.version = 0;
 
@@ -39832,7 +40015,7 @@
 
 	Object.defineProperty( InterleavedBuffer.prototype, 'needsUpdate', {
 
-		set: function ( value ) {
+		set: function( value ) {
 
 			if ( value === true ) this.version ++;
 
@@ -39844,7 +40027,7 @@
 
 		isInterleavedBuffer: true,
 
-		setArray: function ( array ) {
+		setArray: function( array ) {
 
 			if ( Array.isArray( array ) ) {
 
@@ -39857,7 +40040,7 @@
 
 		},
 
-		setDynamic: function ( value ) {
+		setDynamic: function( value ) {
 
 			this.dynamic = value;
 
@@ -39865,7 +40048,7 @@
 
 		},
 
-		copy: function ( source ) {
+		copy: function( source ) {
 
 			this.array = new source.array.constructor( source.array );
 			this.count = source.count;
@@ -39876,7 +40059,7 @@
 
 		},
 
-		copyAt: function ( index1, attribute, index2 ) {
+		copyAt: function( index1, attribute, index2 ) {
 
 			index1 *= this.stride;
 			index2 *= attribute.stride;
@@ -39891,7 +40074,7 @@
 
 		},
 
-		set: function ( value, offset ) {
+		set: function( value, offset ) {
 
 			if ( offset === undefined ) offset = 0;
 
@@ -39901,13 +40084,13 @@
 
 		},
 
-		clone: function () {
+		clone: function() {
 
 			return new this.constructor().copy( this );
 
 		},
 
-		onUpload: function ( callback ) {
+		onUpload: function( callback ) {
 
 			this.onUploadCallback = callback;
 
@@ -39935,7 +40118,7 @@
 
 		isInstancedInterleavedBuffer: true,
 
-		copy: function ( source ) {
+		copy: function( source ) {
 
 			InterleavedBuffer.prototype.copy.call( this, source );
 
@@ -39965,7 +40148,7 @@
 
 		isInstancedBufferAttribute: true,
 
-		copy: function ( source ) {
+		copy: function( source ) {
 
 			BufferAttribute.prototype.copy.call( this, source );
 
@@ -40001,7 +40184,7 @@
 
 		Object.defineProperties( this.params, {
 			PointCloud: {
-				get: function () {
+				get: function() {
 					console.warn( 'THREE.Raycaster: params.PointCloud has been renamed to params.Points.' );
 					return this.Points;
 				}
@@ -40040,7 +40223,7 @@
 
 		linePrecision: 1,
 
-		set: function ( origin, direction ) {
+		set: function( origin, direction ) {
 
 			// direction is assumed to be normalized (for accurate distance calculations)
 
@@ -40048,7 +40231,7 @@
 
 		},
 
-		setFromCamera: function ( coords, camera ) {
+		setFromCamera: function( coords, camera ) {
 
 			if ( ( camera && camera.isPerspectiveCamera ) ) {
 
@@ -40068,7 +40251,7 @@
 
 		},
 
-		intersectObject: function ( object, recursive ) {
+		intersectObject: function( object, recursive ) {
 
 			var intersects = [];
 
@@ -40080,7 +40263,7 @@
 
 		},
 
-		intersectObjects: function ( objects, recursive ) {
+		intersectObjects: function( objects, recursive ) {
 
 			var intersects = [];
 
@@ -40123,7 +40306,7 @@
 
 	Object.assign( Clock.prototype, {
 
-		start: function () {
+		start: function() {
 
 			this.startTime = ( typeof performance === 'undefined' ? Date : performance ).now(); // see #10732
 
@@ -40133,7 +40316,7 @@
 
 		},
 
-		stop: function () {
+		stop: function() {
 
 			this.getElapsedTime();
 			this.running = false;
@@ -40141,14 +40324,14 @@
 
 		},
 
-		getElapsedTime: function () {
+		getElapsedTime: function() {
 
 			this.getDelta();
 			return this.elapsedTime;
 
 		},
 
-		getDelta: function () {
+		getDelta: function() {
 
 			var diff = 0;
 
@@ -40198,7 +40381,7 @@
 
 	Object.assign( Spherical.prototype, {
 
-		set: function ( radius, phi, theta ) {
+		set: function( radius, phi, theta ) {
 
 			this.radius = radius;
 			this.phi = phi;
@@ -40208,13 +40391,13 @@
 
 		},
 
-		clone: function () {
+		clone: function() {
 
 			return new this.constructor().copy( this );
 
 		},
 
-		copy: function ( other ) {
+		copy: function( other ) {
 
 			this.radius = other.radius;
 			this.phi = other.phi;
@@ -40275,7 +40458,7 @@
 
 	Object.assign( Cylindrical.prototype, {
 
-		set: function ( radius, theta, y ) {
+		set: function( radius, theta, y ) {
 
 			this.radius = radius;
 			this.theta = theta;
@@ -40285,13 +40468,13 @@
 
 		},
 
-		clone: function () {
+		clone: function() {
 
 			return new this.constructor().copy( this );
 
 		},
 
-		copy: function ( other ) {
+		copy: function( other ) {
 
 			this.radius = other.radius;
 			this.theta = other.theta;
@@ -40344,7 +40527,7 @@
 	MorphBlendMesh.prototype = Object.create( Mesh.prototype );
 	MorphBlendMesh.prototype.constructor = MorphBlendMesh;
 
-	MorphBlendMesh.prototype.createAnimation = function ( name, start, end, fps ) {
+	MorphBlendMesh.prototype.createAnimation = function( name, start, end, fps ) {
 
 		var animation = {
 
@@ -40375,11 +40558,12 @@
 
 	};
 
-	MorphBlendMesh.prototype.autoCreateAnimations = function ( fps ) {
+	MorphBlendMesh.prototype.autoCreateAnimations = function( fps ) {
 
 		var pattern = /([a-z]+)_?(\d+)/i;
 
-		var firstAnimation, frameRanges = {};
+		var firstAnimation;
+		var frameRanges = {};
 
 		var geometry = this.geometry;
 
@@ -40416,7 +40600,7 @@
 
 	};
 
-	MorphBlendMesh.prototype.setAnimationDirectionForward = function ( name ) {
+	MorphBlendMesh.prototype.setAnimationDirectionForward = function( name ) {
 
 		var animation = this.animationsMap[ name ];
 
@@ -40429,7 +40613,7 @@
 
 	};
 
-	MorphBlendMesh.prototype.setAnimationDirectionBackward = function ( name ) {
+	MorphBlendMesh.prototype.setAnimationDirectionBackward = function( name ) {
 
 		var animation = this.animationsMap[ name ];
 
@@ -40442,7 +40626,7 @@
 
 	};
 
-	MorphBlendMesh.prototype.setAnimationFPS = function ( name, fps ) {
+	MorphBlendMesh.prototype.setAnimationFPS = function( name, fps ) {
 
 		var animation = this.animationsMap[ name ];
 
@@ -40455,7 +40639,7 @@
 
 	};
 
-	MorphBlendMesh.prototype.setAnimationDuration = function ( name, duration ) {
+	MorphBlendMesh.prototype.setAnimationDuration = function( name, duration ) {
 
 		var animation = this.animationsMap[ name ];
 
@@ -40468,7 +40652,7 @@
 
 	};
 
-	MorphBlendMesh.prototype.setAnimationWeight = function ( name, weight ) {
+	MorphBlendMesh.prototype.setAnimationWeight = function( name, weight ) {
 
 		var animation = this.animationsMap[ name ];
 
@@ -40480,7 +40664,7 @@
 
 	};
 
-	MorphBlendMesh.prototype.setAnimationTime = function ( name, time ) {
+	MorphBlendMesh.prototype.setAnimationTime = function( name, time ) {
 
 		var animation = this.animationsMap[ name ];
 
@@ -40492,7 +40676,7 @@
 
 	};
 
-	MorphBlendMesh.prototype.getAnimationTime = function ( name ) {
+	MorphBlendMesh.prototype.getAnimationTime = function( name ) {
 
 		var time = 0;
 
@@ -40508,7 +40692,7 @@
 
 	};
 
-	MorphBlendMesh.prototype.getAnimationDuration = function ( name ) {
+	MorphBlendMesh.prototype.getAnimationDuration = function( name ) {
 
 		var duration = - 1;
 
@@ -40524,7 +40708,7 @@
 
 	};
 
-	MorphBlendMesh.prototype.playAnimation = function ( name ) {
+	MorphBlendMesh.prototype.playAnimation = function( name ) {
 
 		var animation = this.animationsMap[ name ];
 
@@ -40541,7 +40725,7 @@
 
 	};
 
-	MorphBlendMesh.prototype.stopAnimation = function ( name ) {
+	MorphBlendMesh.prototype.stopAnimation = function( name ) {
 
 		var animation = this.animationsMap[ name ];
 
@@ -40553,7 +40737,7 @@
 
 	};
 
-	MorphBlendMesh.prototype.update = function ( delta ) {
+	MorphBlendMesh.prototype.update = function( delta ) {
 
 		for ( var i = 0, il = this.animationsList.length; i < il; i ++ ) {
 
@@ -40638,7 +40822,7 @@
 		Object3D.call( this );
 
 		this.material = material;
-		this.render = function ( renderCallback ) {};
+		this.render = function( renderCallback ) {};
 
 	}
 
@@ -40699,7 +40883,7 @@
 	VertexNormalsHelper.prototype = Object.create( LineSegments.prototype );
 	VertexNormalsHelper.prototype.constructor = VertexNormalsHelper;
 
-	VertexNormalsHelper.prototype.update = ( function () {
+	VertexNormalsHelper.prototype.update = ( function() {
 
 		var v1 = new Vector3();
 		var v2 = new Vector3();
@@ -40843,14 +41027,14 @@
 	SpotLightHelper.prototype = Object.create( Object3D.prototype );
 	SpotLightHelper.prototype.constructor = SpotLightHelper;
 
-	SpotLightHelper.prototype.dispose = function () {
+	SpotLightHelper.prototype.dispose = function() {
 
 		this.cone.geometry.dispose();
 		this.cone.material.dispose();
 
 	};
 
-	SpotLightHelper.prototype.update = function () {
+	SpotLightHelper.prototype.update = function() {
 
 		var vector = new Vector3();
 		var vector2 = new Vector3();
@@ -40950,7 +41134,7 @@
 	SkeletonHelper.prototype = Object.create( LineSegments.prototype );
 	SkeletonHelper.prototype.constructor = SkeletonHelper;
 
-	SkeletonHelper.prototype.onBeforeRender = function () {
+	SkeletonHelper.prototype.onBeforeRender = function() {
 
 		var vector = new Vector3();
 
@@ -41038,14 +41222,14 @@
 	PointLightHelper.prototype = Object.create( Mesh.prototype );
 	PointLightHelper.prototype.constructor = PointLightHelper;
 
-	PointLightHelper.prototype.dispose = function () {
+	PointLightHelper.prototype.dispose = function() {
 
 		this.geometry.dispose();
 		this.material.dispose();
 
 	};
 
-	PointLightHelper.prototype.update = function () {
+	PointLightHelper.prototype.update = function() {
 
 		this.material.color.copy( this.light.color );
 
@@ -41097,14 +41281,14 @@
 	RectAreaLightHelper.prototype = Object.create( Object3D.prototype );
 	RectAreaLightHelper.prototype.constructor = RectAreaLightHelper;
 
-	RectAreaLightHelper.prototype.dispose = function () {
+	RectAreaLightHelper.prototype.dispose = function() {
 
 		this.children[ 0 ].geometry.dispose();
 		this.children[ 0 ].material.dispose();
 
 	};
 
-	RectAreaLightHelper.prototype.update = function () {
+	RectAreaLightHelper.prototype.update = function() {
 
 		var line = this.children[ 0 ];
 
@@ -41167,14 +41351,14 @@
 	HemisphereLightHelper.prototype = Object.create( Object3D.prototype );
 	HemisphereLightHelper.prototype.constructor = HemisphereLightHelper;
 
-	HemisphereLightHelper.prototype.dispose = function () {
+	HemisphereLightHelper.prototype.dispose = function() {
 
 		this.children[ 0 ].geometry.dispose();
 		this.children[ 0 ].material.dispose();
 
 	};
 
-	HemisphereLightHelper.prototype.update = function () {
+	HemisphereLightHelper.prototype.update = function() {
 
 		var vector = new Vector3();
 
@@ -41268,8 +41452,13 @@
 		var vertices = [];
 		var colors = [];
 
-		var x, z;
-		var v, i, j, r, color;
+		var x;
+		var z;
+		var v;
+		var i;
+		var j;
+		var r;
+		var color;
 
 		// create the radials
 
@@ -41390,7 +41579,7 @@
 	FaceNormalsHelper.prototype = Object.create( LineSegments.prototype );
 	FaceNormalsHelper.prototype.constructor = FaceNormalsHelper;
 
-	FaceNormalsHelper.prototype.update = ( function () {
+	FaceNormalsHelper.prototype.update = ( function() {
 
 		var v1 = new Vector3();
 		var v2 = new Vector3();
@@ -41489,7 +41678,7 @@
 	DirectionalLightHelper.prototype = Object.create( Object3D.prototype );
 	DirectionalLightHelper.prototype.constructor = DirectionalLightHelper;
 
-	DirectionalLightHelper.prototype.dispose = function () {
+	DirectionalLightHelper.prototype.dispose = function() {
 
 		var lightPlane = this.children[ 0 ];
 		var targetLine = this.children[ 1 ];
@@ -41501,7 +41690,7 @@
 
 	};
 
-	DirectionalLightHelper.prototype.update = function () {
+	DirectionalLightHelper.prototype.update = function() {
 
 		var v1 = new Vector3();
 		var v2 = new Vector3();
@@ -41643,9 +41832,10 @@
 	CameraHelper.prototype = Object.create( LineSegments.prototype );
 	CameraHelper.prototype.constructor = CameraHelper;
 
-	CameraHelper.prototype.update = function () {
+	CameraHelper.prototype.update = function() {
 
-		var geometry, pointMap;
+		var geometry;
+		var pointMap;
 
 		var vector = new Vector3();
 		var camera = new Camera();
@@ -41754,7 +41944,7 @@
 	BoxHelper.prototype = Object.create( LineSegments.prototype );
 	BoxHelper.prototype.constructor = BoxHelper;
 
-	BoxHelper.prototype.update = ( function () {
+	BoxHelper.prototype.update = ( function() {
 
 		var box = new Box3();
 
@@ -41813,7 +42003,7 @@
 
 	} )();
 
-	BoxHelper.prototype.setFromObject = function ( object ) {
+	BoxHelper.prototype.setFromObject = function( object ) {
 
 		this.object = object;
 		this.update();
@@ -41880,7 +42070,7 @@
 	ArrowHelper.prototype = Object.create( Object3D.prototype );
 	ArrowHelper.prototype.constructor = ArrowHelper;
 
-	ArrowHelper.prototype.setDirection = ( function () {
+	ArrowHelper.prototype.setDirection = ( function() {
 
 		var axis = new Vector3();
 		var radians;
@@ -41911,7 +42101,7 @@
 
 	}() );
 
-	ArrowHelper.prototype.setLength = function ( length, headLength, headWidth ) {
+	ArrowHelper.prototype.setLength = function( length, headLength, headWidth ) {
 
 		if ( headLength === undefined ) headLength = 0.2 * length;
 		if ( headWidth === undefined ) headWidth = 0.2 * headLength;
@@ -41925,7 +42115,7 @@
 
 	};
 
-	ArrowHelper.prototype.setColor = function ( color ) {
+	ArrowHelper.prototype.setColor = function( color ) {
 
 		this.line.material.color.copy( color );
 		this.cone.material.color.copy( color );
@@ -42011,13 +42201,13 @@
 
 		return {
 
-			initCatmullRom: function ( x0, x1, x2, x3, tension ) {
+			initCatmullRom: function( x0, x1, x2, x3, tension ) {
 
 				init( x1, x2, tension * ( x2 - x0 ), tension * ( x3 - x1 ) );
 
 			},
 
-			initNonuniformCatmullRom: function ( x0, x1, x2, x3, dt0, dt1, dt2 ) {
+			initNonuniformCatmullRom: function( x0, x1, x2, x3, dt0, dt1, dt2 ) {
 
 				// compute tangents when parameterized in [t1,t2]
 				var t1 = ( x1 - x0 ) / dt0 - ( x2 - x0 ) / ( dt0 + dt1 ) + ( x2 - x1 ) / dt1;
@@ -42031,7 +42221,7 @@
 
 			},
 
-			calc: function ( t ) {
+			calc: function( t ) {
 
 				var t2 = t * t;
 				var t3 = t2 * t;
@@ -42064,7 +42254,7 @@
 	CatmullRomCurve3.prototype = Object.create( Curve.prototype );
 	CatmullRomCurve3.prototype.constructor = CatmullRomCurve3;
 
-	CatmullRomCurve3.prototype.getPoint = function ( t ) {
+	CatmullRomCurve3.prototype.getPoint = function( t ) {
 
 		var points = this.points;
 		var l = points.length;
@@ -42084,7 +42274,10 @@
 
 		}
 
-		var p0, p1, p2, p3; // 4 points
+		var p0;
+		var p1;
+		var p2;
+		var p3; // 4 points
 
 		if ( this.closed || intPoint > 0 ) {
 
@@ -42157,7 +42350,7 @@
 	CubicBezierCurve3.prototype = Object.create( Curve.prototype );
 	CubicBezierCurve3.prototype.constructor = CubicBezierCurve3;
 
-	CubicBezierCurve3.prototype.getPoint = function ( t ) {
+	CubicBezierCurve3.prototype.getPoint = function( t ) {
 
 		var v0 = this.v0, v1 = this.v1, v2 = this.v2, v3 = this.v3;
 
@@ -42182,7 +42375,7 @@
 	QuadraticBezierCurve3.prototype = Object.create( Curve.prototype );
 	QuadraticBezierCurve3.prototype.constructor = QuadraticBezierCurve3;
 
-	QuadraticBezierCurve3.prototype.getPoint = function ( t ) {
+	QuadraticBezierCurve3.prototype.getPoint = function( t ) {
 
 		var v0 = this.v0, v1 = this.v1, v2 = this.v2;
 
@@ -42206,7 +42399,7 @@
 	LineCurve3.prototype = Object.create( Curve.prototype );
 	LineCurve3.prototype.constructor = LineCurve3;
 
-	LineCurve3.prototype.getPoint = function ( t ) {
+	LineCurve3.prototype.getPoint = function( t ) {
 
 		if ( t === 1 ) {
 
@@ -42239,7 +42432,7 @@
 
 	var SceneUtils = {
 
-		createMultiMaterialObject: function ( geometry, materials ) {
+		createMultiMaterialObject: function( geometry, materials ) {
 
 			var group = new Group();
 
@@ -42253,7 +42446,7 @@
 
 		},
 
-		detach: function ( child, parent, scene ) {
+		detach: function( child, parent, scene ) {
 
 			child.applyMatrix( parent.matrixWorld );
 			parent.remove( child );
@@ -42261,7 +42454,7 @@
 
 		},
 
-		attach: function ( child, scene, parent ) {
+		attach: function( child, scene, parent ) {
 
 			child.applyMatrix( new Matrix4().getInverse( parent.matrixWorld ) );
 
@@ -42301,7 +42494,7 @@
 		console.warn( 'THREE.MultiMaterial has been removed. Use an Array instead.' );
 		materials.isMultiMaterial = true;
 		materials.materials = materials;
-		materials.clone = function () {
+		materials.clone = function() {
 
 			return materials.slice();
 
@@ -42433,7 +42626,7 @@
 
 	//
 
-	Curve.create = function ( construct, getPoint ) {
+	Curve.create = function( construct, getPoint ) {
 
 		console.log( 'THREE.Curve.create() has been deprecated' );
 
@@ -42487,17 +42680,17 @@
 
 	Object.assign( Spline.prototype, {
 
-		initFromArray: function ( a ) {
+		initFromArray: function( a ) {
 
 			console.error( 'THREE.Spline: .initFromArray() has been removed.' );
 
 		},
-		getControlPointsArray: function ( optionalTarget ) {
+		getControlPointsArray: function( optionalTarget ) {
 
 			console.error( 'THREE.Spline: .getControlPointsArray() has been removed.' );
 
 		},
-		reparametrizeByArcLength: function ( samplingCoef ) {
+		reparametrizeByArcLength: function( samplingCoef ) {
 
 			console.error( 'THREE.Spline: .reparametrizeByArcLength() has been removed.' );
 
@@ -42520,16 +42713,16 @@
 
 	}
 
-	GridHelper.prototype.setColors = function () {
+	GridHelper.prototype.setColors = function() {
 
 		console.error( 'THREE.GridHelper: setColors() has been deprecated, pass them in the constructor instead.' );
 
 	};
 
-	SkeletonHelper.prototype.update = function () {
+	SkeletonHelper.prototype.update = function() {
 
 		console.error( 'THREE.SkeletonHelper: update() no longer needs to be called.' );
-		
+
 	};
 
 	function WireframeHelper( object, hex ) {
@@ -42559,25 +42752,25 @@
 
 	Object.assign( Box2.prototype, {
 
-		center: function ( optionalTarget ) {
+		center: function( optionalTarget ) {
 
 			console.warn( 'THREE.Box2: .center() has been renamed to .getCenter().' );
 			return this.getCenter( optionalTarget );
 
 		},
-		empty: function () {
+		empty: function() {
 
 			console.warn( 'THREE.Box2: .empty() has been renamed to .isEmpty().' );
 			return this.isEmpty();
 
 		},
-		isIntersectionBox: function ( box ) {
+		isIntersectionBox: function( box ) {
 
 			console.warn( 'THREE.Box2: .isIntersectionBox() has been renamed to .intersectsBox().' );
 			return this.intersectsBox( box );
 
 		},
-		size: function ( optionalTarget ) {
+		size: function( optionalTarget ) {
 
 			console.warn( 'THREE.Box2: .size() has been renamed to .getSize().' );
 			return this.getSize( optionalTarget );
@@ -42587,31 +42780,31 @@
 
 	Object.assign( Box3.prototype, {
 
-		center: function ( optionalTarget ) {
+		center: function( optionalTarget ) {
 
 			console.warn( 'THREE.Box3: .center() has been renamed to .getCenter().' );
 			return this.getCenter( optionalTarget );
 
 		},
-		empty: function () {
+		empty: function() {
 
 			console.warn( 'THREE.Box3: .empty() has been renamed to .isEmpty().' );
 			return this.isEmpty();
 
 		},
-		isIntersectionBox: function ( box ) {
+		isIntersectionBox: function( box ) {
 
 			console.warn( 'THREE.Box3: .isIntersectionBox() has been renamed to .intersectsBox().' );
 			return this.intersectsBox( box );
 
 		},
-		isIntersectionSphere: function ( sphere ) {
+		isIntersectionSphere: function( sphere ) {
 
 			console.warn( 'THREE.Box3: .isIntersectionSphere() has been renamed to .intersectsSphere().' );
 			return this.intersectsSphere( sphere );
 
 		},
-		size: function ( optionalTarget ) {
+		size: function( optionalTarget ) {
 
 			console.warn( 'THREE.Box3: .size() has been renamed to .getSize().' );
 			return this.getSize( optionalTarget );
@@ -42619,14 +42812,14 @@
 		}
 	} );
 
-	Line3.prototype.center = function ( optionalTarget ) {
+	Line3.prototype.center = function( optionalTarget ) {
 
 		console.warn( 'THREE.Line3: .center() has been renamed to .getCenter().' );
 		return this.getCenter( optionalTarget );
 
 	};
 
-	_Math.random16 = function () {
+	_Math.random16 = function() {
 
 		console.warn( 'THREE.Math.random16() has been deprecated. Use Math.random() instead.' );
 		return Math.random();
@@ -42635,19 +42828,19 @@
 
 	Object.assign( Matrix3.prototype, {
 
-		flattenToArrayOffset: function ( array, offset ) {
+		flattenToArrayOffset: function( array, offset ) {
 
 			console.warn( "THREE.Matrix3: .flattenToArrayOffset() has been deprecated. Use .toArray() instead." );
 			return this.toArray( array, offset );
 
 		},
-		multiplyVector3: function ( vector ) {
+		multiplyVector3: function( vector ) {
 
 			console.warn( 'THREE.Matrix3: .multiplyVector3() has been removed. Use vector.applyMatrix3( matrix ) instead.' );
 			return vector.applyMatrix3( this );
 
 		},
-		multiplyVector3Array: function ( a ) {
+		multiplyVector3Array: function( a ) {
 
 			console.error( 'THREE.Matrix3: .multiplyVector3Array() has been removed.'  );
 
@@ -42668,19 +42861,19 @@
 
 	Object.assign( Matrix4.prototype, {
 
-		extractPosition: function ( m ) {
+		extractPosition: function( m ) {
 
 			console.warn( 'THREE.Matrix4: .extractPosition() has been renamed to .copyPosition().' );
 			return this.copyPosition( m );
 
 		},
-		flattenToArrayOffset: function ( array, offset ) {
+		flattenToArrayOffset: function( array, offset ) {
 
 			console.warn( "THREE.Matrix4: .flattenToArrayOffset() has been deprecated. Use .toArray() instead." );
 			return this.toArray( array, offset );
 
 		},
-		getPosition: function () {
+		getPosition: function() {
 
 			var v1;
 
@@ -42693,67 +42886,67 @@
 			};
 
 		}(),
-		setRotationFromQuaternion: function ( q ) {
+		setRotationFromQuaternion: function( q ) {
 
 			console.warn( 'THREE.Matrix4: .setRotationFromQuaternion() has been renamed to .makeRotationFromQuaternion().' );
 			return this.makeRotationFromQuaternion( q );
 
 		},
-		multiplyToArray: function () {
+		multiplyToArray: function() {
 
 			console.warn( 'THREE.Matrix4: .multiplyToArray() has been removed.' );
 
 		},
-		multiplyVector3: function ( vector ) {
+		multiplyVector3: function( vector ) {
 
 			console.warn( 'THREE.Matrix4: .multiplyVector3() has been removed. Use vector.applyMatrix4( matrix ) instead.' );
 			return vector.applyMatrix4( this );
 
 		},
-		multiplyVector4: function ( vector ) {
+		multiplyVector4: function( vector ) {
 
 			console.warn( 'THREE.Matrix4: .multiplyVector4() has been removed. Use vector.applyMatrix4( matrix ) instead.' );
 			return vector.applyMatrix4( this );
 
 		},
-		multiplyVector3Array: function ( a ) {
+		multiplyVector3Array: function( a ) {
 
 			console.error( 'THREE.Matrix4: .multiplyVector3Array() has been removed.'  );
 
 		},
-		rotateAxis: function ( v ) {
+		rotateAxis: function( v ) {
 
 			console.warn( 'THREE.Matrix4: .rotateAxis() has been removed. Use Vector3.transformDirection( matrix ) instead.' );
 			v.transformDirection( this );
 
 		},
-		crossVector: function ( vector ) {
+		crossVector: function( vector ) {
 
 			console.warn( 'THREE.Matrix4: .crossVector() has been removed. Use vector.applyMatrix4( matrix ) instead.' );
 			return vector.applyMatrix4( this );
 
 		},
-		translate: function () {
+		translate: function() {
 
 			console.error( 'THREE.Matrix4: .translate() has been removed.' );
 
 		},
-		rotateX: function () {
+		rotateX: function() {
 
 			console.error( 'THREE.Matrix4: .rotateX() has been removed.' );
 
 		},
-		rotateY: function () {
+		rotateY: function() {
 
 			console.error( 'THREE.Matrix4: .rotateY() has been removed.' );
 
 		},
-		rotateZ: function () {
+		rotateZ: function() {
 
 			console.error( 'THREE.Matrix4: .rotateZ() has been removed.' );
 
 		},
-		rotateByAxis: function () {
+		rotateByAxis: function() {
 
 			console.error( 'THREE.Matrix4: .rotateByAxis() has been removed.' );
 
@@ -42778,14 +42971,14 @@
 
 	} );
 
-	Plane.prototype.isIntersectionLine = function ( line ) {
+	Plane.prototype.isIntersectionLine = function( line ) {
 
 		console.warn( 'THREE.Plane: .isIntersectionLine() has been renamed to .intersectsLine().' );
 		return this.intersectsLine( line );
 
 	};
 
-	Quaternion.prototype.multiplyVector3 = function ( vector ) {
+	Quaternion.prototype.multiplyVector3 = function( vector ) {
 
 		console.warn( 'THREE.Quaternion: .multiplyVector3() has been removed. Use is now vector.applyQuaternion( quaternion ) instead.' );
 		return vector.applyQuaternion( this );
@@ -42794,19 +42987,19 @@
 
 	Object.assign( Ray.prototype, {
 
-		isIntersectionBox: function ( box ) {
+		isIntersectionBox: function( box ) {
 
 			console.warn( 'THREE.Ray: .isIntersectionBox() has been renamed to .intersectsBox().' );
 			return this.intersectsBox( box );
 
 		},
-		isIntersectionPlane: function ( plane ) {
+		isIntersectionPlane: function( plane ) {
 
 			console.warn( 'THREE.Ray: .isIntersectionPlane() has been renamed to .intersectsPlane().' );
 			return this.intersectsPlane( plane );
 
 		},
-		isIntersectionSphere: function ( sphere ) {
+		isIntersectionSphere: function( sphere ) {
 
 			console.warn( 'THREE.Ray: .isIntersectionSphere() has been renamed to .intersectsSphere().' );
 			return this.intersectsSphere( sphere );
@@ -42817,13 +43010,13 @@
 
 	Object.assign( Shape.prototype, {
 
-		extrude: function ( options ) {
+		extrude: function( options ) {
 
 			console.warn( 'THREE.Shape: .extrude() has been removed. Use ExtrudeGeometry() instead.' );
 			return new ExtrudeGeometry( this, options );
 
 		},
-		makeGeometry: function ( options ) {
+		makeGeometry: function( options ) {
 
 			console.warn( 'THREE.Shape: .makeGeometry() has been removed. Use ShapeGeometry() instead.' );
 			return new ShapeGeometry( this, options );
@@ -42834,7 +43027,7 @@
 
 	Object.assign( Vector2.prototype, {
 
-		fromAttribute: function ( attribute, index, offset ) {
+		fromAttribute: function( attribute, index, offset ) {
 
 			console.error( 'THREE.Vector2: .fromAttribute() has been renamed to .fromBufferAttribute().' );
 			return this.fromBufferAttribute( attribute, index, offset );
@@ -42845,41 +43038,41 @@
 
 	Object.assign( Vector3.prototype, {
 
-		setEulerFromRotationMatrix: function () {
+		setEulerFromRotationMatrix: function() {
 
 			console.error( 'THREE.Vector3: .setEulerFromRotationMatrix() has been removed. Use Euler.setFromRotationMatrix() instead.' );
 
 		},
-		setEulerFromQuaternion: function () {
+		setEulerFromQuaternion: function() {
 
 			console.error( 'THREE.Vector3: .setEulerFromQuaternion() has been removed. Use Euler.setFromQuaternion() instead.' );
 
 		},
-		getPositionFromMatrix: function ( m ) {
+		getPositionFromMatrix: function( m ) {
 
 			console.warn( 'THREE.Vector3: .getPositionFromMatrix() has been renamed to .setFromMatrixPosition().' );
 			return this.setFromMatrixPosition( m );
 
 		},
-		getScaleFromMatrix: function ( m ) {
+		getScaleFromMatrix: function( m ) {
 
 			console.warn( 'THREE.Vector3: .getScaleFromMatrix() has been renamed to .setFromMatrixScale().' );
 			return this.setFromMatrixScale( m );
 
 		},
-		getColumnFromMatrix: function ( index, matrix ) {
+		getColumnFromMatrix: function( index, matrix ) {
 
 			console.warn( 'THREE.Vector3: .getColumnFromMatrix() has been renamed to .setFromMatrixColumn().' );
 			return this.setFromMatrixColumn( matrix, index );
 
 		},
-		applyProjection: function ( m ) {
+		applyProjection: function( m ) {
 
 			console.warn( 'THREE.Vector3: .applyProjection() has been removed. Use .applyMatrix4( m ) instead.' );
 			return this.applyMatrix4( m );
 
 		},
-		fromAttribute: function ( attribute, index, offset ) {
+		fromAttribute: function( attribute, index, offset ) {
 
 			console.error( 'THREE.Vector3: .fromAttribute() has been renamed to .fromBufferAttribute().' );
 			return this.fromBufferAttribute( attribute, index, offset );
@@ -42890,7 +43083,7 @@
 
 	Object.assign( Vector4.prototype, {
 
-		fromAttribute: function ( attribute, index, offset ) {
+		fromAttribute: function( attribute, index, offset ) {
 
 			console.error( 'THREE.Vector4: .fromAttribute() has been renamed to .fromBufferAttribute().' );
 			return this.fromBufferAttribute( attribute, index, offset );
@@ -42901,7 +43094,7 @@
 
 	//
 
-	Geometry.prototype.computeTangents = function () {
+	Geometry.prototype.computeTangents = function() {
 
 		console.warn( 'THREE.Geometry: .computeTangents() has been removed.' );
 
@@ -42909,18 +43102,18 @@
 
 	Object.assign( Object3D.prototype, {
 
-		getChildByName: function ( name ) {
+		getChildByName: function( name ) {
 
 			console.warn( 'THREE.Object3D: .getChildByName() has been renamed to .getObjectByName().' );
 			return this.getObjectByName( name );
 
 		},
-		renderDepth: function () {
+		renderDepth: function() {
 
 			console.warn( 'THREE.Object3D: .renderDepth has been removed. Use .renderOrder, instead.' );
 
 		},
-		translate: function ( distance, axis ) {
+		translate: function( distance, axis ) {
 
 			console.warn( 'THREE.Object3D: .translate() has been removed. Use .translateOnAxis( axis, distance ) instead.' );
 			return this.translateOnAxis( axis, distance );
@@ -42932,13 +43125,13 @@
 	Object.defineProperties( Object3D.prototype, {
 
 		eulerOrder: {
-			get: function () {
+			get: function() {
 
 				console.warn( 'THREE.Object3D: .eulerOrder is now .rotation.order.' );
 				return this.rotation.order;
 
 			},
-			set: function ( value ) {
+			set: function( value ) {
 
 				console.warn( 'THREE.Object3D: .eulerOrder is now .rotation.order.' );
 				this.rotation.order = value;
@@ -42946,12 +43139,12 @@
 			}
 		},
 		useQuaternion: {
-			get: function () {
+			get: function() {
 
 				console.warn( 'THREE.Object3D: .useQuaternion has been removed. The library now uses quaternions by default.' );
 
 			},
-			set: function () {
+			set: function() {
 
 				console.warn( 'THREE.Object3D: .useQuaternion has been removed. The library now uses quaternions by default.' );
 
@@ -42963,7 +43156,7 @@
 	Object.defineProperties( LOD.prototype, {
 
 		objects: {
-			get: function () {
+			get: function() {
 
 				console.warn( 'THREE.LOD: .objects has been renamed to .levels.' );
 				return this.levels;
@@ -42975,12 +43168,12 @@
 
 	Object.defineProperty( Skeleton.prototype, 'useVertexTexture', {
 
-		get: function () {
+		get: function() {
 
 			console.warn( 'THREE.Skeleton: useVertexTexture has been removed.' );
 
 		},
-		set: function () {
+		set: function() {
 
 			console.warn( 'THREE.Skeleton: useVertexTexture has been removed.' );
 
@@ -42990,13 +43183,13 @@
 
 	Object.defineProperty( Curve.prototype, '__arcLengthDivisions', {
 
-		get: function () {
+		get: function() {
 
 			console.warn( 'THREE.Curve: .__arcLengthDivisions is now .arcLengthDivisions.' );
 			return this.arcLengthDivisions;
 
 		},
-		set: function ( value ) {
+		set: function( value ) {
 
 			console.warn( 'THREE.Curve: .__arcLengthDivisions is now .arcLengthDivisions.' );
 			this.arcLengthDivisions = value;
@@ -43007,7 +43200,7 @@
 
 	//
 
-	PerspectiveCamera.prototype.setLens = function ( focalLength, filmGauge ) {
+	PerspectiveCamera.prototype.setLens = function( focalLength, filmGauge ) {
 
 		console.warn( "THREE.PerspectiveCamera.setLens is deprecated. " +
 				"Use .setFocalLength and .filmGauge for a photographic setup." );
@@ -43021,14 +43214,14 @@
 
 	Object.defineProperties( Light.prototype, {
 		onlyShadow: {
-			set: function () {
+			set: function() {
 
 				console.warn( 'THREE.Light: .onlyShadow has been removed.' );
 
 			}
 		},
 		shadowCameraFov: {
-			set: function ( value ) {
+			set: function( value ) {
 
 				console.warn( 'THREE.Light: .shadowCameraFov is now .shadow.camera.fov.' );
 				this.shadow.camera.fov = value;
@@ -43036,7 +43229,7 @@
 			}
 		},
 		shadowCameraLeft: {
-			set: function ( value ) {
+			set: function( value ) {
 
 				console.warn( 'THREE.Light: .shadowCameraLeft is now .shadow.camera.left.' );
 				this.shadow.camera.left = value;
@@ -43044,7 +43237,7 @@
 			}
 		},
 		shadowCameraRight: {
-			set: function ( value ) {
+			set: function( value ) {
 
 				console.warn( 'THREE.Light: .shadowCameraRight is now .shadow.camera.right.' );
 				this.shadow.camera.right = value;
@@ -43052,7 +43245,7 @@
 			}
 		},
 		shadowCameraTop: {
-			set: function ( value ) {
+			set: function( value ) {
 
 				console.warn( 'THREE.Light: .shadowCameraTop is now .shadow.camera.top.' );
 				this.shadow.camera.top = value;
@@ -43060,7 +43253,7 @@
 			}
 		},
 		shadowCameraBottom: {
-			set: function ( value ) {
+			set: function( value ) {
 
 				console.warn( 'THREE.Light: .shadowCameraBottom is now .shadow.camera.bottom.' );
 				this.shadow.camera.bottom = value;
@@ -43068,7 +43261,7 @@
 			}
 		},
 		shadowCameraNear: {
-			set: function ( value ) {
+			set: function( value ) {
 
 				console.warn( 'THREE.Light: .shadowCameraNear is now .shadow.camera.near.' );
 				this.shadow.camera.near = value;
@@ -43076,7 +43269,7 @@
 			}
 		},
 		shadowCameraFar: {
-			set: function ( value ) {
+			set: function( value ) {
 
 				console.warn( 'THREE.Light: .shadowCameraFar is now .shadow.camera.far.' );
 				this.shadow.camera.far = value;
@@ -43084,14 +43277,14 @@
 			}
 		},
 		shadowCameraVisible: {
-			set: function () {
+			set: function() {
 
 				console.warn( 'THREE.Light: .shadowCameraVisible has been removed. Use new THREE.CameraHelper( light.shadow.camera ) instead.' );
 
 			}
 		},
 		shadowBias: {
-			set: function ( value ) {
+			set: function( value ) {
 
 				console.warn( 'THREE.Light: .shadowBias is now .shadow.bias.' );
 				this.shadow.bias = value;
@@ -43099,14 +43292,14 @@
 			}
 		},
 		shadowDarkness: {
-			set: function () {
+			set: function() {
 
 				console.warn( 'THREE.Light: .shadowDarkness has been removed.' );
 
 			}
 		},
 		shadowMapWidth: {
-			set: function ( value ) {
+			set: function( value ) {
 
 				console.warn( 'THREE.Light: .shadowMapWidth is now .shadow.mapSize.width.' );
 				this.shadow.mapSize.width = value;
@@ -43114,7 +43307,7 @@
 			}
 		},
 		shadowMapHeight: {
-			set: function ( value ) {
+			set: function( value ) {
 
 				console.warn( 'THREE.Light: .shadowMapHeight is now .shadow.mapSize.height.' );
 				this.shadow.mapSize.height = value;
@@ -43128,7 +43321,7 @@
 	Object.defineProperties( BufferAttribute.prototype, {
 
 		length: {
-			get: function () {
+			get: function() {
 
 				console.warn( 'THREE.BufferAttribute: .length has been deprecated. Use .count instead.' );
 				return this.array.length;
@@ -43140,13 +43333,13 @@
 
 	Object.assign( BufferGeometry.prototype, {
 
-		addIndex: function ( index ) {
+		addIndex: function( index ) {
 
 			console.warn( 'THREE.BufferGeometry: .addIndex() has been renamed to .setIndex().' );
 			this.setIndex( index );
 
 		},
-		addDrawCall: function ( start, count, indexOffset ) {
+		addDrawCall: function( start, count, indexOffset ) {
 
 			if ( indexOffset !== undefined ) {
 
@@ -43157,18 +43350,18 @@
 			this.addGroup( start, count );
 
 		},
-		clearDrawCalls: function () {
+		clearDrawCalls: function() {
 
 			console.warn( 'THREE.BufferGeometry: .clearDrawCalls() is now .clearGroups().' );
 			this.clearGroups();
 
 		},
-		computeTangents: function () {
+		computeTangents: function() {
 
 			console.warn( 'THREE.BufferGeometry: .computeTangents() has been removed.' );
 
 		},
-		computeOffsets: function () {
+		computeOffsets: function() {
 
 			console.warn( 'THREE.BufferGeometry: .computeOffsets() has been removed.' );
 
@@ -43179,7 +43372,7 @@
 	Object.defineProperties( BufferGeometry.prototype, {
 
 		drawcalls: {
-			get: function () {
+			get: function() {
 
 				console.error( 'THREE.BufferGeometry: .drawcalls has been renamed to .groups.' );
 				return this.groups;
@@ -43187,7 +43380,7 @@
 			}
 		},
 		offsets: {
-			get: function () {
+			get: function() {
 
 				console.warn( 'THREE.BufferGeometry: .offsets has been renamed to .groups.' );
 				return this.groups;
@@ -43202,14 +43395,14 @@
 	Object.defineProperties( Uniform.prototype, {
 
 		dynamic: {
-			set: function () {
+			set: function() {
 
 				console.warn( 'THREE.Uniform: .dynamic has been removed. Use object.onBeforeRender() instead.' );
 
 			}
 		},
 		onUpdate: {
-			value: function () {
+			value: function() {
 
 				console.warn( 'THREE.Uniform: .onUpdate() has been removed. Use object.onBeforeRender() instead.' );
 				return this;
@@ -43224,19 +43417,19 @@
 	Object.defineProperties( Material.prototype, {
 
 		wrapAround: {
-			get: function () {
+			get: function() {
 
 				console.warn( 'THREE.Material: .wrapAround has been removed.' );
 
 			},
-			set: function () {
+			set: function() {
 
 				console.warn( 'THREE.Material: .wrapAround has been removed.' );
 
 			}
 		},
 		wrapRGB: {
-			get: function () {
+			get: function() {
 
 				console.warn( 'THREE.Material: .wrapRGB has been removed.' );
 				return new Color();
@@ -43249,13 +43442,13 @@
 	Object.defineProperties( MeshPhongMaterial.prototype, {
 
 		metal: {
-			get: function () {
+			get: function() {
 
 				console.warn( 'THREE.MeshPhongMaterial: .metal has been removed. Use THREE.MeshStandardMaterial instead.' );
 				return false;
 
 			},
-			set: function () {
+			set: function() {
 
 				console.warn( 'THREE.MeshPhongMaterial: .metal has been removed. Use THREE.MeshStandardMaterial instead' );
 
@@ -43267,13 +43460,13 @@
 	Object.defineProperties( ShaderMaterial.prototype, {
 
 		derivatives: {
-			get: function () {
+			get: function() {
 
 				console.warn( 'THREE.ShaderMaterial: .derivatives has been moved to .extensions.derivatives.' );
 				return this.extensions.derivatives;
 
 			},
-			set: function ( value ) {
+			set: function( value ) {
 
 				console.warn( 'THREE. ShaderMaterial: .derivatives has been moved to .extensions.derivatives.' );
 				this.extensions.derivatives = value;
@@ -43287,83 +43480,83 @@
 
 	Object.assign( WebGLRenderer.prototype, {
 
-		getCurrentRenderTarget: function () {
+		getCurrentRenderTarget: function() {
 
 			console.warn( 'THREE.WebGLRenderer: .getCurrentRenderTarget() is now .getRenderTarget().' );
 			return this.getRenderTarget();
 
 		},
 
-		supportsFloatTextures: function () {
+		supportsFloatTextures: function() {
 
 			console.warn( 'THREE.WebGLRenderer: .supportsFloatTextures() is now .extensions.get( \'OES_texture_float\' ).' );
 			return this.extensions.get( 'OES_texture_float' );
 
 		},
-		supportsHalfFloatTextures: function () {
+		supportsHalfFloatTextures: function() {
 
 			console.warn( 'THREE.WebGLRenderer: .supportsHalfFloatTextures() is now .extensions.get( \'OES_texture_half_float\' ).' );
 			return this.extensions.get( 'OES_texture_half_float' );
 
 		},
-		supportsStandardDerivatives: function () {
+		supportsStandardDerivatives: function() {
 
 			console.warn( 'THREE.WebGLRenderer: .supportsStandardDerivatives() is now .extensions.get( \'OES_standard_derivatives\' ).' );
 			return this.extensions.get( 'OES_standard_derivatives' );
 
 		},
-		supportsCompressedTextureS3TC: function () {
+		supportsCompressedTextureS3TC: function() {
 
 			console.warn( 'THREE.WebGLRenderer: .supportsCompressedTextureS3TC() is now .extensions.get( \'WEBGL_compressed_texture_s3tc\' ).' );
 			return this.extensions.get( 'WEBGL_compressed_texture_s3tc' );
 
 		},
-		supportsCompressedTexturePVRTC: function () {
+		supportsCompressedTexturePVRTC: function() {
 
 			console.warn( 'THREE.WebGLRenderer: .supportsCompressedTexturePVRTC() is now .extensions.get( \'WEBGL_compressed_texture_pvrtc\' ).' );
 			return this.extensions.get( 'WEBGL_compressed_texture_pvrtc' );
 
 		},
-		supportsBlendMinMax: function () {
+		supportsBlendMinMax: function() {
 
 			console.warn( 'THREE.WebGLRenderer: .supportsBlendMinMax() is now .extensions.get( \'EXT_blend_minmax\' ).' );
 			return this.extensions.get( 'EXT_blend_minmax' );
 
 		},
-		supportsVertexTextures: function () {
+		supportsVertexTextures: function() {
 
 			console.warn( 'THREE.WebGLRenderer: .supportsVertexTextures() is now .capabilities.vertexTextures.' );
 			return this.capabilities.vertexTextures;
 
 		},
-		supportsInstancedArrays: function () {
+		supportsInstancedArrays: function() {
 
 			console.warn( 'THREE.WebGLRenderer: .supportsInstancedArrays() is now .extensions.get( \'ANGLE_instanced_arrays\' ).' );
 			return this.extensions.get( 'ANGLE_instanced_arrays' );
 
 		},
-		enableScissorTest: function ( boolean ) {
+		enableScissorTest: function( boolean ) {
 
 			console.warn( 'THREE.WebGLRenderer: .enableScissorTest() is now .setScissorTest().' );
 			this.setScissorTest( boolean );
 
 		},
-		initMaterial: function () {
+		initMaterial: function() {
 
 			console.warn( 'THREE.WebGLRenderer: .initMaterial() has been removed.' );
 
 		},
-		addPrePlugin: function () {
+		addPrePlugin: function() {
 
 			console.warn( 'THREE.WebGLRenderer: .addPrePlugin() has been removed.' );
 
 		},
-		addPostPlugin: function () {
+		addPostPlugin: function() {
 
 			console.warn( 'THREE.WebGLRenderer: .addPostPlugin() has been removed.' );
 
 		},
-		updateShadowMap: function () {
+		updateShadowMap: function() {
 
 			console.warn( 'THREE.WebGLRenderer: .updateShadowMap() has been removed.' );
 
@@ -43374,12 +43567,12 @@
 	Object.defineProperties( WebGLRenderer.prototype, {
 
 		shadowMapEnabled: {
-			get: function () {
+			get: function() {
 
 				return this.shadowMap.enabled;
 
 			},
-			set: function ( value ) {
+			set: function( value ) {
 
 				console.warn( 'THREE.WebGLRenderer: .shadowMapEnabled is now .shadowMap.enabled.' );
 				this.shadowMap.enabled = value;
@@ -43387,12 +43580,12 @@
 			}
 		},
 		shadowMapType: {
-			get: function () {
+			get: function() {
 
 				return this.shadowMap.type;
 
 			},
-			set: function ( value ) {
+			set: function( value ) {
 
 				console.warn( 'THREE.WebGLRenderer: .shadowMapType is now .shadowMap.type.' );
 				this.shadowMap.type = value;
@@ -43400,12 +43593,12 @@
 			}
 		},
 		shadowMapCullFace: {
-			get: function () {
+			get: function() {
 
 				return this.shadowMap.cullFace;
 
 			},
-			set: function ( value ) {
+			set: function( value ) {
 
 				console.warn( 'THREE.WebGLRenderer: .shadowMapCullFace is now .shadowMap.cullFace.' );
 				this.shadowMap.cullFace = value;
@@ -43417,12 +43610,12 @@
 	Object.defineProperties( WebGLShadowMap.prototype, {
 
 		cullFace: {
-			get: function () {
+			get: function() {
 
 				return this.renderReverseSided ? CullFaceFront : CullFaceBack;
 
 			},
-			set: function ( cullFace ) {
+			set: function( cullFace ) {
 
 				var value = ( cullFace !== CullFaceBack );
 				console.warn( "WebGLRenderer: .shadowMap.cullFace is deprecated. Set .shadowMap.renderReverseSided to " + value + "." );
@@ -43438,13 +43631,13 @@
 	Object.defineProperties( WebGLRenderTarget.prototype, {
 
 		wrapS: {
-			get: function () {
+			get: function() {
 
 				console.warn( 'THREE.WebGLRenderTarget: .wrapS is now .texture.wrapS.' );
 				return this.texture.wrapS;
 
 			},
-			set: function ( value ) {
+			set: function( value ) {
 
 				console.warn( 'THREE.WebGLRenderTarget: .wrapS is now .texture.wrapS.' );
 				this.texture.wrapS = value;
@@ -43452,13 +43645,13 @@
 			}
 		},
 		wrapT: {
-			get: function () {
+			get: function() {
 
 				console.warn( 'THREE.WebGLRenderTarget: .wrapT is now .texture.wrapT.' );
 				return this.texture.wrapT;
 
 			},
-			set: function ( value ) {
+			set: function( value ) {
 
 				console.warn( 'THREE.WebGLRenderTarget: .wrapT is now .texture.wrapT.' );
 				this.texture.wrapT = value;
@@ -43466,13 +43659,13 @@
 			}
 		},
 		magFilter: {
-			get: function () {
+			get: function() {
 
 				console.warn( 'THREE.WebGLRenderTarget: .magFilter is now .texture.magFilter.' );
 				return this.texture.magFilter;
 
 			},
-			set: function ( value ) {
+			set: function( value ) {
 
 				console.warn( 'THREE.WebGLRenderTarget: .magFilter is now .texture.magFilter.' );
 				this.texture.magFilter = value;
@@ -43480,13 +43673,13 @@
 			}
 		},
 		minFilter: {
-			get: function () {
+			get: function() {
 
 				console.warn( 'THREE.WebGLRenderTarget: .minFilter is now .texture.minFilter.' );
 				return this.texture.minFilter;
 
 			},
-			set: function ( value ) {
+			set: function( value ) {
 
 				console.warn( 'THREE.WebGLRenderTarget: .minFilter is now .texture.minFilter.' );
 				this.texture.minFilter = value;
@@ -43494,13 +43687,13 @@
 			}
 		},
 		anisotropy: {
-			get: function () {
+			get: function() {
 
 				console.warn( 'THREE.WebGLRenderTarget: .anisotropy is now .texture.anisotropy.' );
 				return this.texture.anisotropy;
 
 			},
-			set: function ( value ) {
+			set: function( value ) {
 
 				console.warn( 'THREE.WebGLRenderTarget: .anisotropy is now .texture.anisotropy.' );
 				this.texture.anisotropy = value;
@@ -43508,13 +43701,13 @@
 			}
 		},
 		offset: {
-			get: function () {
+			get: function() {
 
 				console.warn( 'THREE.WebGLRenderTarget: .offset is now .texture.offset.' );
 				return this.texture.offset;
 
 			},
-			set: function ( value ) {
+			set: function( value ) {
 
 				console.warn( 'THREE.WebGLRenderTarget: .offset is now .texture.offset.' );
 				this.texture.offset = value;
@@ -43522,13 +43715,13 @@
 			}
 		},
 		repeat: {
-			get: function () {
+			get: function() {
 
 				console.warn( 'THREE.WebGLRenderTarget: .repeat is now .texture.repeat.' );
 				return this.texture.repeat;
 
 			},
-			set: function ( value ) {
+			set: function( value ) {
 
 				console.warn( 'THREE.WebGLRenderTarget: .repeat is now .texture.repeat.' );
 				this.texture.repeat = value;
@@ -43536,13 +43729,13 @@
 			}
 		},
 		format: {
-			get: function () {
+			get: function() {
 
 				console.warn( 'THREE.WebGLRenderTarget: .format is now .texture.format.' );
 				return this.texture.format;
 
 			},
-			set: function ( value ) {
+			set: function( value ) {
 
 				console.warn( 'THREE.WebGLRenderTarget: .format is now .texture.format.' );
 				this.texture.format = value;
@@ -43550,13 +43743,13 @@
 			}
 		},
 		type: {
-			get: function () {
+			get: function() {
 
 				console.warn( 'THREE.WebGLRenderTarget: .type is now .texture.type.' );
 				return this.texture.type;
 
 			},
-			set: function ( value ) {
+			set: function( value ) {
 
 				console.warn( 'THREE.WebGLRenderTarget: .type is now .texture.type.' );
 				this.texture.type = value;
@@ -43564,13 +43757,13 @@
 			}
 		},
 		generateMipmaps: {
-			get: function () {
+			get: function() {
 
 				console.warn( 'THREE.WebGLRenderTarget: .generateMipmaps is now .texture.generateMipmaps.' );
 				return this.texture.generateMipmaps;
 
 			},
-			set: function ( value ) {
+			set: function( value ) {
 
 				console.warn( 'THREE.WebGLRenderTarget: .generateMipmaps is now .texture.generateMipmaps.' );
 				this.texture.generateMipmaps = value;
@@ -43582,12 +43775,12 @@
 
 	//
 
-	Audio.prototype.load = function ( file ) {
+	Audio.prototype.load = function( file ) {
 
 		console.warn( 'THREE.Audio: .load has been deprecated. Use THREE.AudioLoader instead.' );
 		var scope = this;
 		var audioLoader = new AudioLoader();
-		audioLoader.load( file, function ( buffer ) {
+		audioLoader.load( file, function( buffer ) {
 
 			scope.setBuffer( buffer );
 
@@ -43596,7 +43789,7 @@
 
 	};
 
-	AudioAnalyser.prototype.getData = function () {
+	AudioAnalyser.prototype.getData = function() {
 
 		console.warn( 'THREE.AudioAnalyser: .getData() is now .getFrequencyData().' );
 		return this.getFrequencyData();
@@ -43607,7 +43800,7 @@
 
 	var GeometryUtils = {
 
-		merge: function ( geometry1, geometry2, materialIndexOffset ) {
+		merge: function( geometry1, geometry2, materialIndexOffset ) {
 
 			console.warn( 'THREE.GeometryUtils: .merge() has been moved to Geometry. Use geometry.merge( geometry2, matrix, materialIndexOffset ) instead.' );
 			var matrix;
@@ -43625,7 +43818,7 @@
 
 		},
 
-		center: function ( geometry ) {
+		center: function( geometry ) {
 
 			console.warn( 'THREE.GeometryUtils: .center() has been moved to Geometry. Use geometry.center() instead.' );
 			return geometry.center();
@@ -43638,7 +43831,7 @@
 
 		crossOrigin: undefined,
 
-		loadTexture: function ( url, mapping, onLoad, onError ) {
+		loadTexture: function( url, mapping, onLoad, onError ) {
 
 			console.warn( 'THREE.ImageUtils.loadTexture has been deprecated. Use THREE.TextureLoader() instead.' );
 
@@ -43653,7 +43846,7 @@
 
 		},
 
-		loadTextureCube: function ( urls, mapping, onLoad, onError ) {
+		loadTextureCube: function( urls, mapping, onLoad, onError ) {
 
 			console.warn( 'THREE.ImageUtils.loadTextureCube has been deprecated. Use THREE.CubeTextureLoader() instead.' );
 
@@ -43668,13 +43861,13 @@
 
 		},
 
-		loadCompressedTexture: function () {
+		loadCompressedTexture: function() {
 
 			console.error( 'THREE.ImageUtils.loadCompressedTexture has been removed. Use THREE.DDSLoader instead.' );
 
 		},
 
-		loadCompressedTextureCube: function () {
+		loadCompressedTextureCube: function() {
 
 			console.error( 'THREE.ImageUtils.loadCompressedTextureCube has been removed. Use THREE.DDSLoader instead.' );
 
@@ -43688,21 +43881,21 @@
 
 		console.error( 'THREE.Projector has been moved to /examples/js/renderers/Projector.js.' );
 
-		this.projectVector = function ( vector, camera ) {
+		this.projectVector = function( vector, camera ) {
 
 			console.warn( 'THREE.Projector: .projectVector() is now vector.project().' );
 			vector.project( camera );
 
 		};
 
-		this.unprojectVector = function ( vector, camera ) {
+		this.unprojectVector = function( vector, camera ) {
 
 			console.warn( 'THREE.Projector: .unprojectVector() is now vector.unproject().' );
 			vector.unproject( camera );
 
 		};
 
-		this.pickingRay = function () {
+		this.pickingRay = function() {
 
 			console.error( 'THREE.Projector: .pickingRay() is now raycaster.setFromCamera().' );
 
@@ -43717,10 +43910,10 @@
 		console.error( 'THREE.CanvasRenderer has been moved to /examples/js/renderers/CanvasRenderer.js' );
 
 		this.domElement = document.createElementNS( 'http://www.w3.org/1999/xhtml', 'canvas' );
-		this.clear = function () {};
-		this.render = function () {};
-		this.setClearColor = function () {};
-		this.setSize = function () {};
+		this.clear = function() {};
+		this.render = function() {};
+		this.setClearColor = function() {};
+		this.setSize = function() {};
 
 	}
 

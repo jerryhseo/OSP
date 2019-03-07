@@ -5,7 +5,7 @@
  * @author Luca Antiga 	/ http://lantiga.github.io
  */
 
-THREE.TrackballControls = function ( object, domElement ) {
+THREE.TrackballControls = function( object, domElement ) {
 
 	var _this = this;
 	var STATE = { NONE: - 1, ROTATE: 0, ZOOM: 1, PAN: 2, TOUCH_ROTATE: 3, TOUCH_ZOOM_PAN: 4 };
@@ -78,7 +78,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 	// methods
 
-	this.handleResize = function () {
+	this.handleResize = function() {
 
 		if ( this.domElement === document ) {
 
@@ -101,7 +101,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 	};
 
-	this.handleEvent = function ( event ) {
+	this.handleEvent = function( event ) {
 
 		if ( typeof this[ event.type ] == 'function' ) {
 
@@ -111,7 +111,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 	};
 
-	var getMouseOnScreen = ( function () {
+	var getMouseOnScreen = ( function() {
 
 		var vector = new THREE.Vector2();
 
@@ -128,7 +128,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 	}() );
 
-	var getMouseOnCircle = ( function () {
+	var getMouseOnCircle = ( function() {
 
 		var vector = new THREE.Vector2();
 
@@ -201,7 +201,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 	}() );
 
 
-	this.zoomCamera = function () {
+	this.zoomCamera = function() {
 
 		var factor;
 
@@ -271,7 +271,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 	}() );
 
-	this.checkDistances = function () {
+	this.checkDistances = function() {
 
 		if ( ! _this.noZoom || ! _this.noPan ) {
 
@@ -293,7 +293,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 	};
 
-	this.update = function () {
+	this.update = function() {
 
 		_eye.subVectors( _this.object.position, _this.target );
 
@@ -331,7 +331,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 	};
 
-	this.reset = function () {
+	this.reset = function() {
 
 		_state = STATE.NONE;
 		_prevState = STATE.NONE;
@@ -475,13 +475,13 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 		switch ( event.deltaMode ) {
 
-                        case 2:
-                                // Zoom in pages
-                                _zoomStart.y -= event.deltaY * 0.025;
-                                break;
+						case 2:
+								// Zoom in pages
+								_zoomStart.y -= event.deltaY * 0.025;
+								break;
 
 			case 1:
-                                // Zoom in lines
+								// Zoom in lines
 				_zoomStart.y -= event.deltaY * 0.01;
 				break;
 

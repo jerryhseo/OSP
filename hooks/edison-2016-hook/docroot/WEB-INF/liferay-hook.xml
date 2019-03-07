@@ -3,6 +3,14 @@
 
 <hook>
 	<portal-properties>portal.properties</portal-properties>
+	
+	<language-properties>
+		content/Language_ko.properties
+	</language-properties>
+	<language-properties>
+		content/Language_en.properties
+	</language-properties>
+	
 	<custom-jsp-dir>/custom_jsps</custom-jsp-dir>
 
 

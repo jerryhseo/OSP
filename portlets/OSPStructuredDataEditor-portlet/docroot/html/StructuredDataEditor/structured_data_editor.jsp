@@ -180,22 +180,23 @@ $('#<portlet:namespace/>canvas').on('change', function(){
 	if( <portlet:namespace/>disabled )
 		return;
 	
-// 	let structure = <portlet:namespace/>dataType.structure();
-// 	let pages = structure.activeParameterFormattedInputs();
-// 	let fileContents = {
-// 			fileCount: pages.length,
-// 			content: pages
-// 	};
+	let structure = <portlet:namespace/>dataType.structure();
+	let pages = structure.activeParameterFormattedInputs();
+	let fileContents = {
+			fileCount: pages.length,
+			content: pages
+	};
 	
+	/*
 	var jsonData = {
 			type_: OSP.Enumeration.PathType.STRUCTURED_DATA,
 			content_: OSP.Util.toJSON( <portlet:namespace/>dataType.structure() )
 	};
-	
-// 	var jsonData = {
-// 			type_: OSP.Enumeration.PathType.FILE_CONTENTS,
-// 			content_: fileContents
-// 	};
+	*/
+	var jsonData = {
+			type_: OSP.Enumeration.PathType.FILE_CONTENTS,
+			content_: fileContents
+	};
 	
 	
 	<portlet:namespace/>visualizer.fireDataChangedEvent( jsonData );
@@ -248,9 +249,8 @@ function <portlet:namespace/>disableControlsEventHandler( data, params ){
 	console.log('[<portlet:namespace/>disableControlsEventHandler] ');
 	<portlet:namespace/>disabled = params.disabled;
 	var inputs = $('#<portlet:namespace/>canvas').find('input');
-	
 	inputs.each(function(index){
-		$(this).prop('disabled', <portlet:namespace/>disabled);
+		$(this).attr('disabled', <portlet:namespace/>disabled);
 	});
 }
 </script>

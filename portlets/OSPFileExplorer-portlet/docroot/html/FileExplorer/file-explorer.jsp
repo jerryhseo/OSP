@@ -136,7 +136,7 @@
 							fireDataChangedEvent( parentPath, fileName, 'file' );
 						}else if( data.node.type == 'closed-folder'){
 							//console.log('closed-folder: '+data.node.id);
-							fireDataChangedEvent( data.node.id, '' );
+							fireDataChangedEvent( data.node.id, '', 'folder' );
 							lookupFolder( data.node.id );
 						}
 						else if( data.node.type == 'prev-folder' ){

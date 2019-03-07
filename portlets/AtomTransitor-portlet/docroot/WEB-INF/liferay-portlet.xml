@@ -2,26 +2,14 @@
 <!DOCTYPE liferay-portlet-app PUBLIC "-//Liferay//DTD Portlet Application 6.2.0//EN" "http://www.liferay.com/dtd/liferay-portlet-app_6_2_0.dtd">
 
 <liferay-portlet-app>
+
 	
-	<portlet>
-		<portlet-name>atom-transistor-editor</portlet-name>
-		<icon>/icon.png</icon>
-        <header-portlet-css>/css/osp-editor.css</header-portlet-css>
-		<footer-portlet-javascript>
-			/js/main.js
-		</footer-portlet-javascript>
-		<css-class-wrapper>
-			atom-transistor-editor-portlet
-		</css-class-wrapper>
-		<add-default-resource>true</add-default-resource>
-	</portlet>
 	<portlet>
 		<portlet-name>atom-transistor-analyzer</portlet-name>
 		<icon>/icon.png</icon>
-        <header-portlet-css>/css/osp-analyzer.css</header-portlet-css>
-		<footer-portlet-javascript>
-			/js/main.js
-		</footer-portlet-javascript>
+		<configuration-action-class>com.kaist.atomtransistor.portlet.AtomTransistorAnalyzerConfigAction</configuration-action-class>
+		<instanceable>true</instanceable>
+		
 		<css-class-wrapper>
 			atom-transistor-analyzer-portlet
 		</css-class-wrapper>
