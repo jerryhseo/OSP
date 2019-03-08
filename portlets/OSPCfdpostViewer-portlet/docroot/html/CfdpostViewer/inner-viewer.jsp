@@ -4,7 +4,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
-  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css"/>
+  <link rel="stylesheet" type="text/css" href="/content/css/bulma/bulma.min.css"/>
   <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/cfdpost/bulma-tooltip.min.css"/>
   <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/cfdpost/all.css"/>
   <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/cfdpost/wb.css"/>
@@ -72,9 +72,15 @@ function setNamespace( ns ){
 
 function cleanCanvas(){
   console.log("cleanCanvas");
+  chart = {};
+  document.getElementById("canvas").innerHTML = "";
+
 }
 
 function drawContour( rltDatas ) {
+  
+  cleanCanvas();
+
   var rltDataJson = rltDatas.map( d => new CFDData(d) );
   chart = new Chart ("#canvas", rltDataJson);
   console.log(chart);
@@ -102,7 +108,10 @@ function onchange(){
 }
 
 function windowResize() {
-  
+  if (typeof chart === "undefined") {
+    return -1;
+  }
+
   var rewinWidth = parseInt(d3.select('.wb-appFrame-ViewerColumn').style('width'));
   var rewinHeight = parseInt(d3.select('.wb-appFrame-ViewerColumn').style('height'));
   const width = chart.width,
