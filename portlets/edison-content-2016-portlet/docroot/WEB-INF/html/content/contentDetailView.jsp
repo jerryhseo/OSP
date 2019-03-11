@@ -102,15 +102,19 @@ function <portlet:namespace/>openContentViewDialogWithData(contentFolderPath){
 		inputData.uri(contentFolderPath);
 		inputData.type(OSP.Enumeration.PathType.URL);
 		
+		console.log(inputData);
+		
 		var renderURL = Liferay.PortletURL.createRenderURL();
-		renderURL.setPortletId( 'HtmlViewer_WAR_OSPAnalyzersportlet');
+		renderURL.setPortletId('HtmlViewer_WAR_OSPAnalyzersportlet');
 		renderURL.setWindowState('<%=LiferayWindowState.POP_UP%>');
 		renderURL.setParameter("inputData", JSON.stringify(inputData));
 		renderURL.setParameter('eventEnable', false);
 
+		
 		window.open(renderURL.toString());
 	});
-} 
+}
+
 function <portlet:namespace/>closeDialog ( data ){
 	//alert( JSON.stringify(data,null,4));
 	<portlet:namespace/>dialogSection.dialog('close');
@@ -159,7 +163,8 @@ function <portlet:namespace/>closeDialog ( data ){
 					<c:if test="${content.advancedContentFolderPath != ''}">
 						<div class="msbox">
 							<ul>
-								<li class="txtnum"><span style="cursor:pointer" onclick="<portlet:namespace/>openContentViewDialogWithData('${content.advancedContentFolderPath }/${content.advancedStartFileNm }')">${content.advancedStartFileNm }</span></li>
+								<%-- <li class="txtnum"><span style="cursor:pointer" onclick="<portlet:namespace/>openContentViewDialogWithData('${content.advancedContentFolderPath }/${content.advancedStartFileNm }')">${content.advancedStartFileNm }</span></li> --%>
+								<li class="txtnum"><span style="cursor:pointer" onclick="window.open('${content.advancedContentFolderPath }/${content.advancedStartFileNm }', '_blank');">${content.advancedStartFileNm }</span></li>
 							</ul>
 						</div>
 					</c:if>
