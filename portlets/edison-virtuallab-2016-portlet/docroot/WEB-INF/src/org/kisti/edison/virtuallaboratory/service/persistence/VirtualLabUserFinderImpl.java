@@ -197,4 +197,118 @@ public class VirtualLabUserFinderImpl extends BasePersistenceImpl<VirtualLabUser
 		return null;
 	}
 	
+	/* 2019.03.12 _ Get users ID in virtual class */
+	public String getVirtualLabClassUserIds(long virtualLabId, long classId) {
+		StringBuilder sqlSb = new StringBuilder();
+		Session session = null;
+		try {
+			String sqlSelect = CustomSQLUtil.get(sqlPath + "getVirtualLabClassUserIds");
+			
+			sqlSb.append(sqlSelect);
+			
+			session = openSession();
+			
+			Map params = new HashMap();
+			
+			params.put("virtualLabId", virtualLabId);
+			params.put("classId", classId);
+			
+			String gBatisQuery = GBatisUtil.getGBatis(params, sqlSb.toString());
+			
+			SQLQuery query = session.createSQLQuery(gBatisQuery);
+			query.addScalar("virtualLabUserIds", Type.STRING);
+			
+			return (String) query.uniqueResult();
+		} catch (Exception e) {
+			try {
+				throw new SystemException(e);
+			} catch (SystemException se) {
+				se.printStackTrace();
+			}
+		} finally {
+			closeSession(session);
+		}
+		return "";
+	}
+	
+	/* 2019.03.12 _ Get ScienceApps ID in virtual class */
+	public String getVirtualLabClassScienceAppIds(long virtualLabId, long classId) {
+		StringBuilder sqlSb = new StringBuilder();
+		Session session = null;
+		try {
+			String sqlSelect = CustomSQLUtil.get(sqlPath + "getVirtualLabClassScienceAppIds");
+			
+			sqlSb.append(sqlSelect);
+			
+			session = openSession();
+			
+			Map params = new HashMap();
+			
+			params.put("virtualLabId", virtualLabId);
+			params.put("classId", classId);
+			
+			String gBatisQuery = GBatisUtil.getGBatis(params, sqlSb.toString());
+			
+			SQLQuery query = session.createSQLQuery(gBatisQuery);
+			query.addScalar("scienceAppIds", Type.STRING);
+			
+			return (String) query.uniqueResult();
+		} catch (Exception e) {
+			try {
+				throw new SystemException(e);
+			} catch (SystemException se) {
+				se.printStackTrace();
+			}
+		} finally {
+			closeSession(session);
+		}
+		return "";
+	}
+	
+	/* 2019.03.12 _ Get student management list */
+	public List<Object[]> getVirtualClassStudentManagementList(long virtualLabId, long classId, long questionSeqNo, String search_parameter, long groupId, String userIds, String scienceAppIds) {
+		StringBuilder sqlSb = new StringBuilder();
+		Session session = null;
+		try {
+			String sqlSelect = CustomSQLUtil.get(sqlPath + "getVirtualClassStudentManagementList");
+			
+			sqlSb.append(sqlSelect);
+			
+			session = openSession();
+			
+			Map params = new HashMap();
+			
+			params.put("virtualLabId", virtualLabId);
+			params.put("classId", classId);
+			params.put("questionSeqNo", questionSeqNo);
+			params.put("groupId", groupId);
+			params.put("userIds", userIds);
+			if(search_parameter != null && !search_parameter.equals("")) {
+				params.put("search_parameter", search_parameter);
+			}
+			
+			if(scienceAppIds != null && !scienceAppIds.equals("")){
+				params.put("scienceAppIds", scienceAppIds);
+			}
+			
+			String gBatisQuery = GBatisUtil.getGBatis(params, sqlSb.toString());
+			
+			SQLQuery query = session.createSQLQuery(gBatisQuery);
+			query.addEntity("VirtualLabUser", VirtualLabUserImpl.class);
+			query.addScalar("surveyCheck", Type.INTEGER);
+			query.addScalar("executeCount", Type.STRING);
+			
+			return (List<Object[]>) query.list();
+		} catch (Exception e) {
+			try {
+				throw new SystemException(e);
+			} catch (SystemException se) {
+				se.printStackTrace();
+			}
+		} finally {
+			closeSession(session);
+		}
+		return null;
+	}
+	
 }

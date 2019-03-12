@@ -206,6 +206,62 @@ public class VirtualLabUserLocalServiceImpl
 			}
 		return resultList;
 	}
-
 	
+	/* 2019.03.12 _ Get users ID in virtual class */
+	public String getVirtualLabClassUserIds(long virtualLabId, long classId) {
+		
+		return virtualLabUserFinder.getVirtualLabClassUserIds(virtualLabId, classId);
+	}
+	
+	/* 2019.03.12 _ Get ScienceApps ID in virtual class */
+	public String getVirtualLabClassScienceAppIds(long virtualLabId, long classId) {
+		
+		return virtualLabUserFinder.getVirtualLabClassScienceAppIds(virtualLabId, classId);
+	}
+	
+	/* 2019.03.12 _ Get student management list */
+	public List<Map<String, Object>> getVirtualClassStudentManagementList(long virtualLabId, long classId, long questionSeqNo, String search_parameter, long groupId, String userIds, String scienceAppIds) {
+		
+		List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+		if(classId > 0) {
+			List<Object[]> studentList = virtualLabUserFinder.getVirtualClassStudentManagementList(virtualLabId, classId, questionSeqNo, search_parameter, groupId, userIds, scienceAppIds);
+			
+			if(studentList != null && studentList.size() > 0) {
+				for (int i = 0; i < studentList.size(); i++) {
+					Object[] studentArray = studentList.get(i);
+					
+					VirtualLabUser virtualLabUser = (VirtualLabUser) studentArray[0];
+					int surveyCheck = (Integer) studentArray[1];
+					String executeCount = (String) studentArray[2];
+					
+					Map<String, Object> result = new HashMap<String, Object>();
+					result.put("virtualLabUserId", virtualLabUser.getVirtualLabUserId());
+					result.put("userStudentNumber", virtualLabUser.getUserStudentNumber());
+					result.put("updateDt", new SimpleDateFormat("yyyy-MM-dd").format(virtualLabUser.getUpdateDt()));
+					result.put("createDt", new SimpleDateFormat("yyyy-MM-dd").format(virtualLabUser.getCreateDt()));
+					result.put("processDate", new SimpleDateFormat("yyyy-MM-dd").format(virtualLabUser.getProcessDate()));
+					result.put("processNote", virtualLabUser.getProcessNote());
+					result.put("requestSort", virtualLabUser.getRequestSort());
+					result.put("userUseYn", virtualLabUser.getUserUseYn());
+					result.put("authRole", virtualLabUser.getAuthRole());
+					result.put("surveyCheck", surveyCheck);
+					result.put("executeCount", executeCount);
+					
+					long userId = virtualLabUser.getUserId();
+					result.put("userId", virtualLabUser.getUserId());
+					try {
+						User user = userPersistence.fetchByPrimaryKey(userId);
+						if (user != null) {
+							result.put("userScreenName", user.getScreenName());
+							result.put("userFirstName", user.getFirstName());
+						}
+					} catch (SystemException e) {
+						e.printStackTrace();
+					}
+					resultList.add(result);
+				}
+			}
+		}
+		return resultList;
+	}
 }

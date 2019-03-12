@@ -231,6 +231,21 @@ public class VirtualLabUserLocalServiceClp implements VirtualLabUserLocalService
 		_methodName44 = "getUserGroupClassUser";
 
 		_methodParameterTypes44 = new String[] { "long", "long" };
+
+		_methodName45 = "getVirtualLabClassUserIds";
+
+		_methodParameterTypes45 = new String[] { "long", "long" };
+
+		_methodName46 = "getVirtualLabClassScienceAppIds";
+
+		_methodParameterTypes46 = new String[] { "long", "long" };
+
+		_methodName47 = "getVirtualClassStudentManagementList";
+
+		_methodParameterTypes47 = new String[] {
+				"long", "long", "long", "java.lang.String", "long",
+				"java.lang.String", "java.lang.String"
+			};
 	}
 
 	@Override
@@ -1537,6 +1552,97 @@ public class VirtualLabUserLocalServiceClp implements VirtualLabUserLocalService
 		return (java.util.List<java.util.Map<java.lang.String, java.lang.Object>>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
+	public java.lang.String getVirtualLabClassUserIds(long virtualLabId,
+		long classId) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName45,
+					_methodParameterTypes45,
+					new Object[] { virtualLabId, classId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.lang.String)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public java.lang.String getVirtualLabClassScienceAppIds(long virtualLabId,
+		long classId) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName46,
+					_methodParameterTypes46,
+					new Object[] { virtualLabId, classId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.lang.String)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getVirtualClassStudentManagementList(
+		long virtualLabId, long classId, long questionSeqNo,
+		java.lang.String search_parameter, long groupId,
+		java.lang.String userIds, java.lang.String scienceAppIds) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName47,
+					_methodParameterTypes47,
+					new Object[] {
+						virtualLabId,
+						
+					classId,
+						
+					questionSeqNo,
+						
+					ClpSerializer.translateInput(search_parameter),
+						
+					groupId,
+						
+					ClpSerializer.translateInput(userIds),
+						
+					ClpSerializer.translateInput(scienceAppIds)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<java.util.Map<java.lang.String, java.lang.Object>>)ClpSerializer.translateOutput(returnObj);
+	}
+
 	private InvokableLocalService _invokableLocalService;
 	private String _methodName0;
 	private String[] _methodParameterTypes0;
@@ -1626,4 +1732,10 @@ public class VirtualLabUserLocalServiceClp implements VirtualLabUserLocalService
 	private String[] _methodParameterTypes43;
 	private String _methodName44;
 	private String[] _methodParameterTypes44;
+	private String _methodName45;
+	private String[] _methodParameterTypes45;
+	private String _methodName46;
+	private String[] _methodParameterTypes46;
+	private String _methodName47;
+	private String[] _methodParameterTypes47;
 }

@@ -139,4 +139,128 @@
 		]]>
 	</sql>
 	
+	<sql id="org.kisti.edison.service.persistence.virtualLabUser.getVirtualLabClassUserIds" >
+		<![CDATA[
+			SELECT
+				GROUP_CONCAT(userId SEPARATOR ',') AS virtualLabUserIds
+			FROM 
+				EDVIR_VirtualLabClasses_VirtualLabUsers EVLCVLU,
+				EDVIR_VirtualLabUser EVLU
+			WHERE
+				EVLCVLU.virtualLabUserId = EVLU.virtualLabUserId
+				AND EVLCVLU.classId = #classId#
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.service.persistence.virtualLabUser.getVirtualLabClassScienceAppIds" >
+		<![CDATA[
+			SELECT
+				GROUP_CONCAT(scienceAppId SEPARATOR ',') AS scienceAppIds
+			FROM
+				EDVIR_VirtualLabScienceAppLink EVLSAL,
+				EDVIR_VirtualLabScienceAppLinkClass EVLSALC
+			WHERE
+				EVLSAL.scienceAppSeqNo = EVLSALC.scienceAppSeqNo
+				AND EVLSAL.virtualLabId = #virtualLabId#
+				AND EVLSALC.classId = #classId#
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.service.persistence.virtualLabUser.getVirtualClassStudentManagementList" >
+		<![CDATA[
+			SELECT 
+				VLCUSR.virtualLabUserId,
+				VLCUSR.userId,
+				VLCUSR.userStudentNumber,
+				VLCUSR.authRole,
+				VLCUSR.userUseYn,
+				VLCUSR.requestSort,
+				VLCUSR.processNote,
+				VLCUSR.processDate,
+				VLCUSR.createDt,
+				VLCUSR.updateDt,
+				IFNULL(SURVEY.surveyCheck, '0') AS surveyCheck,
+				IFNULL(SIM.executeCount, '0(0/0)') AS executeCount
+			FROM 
+				(
+					SELECT 
+						EVLU.virtualLabUserId AS virtualLabUserId,
+						USER.userId AS userId,
+						EVLU.userStudentNumber AS userStudentNumber,
+						EVLU.authRole AS authRole,
+						EVLU.userUseYn AS userUseYn,
+						EVLU.requestSort AS requestSort,
+						EVLU.processNote AS processNote,
+						EVLU.processDate AS processDate,
+						EVLU.createDt AS createDt,
+						EVLU.updateDt AS updateDt
+					FROM 
+						User_ USER,
+						EDVIR_VirtualLabUser EVLU,
+						EDVIR_VirtualLabClasses_VirtualLabUsers EVLCVLU
+					WHERE 
+						USER.userId IN (@@userIds@@)
+						AND USER.userId = EVLU.userId
+						AND EVLU.virtualLabUserId = EVLCVLU.virtualLabUserId
+						<isNotEmpty property="classId">
+							AND EVLCVLU.classId = #classId#
+						</isNotEmpty>
+						<isNotEmpty property="search_parameter">
+							AND (
+								USER.screenName like '%@@search_parameter@@%'
+								OR
+								USER.firstName like '%@@search_parameter@@%'
+							)
+						</isNotEmpty>
+				) VLCUSR
+				LEFT OUTER JOIN
+				(
+					SELECT
+						ESA.userId as userId,
+						COUNT(*) AS surveyCheck
+					FROM
+						EDVIR_SurveyAnswer ESA,
+						EDVIR_SurveyQuestions_SurveyAnswers ESQSA
+					WHERE
+						ESA.SurveyAnswerId = ESQSA.SurveyAnswerId
+						AND ESQSA.questionSeqNo = #questionSeqNo#
+						AND ESA.virtualLabId = #virtualLabId#
+						AND ESA.classId = #classId#
+				) SURVEY
+				ON VLCUSR.userId = SURVEY.userId
+				LEFT OUTER JOIN
+				(
+					SELECT
+						SIM.userId,
+						IF(COUNT(*) = 0,
+							CONVERT('0(0/0)', CHAR),
+							CONVERT(
+								CONCAT(
+									COUNT(*), 
+									'(',
+									SUM(IF(JOB.jobStatus = 1701011, 1, 0)),
+									'/',
+									SUM(IF(JOB.jobStatus = 1701012, 1, 0)),
+									')'
+								), 
+								CHAR
+							)
+						)
+							AS executeCount
+					FROM
+						EDSIM_Simulation SIM, EDSIM_SimulationJob JOB
+					WHERE
+						SIM.userId IN (@@userIds@@)
+						AND SIM.scienceAppId IN (@@scienceAppIds@@)
+						AND SIM.simulationUuid = JOB.simulationUuid
+						AND JOB.jobSubmit = 1
+					GROUP BY SIM.userId
+				) SIM
+				ON VLCUSR.userId = SIM.userId
+			WHERE 
+				1=1
+			ORDER BY VLCUSR.userStudentNumber DESC
+		]]>
+	</sql>
+	
 </custom-sql>

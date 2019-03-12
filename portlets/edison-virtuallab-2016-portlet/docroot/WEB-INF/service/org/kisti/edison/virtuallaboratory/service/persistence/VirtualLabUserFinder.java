@@ -31,4 +31,15 @@ public interface VirtualLabUserFinder {
 
 	public java.util.List<java.lang.Object[]> getUserGroupClassUser(
 		long userId, long groupId);
+
+	public java.lang.String getVirtualLabClassUserIds(long virtualLabId,
+		long classId);
+
+	public java.lang.String getVirtualLabClassScienceAppIds(long virtualLabId,
+		long classId);
+
+	public java.util.List<java.lang.Object[]> getVirtualClassStudentManagementList(
+		long virtualLabId, long classId, long questionSeqNo,
+		java.lang.String search_parameter, long groupId,
+		java.lang.String userIds, java.lang.String scienceAppIds);
 }

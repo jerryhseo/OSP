@@ -48,6 +48,25 @@ public class VirtualLabUserFinderUtil {
 		return getFinder().getUserGroupClassUser(userId, groupId);
 	}
 
+	public static java.lang.String getVirtualLabClassUserIds(
+		long virtualLabId, long classId) {
+		return getFinder().getVirtualLabClassUserIds(virtualLabId, classId);
+	}
+
+	public static java.lang.String getVirtualLabClassScienceAppIds(
+		long virtualLabId, long classId) {
+		return getFinder().getVirtualLabClassScienceAppIds(virtualLabId, classId);
+	}
+
+	public static java.util.List<java.lang.Object[]> getVirtualClassStudentManagementList(
+		long virtualLabId, long classId, long questionSeqNo,
+		java.lang.String search_parameter, long groupId,
+		java.lang.String userIds, java.lang.String scienceAppIds) {
+		return getFinder()
+				   .getVirtualClassStudentManagementList(virtualLabId, classId,
+			questionSeqNo, search_parameter, groupId, userIds, scienceAppIds);
+	}
+
 	public static VirtualLabUserFinder getFinder() {
 		if (_finder == null) {
 			_finder = (VirtualLabUserFinder)PortletBeanLocatorUtil.locate(org.kisti.edison.virtuallaboratory.service.ClpSerializer.getServletContextName(),

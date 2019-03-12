@@ -407,4 +407,18 @@ public interface VirtualLabUserLocalService extends BaseLocalService,
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getUserGroupClassUser(
 		long userId, long groupId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.lang.String getVirtualLabClassUserIds(long virtualLabId,
+		long classId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.lang.String getVirtualLabClassScienceAppIds(long virtualLabId,
+		long classId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getVirtualClassStudentManagementList(
+		long virtualLabId, long classId, long questionSeqNo,
+		java.lang.String search_parameter, long groupId,
+		java.lang.String userIds, java.lang.String scienceAppIds);
 }

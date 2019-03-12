@@ -482,6 +482,26 @@ public class VirtualLabUserLocalServiceUtil {
 		return getService().getUserGroupClassUser(userId, groupId);
 	}
 
+	public static java.lang.String getVirtualLabClassUserIds(
+		long virtualLabId, long classId) {
+		return getService().getVirtualLabClassUserIds(virtualLabId, classId);
+	}
+
+	public static java.lang.String getVirtualLabClassScienceAppIds(
+		long virtualLabId, long classId) {
+		return getService()
+				   .getVirtualLabClassScienceAppIds(virtualLabId, classId);
+	}
+
+	public static java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getVirtualClassStudentManagementList(
+		long virtualLabId, long classId, long questionSeqNo,
+		java.lang.String search_parameter, long groupId,
+		java.lang.String userIds, java.lang.String scienceAppIds) {
+		return getService()
+				   .getVirtualClassStudentManagementList(virtualLabId, classId,
+			questionSeqNo, search_parameter, groupId, userIds, scienceAppIds);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

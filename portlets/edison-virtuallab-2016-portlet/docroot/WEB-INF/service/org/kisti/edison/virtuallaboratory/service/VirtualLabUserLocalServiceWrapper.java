@@ -524,6 +524,30 @@ public class VirtualLabUserLocalServiceWrapper
 		return _virtualLabUserLocalService.getUserGroupClassUser(userId, groupId);
 	}
 
+	@Override
+	public java.lang.String getVirtualLabClassUserIds(long virtualLabId,
+		long classId) {
+		return _virtualLabUserLocalService.getVirtualLabClassUserIds(virtualLabId,
+			classId);
+	}
+
+	@Override
+	public java.lang.String getVirtualLabClassScienceAppIds(long virtualLabId,
+		long classId) {
+		return _virtualLabUserLocalService.getVirtualLabClassScienceAppIds(virtualLabId,
+			classId);
+	}
+
+	@Override
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getVirtualClassStudentManagementList(
+		long virtualLabId, long classId, long questionSeqNo,
+		java.lang.String search_parameter, long groupId,
+		java.lang.String userIds, java.lang.String scienceAppIds) {
+		return _virtualLabUserLocalService.getVirtualClassStudentManagementList(virtualLabId,
+			classId, questionSeqNo, search_parameter, groupId, userIds,
+			scienceAppIds);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */

@@ -182,8 +182,15 @@ public class virtualLabClassStudentManagementController {
 		
 		JSONObject obj = new JSONObject();
 		if (classId != null && !classId.equals(0)) {
-			List<Map<String, Object>> virtualClassStudentList = VirtualLabUserLocalServiceUtil.getVirtualClassStudentList(Long.parseLong(virtualLabId), Long.parseLong(classId), Long.parseLong(questionSeqNo), search_parameter, groupId);
-			obj.put("virtualClassStudentList", virtualClassStudentList);
+			// 2019.03.12 _ Modify virtual class user list query
+			String userIds = VirtualLabUserLocalServiceUtil.getVirtualLabClassUserIds(Long.parseLong(virtualLabId), Long.parseLong(classId));
+			String scienceAppIds = VirtualLabUserLocalServiceUtil.getVirtualLabClassScienceAppIds(Long.parseLong(virtualLabId), Long.parseLong(classId));
+			
+			List<Map<String, Object>> virtualClassStudentsList = VirtualLabUserLocalServiceUtil.getVirtualClassStudentManagementList(Long.parseLong(virtualLabId), Long.parseLong(classId), Long.parseLong(questionSeqNo), search_parameter, groupId, userIds, scienceAppIds);
+			obj.put("virtualClassStudentList", virtualClassStudentsList);
+			
+			/*List<Map<String, Object>> virtualClassStudentList = VirtualLabUserLocalServiceUtil.getVirtualClassStudentList(Long.parseLong(virtualLabId), Long.parseLong(classId), Long.parseLong(questionSeqNo), search_parameter, groupId);
+			obj.put("virtualClassStudentList", virtualClassStudentList);*/
 		}
 		response.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = response.getWriter();

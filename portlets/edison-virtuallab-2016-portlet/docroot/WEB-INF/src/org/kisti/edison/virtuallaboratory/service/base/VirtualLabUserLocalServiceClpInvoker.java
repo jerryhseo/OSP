@@ -230,6 +230,21 @@ public class VirtualLabUserLocalServiceClpInvoker {
 		_methodName151 = "getUserGroupClassUser";
 
 		_methodParameterTypes151 = new String[] { "long", "long" };
+
+		_methodName152 = "getVirtualLabClassUserIds";
+
+		_methodParameterTypes152 = new String[] { "long", "long" };
+
+		_methodName153 = "getVirtualLabClassScienceAppIds";
+
+		_methodParameterTypes153 = new String[] { "long", "long" };
+
+		_methodName154 = "getVirtualClassStudentManagementList";
+
+		_methodParameterTypes154 = new String[] {
+				"long", "long", "long", "java.lang.String", "long",
+				"java.lang.String", "java.lang.String"
+			};
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -510,6 +525,28 @@ public class VirtualLabUserLocalServiceClpInvoker {
 				((Long)arguments[1]).longValue());
 		}
 
+		if (_methodName152.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes152, parameterTypes)) {
+			return VirtualLabUserLocalServiceUtil.getVirtualLabClassUserIds(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue());
+		}
+
+		if (_methodName153.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes153, parameterTypes)) {
+			return VirtualLabUserLocalServiceUtil.getVirtualLabClassScienceAppIds(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue());
+		}
+
+		if (_methodName154.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes154, parameterTypes)) {
+			return VirtualLabUserLocalServiceUtil.getVirtualClassStudentManagementList(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(),
+				((Long)arguments[2]).longValue(),
+				(java.lang.String)arguments[3],
+				((Long)arguments[4]).longValue(),
+				(java.lang.String)arguments[5], (java.lang.String)arguments[6]);
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -601,4 +638,10 @@ public class VirtualLabUserLocalServiceClpInvoker {
 	private String[] _methodParameterTypes150;
 	private String _methodName151;
 	private String[] _methodParameterTypes151;
+	private String _methodName152;
+	private String[] _methodParameterTypes152;
+	private String _methodName153;
+	private String[] _methodParameterTypes153;
+	private String _methodName154;
+	private String[] _methodParameterTypes154;
 }
