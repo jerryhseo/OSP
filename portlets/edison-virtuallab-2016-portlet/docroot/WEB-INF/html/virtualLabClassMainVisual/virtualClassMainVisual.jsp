@@ -19,6 +19,13 @@
 PasswordPolicy edionPasswordPolicy = PasswordPolicyLocalServiceUtil.getDefaultPasswordPolicy(company.getCompanyId());
 %>
 
+<style>
+	/* 2019.03.12 _ Student management scroll bar in virtual class */
+	#studentManagementDialog .modal-body{
+		overflow-y: hidden;
+	}
+</style>
+
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/virtualClassMainVisual.css" media="screen"/>
 
 <script type="text/javascript">
