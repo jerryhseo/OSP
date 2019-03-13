@@ -4,7 +4,7 @@
 <liferay-portlet-app>
 	
 	<portlet>
-		<portlet-name>ParaView</portlet-name>
+		<portlet-name>OSPParaView</portlet-name>
 		<icon>/icon.png</icon>
 		<configuration-action-class>com.kisti.osp.visualizer.portlet.paraview.ParaViewPortletConfigAction</configuration-action-class>
 		<instanceable>true</instanceable>
