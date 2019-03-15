@@ -1950,8 +1950,16 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 		scienceApp.setExeFileName(CustomUtil.strNull(params.get("exeFileName")));
 		scienceApp.setOpenLevel(CustomUtil.strNull(params.get("openLevel")));
 		scienceApp.setAppType(CustomUtil.strNull(params.get("appType")));
-		scienceApp.setRunType(CustomUtil.strNull(params.get("runType")));
-		scienceApp.setParallelModule(CustomUtil.strNull(params.get("parallelModule")));
+		String runType = CustomUtil.strNull(params.get("runType"));
+		String parallelModule = CustomUtil.strNull(params.get("parallelModule"));
+		if(runType.toUpperCase() == "SEQUENTIAL"){
+			
+		} else {
+			parallelModule = runType;
+			runType = "Parallel";
+		}
+		scienceApp.setRunType(runType);
+		scienceApp.setParallelModule(parallelModule);
 		scienceApp.setEditorType(CustomUtil.strNull(params.get("editorType")));
 		scienceApp.setMinCpus(GetterUtil.getInteger(params.get("minCpus"), 0));
 		scienceApp.setMaxCpus(GetterUtil.getInteger(params.get("maxCpus"), 0));
