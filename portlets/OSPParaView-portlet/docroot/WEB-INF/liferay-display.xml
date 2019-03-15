@@ -4,6 +4,6 @@
 <display>
 	
 	<category name="OSP Viewers">
-		<portlet id="ParaView"></portlet>
+		<portlet id="OSPParaView"></portlet>
 	</category>
 </display>

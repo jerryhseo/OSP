@@ -7,7 +7,7 @@
 		var Path = this;
 		OSP._MapObject.apply(Path);
 
-		Path.VERSION='20190228-GA01';
+		Path.VERSION='2019-3-15';
 		Path.url = function( url ){
 			return Path.property.apply( Path, OSP.Util.addFirstArgument(OSP.Constants.CONTENT, arguments) );
 		};
@@ -193,6 +193,7 @@
 					case OSP.Constants.URI:
 					case OSP.Constants.RELATIVE:
 					case OSP.Constants.PORT_NAME:
+					case 'VERSION':
 						InputData.property( key, jsonInputData[key] );
 						break;
 					case 'context_':
@@ -213,7 +214,7 @@
 		var DataType = this;
 		OSP._OpenObject.apply(DataType);
 
-		DataType.VERSION='20190228-GA01';
+		DataType.VERSION='2019315';
 		var DataStructure = function( jsonObject ){
 			var DS = this;
 			OSP._MapObject.apply(DS);

@@ -7,7 +7,7 @@
         w.OSP = {};
 
     w.OSP.Constants = {
-        VERSION: '20190228-GA01',
+        version_: '2019315',
         ACTION: 'action_',
         ARRAY_KEYS: 'arrayKeys_',
         ASSIGNED_PORTS: 'assignedPorts_',
