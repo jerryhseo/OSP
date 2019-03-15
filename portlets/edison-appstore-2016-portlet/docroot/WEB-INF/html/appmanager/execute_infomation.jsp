@@ -478,6 +478,9 @@ if(mode.equals(Constants.UPDATE)){
 			$(".data-parallel-cpu").hide();
 		}
 		
+		/* Select Run Type */
+		$("#<portlet:namespace/>runType option[value='${data.runType}']").attr("selected", "selected");
+		
 	});
 <%} else { %>
 	$(document).ready(function () {
