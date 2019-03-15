@@ -1035,7 +1035,7 @@
          */
 
         return {
-            VERSION:'20190228-GA01',
+            VERSION:'2019-3-15',
             callIframeFunc: callIframeFunc,
             configConnection: function( caller, disable ){
                 connector = caller;
