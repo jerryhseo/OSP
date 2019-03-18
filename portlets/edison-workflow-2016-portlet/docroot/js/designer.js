@@ -169,6 +169,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                 events: {
                     dblclick: function(obj) {
                         if (!isDesigner && uiPanelInstance) {
+                        	console.log("ehre...")
                             uiPanelInstance.openNodeHandler(obj.node);
                         }
                     }
@@ -500,7 +501,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     currentJsPlumbInstance.bind("connectionDetached", jsPlumbConnectionDetachedCallback);
 
     function addScienceApp(pageX, pageY, data) {
-        if (data["appType"] && data["appType"] == WF_APP_TYPES.APP.NAME) {
+        if (data["appType"] && data["appType"] == WF_APP_TYPES.APP.NAME || data["appType"] && data["appType"] == WF_APP_TYPES.STATIC_CONVERTER.NAME) {
             drawScienceAppDiv(pageX, pageY, data);
         } else {
             if (data["appType"] == WF_APP_TYPES.GROUP.NAME) {
@@ -824,7 +825,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
 
                 currentJsPlumbInstance.removeNode(node);
 
-                if (node.data.type === WF_APP_TYPES.APP.NAME) {
+                if (node.data.type === WF_APP_TYPES.APP.NAME || node.data.type === WF_APP_TYPES.STATIC_CONVERTER.NAME) {
 
                 } else {
                     if (node.data.scienceAppData.runType === WF_APP_TYPES.FILE_COMPONENT.NAME) {
