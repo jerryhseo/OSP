@@ -13,6 +13,8 @@
 </liferay-portlet:renderURL>
 
 <liferay-portlet:resourceURL var="copyParentNodeFilesURL" id="copyParentNodeFiles" copyCurrentRenderParameters="false"/>
+<liferay-portlet:resourceURL var="readOutLogURL" id="readOutLog" copyCurrentRenderParameters="false" 
+escapeXml="false" portletName="SimulationDashboard_WAR_edisonsimulationportlet"/>
 
 <link rel="stylesheet" href="${contextPath}/css/font-awesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="${contextPath}/css/Ionicons/css/ionicons.min.css">
@@ -584,6 +586,64 @@ function <portlet:namespace/>copyParentNodeFiles(params){
 
 function cogClick(nodeId){
 	$("#"+nodeId).contextmenu();
+}
+
+function <portlet:namespace/>jobSystemLog(params) {
+	var simulationUuid = params.simulationUuid;
+	var jobUuid = params.jobUuid;
+	var lastPosition = params.lastPosition;
+	var type = params.type;
+	
+	jQuery.ajax({
+		url: '<%=readOutLogURL.toString()%>',
+		type:'POST',
+		dataType:'json',
+		data:{
+			"_SimulationDashboard_WAR_edisonsimulationportlet_simulationUuid": simulationUuid,
+			"_SimulationDashboard_WAR_edisonsimulationportlet_jobUuid": jobUuid,
+			"_SimulationDashboard_WAR_edisonsimulationportlet_lastPosition": lastPosition,
+			"_SimulationDashboard_WAR_edisonsimulationportlet_type": type
+		},
+		success:function(result){
+			var modal = $("#"+<portlet:namespace/>parentNamespace+"job-log-modal");
+			var textarea = modal.find("textarea#"+<portlet:namespace/>parentNamespace+"log-text");
+			
+			var isScrollMove = false;
+			if(textarea[0].scrollTop==0){
+				isScrollMove = true;
+			}else if(textarea[0].scrollTop+textarea.outerHeight()>textarea.prop('scrollHeight')){
+				isScrollMove = true;
+			}
+			
+			var preTextareVal = textarea.text();
+			textarea.empty();
+			
+			if(typeof result.outLog!='undefined'){
+				if(lastPosition === 0){
+					textarea.text(result.outLog.outLog);
+				}else{
+					textarea.text(preTextareVal+result.outLog.outLog);
+				}
+				
+				if(result.jobStatus == '1701006'){
+					<portlet:namespace/>refreshJobLogTimer = setInterval("_SimulationDashboard_WAR_edisonsimulationportlet_" + jobSystemLog, 1000*3, simulationUuid,jobUuid,result.outLog.lastPosition,type);
+				}
+			}
+			
+			if(typeof result.errLog!='undefined'){
+				var deviLog = '\n\n--------------------------ERROR LOG----------------------------\n';
+				textarea.text(textarea.text()+deviLog+result.errLog.outLog);
+			}
+			
+			if(isScrollMove){
+				textarea.scrollTop(textarea.prop('scrollHeight'));
+			}
+			modal.modal({ "backdrop": "static", "keyboard": false });
+		},error:function(jqXHR, textStatus, errorThrown){
+			$.alert(Liferay.Language.get('edison-simulation-monitoring-log-file-is-not-exist'));
+		}
+	});
+	
 }
 
 </script>

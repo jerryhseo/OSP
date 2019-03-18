@@ -7,6 +7,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     var currJobs = eStruct("id", "data")
     var currInputPorts = eStruct("id")
     var currOutputPorts = eStruct("id")
+    var currLogPorts = eStruct("id")
     var currOpenPort = eMap()
     var currPageJob = 1
     var JQ_PORTLET_BOUNDARY_ID = "#p_p_id" + namespace;
@@ -1006,20 +1007,29 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     function addPortHandler(that, nodeId, isInput) {
         var portId = $(that).attr("port-id")
         var port = isInput ? currInputPorts.get(portId) : currOutputPorts.get(portId)
+        if(!port){
+        	port = currLogPorts.get(portId);
+        }
         $(that).children("a").click(function (e) {
-            if (port.dataType_.name === CONSTS.WF_APP_TYPES.CONTROLLER.INPUT_DATA_TYPE) {
-                return
-            }
-            if (port.dataType_.name === CONSTS.WF_APP_TYPES.CONTROLLER.OUTPUT_DATA_TYPE) {
-                return
-            }
-            if (port.dataType_.name === CONSTS.WF_APP_TYPES.DYNAMIC_CONVERTER.INPUT_DATA_TYPE) {
-                return
-            }
+        	if(port){
+        		if (port.dataType_.name === CONSTS.WF_APP_TYPES.CONTROLLER.INPUT_DATA_TYPE) {
+        			return
+        		}
+        		if (port.dataType_.name === CONSTS.WF_APP_TYPES.CONTROLLER.OUTPUT_DATA_TYPE) {
+        			return
+        		}
+        		if (port.dataType_.name === CONSTS.WF_APP_TYPES.DYNAMIC_CONVERTER.INPUT_DATA_TYPE) {
+        			return
+        		}
+        	}
             if (isInput) {
                 openInputPort(nodeId, portId)
             } else {
-                openOutputPort(nodeId, portId)
+            	if($(that).hasClass("output")){
+            		openOutputPort(nodeId, portId)
+            	} else if($(that).hasClass("log")){
+                    openLogPort(nodeId, portId);
+            	}
             }
         })
         $(that).children("a").hover(
@@ -1068,19 +1078,20 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             '       {{/data.arrInputPorts}}' +
             '       </ul>' +
             '    </li>\n' +
-           /* '    <li class="treeview log">' +
+            
+            '    {{#data.arrLogPorts}}' +
+            '    <li class="treeview log">' +
             '       <a href="#"><i class="fa fa-laptop"></i><div>log</div></a>' +
             '       <ul class="treeview-menu">' +
-            '          {{#data.arrLogPorts}}' +
             '             <li class="treeview port-li log" port-id="{{id}}">\n' +
             '                 <a href="#" class="sidebar-btn job-li" port-id=\"{{id}}\">\n' +
             '                     <i class="fa fa-edit"></i>\n' +
             '                     <div>{{name_}}</div>\n' +
             '                 </a>\n' +
             '             </li>' +
-            '          {{/data.arrLogPorts}}' +
             '       </ul>' +
-            '    </li>\n' +*/
+            '    </li>\n' +
+            '    {{/data.arrLogPorts}}' +
             
             '    <li class="treeview output">' +
             '       <a href="#"><i class="fa fa-laptop"></i><div>output</div></a>' +
@@ -1109,6 +1120,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         // var screenLogic = jpInstance.exportData({ type: "json" })
         var inputPorts = []
         var outputPorts = []
+        var logPorts = []
         var dataComponentNodes = []
         currNodes.set(
             designer.getCurrentJsPlumbInstance().getNodes(),
@@ -1122,10 +1134,19 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             pushPorts(node.id, node.data.outputPorts, outputPorts, node.data.arrOutputPorts)
             setPortsId(node.id, node.data.inputPorts, CONSTS.WF_JSPLUMB_TYPES.INPUT)
             setPortsId(node.id, node.data.outputPorts, CONSTS.WF_JSPLUMB_TYPES.OUTPUT)
+            
+            if(!!node.data.logPorts){
+            	node.data.arrLogPorts = [];
+            	pushPorts(node.id, node.data.logPorts, logPorts, node.data.arrLogPorts);
+            	setPortsId(node.id, node.data.logPorts, CONSTS.WF_JSPLUMB_TYPES.LOG);
+            }
         })
 
         currInputPorts.set(inputPorts)
         currOutputPorts.set(outputPorts)
+        if(logPorts.length > 0){
+        	currLogPorts.set(logPorts);
+        }
 
         $.each(currNodes.getArray(), function(i, node){
             setDataComponent(node)
@@ -1181,6 +1202,51 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 })
             })
     }
+    
+    function jobSystemLog(simulationUuid, jobUuid, lastPosition, type) {
+    	var sendDataObj = new Object();
+    	var simulationJob = currJobs.selected()
+		sendDataObj.simulationUuid = simulationUuid;
+		sendDataObj.jobUuid = jobUuid;
+		sendDataObj.lastPosition = lastPosition;
+		sendDataObj.type = type;
+
+		var fn = window[namespace + "jobSystemLog"];
+		return fn.apply(null, [sendDataObj]);
+    }
+    
+    function jobResultFileView(simulationUuid, jobUuid) {
+    	$("body").css('overflow','hidden');
+    	AUI().use("liferay-portlet-url", function(a) {
+    		var portletURL = Liferay.PortletURL.createRenderURL();
+    		portletURL.setPortletMode("view");
+    		portletURL.setWindowState("pop_up");
+    		portletURL.setParameter("jobUuid", jobUuid);
+    		portletURL.setPortletId("SimulationResultFileViewer_WAR_edisonsimulationportlet");
+    		Liferay.Util.openWindow({
+    			dialog: {
+    				width:1024,
+    				height:750,
+    				cache: false,
+    				draggable: false,
+    				resizable: false,
+    				modal: true,
+    				destroyOnClose: true,
+    				className:'homepage-ui-dialog',
+    				after: {
+    					render: function(event) {
+    						$("button.btn.close").on("click", function(e){
+    							$("body").css('overflow','');
+    						});
+    					}
+    				}
+    			},
+    			id: "simulationResultFileViewDialog",
+    			uri: portletURL.toString(),
+    			title: "Result File View"
+    		});
+    	});
+    }
 
     function updatePortData(prevPortData, inputData) {
         prevPortData[OSP.Constants.INPUTS] = inputData
@@ -1191,14 +1257,22 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     	var portId = nodeId + "." + portName;
     	var portData = {};
     	var isInput = false;
+    	var isOutput = false;
     	
     	var currPortData = null;
     	if(currInputPorts.get(portId)){
     		currPortData = $.extend({}, currInputPorts.get(portId));
     		isInput= true;
     	} else {
-    		currPortData = $.extend({}, currOutputPorts.get(portId));
     		isInput= false;
+    		
+    		if(currOutputPorts.get(portId)){
+    			currPortData = $.extend({}, currOutputPorts.get(portId));
+    			isOutput = true;
+    		} else {
+    			currPortData = $.extend({}, currLogPorts.get(portId));
+    			isOutput = false;
+    		}
     	}
     	
         delete currPortData.id;
@@ -1206,7 +1280,11 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         if(isInput){
         	portData[currInputPorts.get(portId)[OSP.Constants.NAME]] = currPortData;
         } else {
-        	portData[currOutputPorts.get(portId)[OSP.Constants.NAME]] = currPortData;
+        	if(isOutput){
+        		portData[currOutputPorts.get(portId)[OSP.Constants.NAME]] = currPortData;
+        	} else {
+        		portData[currLogPorts.get(portId)[OSP.Constants.NAME]] = currPortData;
+        	}
         }
     	
     	return portData;
@@ -1271,6 +1349,18 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         popPortDialog(node, portId, portData, isDataComponentCall);
     }
     
+    /* 2019.03.08 _ Open Log port */
+    function openLogPort(nodeId, portId) {
+    	var node = currNodes.get(nodeId);
+    	var portData = {};
+        var currPortData = $.extend({}, currLogPorts.get(portId));
+    	delete currPortData.id;
+    	
+    	portData[currLogPorts.get(portId)[OSP.Constants.NAME]] = currPortData;
+    	
+    	popPortDialog(node, portId, portData);
+    }
+    
     function popPortDialog(node, portId, portData, isDataComponentCall) {
         var portName = ''
         var nodeId = node.id
@@ -1311,7 +1401,18 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 //            portletURL.setParameter('portData', JSON.stringify(portData));
             
             portletURL.setParameter('portName', portName);
-            portletURL.setParameter('portType',currInputPorts.contains(portId) ? CONSTS.WF_JSPLUMB_TYPES.INPUT_PORTS : CONSTS.WF_JSPLUMB_TYPES.OUTPUT_PORTS);
+            
+            var portType = null;
+            if(currInputPorts.contains(portId)){
+            	portType = CONSTS.WF_JSPLUMB_TYPES.INPUT_PORTS;
+            } else {
+            	if(currInputPorts.contains(portId)){
+            		portType = CONSTS.WF_JSPLUMB_TYPES.OUTPUT_PORTS;
+            	} else {
+            		portType = CONSTS.WF_JSPLUMB_TYPES.LOG_PORTS;
+            	}
+            }
+            portletURL.setParameter('portType', portType);
             portletURL.setParameter('nodeId', nodeId);
             portletURL.setParameter('userId', userId);
             portletURL.setParameter('dialogId', dialogId);
@@ -2696,6 +2797,8 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 		"setReuseNode" : setReuseNode,
 		// "insertIbUuid" : insertIbUuid,
 		"pauseNode" : pauseNode,
+		"jobSystemLog" : jobSystemLog,
+		"jobResultFileView" : jobResultFileView,
 		"isEmpty" : function() {
 			return _isEmpty(PANEL_DATA.setting.form.workflowId
 					&& PANEL_DATA.setting.form.simulationId);

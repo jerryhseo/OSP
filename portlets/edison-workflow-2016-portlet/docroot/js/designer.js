@@ -552,6 +552,12 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         if (!$.isEmptyObject(outputports)) {
             outputPortsObj = $.parseJSON(outputports);
         }
+        
+        var logPorts = getScienceAppLogPort(data.scienceAppId);
+        var logPortsObj = new Object();
+        if (!$.isEmptyObject(outputports)) {
+        	logPortsObj = $.parseJSON(logPorts);
+        }
 
         var ibDataObj = {};
 
@@ -566,6 +572,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
             scienceAppData: scienceAppData,
             inputPorts: inputPortsObj,
             outputPorts: outputPortsObj,
+            logPorts: logPortsObj,
             ibData: ibDataObj,
             status: statusObj,
             startPoint: false
@@ -714,6 +721,11 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     function getScienceAppOutputPort(scienceAppId) {
         var outputports = synchronousAjaxHelper.get("/delegate/services/app/" + scienceAppId + "/outputports");
         return outputports;
+    }
+    
+    function getScienceAppLogPort(scienceAppId) {
+        var logports = synchronousAjaxHelper.get("/delegate/services/app/" + scienceAppId + "/logports");
+        return logports;
     }
 
     function getPortsArrayFromPortJson(portJsonObject, isInputPort) {
@@ -1043,7 +1055,36 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                         uiPanelInstance.openScienceAppWorkbench(node);
                     }
                 };
+                
+                /* 2019.03.08 _ Add system log dialog and log file */
+                var nodeStatus = node.data.status.status;
+                if(nodeStatus == CONSTS.WF_STATUS_CODE.SUCCESS || 
+                		nodeStatus == CONSTS.WF_STATUS_CODE.DONE ||
+                		nodeStatus == CONSTS.WF_STATUS_CODE.FAILED) {
+                	items["items"]["system-log"] = {
+                        name: "System Log",
+                        icon: "fa-bar-chart",
+                        callback: function(key, options) {
+                            var simulationUuid = node.data[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_SIM_UUID];
+                        	var jobUuid = node.data[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_UUID];
+                        	
+                            uiPanelInstance.jobSystemLog(simulationUuid, jobUuid, 0, 'out');
+                        }
+                    };
+                	
+                	items["items"]["log-file-download"] = {
+                        name: "Download",
+                        icon: "fa-cloud-download",
+                        callback: function(key, options) {
+                        	var simulationUuid = node.data[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_SIM_UUID];
+                        	var jobUuid = node.data[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_UUID];
+                        	
+                        	uiPanelInstance.jobResultFileView(simulationUuid, jobUuid);
+                        }
+                    };
+                }
             }
+            
             return items;
         }
     });
@@ -1362,6 +1403,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         "deleteWorkflowDefinitionWithScienceApp": deleteWorkflowDefinitionWithScienceApp,
         "drawWorkflowDefinition": drawWorkflowDefinition,
         "resetWorkflow": resetWorkflow,
+        "getScienceAppLogPort": getScienceAppLogPort,
         "getWfPortletGlobalData": function() {
             return wfPortletGlobalData;
         },
