@@ -1952,9 +1952,7 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 		scienceApp.setAppType(CustomUtil.strNull(params.get("appType")));
 		String runType = CustomUtil.strNull(params.get("runType"));
 		String parallelModule = CustomUtil.strNull(params.get("parallelModule"));
-		if(runType.toUpperCase() == "SEQUENTIAL"){
-			
-		} else {
+		if(!runType.toUpperCase().equals("SEQUENTIAL")){
 			parallelModule = runType;
 			runType = "Parallel";
 		}
