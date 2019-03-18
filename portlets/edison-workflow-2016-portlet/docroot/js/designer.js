@@ -234,7 +234,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                     click: function(obj) {
                         if (!isDesigner && uiPanelInstance) {
                         	var status = obj.node.data.status.status;
-                        	if(status != "WAITING" && status != "PAUSED"){
+                        	if(status != "WAITING" && status != "PAUSED" && status != "RUNNING"){
                         		uiPanelInstance.openOutputPortData(obj)
                         	} else {
                         		toastr['warning']('', 'No execution results.');
