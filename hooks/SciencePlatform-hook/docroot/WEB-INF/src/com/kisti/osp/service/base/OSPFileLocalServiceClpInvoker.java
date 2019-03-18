@@ -108,220 +108,213 @@ public class OSPFileLocalServiceClpInvoker {
 
 		_methodParameterTypes41 = new String[] { "java.lang.String" };
 
-		_methodName69 = "getLinkedTemporaryFilePath";
-
-		_methodParameterTypes69 = new String[] {
-				"javax.portlet.PortletRequest", "java.lang.String",
-				"java.lang.String", "java.lang.String", "java.lang.String"
-			};
-
 		_methodName70 = "getLinkedTemporaryFilePath";
 
 		_methodParameterTypes70 = new String[] {
+				"javax.portlet.PortletRequest", "java.lang.String",
+				"java.lang.String", "java.lang.String", "java.lang.String"
+			};
+
+		_methodName71 = "getLinkedTemporaryFilePath";
+
+		_methodParameterTypes71 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
 				"java.lang.String", "java.lang.String", "java.lang.String",
 				"java.lang.String"
-			};
-
-		_methodName71 = "getCopiedTemporaryFilePath";
-
-		_methodParameterTypes71 = new String[] {
-				"javax.portlet.PortletRequest", "java.lang.String",
-				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
 		_methodName72 = "getCopiedTemporaryFilePath";
 
 		_methodParameterTypes72 = new String[] {
+				"javax.portlet.PortletRequest", "java.lang.String",
+				"java.lang.String", "java.lang.String", "java.lang.String"
+			};
+
+		_methodName73 = "getCopiedTemporaryFilePath";
+
+		_methodParameterTypes73 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
 				"java.lang.String", "java.lang.String", "java.lang.String",
 				"java.lang.String"
 			};
 
-		_methodName73 = "getFolderInformation";
+		_methodName74 = "getFolderInformation";
 
-		_methodParameterTypes73 = new String[] {
+		_methodParameterTypes74 = new String[] {
 				"javax.portlet.PortletRequest", "java.lang.String",
 				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName74 = "getFolderInformation";
-
-		_methodParameterTypes74 = new String[] {
-				"java.lang.String", "java.lang.String", "java.lang.String",
-				"java.lang.String"
-			};
-
-		_methodName75 = "getFileInformation";
+		_methodName75 = "getFolderInformation";
 
 		_methodParameterTypes75 = new String[] {
-				"javax.portlet.PortletRequest", "java.lang.String",
+				"java.lang.String", "java.lang.String", "java.lang.String",
 				"java.lang.String"
 			};
 
 		_methodName76 = "getFileInformation";
 
 		_methodParameterTypes76 = new String[] {
-				"java.lang.String", "java.lang.String", "java.lang.String"
-			};
-
-		_methodName77 = "createFile";
-
-		_methodParameterTypes77 = new String[] {
 				"javax.portlet.PortletRequest", "java.lang.String",
 				"java.lang.String"
+			};
+
+		_methodName77 = "getFileInformation";
+
+		_methodParameterTypes77 = new String[] {
+				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
 		_methodName78 = "createFile";
 
 		_methodParameterTypes78 = new String[] {
-				"java.lang.String", "java.lang.String", "java.lang.String"
-			};
-
-		_methodName79 = "deleteFile";
-
-		_methodParameterTypes79 = new String[] {
 				"javax.portlet.PortletRequest", "java.lang.String",
 				"java.lang.String"
+			};
+
+		_methodName79 = "createFile";
+
+		_methodParameterTypes79 = new String[] {
+				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
 		_methodName80 = "deleteFile";
 
 		_methodParameterTypes80 = new String[] {
-				"java.lang.String", "java.lang.String", "java.lang.String"
+				"javax.portlet.PortletRequest", "java.lang.String",
+				"java.lang.String"
 			};
 
-		_methodName81 = "moveFile";
+		_methodName81 = "deleteFile";
 
 		_methodParameterTypes81 = new String[] {
-				"javax.portlet.PortletRequest", "java.lang.String",
-				"java.lang.String", "boolean", "java.lang.String"
+				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
 		_methodName82 = "moveFile";
 
 		_methodParameterTypes82 = new String[] {
+				"javax.portlet.PortletRequest", "java.lang.String",
+				"java.lang.String", "boolean", "java.lang.String"
+			};
+
+		_methodName83 = "moveFile";
+
+		_methodParameterTypes83 = new String[] {
 				"java.lang.String", "java.lang.String", "java.lang.String",
 				"java.lang.String", "java.lang.String", "java.lang.String",
 				"boolean"
-			};
-
-		_methodName83 = "copyFile";
-
-		_methodParameterTypes83 = new String[] {
-				"javax.portlet.PortletRequest", "java.lang.String",
-				"java.lang.String", "boolean", "java.lang.String"
 			};
 
 		_methodName84 = "copyFile";
 
 		_methodParameterTypes84 = new String[] {
+				"javax.portlet.PortletRequest", "java.lang.String",
+				"java.lang.String", "boolean", "java.lang.String"
+			};
+
+		_methodName85 = "copyFile";
+
+		_methodParameterTypes85 = new String[] {
 				"java.lang.String", "java.lang.String", "java.lang.String",
 				"java.lang.String", "java.lang.String", "java.lang.String",
 				"boolean"
 			};
 
-		_methodName85 = "copyDLEntryFile";
+		_methodName86 = "copyDLEntryFile";
 
-		_methodParameterTypes85 = new String[] {
+		_methodParameterTypes86 = new String[] {
 				"javax.portlet.PortletRequest", "long", "java.lang.String",
 				"boolean", "java.lang.String"
 			};
 
-		_methodName86 = "copyDLEntryFile";
-
-		_methodParameterTypes86 = new String[] {
-				"long", "java.lang.String", "java.lang.String",
-				"java.lang.String", "boolean"
-			};
-
-		_methodName87 = "changeFileOwner";
+		_methodName87 = "copyDLEntryFile";
 
 		_methodParameterTypes87 = new String[] {
-				"javax.portlet.PortletRequest", "java.lang.String",
-				"java.lang.String", "java.lang.String"
+				"long", "java.lang.String", "java.lang.String",
+				"java.lang.String", "boolean"
 			};
 
 		_methodName88 = "changeFileOwner";
 
 		_methodParameterTypes88 = new String[] {
-				"java.lang.String", "java.lang.String", "java.lang.String",
-				"java.lang.String"
-			};
-
-		_methodName89 = "changeFileMode";
-
-		_methodParameterTypes89 = new String[] {
 				"javax.portlet.PortletRequest", "java.lang.String",
 				"java.lang.String", "java.lang.String"
+			};
+
+		_methodName89 = "changeFileOwner";
+
+		_methodParameterTypes89 = new String[] {
+				"java.lang.String", "java.lang.String", "java.lang.String",
+				"java.lang.String"
 			};
 
 		_methodName90 = "changeFileMode";
 
 		_methodParameterTypes90 = new String[] {
-				"java.lang.String", "java.lang.String", "java.lang.String",
-				"java.lang.String"
+				"javax.portlet.PortletRequest", "java.lang.String",
+				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName91 = "duplicated";
+		_methodName91 = "changeFileMode";
 
 		_methodParameterTypes91 = new String[] {
-				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
-				"java.lang.String", "java.lang.String"
+				"java.lang.String", "java.lang.String", "java.lang.String",
+				"java.lang.String"
 			};
 
 		_methodName92 = "duplicated";
 
 		_methodParameterTypes92 = new String[] {
-				"javax.portlet.PortletResponse", "java.lang.String",
+				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
 				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName93 = "upload";
+		_methodName93 = "duplicated";
 
 		_methodParameterTypes93 = new String[] {
-				"javax.portlet.PortletRequest", "java.lang.String",
+				"javax.portlet.PortletResponse", "java.lang.String",
 				"java.lang.String", "java.lang.String"
 			};
 
 		_methodName94 = "upload";
 
 		_methodParameterTypes94 = new String[] {
+				"javax.portlet.PortletRequest", "java.lang.String",
+				"java.lang.String", "java.lang.String"
+			};
+
+		_methodName95 = "upload";
+
+		_methodParameterTypes95 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
 				"java.io.File", "java.lang.String", "java.lang.String",
 				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName95 = "downloadDLEntry";
-
-		_methodParameterTypes95 = new String[] {
-				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
-				"long"
-			};
-
-		_methodName96 = "download";
+		_methodName96 = "downloadDLEntry";
 
 		_methodParameterTypes96 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
-				"java.lang.String", "java.lang.String[][]", "java.lang.String"
+				"long"
 			};
 
 		_methodName97 = "download";
 
 		_methodParameterTypes97 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
+				"java.lang.String", "java.lang.String[][]", "java.lang.String"
+			};
+
+		_methodName98 = "download";
+
+		_methodParameterTypes98 = new String[] {
+				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
 				"java.lang.String", "java.lang.String", "java.lang.String[][]",
 				"java.lang.String"
 			};
 
-		_methodName98 = "downloadFromText";
-
-		_methodParameterTypes98 = new String[] {
-				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
-				"java.lang.String", "java.lang.String"
-			};
-
-		_methodName99 = "checkValidFile";
+		_methodName99 = "downloadFromText";
 
 		_methodParameterTypes99 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
@@ -331,28 +324,28 @@ public class OSPFileLocalServiceClpInvoker {
 		_methodName100 = "checkValidFile";
 
 		_methodParameterTypes100 = new String[] {
-				"javax.portlet.PortletResponse", "java.lang.String",
+				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
 				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName101 = "readFileContent";
+		_methodName101 = "checkValidFile";
 
 		_methodParameterTypes101 = new String[] {
-				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
+				"javax.portlet.PortletResponse", "java.lang.String",
 				"java.lang.String", "java.lang.String"
 			};
 
 		_methodName102 = "readFileContent";
 
 		_methodParameterTypes102 = new String[] {
-				"javax.portlet.PortletResponse", "java.lang.String",
+				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
 				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName103 = "getFile";
+		_methodName103 = "readFileContent";
 
 		_methodParameterTypes103 = new String[] {
-				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
+				"javax.portlet.PortletResponse", "java.lang.String",
 				"java.lang.String", "java.lang.String"
 			};
 
@@ -360,24 +353,24 @@ public class OSPFileLocalServiceClpInvoker {
 
 		_methodParameterTypes104 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
-				"java.lang.String", "java.lang.String", "java.lang.String"
+				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName105 = "downloadFile";
+		_methodName105 = "getFile";
 
 		_methodParameterTypes105 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
-				"java.lang.String", "java.lang.String"
+				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
 		_methodName106 = "downloadFile";
 
 		_methodParameterTypes106 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
-				"java.lang.String", "java.lang.String", "java.lang.String"
+				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName107 = "readFileContent";
+		_methodName107 = "downloadFile";
 
 		_methodParameterTypes107 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
@@ -387,160 +380,167 @@ public class OSPFileLocalServiceClpInvoker {
 		_methodName108 = "readFileContent";
 
 		_methodParameterTypes108 = new String[] {
-				"javax.portlet.PortletResponse", "java.lang.String",
+				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
 				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
-		_methodName109 = "readFirstFileContent";
+		_methodName109 = "readFileContent";
 
 		_methodParameterTypes109 = new String[] {
-				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
+				"javax.portlet.PortletResponse", "java.lang.String",
 				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
 		_methodName110 = "readFirstFileContent";
 
 		_methodParameterTypes110 = new String[] {
-				"javax.portlet.PortletResponse", "java.lang.String",
+				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
 				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
-		_methodName111 = "readFileContent";
+		_methodName111 = "readFirstFileContent";
 
 		_methodParameterTypes111 = new String[] {
-				"javax.portlet.PortletRequest", "java.lang.String",
-				"java.lang.String"
+				"javax.portlet.PortletResponse", "java.lang.String",
+				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
 		_methodName112 = "readFileContent";
 
 		_methodParameterTypes112 = new String[] {
-				"java.lang.String", "java.lang.String", "java.lang.String"
+				"javax.portlet.PortletRequest", "java.lang.String",
+				"java.lang.String"
 			};
 
-		_methodName113 = "getFirstFileName";
+		_methodName113 = "readFileContent";
 
 		_methodParameterTypes113 = new String[] {
-				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
 				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
 		_methodName114 = "getFirstFileName";
 
 		_methodParameterTypes114 = new String[] {
-				"javax.portlet.PortletResponse", "java.lang.String",
+				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
 				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
-		_methodName115 = "saveFileContent";
+		_methodName115 = "getFirstFileName";
 
 		_methodParameterTypes115 = new String[] {
-				"javax.portlet.PortletRequest", "java.lang.String",
-				"java.lang.String", "java.lang.String"
+				"javax.portlet.PortletResponse", "java.lang.String",
+				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
 		_methodName116 = "saveFileContent";
 
 		_methodParameterTypes116 = new String[] {
+				"javax.portlet.PortletRequest", "java.lang.String",
+				"java.lang.String", "java.lang.String"
+			};
+
+		_methodName117 = "saveFileContent";
+
+		_methodParameterTypes117 = new String[] {
 				"javax.portlet.PortletResponse", "java.lang.String",
 				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
-		_methodName117 = "writeTextFile";
+		_methodName118 = "writeTextFile";
 
-		_methodParameterTypes117 = new String[] {
+		_methodParameterTypes118 = new String[] {
 				"java.lang.String", "java.nio.file.Path"
 			};
 
-		_methodName118 = "readDLAppEntry";
+		_methodName119 = "readDLAppEntry";
 
-		_methodParameterTypes118 = new String[] {
+		_methodParameterTypes119 = new String[] {
 				"javax.portlet.PortletResponse", "long"
 			};
 
-		_methodName119 = "writeToClient";
+		_methodName120 = "writeToClient";
 
-		_methodParameterTypes119 = new String[] {
+		_methodParameterTypes120 = new String[] {
 				"javax.portlet.PortletResponse", "java.lang.String",
 				"com.liferay.portal.kernel.json.JSONObject"
 			};
 
-		_methodName120 = "readTextFile";
+		_methodName121 = "readTextFile";
 
-		_methodParameterTypes120 = new String[] { "java.nio.file.Path" };
-
-		_methodName121 = "readFileAtPosition";
-
-		_methodParameterTypes121 = new String[] {
-				"javax.portlet.PortletRequest", "java.lang.String", "long",
-				"long", "java.lang.String"
-			};
+		_methodParameterTypes121 = new String[] { "java.nio.file.Path" };
 
 		_methodName122 = "readFileAtPosition";
 
 		_methodParameterTypes122 = new String[] {
-				"java.lang.String", "java.lang.String", "long", "long",
-				"java.lang.String"
+				"javax.portlet.PortletRequest", "java.lang.String", "long",
+				"long", "java.lang.String"
 			};
 
-		_methodName123 = "getRepositoryPath";
+		_methodName123 = "readFileAtPosition";
 
 		_methodParameterTypes123 = new String[] {
-				"javax.portlet.PortletRequest", "java.lang.String",
+				"java.lang.String", "java.lang.String", "long", "long",
 				"java.lang.String"
 			};
 
 		_methodName124 = "getRepositoryPath";
 
 		_methodParameterTypes124 = new String[] {
-				"java.lang.String", "java.lang.String", "java.lang.String"
+				"javax.portlet.PortletRequest", "java.lang.String",
+				"java.lang.String"
 			};
 
-		_methodName125 = "getFileURL";
+		_methodName125 = "getRepositoryPath";
 
 		_methodParameterTypes125 = new String[] {
-				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
-				"java.lang.String", "java.lang.String"
+				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
 		_methodName126 = "getFileURL";
 
 		_methodParameterTypes126 = new String[] {
+				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
+				"java.lang.String", "java.lang.String"
+			};
+
+		_methodName127 = "getFileURL";
+
+		_methodParameterTypes127 = new String[] {
 				"javax.portlet.PortletResponse", "java.lang.String",
 				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName127 = "getJobResultPath";
+		_methodName128 = "getJobResultPath";
 
-		_methodParameterTypes127 = new String[] {
+		_methodParameterTypes128 = new String[] {
 				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
-		_methodName128 = "getFileInformation";
+		_methodName129 = "getFileInformation";
 
-		_methodParameterTypes128 = new String[] {
+		_methodParameterTypes129 = new String[] {
 				"javax.portlet.PortletResponse", "java.lang.String",
 				"java.lang.String", "java.lang.String", "java.lang.String",
 				"java.lang.String"
 			};
 
-		_methodName129 = "processOSPResourceAction";
+		_methodName130 = "processOSPResourceAction";
 
-		_methodParameterTypes129 = new String[] {
+		_methodParameterTypes130 = new String[] {
 				"javax.portlet.ResourceRequest",
 				"javax.portlet.ResourceResponse"
 			};
 
-		_methodName130 = "setJobDataWithFileFormOutputData";
+		_methodName131 = "setJobDataWithFileFormOutputData";
 
-		_methodParameterTypes130 = new String[] {
+		_methodParameterTypes131 = new String[] {
 				"java.lang.String", "java.lang.String", "java.lang.String",
 				"com.liferay.portal.kernel.json.JSONObject", "java.lang.String"
 			};
 
-		_methodName131 = "setJobDataWithFileFormInputData";
+		_methodName132 = "setJobDataWithFileFormInputData";
 
-		_methodParameterTypes131 = new String[] {
+		_methodParameterTypes132 = new String[] {
 				"java.lang.String", "com.liferay.portal.kernel.json.JSONObject",
 				"java.lang.String"
 			};
@@ -647,15 +647,15 @@ public class OSPFileLocalServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName69.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes69, parameterTypes)) {
+		if (_methodName70.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes70, parameterTypes)) {
 			return OSPFileLocalServiceUtil.getLinkedTemporaryFilePath((javax.portlet.PortletRequest)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				(java.lang.String)arguments[3], (java.lang.String)arguments[4]);
 		}
 
-		if (_methodName70.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes70, parameterTypes)) {
+		if (_methodName71.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes71, parameterTypes)) {
 			OSPFileLocalServiceUtil.getLinkedTemporaryFilePath((javax.portlet.PortletRequest)arguments[0],
 				(javax.portlet.PortletResponse)arguments[1],
 				(java.lang.String)arguments[2], (java.lang.String)arguments[3],
@@ -664,15 +664,15 @@ public class OSPFileLocalServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName71.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes71, parameterTypes)) {
+		if (_methodName72.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes72, parameterTypes)) {
 			return OSPFileLocalServiceUtil.getCopiedTemporaryFilePath((javax.portlet.PortletRequest)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				(java.lang.String)arguments[3], (java.lang.String)arguments[4]);
 		}
 
-		if (_methodName72.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes72, parameterTypes)) {
+		if (_methodName73.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes73, parameterTypes)) {
 			OSPFileLocalServiceUtil.getCopiedTemporaryFilePath((javax.portlet.PortletRequest)arguments[0],
 				(javax.portlet.PortletResponse)arguments[1],
 				(java.lang.String)arguments[2], (java.lang.String)arguments[3],
@@ -681,55 +681,47 @@ public class OSPFileLocalServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName73.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes73, parameterTypes)) {
-			return OSPFileLocalServiceUtil.getFolderInformation((javax.portlet.PortletRequest)arguments[0],
-				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
-				(java.lang.String)arguments[3]);
-		}
-
 		if (_methodName74.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes74, parameterTypes)) {
-			return OSPFileLocalServiceUtil.getFolderInformation((java.lang.String)arguments[0],
+			return OSPFileLocalServiceUtil.getFolderInformation((javax.portlet.PortletRequest)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				(java.lang.String)arguments[3]);
 		}
 
 		if (_methodName75.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes75, parameterTypes)) {
-			return OSPFileLocalServiceUtil.getFileInformation((javax.portlet.PortletRequest)arguments[0],
-				(java.lang.String)arguments[1], (java.lang.String)arguments[2]);
+			return OSPFileLocalServiceUtil.getFolderInformation((java.lang.String)arguments[0],
+				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
+				(java.lang.String)arguments[3]);
 		}
 
 		if (_methodName76.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes76, parameterTypes)) {
-			return OSPFileLocalServiceUtil.getFileInformation((java.lang.String)arguments[0],
+			return OSPFileLocalServiceUtil.getFileInformation((javax.portlet.PortletRequest)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2]);
 		}
 
 		if (_methodName77.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes77, parameterTypes)) {
-			return OSPFileLocalServiceUtil.createFile((javax.portlet.PortletRequest)arguments[0],
+			return OSPFileLocalServiceUtil.getFileInformation((java.lang.String)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2]);
 		}
 
 		if (_methodName78.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes78, parameterTypes)) {
-			return OSPFileLocalServiceUtil.createFile((java.lang.String)arguments[0],
+			return OSPFileLocalServiceUtil.createFile((javax.portlet.PortletRequest)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2]);
 		}
 
 		if (_methodName79.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes79, parameterTypes)) {
-			OSPFileLocalServiceUtil.deleteFile((javax.portlet.PortletRequest)arguments[0],
+			return OSPFileLocalServiceUtil.createFile((java.lang.String)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2]);
-
-			return null;
 		}
 
 		if (_methodName80.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes80, parameterTypes)) {
-			OSPFileLocalServiceUtil.deleteFile((java.lang.String)arguments[0],
+			OSPFileLocalServiceUtil.deleteFile((javax.portlet.PortletRequest)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2]);
 
 			return null;
@@ -737,14 +729,22 @@ public class OSPFileLocalServiceClpInvoker {
 
 		if (_methodName81.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes81, parameterTypes)) {
+			OSPFileLocalServiceUtil.deleteFile((java.lang.String)arguments[0],
+				(java.lang.String)arguments[1], (java.lang.String)arguments[2]);
+
+			return null;
+		}
+
+		if (_methodName82.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes82, parameterTypes)) {
 			return OSPFileLocalServiceUtil.moveFile((javax.portlet.PortletRequest)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				((Boolean)arguments[3]).booleanValue(),
 				(java.lang.String)arguments[4]);
 		}
 
-		if (_methodName82.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes82, parameterTypes)) {
+		if (_methodName83.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes83, parameterTypes)) {
 			return OSPFileLocalServiceUtil.moveFile((java.lang.String)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				(java.lang.String)arguments[3], (java.lang.String)arguments[4],
@@ -752,16 +752,16 @@ public class OSPFileLocalServiceClpInvoker {
 				((Boolean)arguments[6]).booleanValue());
 		}
 
-		if (_methodName83.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes83, parameterTypes)) {
+		if (_methodName84.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes84, parameterTypes)) {
 			return OSPFileLocalServiceUtil.copyFile((javax.portlet.PortletRequest)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				((Boolean)arguments[3]).booleanValue(),
 				(java.lang.String)arguments[4]);
 		}
 
-		if (_methodName84.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes84, parameterTypes)) {
+		if (_methodName85.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes85, parameterTypes)) {
 			return OSPFileLocalServiceUtil.copyFile((java.lang.String)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				(java.lang.String)arguments[3], (java.lang.String)arguments[4],
@@ -769,8 +769,8 @@ public class OSPFileLocalServiceClpInvoker {
 				((Boolean)arguments[6]).booleanValue());
 		}
 
-		if (_methodName85.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes85, parameterTypes)) {
+		if (_methodName86.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes86, parameterTypes)) {
 			return OSPFileLocalServiceUtil.copyDLEntryFile((javax.portlet.PortletRequest)arguments[0],
 				((Long)arguments[1]).longValue(),
 				(java.lang.String)arguments[2],
@@ -778,26 +778,17 @@ public class OSPFileLocalServiceClpInvoker {
 				(java.lang.String)arguments[4]);
 		}
 
-		if (_methodName86.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes86, parameterTypes)) {
+		if (_methodName87.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes87, parameterTypes)) {
 			return OSPFileLocalServiceUtil.copyDLEntryFile(((Long)arguments[0]).longValue(),
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				(java.lang.String)arguments[3],
 				((Boolean)arguments[4]).booleanValue());
 		}
 
-		if (_methodName87.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes87, parameterTypes)) {
-			OSPFileLocalServiceUtil.changeFileOwner((javax.portlet.PortletRequest)arguments[0],
-				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
-				(java.lang.String)arguments[3]);
-
-			return null;
-		}
-
 		if (_methodName88.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes88, parameterTypes)) {
-			OSPFileLocalServiceUtil.changeFileOwner((java.lang.String)arguments[0],
+			OSPFileLocalServiceUtil.changeFileOwner((javax.portlet.PortletRequest)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				(java.lang.String)arguments[3]);
 
@@ -806,7 +797,7 @@ public class OSPFileLocalServiceClpInvoker {
 
 		if (_methodName89.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes89, parameterTypes)) {
-			OSPFileLocalServiceUtil.changeFileMode((javax.portlet.PortletRequest)arguments[0],
+			OSPFileLocalServiceUtil.changeFileOwner((java.lang.String)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				(java.lang.String)arguments[3]);
 
@@ -815,7 +806,7 @@ public class OSPFileLocalServiceClpInvoker {
 
 		if (_methodName90.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes90, parameterTypes)) {
-			OSPFileLocalServiceUtil.changeFileMode((java.lang.String)arguments[0],
+			OSPFileLocalServiceUtil.changeFileMode((javax.portlet.PortletRequest)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				(java.lang.String)arguments[3]);
 
@@ -824,6 +815,15 @@ public class OSPFileLocalServiceClpInvoker {
 
 		if (_methodName91.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes91, parameterTypes)) {
+			OSPFileLocalServiceUtil.changeFileMode((java.lang.String)arguments[0],
+				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
+				(java.lang.String)arguments[3]);
+
+			return null;
+		}
+
+		if (_methodName92.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes92, parameterTypes)) {
 			OSPFileLocalServiceUtil.duplicated((javax.portlet.PortletRequest)arguments[0],
 				(javax.portlet.PortletResponse)arguments[1],
 				(java.lang.String)arguments[2], (java.lang.String)arguments[3]);
@@ -831,18 +831,9 @@ public class OSPFileLocalServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName92.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes92, parameterTypes)) {
-			OSPFileLocalServiceUtil.duplicated((javax.portlet.PortletResponse)arguments[0],
-				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
-				(java.lang.String)arguments[3]);
-
-			return null;
-		}
-
 		if (_methodName93.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes93, parameterTypes)) {
-			OSPFileLocalServiceUtil.upload((javax.portlet.PortletRequest)arguments[0],
+			OSPFileLocalServiceUtil.duplicated((javax.portlet.PortletResponse)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				(java.lang.String)arguments[3]);
 
@@ -852,6 +843,15 @@ public class OSPFileLocalServiceClpInvoker {
 		if (_methodName94.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes94, parameterTypes)) {
 			OSPFileLocalServiceUtil.upload((javax.portlet.PortletRequest)arguments[0],
+				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
+				(java.lang.String)arguments[3]);
+
+			return null;
+		}
+
+		if (_methodName95.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes95, parameterTypes)) {
+			OSPFileLocalServiceUtil.upload((javax.portlet.PortletRequest)arguments[0],
 				(javax.portlet.PortletResponse)arguments[1],
 				(java.io.File)arguments[2], (java.lang.String)arguments[3],
 				(java.lang.String)arguments[4], (java.lang.String)arguments[5],
@@ -860,21 +860,11 @@ public class OSPFileLocalServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName95.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes95, parameterTypes)) {
+		if (_methodName96.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes96, parameterTypes)) {
 			OSPFileLocalServiceUtil.downloadDLEntry((javax.portlet.PortletRequest)arguments[0],
 				(javax.portlet.PortletResponse)arguments[1],
 				((Long)arguments[2]).longValue());
-
-			return null;
-		}
-
-		if (_methodName96.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes96, parameterTypes)) {
-			OSPFileLocalServiceUtil.download((javax.portlet.PortletRequest)arguments[0],
-				(javax.portlet.PortletResponse)arguments[1],
-				(java.lang.String)arguments[2],
-				(java.lang.String[])arguments[3], (java.lang.String)arguments[4]);
 
 			return null;
 		}
@@ -883,24 +873,25 @@ public class OSPFileLocalServiceClpInvoker {
 				Arrays.deepEquals(_methodParameterTypes97, parameterTypes)) {
 			OSPFileLocalServiceUtil.download((javax.portlet.PortletRequest)arguments[0],
 				(javax.portlet.PortletResponse)arguments[1],
-				(java.lang.String)arguments[2], (java.lang.String)arguments[3],
-				(java.lang.String[])arguments[4], (java.lang.String)arguments[5]);
+				(java.lang.String)arguments[2],
+				(java.lang.String[])arguments[3], (java.lang.String)arguments[4]);
 
 			return null;
 		}
 
 		if (_methodName98.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes98, parameterTypes)) {
-			OSPFileLocalServiceUtil.downloadFromText((javax.portlet.PortletRequest)arguments[0],
+			OSPFileLocalServiceUtil.download((javax.portlet.PortletRequest)arguments[0],
 				(javax.portlet.PortletResponse)arguments[1],
-				(java.lang.String)arguments[2], (java.lang.String)arguments[3]);
+				(java.lang.String)arguments[2], (java.lang.String)arguments[3],
+				(java.lang.String[])arguments[4], (java.lang.String)arguments[5]);
 
 			return null;
 		}
 
 		if (_methodName99.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes99, parameterTypes)) {
-			OSPFileLocalServiceUtil.checkValidFile((javax.portlet.PortletRequest)arguments[0],
+			OSPFileLocalServiceUtil.downloadFromText((javax.portlet.PortletRequest)arguments[0],
 				(javax.portlet.PortletResponse)arguments[1],
 				(java.lang.String)arguments[2], (java.lang.String)arguments[3]);
 
@@ -909,6 +900,15 @@ public class OSPFileLocalServiceClpInvoker {
 
 		if (_methodName100.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes100, parameterTypes)) {
+			OSPFileLocalServiceUtil.checkValidFile((javax.portlet.PortletRequest)arguments[0],
+				(javax.portlet.PortletResponse)arguments[1],
+				(java.lang.String)arguments[2], (java.lang.String)arguments[3]);
+
+			return null;
+		}
+
+		if (_methodName101.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes101, parameterTypes)) {
 			OSPFileLocalServiceUtil.checkValidFile((javax.portlet.PortletResponse)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				(java.lang.String)arguments[3]);
@@ -916,8 +916,8 @@ public class OSPFileLocalServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName101.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes101, parameterTypes)) {
+		if (_methodName102.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes102, parameterTypes)) {
 			OSPFileLocalServiceUtil.readFileContent((javax.portlet.PortletRequest)arguments[0],
 				(javax.portlet.PortletResponse)arguments[1],
 				(java.lang.String)arguments[2], (java.lang.String)arguments[3]);
@@ -925,20 +925,11 @@ public class OSPFileLocalServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName102.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes102, parameterTypes)) {
+		if (_methodName103.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes103, parameterTypes)) {
 			OSPFileLocalServiceUtil.readFileContent((javax.portlet.PortletResponse)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				(java.lang.String)arguments[3]);
-
-			return null;
-		}
-
-		if (_methodName103.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes103, parameterTypes)) {
-			OSPFileLocalServiceUtil.getFile((javax.portlet.PortletRequest)arguments[0],
-				(javax.portlet.PortletResponse)arguments[1],
-				(java.lang.String)arguments[2], (java.lang.String)arguments[3]);
 
 			return null;
 		}
@@ -947,17 +938,17 @@ public class OSPFileLocalServiceClpInvoker {
 				Arrays.deepEquals(_methodParameterTypes104, parameterTypes)) {
 			OSPFileLocalServiceUtil.getFile((javax.portlet.PortletRequest)arguments[0],
 				(javax.portlet.PortletResponse)arguments[1],
-				(java.lang.String)arguments[2], (java.lang.String)arguments[3],
-				(java.lang.String)arguments[4]);
+				(java.lang.String)arguments[2], (java.lang.String)arguments[3]);
 
 			return null;
 		}
 
 		if (_methodName105.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes105, parameterTypes)) {
-			OSPFileLocalServiceUtil.downloadFile((javax.portlet.PortletRequest)arguments[0],
+			OSPFileLocalServiceUtil.getFile((javax.portlet.PortletRequest)arguments[0],
 				(javax.portlet.PortletResponse)arguments[1],
-				(java.lang.String)arguments[2], (java.lang.String)arguments[3]);
+				(java.lang.String)arguments[2], (java.lang.String)arguments[3],
+				(java.lang.String)arguments[4]);
 
 			return null;
 		}
@@ -966,15 +957,14 @@ public class OSPFileLocalServiceClpInvoker {
 				Arrays.deepEquals(_methodParameterTypes106, parameterTypes)) {
 			OSPFileLocalServiceUtil.downloadFile((javax.portlet.PortletRequest)arguments[0],
 				(javax.portlet.PortletResponse)arguments[1],
-				(java.lang.String)arguments[2], (java.lang.String)arguments[3],
-				(java.lang.String)arguments[4]);
+				(java.lang.String)arguments[2], (java.lang.String)arguments[3]);
 
 			return null;
 		}
 
 		if (_methodName107.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes107, parameterTypes)) {
-			OSPFileLocalServiceUtil.readFileContent((javax.portlet.PortletRequest)arguments[0],
+			OSPFileLocalServiceUtil.downloadFile((javax.portlet.PortletRequest)arguments[0],
 				(javax.portlet.PortletResponse)arguments[1],
 				(java.lang.String)arguments[2], (java.lang.String)arguments[3],
 				(java.lang.String)arguments[4]);
@@ -984,6 +974,16 @@ public class OSPFileLocalServiceClpInvoker {
 
 		if (_methodName108.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes108, parameterTypes)) {
+			OSPFileLocalServiceUtil.readFileContent((javax.portlet.PortletRequest)arguments[0],
+				(javax.portlet.PortletResponse)arguments[1],
+				(java.lang.String)arguments[2], (java.lang.String)arguments[3],
+				(java.lang.String)arguments[4]);
+
+			return null;
+		}
+
+		if (_methodName109.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes109, parameterTypes)) {
 			OSPFileLocalServiceUtil.readFileContent((javax.portlet.PortletResponse)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				(java.lang.String)arguments[3], (java.lang.String)arguments[4]);
@@ -991,8 +991,8 @@ public class OSPFileLocalServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName109.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes109, parameterTypes)) {
+		if (_methodName110.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes110, parameterTypes)) {
 			OSPFileLocalServiceUtil.readFirstFileContent((javax.portlet.PortletRequest)arguments[0],
 				(javax.portlet.PortletResponse)arguments[1],
 				(java.lang.String)arguments[2], (java.lang.String)arguments[3],
@@ -1001,8 +1001,8 @@ public class OSPFileLocalServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName110.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes110, parameterTypes)) {
+		if (_methodName111.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes111, parameterTypes)) {
 			OSPFileLocalServiceUtil.readFirstFileContent((javax.portlet.PortletResponse)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				(java.lang.String)arguments[3], (java.lang.String)arguments[4]);
@@ -1010,20 +1010,20 @@ public class OSPFileLocalServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName111.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes111, parameterTypes)) {
-			return OSPFileLocalServiceUtil.readFileContent((javax.portlet.PortletRequest)arguments[0],
-				(java.lang.String)arguments[1], (java.lang.String)arguments[2]);
-		}
-
 		if (_methodName112.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes112, parameterTypes)) {
-			return OSPFileLocalServiceUtil.readFileContent((java.lang.String)arguments[0],
+			return OSPFileLocalServiceUtil.readFileContent((javax.portlet.PortletRequest)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2]);
 		}
 
 		if (_methodName113.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes113, parameterTypes)) {
+			return OSPFileLocalServiceUtil.readFileContent((java.lang.String)arguments[0],
+				(java.lang.String)arguments[1], (java.lang.String)arguments[2]);
+		}
+
+		if (_methodName114.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes114, parameterTypes)) {
 			OSPFileLocalServiceUtil.getFirstFileName((javax.portlet.PortletRequest)arguments[0],
 				(javax.portlet.PortletResponse)arguments[1],
 				(java.lang.String)arguments[2], (java.lang.String)arguments[3],
@@ -1032,8 +1032,8 @@ public class OSPFileLocalServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName114.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes114, parameterTypes)) {
+		if (_methodName115.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes115, parameterTypes)) {
 			OSPFileLocalServiceUtil.getFirstFileName((javax.portlet.PortletResponse)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				(java.lang.String)arguments[3], (java.lang.String)arguments[4]);
@@ -1041,8 +1041,8 @@ public class OSPFileLocalServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName115.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes115, parameterTypes)) {
+		if (_methodName116.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes116, parameterTypes)) {
 			OSPFileLocalServiceUtil.saveFileContent((javax.portlet.PortletRequest)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				(java.lang.String)arguments[3]);
@@ -1050,8 +1050,8 @@ public class OSPFileLocalServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName116.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes116, parameterTypes)) {
+		if (_methodName117.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes117, parameterTypes)) {
 			OSPFileLocalServiceUtil.saveFileContent((javax.portlet.PortletResponse)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				(java.lang.String)arguments[3], (java.lang.String)arguments[4]);
@@ -1059,24 +1059,24 @@ public class OSPFileLocalServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName117.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes117, parameterTypes)) {
+		if (_methodName118.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes118, parameterTypes)) {
 			OSPFileLocalServiceUtil.writeTextFile((java.lang.String)arguments[0],
 				(java.nio.file.Path)arguments[1]);
 
 			return null;
 		}
 
-		if (_methodName118.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes118, parameterTypes)) {
+		if (_methodName119.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes119, parameterTypes)) {
 			OSPFileLocalServiceUtil.readDLAppEntry((javax.portlet.PortletResponse)arguments[0],
 				((Long)arguments[1]).longValue());
 
 			return null;
 		}
 
-		if (_methodName119.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes119, parameterTypes)) {
+		if (_methodName120.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes120, parameterTypes)) {
 			OSPFileLocalServiceUtil.writeToClient((javax.portlet.PortletResponse)arguments[0],
 				(java.lang.String)arguments[1],
 				(com.liferay.portal.kernel.json.JSONObject)arguments[2]);
@@ -1084,22 +1084,14 @@ public class OSPFileLocalServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName120.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes120, parameterTypes)) {
-			return OSPFileLocalServiceUtil.readTextFile((java.nio.file.Path)arguments[0]);
-		}
-
 		if (_methodName121.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes121, parameterTypes)) {
-			return OSPFileLocalServiceUtil.readFileAtPosition((javax.portlet.PortletRequest)arguments[0],
-				(java.lang.String)arguments[1],
-				((Long)arguments[2]).longValue(),
-				((Long)arguments[3]).longValue(), (java.lang.String)arguments[4]);
+			return OSPFileLocalServiceUtil.readTextFile((java.nio.file.Path)arguments[0]);
 		}
 
 		if (_methodName122.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes122, parameterTypes)) {
-			return OSPFileLocalServiceUtil.readFileAtPosition((java.lang.String)arguments[0],
+			return OSPFileLocalServiceUtil.readFileAtPosition((javax.portlet.PortletRequest)arguments[0],
 				(java.lang.String)arguments[1],
 				((Long)arguments[2]).longValue(),
 				((Long)arguments[3]).longValue(), (java.lang.String)arguments[4]);
@@ -1107,18 +1099,26 @@ public class OSPFileLocalServiceClpInvoker {
 
 		if (_methodName123.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes123, parameterTypes)) {
-			return OSPFileLocalServiceUtil.getRepositoryPath((javax.portlet.PortletRequest)arguments[0],
-				(java.lang.String)arguments[1], (java.lang.String)arguments[2]);
+			return OSPFileLocalServiceUtil.readFileAtPosition((java.lang.String)arguments[0],
+				(java.lang.String)arguments[1],
+				((Long)arguments[2]).longValue(),
+				((Long)arguments[3]).longValue(), (java.lang.String)arguments[4]);
 		}
 
 		if (_methodName124.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes124, parameterTypes)) {
-			return OSPFileLocalServiceUtil.getRepositoryPath((java.lang.String)arguments[0],
+			return OSPFileLocalServiceUtil.getRepositoryPath((javax.portlet.PortletRequest)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2]);
 		}
 
 		if (_methodName125.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes125, parameterTypes)) {
+			return OSPFileLocalServiceUtil.getRepositoryPath((java.lang.String)arguments[0],
+				(java.lang.String)arguments[1], (java.lang.String)arguments[2]);
+		}
+
+		if (_methodName126.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes126, parameterTypes)) {
 			OSPFileLocalServiceUtil.getFileURL((javax.portlet.PortletRequest)arguments[0],
 				(javax.portlet.PortletResponse)arguments[1],
 				(java.lang.String)arguments[2], (java.lang.String)arguments[3]);
@@ -1126,8 +1126,8 @@ public class OSPFileLocalServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName126.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes126, parameterTypes)) {
+		if (_methodName127.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes127, parameterTypes)) {
 			OSPFileLocalServiceUtil.getFileURL((javax.portlet.PortletResponse)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				(java.lang.String)arguments[3]);
@@ -1135,14 +1135,14 @@ public class OSPFileLocalServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName127.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes127, parameterTypes)) {
+		if (_methodName128.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes128, parameterTypes)) {
 			return OSPFileLocalServiceUtil.getJobResultPath((java.lang.String)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2]);
 		}
 
-		if (_methodName128.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes128, parameterTypes)) {
+		if (_methodName129.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes129, parameterTypes)) {
 			OSPFileLocalServiceUtil.getFileInformation((javax.portlet.PortletResponse)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				(java.lang.String)arguments[3], (java.lang.String)arguments[4],
@@ -1151,24 +1151,24 @@ public class OSPFileLocalServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName129.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes129, parameterTypes)) {
+		if (_methodName130.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes130, parameterTypes)) {
 			OSPFileLocalServiceUtil.processOSPResourceAction((javax.portlet.ResourceRequest)arguments[0],
 				(javax.portlet.ResourceResponse)arguments[1]);
 
 			return null;
 		}
 
-		if (_methodName130.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes130, parameterTypes)) {
+		if (_methodName131.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes131, parameterTypes)) {
 			return OSPFileLocalServiceUtil.setJobDataWithFileFormOutputData((java.lang.String)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				(com.liferay.portal.kernel.json.JSONObject)arguments[3],
 				(java.lang.String)arguments[4]);
 		}
 
-		if (_methodName131.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes131, parameterTypes)) {
+		if (_methodName132.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes132, parameterTypes)) {
 			return OSPFileLocalServiceUtil.setJobDataWithFileFormInputData((java.lang.String)arguments[0],
 				(com.liferay.portal.kernel.json.JSONObject)arguments[1],
 				(java.lang.String)arguments[2]);
@@ -1213,8 +1213,6 @@ public class OSPFileLocalServiceClpInvoker {
 	private String[] _methodParameterTypes40;
 	private String _methodName41;
 	private String[] _methodParameterTypes41;
-	private String _methodName69;
-	private String[] _methodParameterTypes69;
 	private String _methodName70;
 	private String[] _methodParameterTypes70;
 	private String _methodName71;
@@ -1339,4 +1337,6 @@ public class OSPFileLocalServiceClpInvoker {
 	private String[] _methodParameterTypes130;
 	private String _methodName131;
 	private String[] _methodParameterTypes131;
+	private String _methodName132;
+	private String[] _methodParameterTypes132;
 }

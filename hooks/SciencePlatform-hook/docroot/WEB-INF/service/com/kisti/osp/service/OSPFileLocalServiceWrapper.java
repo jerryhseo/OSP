@@ -1122,7 +1122,7 @@ public class OSPFileLocalServiceWrapper implements OSPFileLocalService,
 
 	/**
 	* ADD GPLUS
-	*      **********************************************************************
+	*      ***********************************************************************
 	*/
 	@Override
 	public com.liferay.portal.kernel.json.JSONObject setJobDataWithFileFormOutputData(

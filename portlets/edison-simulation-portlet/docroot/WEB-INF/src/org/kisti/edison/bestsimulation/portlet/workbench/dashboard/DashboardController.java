@@ -1,6 +1,10 @@
 package org.kisti.edison.bestsimulation.portlet.workbench.dashboard;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.nio.file.NoSuchFileException;
 import java.text.SimpleDateFormat;
@@ -334,8 +338,9 @@ public class DashboardController {
 				jobStatus = simulationJob.getJobStatus();
 				try{
 					String logFile = OSPFileLocalServiceUtil.getJobResultPath(simulationUuid, jobUuid, jobUuid+".out");
+					String scrollPage = CustomUtil.strNull(request.getParameter("scrollPage"), "1");
 					
-					com.liferay.portal.kernel.json.JSONObject outLog = getReadLogFile(request, jobUuid, logFile, lastPosition);
+					com.liferay.portal.kernel.json.JSONObject outLog = getReadLogFile(request, jobUuid, logFile, lastPosition, jobStatus, Long.parseLong(scrollPage));
 					result.put("outLog", outLog);
 				}catch(Exception e){
 					if(e instanceof NoSuchFileException){
@@ -345,7 +350,7 @@ public class DashboardController {
 					}
 				}
 				
-				if(jobStatus>=1701011){
+				/*if(jobStatus>=1701011){
 					try{
 						String logFile = OSPFileLocalServiceUtil.getJobResultPath(simulationUuid, jobUuid, jobUuid+".err");
 						com.liferay.portal.kernel.json.JSONObject errLog = getReadLogFile(request, jobUuid, logFile, lastPosition);
@@ -359,7 +364,7 @@ public class DashboardController {
 					}
 				}else{
 					isErrorLogExist = false;
-				}
+				}*/
 				
 				if(!isOutLogExist&&!isErrorLogExist){
 					throw new SystemException();
@@ -375,6 +380,24 @@ public class DashboardController {
 				e1.printStackTrace();
 			}
 			
+	}
+	
+	private com.liferay.portal.kernel.json.JSONObject getReadLogFile(ResourceRequest request,String jobUuid, String logFile, long lastPosition, long jobStatus, long scrollPage) throws Exception{
+		com.liferay.portal.kernel.json.JSONObject log = JSONFactoryUtil.createJSONObject();
+		try {
+			request.setAttribute("jobStatus", jobStatus);
+			request.setAttribute("scrollPage", scrollPage);
+			log = OSPFileLocalServiceUtil.readFileAtPosition(request, logFile, lastPosition, 300, OSPRepositoryTypes.USER_JOBS.toString());
+		} catch (Exception e) {
+			if(e instanceof NoSuchFileException){
+				e.printStackTrace();
+				throw e;
+			}else{
+				throw new SystemException(e);
+			}
+		}
+		
+		return log;
 	}
 	
 	private com.liferay.portal.kernel.json.JSONObject getReadLogFile(ResourceRequest request,String jobUuid, String logFile, long lastPosition) throws Exception{
