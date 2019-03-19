@@ -169,7 +169,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                 events: {
                     dblclick: function(obj) {
                         if (!isDesigner && uiPanelInstance) {
-                        	console.log("ehre...")
                             uiPanelInstance.openNodeHandler(obj.node);
                         }
                     }
