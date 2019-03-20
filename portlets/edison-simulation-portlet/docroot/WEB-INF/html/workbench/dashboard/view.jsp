@@ -1334,6 +1334,12 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 // 			}
 			$.alert(Liferay.Language.get('edison-simulation-monitoring-log-file-is-not-exist'));
 			<portlet:namespace/>clearReadOutLogTimer();
+		}, complete: function(){
+			if(scrollPage == 1){
+				$("#"+<portlet:namespace/>parentNamespace+"job-log-modal").css("display", "block");
+				$("#"+<portlet:namespace/>parentNamespace+"system-log").css("display", "block");
+				textarea.scrollTop(textarea.prop("scrollHeight"));
+			}
 		}
 	});
 	
