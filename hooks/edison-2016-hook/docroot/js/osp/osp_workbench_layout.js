@@ -2659,6 +2659,8 @@
                         if (!job) {
                             Workbench.handlePortSelected(portName, portletInstanceId);
                         } else {
+                        	/* 2019.03.21 _ OSP_DISABLE_CONTROLS event call when selected port */
+                        	blockModule(job);
                             if (portletInstanceId)
                                 Workbench.switchPortlet(portletInstanceId);
                             else
