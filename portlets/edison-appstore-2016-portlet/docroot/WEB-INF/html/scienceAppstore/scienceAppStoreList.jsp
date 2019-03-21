@@ -443,8 +443,10 @@
 						vSolverIconId = dataMap.dataList[i].iconId;
 						
 						if(typeof vSolverIconId != "undefined"){
+							console.log("not undefinde")
 							vSolverImageSrc = spaceDelete("/documents/"+dataMap.dataList[i].iconRepositoryId+"/"+dataMap.dataList[i].iconUuid); 
 						}else{
+							console.log("undefinde")
 							vSolverImageSrc = "${contextPath}/images/scienceappstorelist/sc_appbox.jpg";
 						}
 						console.log(dataMap.dataList[i]);
