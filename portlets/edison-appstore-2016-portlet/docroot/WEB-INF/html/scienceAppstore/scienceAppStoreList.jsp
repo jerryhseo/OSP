@@ -445,10 +445,10 @@
 						if(typeof vSolverIconId != "undefined"){
 							vSolverImageSrc = spaceDelete("/documents/"+dataMap.dataList[i].iconRepositoryId+"/"+dataMap.dataList[i].iconUuid); 
 						}else{
-							console.log(dataMap.dataList[i]);
-							console.log(typeof vSolverIconId);
 							vSolverImageSrc = "${contextPath}/images/scienceappstorelist/sc_appbox.jpg";
 						}
+						console.log(dataMap.dataList[i]);
+						console.log(typeof vSolverIconId);
 						
 						$("<td/>").addClass("TC").append(
 							$("<img/>").attr("src",vSolverImageSrc)
