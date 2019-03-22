@@ -166,10 +166,32 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
         }
 
         if(btnType === "execute"){
-            if(!_isEmpty(PANEL_DATA.setting.form.workflowId, "Load Workflow first.")){
+        	var isEmpty = _isEmpty(PANEL_DATA.setting.form.workflowId, "Load Workflow first.")
+            if(!isEmpty){
+            	console.log("test???");
                 var fn = window[namespace + "moveToExecutor"];
                 var workflowId = PANEL_DATA.setting.form.workflowId;
                 fn.apply(null, [workflowId]);
+            } else {
+            	setTimeout(function(){
+            		var confirmContent = '<div style="font-size: 15px; padding: 10px 20px 0px;">'+var_workflow_not_save_message+'</div>'
+            		
+            		$.confirm({
+            			boxWidth: '420px',
+            			useBootstrap: false,
+            			title: '',
+            			content: confirmContent,
+            			buttons: {
+            				SAVE: function () {
+            					alert("save...")
+            				},
+            				CANCEL: function () {
+            					alert("cancel...")
+            				}
+            			}
+            		});
+            		
+            	}, 500);
             }
         }
 

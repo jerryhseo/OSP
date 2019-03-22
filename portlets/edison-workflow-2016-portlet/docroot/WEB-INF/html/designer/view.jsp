@@ -61,7 +61,7 @@ var var_workflow_register_app_error_message = Liferay.Language.get("edison-workf
 var var_workflow_register_app_role_error_message = Liferay.Language.get("edison-workflow-register-app-role-error-message");
 var var_workflow_config_data_error_message = Liferay.Language.get("edison-workflow-config-data-error-message");
 var var_workflow_remove_status_error_message = Liferay.Language.get("edison-workflow-remove-status-error-message");
-
+var var_workflow_not_save_message = Liferay.Language.get("edison-workflow-not-save-message");
 
 
 var var_is_developer = '${isDeveloper}';
