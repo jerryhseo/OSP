@@ -451,6 +451,7 @@
 						}
 						console.log(dataMap.dataList[i]);
 						console.log(typeof vSolverIconId);
+						console.log(vSolverImageSrc);
 						
 						$("<td/>").addClass("TC").append(
 							$("<img/>").attr("src",vSolverImageSrc)
