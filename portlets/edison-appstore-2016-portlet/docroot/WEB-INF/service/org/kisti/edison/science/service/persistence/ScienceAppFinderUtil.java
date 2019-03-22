@@ -150,6 +150,10 @@ public class ScienceAppFinderUtil {
 		return getFinder().getScienceAppByWorkflowId(searchParam);
 	}
 
+	public static java.util.List<java.lang.Long> getOrganizationRegisteredWithApp() {
+		return getFinder().getOrganizationRegisteredWithApp();
+	}
+
 	public static ScienceAppFinder getFinder() {
 		if (_finder == null) {
 			_finder = (ScienceAppFinder)PortletBeanLocatorUtil.locate(org.kisti.edison.science.service.ClpSerializer.getServletContextName(),

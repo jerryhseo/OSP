@@ -3031,4 +3031,9 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 		return scienceApp;
 	}
 	
+	public List<Long> getOrganizationRegisteredWithApp() throws NoSuchScienceAppException, NonUniqueResultException, SystemException, PortalException{
+		
+		 return scienceAppFinder.getOrganizationRegisteredWithApp();
+	}
+	
 }

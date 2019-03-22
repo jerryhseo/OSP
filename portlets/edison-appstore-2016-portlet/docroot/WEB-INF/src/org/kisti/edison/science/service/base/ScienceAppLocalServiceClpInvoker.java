@@ -682,6 +682,10 @@ public class ScienceAppLocalServiceClpInvoker {
 		_methodName316 = "getScienceAppByWorkflowId";
 
 		_methodParameterTypes316 = new String[] { "long" };
+
+		_methodName317 = "getOrganizationRegisteredWithApp";
+
+		_methodParameterTypes317 = new String[] {  };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -1546,6 +1550,11 @@ public class ScienceAppLocalServiceClpInvoker {
 			return ScienceAppLocalServiceUtil.getScienceAppByWorkflowId(((Long)arguments[0]).longValue());
 		}
 
+		if (_methodName317.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes317, parameterTypes)) {
+			return ScienceAppLocalServiceUtil.getOrganizationRegisteredWithApp();
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -1813,4 +1822,6 @@ public class ScienceAppLocalServiceClpInvoker {
 	private String[] _methodParameterTypes315;
 	private String _methodName316;
 	private String[] _methodParameterTypes316;
+	private String _methodName317;
+	private String[] _methodParameterTypes317;
 }

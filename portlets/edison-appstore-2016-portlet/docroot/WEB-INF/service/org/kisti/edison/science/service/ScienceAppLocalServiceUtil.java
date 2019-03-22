@@ -1360,6 +1360,14 @@ public class ScienceAppLocalServiceUtil {
 		return getService().getScienceAppByWorkflowId(workflowId);
 	}
 
+	public static java.util.List<java.lang.Long> getOrganizationRegisteredWithApp()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			javax.persistence.NonUniqueResultException,
+			org.kisti.edison.science.NoSuchScienceAppException {
+		return getService().getOrganizationRegisteredWithApp();
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

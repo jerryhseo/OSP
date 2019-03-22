@@ -718,4 +718,21 @@
 		]]>
 	</sql>
 	
+	<sql id="org.kisti.edison.science.service.persistence.ScienceAppFinder.getOrganizationRegisteredWithApp" >
+		<![CDATA[
+		SELECT
+			EV.data_ AS orgCd
+		FROM
+			EDAPP_ScienceApp ESA,
+			User_ U,
+			ExpandoValue EV
+		WHERE
+			ESA.authorId = U.userId
+			AND U.userId = EV.classPK
+			AND EV.columnId = 50187
+			AND EV.tableId = 23206
+		GROUP BY EV.data_;
+		]]>
+	</sql>
+	
 </custom-sql>

@@ -1483,6 +1483,15 @@ public class ScienceAppLocalServiceWrapper implements ScienceAppLocalService,
 		return _scienceAppLocalService.getScienceAppByWorkflowId(workflowId);
 	}
 
+	@Override
+	public java.util.List<java.lang.Long> getOrganizationRegisteredWithApp()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			javax.persistence.NonUniqueResultException,
+			org.kisti.edison.science.NoSuchScienceAppException {
+		return _scienceAppLocalService.getOrganizationRegisteredWithApp();
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */
