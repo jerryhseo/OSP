@@ -168,7 +168,6 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
         if(btnType === "execute"){
         	var isEmpty = _isEmpty(PANEL_DATA.setting.form.workflowId, "Load Workflow first.")
             if(!isEmpty){
-            	console.log("test???");
                 var fn = window[namespace + "moveToExecutor"];
                 var workflowId = PANEL_DATA.setting.form.workflowId;
                 fn.apply(null, [workflowId]);
@@ -183,10 +182,15 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
             			content: confirmContent,
             			buttons: {
             				SAVE: function () {
-            					alert("save...")
+            					saveOrUpdateDesigner();
+            					
+            					setTimeout(function(){
+            						var fn = window[namespace + "moveToExecutor"];
+            						var workflowId = PANEL_DATA.setting.form.workflowId;
+        							fn.apply(null, [workflowId]);
+            					}, 500);
             				},
             				CANCEL: function () {
-            					alert("cancel...")
             				}
             			}
             		});
