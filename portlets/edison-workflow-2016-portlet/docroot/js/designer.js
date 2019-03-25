@@ -532,6 +532,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         var scienceAppData = {
             scienceAppId: data.scienceAppId,
             runType: data.runType,
+            parallelModule: data.parallelModule,
             name: data.name,
             version: data.version,
             text: data.text,
