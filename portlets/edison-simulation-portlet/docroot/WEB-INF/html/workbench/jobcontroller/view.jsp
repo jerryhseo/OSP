@@ -161,6 +161,7 @@ var <portlet:namespace/>LI_EVENT = {
 
 var <portlet:namespace/>wfLiObj 	 = {"simulation":false,"edit":false,"new":false,"wf-copy":true,"copy":false,"delete":false,"data":false};
 var <portlet:namespace/>defaultLiObj = {"simulation":true,"edit":false,"new":true,"save":true,"wf-copy":false,"copy":true,"delete":true,"select":false,"submit":true,"cancel":false,"log":false,"download":false,"data":false};
+var <portlet:namespace/>queueLiObj  = {"simulation":true,"edit":false,"new":true,"save":false,"wf-copy":false,"copy":false,"delete":false,"select":false,"submit":false,"cancel":false,"log":false,"download":false,"data":false};
 var <portlet:namespace/>submitLiObj  = {"simulation":true,"edit":false,"new":true,"save":false,"wf-copy":false,"copy":false,"delete":false,"select":false,"submit":false,"cancel":true,"log":true,"download":false,"data":false};
 var <portlet:namespace/>cancelLiObj  = {"simulation":true,"edit":false,"new":true,"save":false,"wf-copy":false,"copy":true,"delete":true,"select":false,"submit":false,"cancel":false,"log":true,"download":true,"data":false};
 var <portlet:namespace/>successLiObj = {"simulation":true,"edit":false,"new":true,"save":false,"wf-copy":false,"copy":true,"delete":true,"select":false,"submit":false,"cancel":false,"log":true,"download":true,"data":true};
@@ -319,7 +320,7 @@ function <portlet:namespace/>displayChange(status,workBenchType,isEdit){
 	}else if(status=="FAILED"){
 		liObj = $.extend({},<portlet:namespace/>failLiObj);
 	}else if(status=="QUEUED"){
-		liObj = $.extend({},<portlet:namespace/>submitLiObj);
+		liObj = $.extend({},<portlet:namespace/>queueLiObj);
 	}else if(status=="RUNNING"){
 		liObj = $.extend({},<portlet:namespace/>submitLiObj);
 	}else if(status=="CANCELED"){
