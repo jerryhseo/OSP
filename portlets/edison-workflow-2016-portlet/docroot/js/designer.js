@@ -529,10 +529,11 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
 
     function drawScienceAppDiv(pageX, pageY, data, savedId) {
         var wfId = savedId ? savedId : getGUID();
+        var parallelModule = data.parallelModule ? data.parallelModule : '';
         var scienceAppData = {
             scienceAppId: data.scienceAppId,
             runType: data.runType,
-            parallelModule: data.parallelModule,
+            parallelModule: parallelModule,
             name: data.name,
             version: data.version,
             text: data.text,
