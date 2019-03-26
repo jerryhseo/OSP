@@ -127,8 +127,10 @@ public class WorkflowSimulationController{
             User user = PortalUtil.getUser(request);
             return WorkflowSimulationLocalServiceUtil.createWorkflowSimulation(params, user).getModelAttributes();
         }catch (Exception e){
-            log.error("error", e);
-            throw e;
+            /*log.error("error", e);
+            throw e;*/
+        	User user = PortalUtil.getUser(request);
+            return WorkflowSimulationLocalServiceUtil.createWorkflowSimulation(params, user).getModelAttributes();
         }
     }
     

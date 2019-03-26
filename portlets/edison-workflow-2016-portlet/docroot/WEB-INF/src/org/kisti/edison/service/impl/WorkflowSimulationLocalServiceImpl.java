@@ -107,20 +107,9 @@ public class WorkflowSimulationLocalServiceImpl extends WorkflowSimulationLocalS
     	simulation.setTestYn(testYn);
     	simulation.setCreateDate(new Date());
     	CacheRegistryUtil.clear();
-//			simulation = workflowSimulationLocalService.addWorkflowSimulation(simulation);
-    	simulation = addWorkflowSimulation(simulation);
+		simulation = workflowSimulationLocalService.addWorkflowSimulation(simulation);
     	WorkflowSimulationJobLocalServiceUtil.createSimulationJob(simulation, workflow, null);
         return simulation;
-    }
-    
-    public WorkflowSimulation addWorkflowSimulation(WorkflowSimulation simulation){
-    	try {
-    		System.out.println("addWorkflowSimulation execute.....");
-    		return workflowSimulationLocalService.addWorkflowSimulation(simulation);
-		} catch (Exception e) {
-			addWorkflowSimulation(simulation);
-		}
-    	return null;
     }
     
     public WorkflowSimulation updateWorkflowSimulation(long simulationId, Map<String, Object> params, User user) 
