@@ -113,7 +113,8 @@ public class WorkflowSimulationController{
         try{
             return WorkflowSimulationLocalServiceUtil.getWorkflowSimulation(simulationId).getModelAttributes();
         }catch (Exception e){
-            log.error("error", e);
+        	/*log.error("error", e);*/
+        	log.error("error : Server Index Error");
             throw e;
         }
     }

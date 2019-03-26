@@ -672,6 +672,8 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             $("#" + namespace + "header-li-reuse-run").show();
         }
         if (workflowStatus && workflowStatus.workflow && workflowStatus.workflow.simulations) {
+        	var isJobFinish = false;
+        	var jobStatus = "";
             $.each(workflowStatus.workflow.simulations, function () {
                 var simulation = this
                 var nodeId = simulation.clientId
@@ -704,6 +706,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                     "WAITING CANCELED CREATED NOT_FOUND RUNNING " +
                     "FAILED DONE SUCCESS COMPLETED PAUSED")
                 $("#" + nodeId).addClass(statusCode)
+                /* statusCode가 Success일 때 해당 앱의 context-menu의 reuse 출력 */
                 setReUseNodeStatus(node)
                 $("#" + nodeId + " .wf-node-execute-status").text(statusCode)
                 if(statusCode === "RUNNING") {
@@ -711,7 +714,26 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 } else {
                     $("#" + nodeId + " .top-cog-icon").removeClass("fa-spin")
                 }
+                
+                if(node.data.status.childNodes.length == 0){
+                	if(statusCode != CONSTS.WF_STATUS_CODE.SUCCESS && statusCode != CONSTS.WF_STATUS_CODE.DONE && statusCode != CONSTS.WF_STATUS_CODE.FAILED){
+                		jobStatus = statusCode;
+                		isJobFinish = false;
+                	} else {
+                		if(jobStatus != CONSTS.WF_STATUS_CODE.FAILED){
+                			jobStatus = statusCode;
+                		}
+                		isJobFinish = true;
+                	}
+                }
             })
+            
+            var currSimJob = currJobs.selected();
+            var currSimJobId = currSimJob.simulationJobId;
+        	if($(".job-li[job-id="+currSimJobId+"]").attr("job-status") == CONSTS.WF_STATUS_CODE.RUNNING && isJobFinish) {
+            	$(".job-li[job-id="+currSimJobId+"]").attr("job-status", jobStatus);
+            	location.reload();
+            }
         }
         // console.log(workflowStatus)
     }
@@ -1470,15 +1492,15 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             	uri: portletURL.toString(),
             	title: (isDataComponentCall ? 'DataComponent' : node.data.scienceAppData.name ) + " " + portName
             });
-        	
+ 
 //            A.one('body').on('key', function(event){
-//        		openPortPopup.once('visibleChange', function(event){
-//        			if(event.prevVal == true){
-//        				event.newVal = true;
-//        			}
-//        		});
-//        	}, 'esc');
-        	
+//          	openPortPopup.once('visibleChange', function(event){
+//         		    if(event.prevVal == true){
+//                     	event.newVal = true;
+//          		}
+//        	    });
+//        }, 'esc');
+
             $('#' + dialogId).css('top', positionTop+'px').css('left', positionLeft+'px')
         });
     }
@@ -1578,6 +1600,11 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                     })
                     toastr["success"]("", var_create_success_message);
 
+                }, function(){
+                	toastr["errror"]("", var_workflow_simulation_create_error_message);
+                	setTimeout(function () {
+                		location.reload();
+                    }, 1000)
                 });
                 closePanel();
             };
