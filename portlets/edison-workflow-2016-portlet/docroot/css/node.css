@@ -290,3 +290,21 @@
 	color: #fff;
 	background-color: #f76258;
 }
+
+.job-li > i.fa-file {
+	color: #444444;
+}
+
+.job-li.FAILED > i.fa-file {
+	color: red;
+}
+
+.job-li.DONE > i.fa-file,
+.job-li.SUCCESS > i.fa-file,
+.job-li.COMPLETED > i.fa-file {
+	color: green;
+}
+
+.job-li.RUNNING > i.fa-file {
+	color: hsl(217, 71%, 53%);
+}

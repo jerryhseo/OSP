@@ -732,7 +732,8 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             var currSimJobId = currSimJob.simulationJobId;
         	if($(".job-li[job-id="+currSimJobId+"]").attr("job-status") == CONSTS.WF_STATUS_CODE.RUNNING && isJobFinish) {
             	$(".job-li[job-id="+currSimJobId+"]").attr("job-status", jobStatus);
-            	location.reload();
+            	/* TODO reuse menu */
+            	/*location.reload();*/
             }
         }
         // console.log(workflowStatus)
@@ -816,7 +817,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             '</li>' +
             '{{#jobs}}' +
             '<li class="treeview" job-id="{{simulationJobId}}">\n' +
-            '  <a href="#" class="sidebar-btn job-li" job-id=\"{{simulationJobId}}\" job-status=\"{{status}}\">\n' +
+            '  <a href="#" class="sidebar-btn job-li {{status}}" job-id=\"{{simulationJobId}}\" job-status=\"{{status}}\">\n' +
             '    <i class="fa fa-file"></i>\n' +
             '    <div>{{title}}</div>\n' +
             '  <span class="label label-primary pull-right sidebar-btn">\n' +
