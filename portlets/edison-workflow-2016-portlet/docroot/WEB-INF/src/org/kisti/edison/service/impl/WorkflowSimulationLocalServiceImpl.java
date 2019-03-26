@@ -95,21 +95,32 @@ public class WorkflowSimulationLocalServiceImpl extends WorkflowSimulationLocalS
         return workflowSimulationLocalService.createWorkflowSimulation(simulationId);
     }
     
-    public WorkflowSimulation createWorkflowSimulation(Map<String, Object> params, User user) throws SystemException, PortalException{
-        String tetsYnStr = CustomUtil.strNull(params.get("testYn"), "true");
-        boolean testYn = tetsYnStr.equals("true") || tetsYnStr.equals("y") || tetsYnStr.equals("Y");
-        long workflowId = GetterUtil.getLong(params.get("workflowId"));
-        Workflow workflow = WorkflowLocalServiceUtil.getWorkflow(workflowId);
-        WorkflowSimulation simulation = createWorkflowSimulation();
-        simulation.setTitle(CustomUtil.strNull(params.get("title"), "workflow simulation #" + simulation.getSimulationId()));
-        simulation.setWorkflowId(workflowId);
-        simulation.setUserId(user.getUserId());
-        simulation.setTestYn(testYn);
-        simulation.setCreateDate(new Date());
-        CacheRegistryUtil.clear();
-        simulation = workflowSimulationLocalService.addWorkflowSimulation(simulation);
-        WorkflowSimulationJobLocalServiceUtil.createSimulationJob(simulation, workflow, null);
+    public WorkflowSimulation createWorkflowSimulation(Map<String, Object> params, User user)throws SystemException, PortalException{
+    	String tetsYnStr = CustomUtil.strNull(params.get("testYn"), "true");
+    	boolean testYn = tetsYnStr.equals("true") || tetsYnStr.equals("y") || tetsYnStr.equals("Y");
+    	long workflowId = GetterUtil.getLong(params.get("workflowId"));
+    	Workflow workflow = WorkflowLocalServiceUtil.getWorkflow(workflowId);
+    	WorkflowSimulation simulation = createWorkflowSimulation();
+    	simulation.setTitle(CustomUtil.strNull(params.get("title"), "workflow simulation #" + simulation.getSimulationId()));
+    	simulation.setWorkflowId(workflowId);
+    	simulation.setUserId(user.getUserId());
+    	simulation.setTestYn(testYn);
+    	simulation.setCreateDate(new Date());
+    	CacheRegistryUtil.clear();
+//			simulation = workflowSimulationLocalService.addWorkflowSimulation(simulation);
+    	simulation = addWorkflowSimulation(simulation);
+    	WorkflowSimulationJobLocalServiceUtil.createSimulationJob(simulation, workflow, null);
         return simulation;
+    }
+    
+    public WorkflowSimulation addWorkflowSimulation(WorkflowSimulation simulation){
+    	try {
+    		System.out.println("addWorkflowSimulation execute.....");
+    		return workflowSimulationLocalService.addWorkflowSimulation(simulation);
+		} catch (Exception e) {
+			addWorkflowSimulation(simulation);
+		}
+    	return null;
     }
     
     public WorkflowSimulation updateWorkflowSimulation(long simulationId, Map<String, Object> params, User user) 
