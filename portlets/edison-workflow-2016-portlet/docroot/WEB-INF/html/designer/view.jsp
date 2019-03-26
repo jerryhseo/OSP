@@ -693,7 +693,8 @@ $(document).ready(function(){
 function <portlet:namespace/>moveToExecutor(workflowId){
     var thisPortletNamespace = "_workflowsimulationexecutor_WAR_edisonworkflow2016portlet_";
     var params = "&" + thisPortletNamespace + "workflowId=" + workflowId;
-    location.href = "<%=executorUrl%>" + params;
+    var url = "<%=executorUrl%>" + params;
+    window.open(url, "_blank");
 }
 
 function <portlet:namespace/>getCompanyGroupId(){
