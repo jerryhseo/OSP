@@ -525,7 +525,7 @@ function <portlet:namespace/>virtualLabClassDisable(virtualLabId, classId, group
 					<portlet:namespace/>dataSearchList(1);
 				} else if (result == "500") {
 					/* 수강인원이 존재하여 클래스를 삭제 할 수 없습니다. */
-					alert("<liferay-ui:message key='edison-data-delete-error' />");
+					alert("<liferay-ui:message key='edison-virtuallab-virtualLabClass-student-delete-message' />");
 				} else {
 					alert("<liferay-ui:message key='edison-data-delete-error' />");
 				}
