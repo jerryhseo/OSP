@@ -113,8 +113,7 @@ public class WorkflowSimulationController{
         try{
             return WorkflowSimulationLocalServiceUtil.getWorkflowSimulation(simulationId).getModelAttributes();
         }catch (Exception e){
-        	/*log.error("error", e);*/
-        	log.error("error : Server Index Error");
+        	log.error("error", e);
             throw e;
         }
     }
@@ -128,10 +127,9 @@ public class WorkflowSimulationController{
             User user = PortalUtil.getUser(request);
             return WorkflowSimulationLocalServiceUtil.createWorkflowSimulation(params, user).getModelAttributes();
         }catch (Exception e){
-            /*log.error("error", e);
-            throw e;*/
-        	User user = PortalUtil.getUser(request);
-            return WorkflowSimulationLocalServiceUtil.createWorkflowSimulation(params, user).getModelAttributes();
+            /*log.error("error", e);*/
+        	log.error("error : Server Index Error");
+            throw e;
         }
     }
     

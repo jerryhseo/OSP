@@ -1601,7 +1601,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                     toastr["success"]("", var_create_success_message);
 
                 }, function(){
-                	toastr["errror"]("", var_workflow_simulation_create_error_message);
+                	toastr["error"]("", var_workflow_simulation_create_error_message);
                 	setTimeout(function () {
                 		location.reload();
                     }, 1000)
