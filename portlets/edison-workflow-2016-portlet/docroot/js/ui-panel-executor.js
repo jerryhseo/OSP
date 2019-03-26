@@ -1400,8 +1400,15 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             return false
         }
         if (currOpenPort.containsKey(portId)) {
-        	toastr['warning']('', 'Already open')
-        	return false
+        	/* ESC - hasClass modal-hidden */
+        	var portPopupByPortId =$('.wf-port-popup[data-port-id="' + portId+ '"]');
+        	if(portPopupByPortId.hasClass('modal-hidden')){
+        		currOpenPort.remove(portId)
+        		portPopupByPortId.remove();
+        	} else {
+        		toastr['warning']('', 'Already open')
+        		return false
+        	}
         }
         
         var dialogId = namespace + getGUID()
@@ -1482,9 +1489,10 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             		destroyOnClose: true,
             		after: {
             			render: function (event) {
-            				$('#' + dialogId).addClass('wf-port-popup')
+            				$('#' + dialogId).addClass('wf-port-popup').attr("data-port-id", portId);
             				$("button.btn.close").on("click", function (e) {
             					currOpenPort.remove(portId)
+            					$('#' + dialogId).remove();
             				});
             			},
             		},
