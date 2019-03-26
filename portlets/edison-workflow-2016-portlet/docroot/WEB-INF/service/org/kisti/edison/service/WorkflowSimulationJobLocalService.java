@@ -409,7 +409,7 @@ public interface WorkflowSimulationJobLocalService extends BaseLocalService,
 	public org.kisti.edison.model.WorkflowSimulationJob reuseCopyWorkflowEngineJson(
 		long simulationJobId, java.lang.String strNodes,
 		java.lang.String userName, java.lang.String ibToken,
-		javax.servlet.http.HttpServletRequest request, java.lang.String title)
+		javax.servlet.http.HttpServletRequest request, java.lang.String newTitle)
 		throws org.kisti.edison.WFEngine500Exception;
 
 	public org.kisti.edison.model.WorkflowSimulationJob createWorkflowEngineJson(

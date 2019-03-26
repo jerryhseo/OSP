@@ -20,7 +20,6 @@
 		<property name="screenLogic" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 	</class>
 	<class name="org.kisti.edison.model.impl.WorkflowSimulationImpl" table="EDWF_WorkflowSimulation">
-		<cache usage="read-write" />
 		<id name="simulationId" type="long">
 			<generator class="increment" />
 		</id>

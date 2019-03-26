@@ -67,7 +67,7 @@
   </entity>
    -->
    
-  <entity name="WorkflowSimulation" local-service="true" remote-service="false">
+  <entity name="WorkflowSimulation" local-service="true" remote-service="false" cache-enabled="false">
     <!-- PK fields -->
     <column name="simulationId" type="long" primary="true" id-type="increment"/>
     <!-- Main fields -->

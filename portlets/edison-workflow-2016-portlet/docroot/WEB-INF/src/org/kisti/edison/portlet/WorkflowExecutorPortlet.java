@@ -135,25 +135,12 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
         ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
         User user = themeDisplay.getUser();
         Group thisGroup = GroupLocalServiceUtil.getGroup(groupId);
-
-        if(thisGroup.getParentGroupId() == 0){ // 포탈
-            String visitSite = themeDisplay.getUser().getExpandoBridge().getAttribute(EdisonExpando.USER_VISIT_SITE)
-                .toString();
-            List<Group> groupList = GroupLocalServiceUtil.getGroups(themeDisplay.getCompanyId(), thisGroup.getGroupId(),
-                true);// 하위 그룹 리스트
-
-            for(Group group : groupList){
-                if(visitSite.equals(group.getName())){
-                    groupId = group.getGroupId();
-                    thisGroup = GroupLocalServiceUtil.getGroup(groupId);
-                    break;
-                }
-            }
-        }
+        
+        String icebreakerUrl = CustomUtil
+        		.strNull(thisGroup.getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_URL));
+        
         IcebreakerVcToken icebreakerVcToken = getOrCreateToken(user, groupId);
 
-        String icebreakerUrl = CustomUtil
-            .strNull(thisGroup.getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_URL));
         JSONObject obj = JSONFactoryUtil.createJSONObject();
         obj.put("icebreakerUrl", icebreakerUrl);
         obj.put("icebreakerVcToken", icebreakerVcToken.getVcToken());
