@@ -1062,7 +1062,8 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                 var nodeStatus = node.data.status.status;
                 if(nodeStatus == CONSTS.WF_STATUS_CODE.SUCCESS || 
                 		nodeStatus == CONSTS.WF_STATUS_CODE.DONE ||
-                		nodeStatus == CONSTS.WF_STATUS_CODE.FAILED) {
+                		nodeStatus == CONSTS.WF_STATUS_CODE.FAILED  ||
+                		nodeStatus == CONSTS.WF_STATUS_CODE.RUNNING) {
                 	items["items"]["system-log"] = {
                         name: "System Log",
                         icon: "fa-bar-chart",
