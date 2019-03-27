@@ -662,6 +662,7 @@ function <portlet:namespace/>jobSystemLog(params) {
 	var type = params.type;
 	
 	var textarea = null;
+	var hasLog = true;
 	jQuery.ajax({
 		url: '<%=readOutLogURL.toString()%>',
 		type:'POST',
@@ -675,7 +676,6 @@ function <portlet:namespace/>jobSystemLog(params) {
 			"<portlet:namespace/>type": type
 		},
 		success:function(result){
-			var hasLog = true;
 			var modal = $("#<portlet:namespace/>job-log-modal");
 			textarea = modal.find("textarea#<portlet:namespace/>log-text");
 			var systemLogDiv = modal.find("div#<portlet:namespace/>system-log");
@@ -761,9 +761,10 @@ function <portlet:namespace/>jobSystemLog(params) {
 				<portlet:namespace/>moreSystemLogView(textarea, sysLogMoreBtn, params, currScrollH);
 			});
 		},error:function(jqXHR, textStatus, errorThrown){
+			hasLog = false;
 			$.alert(Liferay.Language.get('edison-simulation-monitoring-log-file-is-not-exist'));
 		}, complete: function(){
-			if(scrollPage == 1){
+			if(hasLog && scrollPage == 1){
 				$("#<portlet:namespace/>job-log-modal").css("display", "block");
 				$("#<portlet:namespace/>system-log").css("display", "block");
 				textarea.scrollTop(textarea.prop("scrollHeight"));
