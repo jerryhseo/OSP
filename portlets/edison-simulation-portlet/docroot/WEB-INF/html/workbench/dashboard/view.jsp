@@ -1302,7 +1302,8 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 			
 			if(isScrollMove){
 				if(result.jobStatus == '1701006'){
-					textarea.scrollTop(0);
+					/* textarea.scrollTop(0); */
+					textarea.scrollTop(textarea.prop('scrollHeight'));
 				} else {
 					if(scrollPage > 1){
 						if(beforeScrollH != 0){

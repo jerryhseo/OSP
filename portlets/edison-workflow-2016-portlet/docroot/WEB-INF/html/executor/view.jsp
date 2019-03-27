@@ -675,6 +675,7 @@ function <portlet:namespace/>jobSystemLog(params) {
 			"<portlet:namespace/>type": type
 		},
 		success:function(result){
+			var hasLog = true;
 			var modal = $("#<portlet:namespace/>job-log-modal");
 			textarea = modal.find("textarea#<portlet:namespace/>log-text");
 			var systemLogDiv = modal.find("div#<portlet:namespace/>system-log");
@@ -700,11 +701,11 @@ function <portlet:namespace/>jobSystemLog(params) {
 				}
 				
 				if(result.jobStatus == '1701006'){
-					if(!result.outLog.outLog){
-						$.alert(Liferay.Language.get('edison-simulation-monitoring-log-file-is-not-exist'));
-						return false;
-					}
 					<portlet:namespace/>refreshJobLogTimer = setInterval(<portlet:namespace/>jobSystemLog, 1000*3, simulationUuid,jobUuid,result.outLog.lastPosition,type);
+				} else {
+					if(!result.outLog.outLog){
+						hasLog = false;
+					}
 				}
 			}
 			
@@ -749,7 +750,11 @@ function <portlet:namespace/>jobSystemLog(params) {
 				}
 			});
 			
-			modal.modal({ "backdrop": "static", "keyboard": false });
+			if(hasLog){
+				modal.modal({ "backdrop": "static", "keyboard": false });
+			} else {
+				$.alert(Liferay.Language.get('edison-simulation-monitoring-log-file-is-not-exist'));
+			}
 			
 			sysLogMoreBtn.off('click');
 			sysLogMoreBtn.on('click', function(e){
