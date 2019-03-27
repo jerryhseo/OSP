@@ -739,11 +739,13 @@ function <portlet:namespace/>jobSystemLog(params) {
 			textarea.on("scroll",function(){
 				var scrollTop = textarea.scrollTop();
 				var scrollH = $(this).prop("scrollHeight");
-				if(scrollTop < 150){
-					currScrollH = textarea.prop('scrollHeight');
-					sysLogMoreBtn.show();
-				} else {
-					sysLogMoreBtn.hide();
+				if(result.jobStatus != '1701006'){
+					if(scrollTop < 150){
+						currScrollH = textarea.prop('scrollHeight');
+						sysLogMoreBtn.show();
+					} else {
+						sysLogMoreBtn.hide();
+					}
 				}
 			});
 			
