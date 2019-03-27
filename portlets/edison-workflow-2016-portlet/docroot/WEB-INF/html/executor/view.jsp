@@ -13,8 +13,8 @@
 </liferay-portlet:renderURL>
 
 <liferay-portlet:resourceURL var="copyParentNodeFilesURL" id="copyParentNodeFiles" copyCurrentRenderParameters="false"/>
-<liferay-portlet:resourceURL var="readOutLogURL" id="readOutLog" copyCurrentRenderParameters="false" 
-escapeXml="false" portletName="SimulationDashboard_WAR_edisonsimulationportlet"/>
+
+<liferay-portlet:resourceURL var="readOutLogURL" id="readOutLog" copyCurrentRenderParameters="false" escapeXml="false" />
 
 <link rel="stylesheet" href="${contextPath}/css/font-awesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="${contextPath}/css/Ionicons/css/ionicons.min.css">
@@ -131,6 +131,28 @@ var contextPath = '${contextPath}';
     	text-align: center;
     	vertical-align: middle !important;
     }
+    
+    .<portlet:namespace/>log-text-area{
+    	margin-top: 10px !important;
+    	min-width: 90% !important;
+    	height: 650px !important;
+    	resize: none !important;
+    }
+    
+    .<portlet:namespace/>log-title{
+        font-size: 15px;
+    }
+    
+    #<portlet:namespace/>sys-log-more-icon{
+		width: 65px;
+		height: 40px;
+		padding: 10px 5px;
+		text-align: center;
+		position: absolute;
+		top: 40px;
+		right: 55px;
+		display: none;
+	}
     
 </style>
 <div class="container-fluid workflow-executor">
@@ -267,6 +289,41 @@ var contextPath = '${contextPath}';
     </div>
   </div>
 </div>
+</div>
+
+<div class="modal fade" id="<portlet:namespace/>job-log-modal" tabindex="-1" role="dialog" aria-labelledby="<portlet:namespace/>job-log-modal" style="display: none;">
+	<div class="vertical-alignment-helper">
+		<div class="modal-dialog vertical-align-center" role="document">
+			<div class="modal-content" style="width: 75%;">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">Job System Log</h4>
+				</div>
+				<div class="modal-body">
+					<div id="<portlet:namespace/>system-log" class="col-md-6">
+						<span class="<portlet:namespace/>log-title">
+							<i class="icon-file-alt"></i>&nbsp;
+							SYSTEM LOG
+						</span>
+						<div id="<portlet:namespace/>sys-log-more-icon" class="btn btn-default">
+							<i class="icon-chevron-sign-up"></i> MORE
+						</div>
+						<textarea class="form-control <portlet:namespace/>log-text-area" id="<portlet:namespace/>log-text" autofocus="autofocus" readonly="readonly" >
+						</textarea>
+					</div>
+					<div id="<portlet:namespace/>error-log" class="col-md-6">
+						<span class="<portlet:namespace/>log-title">
+							<i class="icon-file-alt"></i>&nbsp;
+							ERROR LOG
+						</span>
+						<textarea class="form-control <portlet:namespace/>log-text-area" id="<portlet:namespace/>error-log-text" autofocus="autofocus" readonly="readonly" >
+						 
+						</textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 <script>
@@ -590,25 +647,40 @@ function cogClick(nodeId){
 	$("#"+nodeId).contextmenu();
 }
 
+var scrollPage = 1;
+var beforeScrollH = 0;
 function <portlet:namespace/>jobSystemLog(params) {
+	
+	if(!scrollPage){
+		scrollPage = 1;
+	}
 	var simulationUuid = params.simulationUuid;
-	var jobUuid = params.jobUuid;
 	var lastPosition = params.lastPosition;
+	var scrollPage = params.scrollPage;
+	var jobStatus = params.jobStatus;
+	var jobUuid = params.jobUuid;
 	var type = params.type;
 	
+	var textarea = null;
 	jQuery.ajax({
 		url: '<%=readOutLogURL.toString()%>',
 		type:'POST',
 		dataType:'json',
 		data:{
-			"_SimulationDashboard_WAR_edisonsimulationportlet_simulationUuid": simulationUuid,
-			"_SimulationDashboard_WAR_edisonsimulationportlet_jobUuid": jobUuid,
-			"_SimulationDashboard_WAR_edisonsimulationportlet_lastPosition": lastPosition,
-			"_SimulationDashboard_WAR_edisonsimulationportlet_type": type
+			"<portlet:namespace/>simulationUuid": simulationUuid,
+			"<portlet:namespace/>lastPosition": lastPosition,
+			"<portlet:namespace/>scrollPage": scrollPage,
+			"<portlet:namespace/>jobStatus": jobStatus,
+			"<portlet:namespace/>jobUuid": jobUuid,
+			"<portlet:namespace/>type": type
 		},
 		success:function(result){
-			var modal = $("#"+<portlet:namespace/>parentNamespace+"job-log-modal");
-			var textarea = modal.find("textarea#"+<portlet:namespace/>parentNamespace+"log-text");
+			var modal = $("#<portlet:namespace/>job-log-modal");
+			textarea = modal.find("textarea#<portlet:namespace/>log-text");
+			var systemLogDiv = modal.find("div#<portlet:namespace/>system-log");
+			var sysLogMoreBtn = modal.find("div#<portlet:namespace/>sys-log-more-icon");
+			var errorLogDiv = modal.find("div#<portlet:namespace/>error-log");
+			var errorLogTextarea = modal.find("textarea#<portlet:namespace/>error-log-text");
 			
 			var isScrollMove = false;
 			if(textarea[0].scrollTop==0){
@@ -628,24 +700,75 @@ function <portlet:namespace/>jobSystemLog(params) {
 				}
 				
 				if(result.jobStatus == '1701006'){
-					<portlet:namespace/>refreshJobLogTimer = setInterval("_SimulationDashboard_WAR_edisonsimulationportlet_" + jobSystemLog, 1000*3, simulationUuid,jobUuid,result.outLog.lastPosition,type);
+					<portlet:namespace/>refreshJobLogTimer = setInterval(<portlet:namespace/>jobSystemLog, 1000*3, simulationUuid,jobUuid,result.outLog.lastPosition,type);
 				}
 			}
 			
-			if(typeof result.errLog!='undefined'){
-				var deviLog = '\n\n--------------------------ERROR LOG----------------------------\n';
-				textarea.text(textarea.text()+deviLog+result.errLog.outLog);
+			if(!result.errLog && typeof result.errLog!='undefined'){
+				errorLogTextarea.text(result.errLog.outLog);
+				if(systemLogDiv.hasClass('col-md-6')){
+					systemLogDiv.removeClass('col-md-12');
+					systemLogDiv.addClass('col-md-6');
+				}
+			} else {
+				systemLogDiv.removeClass('col-md-6');
+				systemLogDiv.addClass('col-md-12');
+				errorLogDiv.hide();
 			}
 			
+			currScrollH = textarea.prop('scrollHeight');
+			
 			if(isScrollMove){
-				textarea.scrollTop(textarea.prop('scrollHeight'));
+				if(result.jobStatus == '1701006'){
+					textarea.scrollTop(0);
+				} else {
+					if(scrollPage > 1){
+						if(beforeScrollH != 0){
+							var currLogTop = (currScrollH-beforeScrollH)
+							textarea.scrollTop(currLogTop);
+						}
+					}
+				}
 			}
+			
+			textarea.off("scroll");
+			textarea.on("scroll",function(){
+				var scrollTop = textarea.scrollTop();
+				var scrollH = $(this).prop("scrollHeight");
+				if(scrollTop < 150){
+					currScrollH = textarea.prop('scrollHeight');
+					sysLogMoreBtn.show();
+				} else {
+					sysLogMoreBtn.hide();
+				}
+			});
+			
 			modal.modal({ "backdrop": "static", "keyboard": false });
+			
+			sysLogMoreBtn.off('click');
+			sysLogMoreBtn.on('click', function(e){
+				<portlet:namespace/>moreSystemLogView(textarea, sysLogMoreBtn, params, currScrollH);
+			});
 		},error:function(jqXHR, textStatus, errorThrown){
 			$.alert(Liferay.Language.get('edison-simulation-monitoring-log-file-is-not-exist'));
+		}, complete: function(){
+			if(scrollPage == 1){
+				$("#<portlet:namespace/>job-log-modal").css("display", "block");
+				$("#<portlet:namespace/>system-log").css("display", "block");
+				textarea.scrollTop(textarea.prop("scrollHeight"));
+			}
 		}
 	});
 	
+}
+
+function <portlet:namespace/>moreSystemLogView(textarea, systemLogDiv, params, currScrollH){
+	scrollPage += 1;
+	beforeScrollH = currScrollH;
+	systemLogDiv.hide();
+	
+	params.scrollPage = scrollPage;
+	<portlet:namespace/>jobSystemLog(params);
 }
 
 </script>

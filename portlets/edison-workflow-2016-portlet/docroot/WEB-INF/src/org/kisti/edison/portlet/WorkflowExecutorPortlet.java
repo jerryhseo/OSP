@@ -3,6 +3,7 @@ package org.kisti.edison.portlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
+import java.nio.file.NoSuchFileException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -41,12 +42,14 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
+import com.kisti.osp.constants.OSPRepositoryTypes;
 import com.kisti.osp.service.OSPFileLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -280,5 +283,95 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
 		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		response.getWriter().write(message);
 		response.flushBuffer();
+	}
+    
+    @ResourceMapping(value = "readOutLog")
+    public void readOutLog(ResourceRequest request, ResourceResponse response) throws IOException, NumberFormatException, PortalException, SystemException, ParseException{
+    	ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+    	Map<String, Object> param = RequestUtil.getParameterMap(request);
+    	long lastPosition = Long.parseLong(CustomUtil.strNull(param.get("lastPosition"), "0"));
+    	long jobStatus = Long.parseLong(CustomUtil.strNull(param.get("jobStatus"), "0"));
+    	String simulationUuid = CustomUtil.strNull(param.get("simulationUuid"), "");
+    	String jobUuid = CustomUtil.strNull(param.get("jobUuid"), "");
+    	String type = CustomUtil.strNull(param.get("type"), "");
+    	
+        try {
+        	JSONObject result = JSONFactoryUtil.createJSONObject();
+        	boolean isOutLogExist = true;
+			boolean isErrorLogExist = true;
+        	
+        	try {
+        		String logFile = OSPFileLocalServiceUtil.getJobResultPath(simulationUuid, jobUuid, jobUuid+".out");
+        		String scrollPage = CustomUtil.strNull(request.getParameter("scrollPage"), "1");
+        		JSONObject outLog = getReadLogFile(request, jobUuid, logFile, lastPosition, jobStatus, Long.parseLong(scrollPage));
+        		result.put("outLog", outLog);
+			} catch (Exception e) {
+				if(e instanceof NoSuchFileException){
+					isOutLogExist = false;
+				}else{
+					throw new SystemException(e);
+				}
+			}
+        	
+        	if(jobStatus>=1701011){
+				try{
+					String logFile = OSPFileLocalServiceUtil.getJobResultPath(simulationUuid, jobUuid, jobUuid+".err");
+					com.liferay.portal.kernel.json.JSONObject errLog = getReadLogFile(request, jobUuid, logFile, lastPosition);
+					result.put("errLog", errLog);
+				}catch(Exception e){
+					if(e instanceof NoSuchFileException){
+						isErrorLogExist = false;
+					}else{
+						throw new SystemException(e);
+					}
+				}
+			}else{
+				isErrorLogExist = false;
+			}
+			
+			if(!isOutLogExist&&!isErrorLogExist){
+				throw new SystemException();
+			}
+			
+			result.put( "jobStatus", jobStatus);
+			response.setContentType("application/json; charset=UTF-8");
+			HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(response);
+			ServletResponseUtil.write(httpResponse, result.toString());
+		} catch (Exception e) {
+			handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
+		}
+    }
+    
+    private JSONObject getReadLogFile(ResourceRequest request,String jobUuid, String logFile, long lastPosition, long jobStatus, long scrollPage) throws Exception{
+		JSONObject log = JSONFactoryUtil.createJSONObject();
+		try {
+			request.setAttribute("jobStatus", jobStatus);
+			request.setAttribute("scrollPage", scrollPage);
+			log = OSPFileLocalServiceUtil.readFileAtPosition(request, logFile, lastPosition, 300, OSPRepositoryTypes.USER_JOBS.toString());
+		} catch (Exception e) {
+			if(e instanceof NoSuchFileException){
+				e.printStackTrace();
+				throw e;
+			}else{
+				throw new SystemException(e);
+			}
+		}
+		
+		return log;
+	}
+	
+	private JSONObject getReadLogFile(ResourceRequest request,String jobUuid, String logFile, long lastPosition) throws Exception{
+		JSONObject log = JSONFactoryUtil.createJSONObject();
+		try {
+			log = OSPFileLocalServiceUtil.readFileAtPosition(request, logFile, lastPosition, 300, OSPRepositoryTypes.USER_JOBS.toString());
+		} catch (Exception e) {
+			if(e instanceof NoSuchFileException){
+				e.printStackTrace();
+				throw e;
+			}else{
+				throw new SystemException(e);
+			}
+		}
+		return log;
 	}
 }

@@ -1229,14 +1229,36 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     function jobSystemLog(simulationUuid, jobUuid, lastPosition, type) {
     	var sendDataObj = new Object();
     	var simulationJob = currJobs.selected()
+    	var jobStatus = getLongTypeCodeByStatus(simulationJob.status);
 		sendDataObj.simulationUuid = simulationUuid;
-		sendDataObj.jobUuid = jobUuid;
 		sendDataObj.lastPosition = lastPosition;
+		sendDataObj.jobStatus = jobStatus;
+		sendDataObj.jobUuid = jobUuid;
+		sendDataObj.scrollPage = 1;
 		sendDataObj.type = type;
 
 		var fn = window[namespace + "jobSystemLog"];
 		return fn.apply(null, [sendDataObj]);
     }
+    
+    function getLongTypeCodeByStatus(statusStr){
+    	var jobStatus = 0;
+    	
+    	switch(statusStr.toUpperCase()){
+	        case "FAILED":
+	        	jobStatus = 1701012;
+	        case "QUEUED":
+	        	jobStatus = 1701005;
+	        case "RUNNING":
+	        	jobStatus = 1701006;
+	        case "CANCELED":
+	        	jobStatus = 1701010;
+	        case "SUCCESS":
+	        	jobStatus = 1701011;
+    	}
+    	
+        return jobStatus;
+	}
     
     function jobResultFileView(simulationUuid, jobUuid) {
     	$("body").css('overflow','hidden');
