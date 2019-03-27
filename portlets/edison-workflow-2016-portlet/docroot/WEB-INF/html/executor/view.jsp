@@ -700,6 +700,10 @@ function <portlet:namespace/>jobSystemLog(params) {
 				}
 				
 				if(result.jobStatus == '1701006'){
+					if(!result.outLog.outLog){
+						$.alert(Liferay.Language.get('edison-simulation-monitoring-log-file-is-not-exist'));
+						return false;
+					}
 					<portlet:namespace/>refreshJobLogTimer = setInterval(<portlet:namespace/>jobSystemLog, 1000*3, simulationUuid,jobUuid,result.outLog.lastPosition,type);
 				}
 			}

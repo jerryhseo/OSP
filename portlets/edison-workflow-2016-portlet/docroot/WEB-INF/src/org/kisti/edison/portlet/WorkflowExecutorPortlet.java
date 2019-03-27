@@ -313,7 +313,7 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
 				}
 			}
         	
-        	if(jobStatus>=1701011){
+        	if(jobStatus==1701011){
 				try{
 					String logFile = OSPFileLocalServiceUtil.getJobResultPath(simulationUuid, jobUuid, jobUuid+".err");
 					com.liferay.portal.kernel.json.JSONObject errLog = getReadLogFile(request, jobUuid, logFile, lastPosition);
