@@ -656,13 +656,16 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 	params.lastPosition = lastPosition;
 	params.jobStatus = jobStatus;
 	params.jobUuid = jobUuid;
+	params.scrollPage = 0;
 	params.type = type;
 	
+	console.log(params)
 	<portlet:namespace/>jobSystemLog(params);
 }
 
 function <portlet:namespace/>jobSystemLog(params) {
 	
+	console.log("job System Log...")
 	if(!scrollPage){
 		scrollPage = 1;
 	}
@@ -675,6 +678,7 @@ function <portlet:namespace/>jobSystemLog(params) {
 	
 	var textarea = null;
 	var hasLog = true;
+	var isRunning = false;
 	jQuery.ajax({
 		url: '<%=readOutLogURL.toString()%>',
 		type:'POST',
@@ -713,6 +717,7 @@ function <portlet:namespace/>jobSystemLog(params) {
 				}
 				
 				if(result.jobStatus == '1701006'){
+					isRunning = true;
 					<portlet:namespace/>refreshJobLogTimer = setInterval(<portlet:namespace/>jobSystemLog, 1000*3, simulationUuid,jobUuid,result.outLog.lastPosition,type);
 				} else {
 					if(!result.outLog.outLog){
@@ -737,8 +742,6 @@ function <portlet:namespace/>jobSystemLog(params) {
 			
 			if(isScrollMove){
 				if(result.jobStatus != '1701006'){
-					/* textarea.scrollTop(0);
-				} else { */
 					if(scrollPage > 1){
 						if(beforeScrollH != 0){
 							var currLogTop = (currScrollH-beforeScrollH)
@@ -779,7 +782,9 @@ function <portlet:namespace/>jobSystemLog(params) {
 			if(hasLog && scrollPage == 1){
 				$("#<portlet:namespace/>job-log-modal").css("display", "block");
 				$("#<portlet:namespace/>system-log").css("display", "block");
-				textarea.scrollTop(textarea.prop("scrollHeight"));
+				if(!isRunning){
+					textarea.scrollTop(textarea.prop("scrollHeight"));
+				}
 			}
 		}
 	});
