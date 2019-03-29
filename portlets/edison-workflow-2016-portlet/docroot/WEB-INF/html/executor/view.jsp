@@ -651,7 +651,6 @@ var scrollPage = 1;
 var beforeScrollH = 0;
 function <portlet:namespace/>openJobSystemLog(params) {
 	
-	console.log("opneSyslog....")
 	/* var params = new Object();
 	params.simulationUuid = simulationUuid;
 	params.lastPosition = lastPosition;
@@ -675,7 +674,6 @@ function <portlet:namespace/>openJobSystemLog(params) {
 var isRunning = false;
 function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition, type, scrollPage, jobStatus) {
 	
-	console.log("jobSysLog...")
 	if(!isRunning && !scrollPage){
 		scrollPage = 1;
 	} else {
