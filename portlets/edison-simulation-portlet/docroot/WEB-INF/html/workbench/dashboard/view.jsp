@@ -1227,22 +1227,19 @@ function <portlet:namespace/>writeTimeLineAboutShare(customIds, jobTitle, writeT
 
 var scrollPage = 1;
 var beforeScrollH = 0;
-
-function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition, type){
-	<portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition, type, 0);
-}
-
+var isRunning = false;
 function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition, type, scrollPage) {
 	<portlet:namespace/>clearReadOutLogTimer();
 	
-	if(!scrollPage){
+	if(!isRunning && !scrollPage){
 		scrollPage = 1;
+	} else {
+		scrollPage = 0;
 	}
 	
 	var textarea = null
 	var sysLogMoreBtn = null;
 	var currScrollH = 0;
-	var isRunning = false;
 	jQuery.ajax({
 		url: '<%=readOutLogURL.toString()%>',
 		type:'POST',

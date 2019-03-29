@@ -1811,7 +1811,7 @@ public class OSPFileLocalServiceImpl extends OSPFileLocalServiceBaseImpl {
 		HttpServletRequest httpRequest = PortalUtil.getHttpServletRequest(portletRequest);
 		long jobStatus = (Long) httpRequest.getAttribute("jobStatus");
 		long scrollPage = (Long) portletRequest.getAttribute("scrollPage");
-		if(jobStatus == 1701011 || jobStatus == 1701012){
+		if((jobStatus == 1701006 && scrollPage == 1) || jobStatus == 1701011 || jobStatus == 1701012){
 			outLog = readTextAndLastPosition(targetPath, startPosition, jobStatus, scrollPage);
 		} else {
 			outLog = readTextAndLastPosition(targetPath, startPosition);
