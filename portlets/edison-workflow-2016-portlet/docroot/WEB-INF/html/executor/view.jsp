@@ -647,17 +647,10 @@ function cogClick(nodeId){
 	$("#"+nodeId).contextmenu();
 }
 
+var <portlet:namespace/>refreshJobLogTimer;
 var scrollPage = 1;
 var beforeScrollH = 0;
 function <portlet:namespace/>openJobSystemLog(params) {
-	
-	/* var params = new Object();
-	params.simulationUuid = simulationUuid;
-	params.lastPosition = lastPosition;
-	params.jobStatus = jobStatus;
-	params.jobUuid = jobUuid;
-	params.scrollPage = 0;
-	params.type = type; */
 	
 	var simulationUuid = params.simulationUuid;
 	var lastPosition = params.lastPosition;
@@ -666,26 +659,18 @@ function <portlet:namespace/>openJobSystemLog(params) {
 	var jobUuid = params.jobUuid;
 	var type = params.type;
 	
-	/* <portlet:namespace/>jobSystemLog(params); */
-	
 	<portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition, type, scrollPage, jobStatus)
 }
 
 var isRunning = false;
 function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition, type, scrollPage, jobStatus) {
+	<portlet:namespace/>clearReadOutLogTimer();
 	
 	if(!isRunning && !scrollPage){
 		scrollPage = 1;
 	} else {
 		scrollPage = 0;
 	}
-	
-	/* var simulationUuid = params.simulationUuid;
-	var lastPosition = params.lastPosition;
-	var scrollPage = params.scrollPage;
-	var jobStatus = params.jobStatus;
-	var jobUuid = params.jobUuid;
-	var type = params.type; */
 	
 	var textarea = null;
 	var hasLog = true;
@@ -799,7 +784,18 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 			}
 		}
 	});
-	
+}
+
+//Job System Log modal close event
+$("#<portlet:namespace/>job-log-modal").on('hidden.bs.modal', function () {
+	isRunning = false;
+	<portlet:namespace/>clearReadOutLogTimer();
+})
+
+function <portlet:namespace/>clearReadOutLogTimer(){
+	if(<portlet:namespace/>refreshJobLogTimer){
+		clearInterval(<portlet:namespace/>refreshJobLogTimer);
+	}
 }
 
 function <portlet:namespace/>moreSystemLogView(textarea, systemLogDiv, params, currScrollH){
