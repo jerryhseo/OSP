@@ -1266,6 +1266,8 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 			var isScrollMove = false;
 			if(textarea[0].scrollTop==0){
 				isScrollMove = true;
+			}else if(textarea[0].scrollTop() < textarea.prop('scrollHeight')){
+				isScrollMove = false;
 			}else if(textarea[0].scrollTop+textarea.outerHeight()>textarea.prop('scrollHeight')){
 				isScrollMove = true;
 			}
@@ -1303,15 +1305,15 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 			currScrollH = textarea.prop('scrollHeight');
 			
 			if(isScrollMove){
-				if(result.jobStatus != '1701006'){
+				if(isRunning){
+					textarea.scrollTop(textarea.prop('scrollHeight'));
+				} else {
 					if(scrollPage > 1){
 						if(beforeScrollH != 0){
 							var currLogTop = (currScrollH-beforeScrollH)
 							textarea.scrollTop(currLogTop);
 						}
 					}
-				} else {
-					isRunning = true;
 				}
 			}
 			
