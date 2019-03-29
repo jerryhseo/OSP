@@ -1285,6 +1285,7 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 				}
 				
 				if(result.jobStatus == '1701006'){
+					isRunning = true;
 					<portlet:namespace/>refreshJobLogTimer = setInterval(<portlet:namespace/>jobSystemLog, 1000*3, simulationUuid,jobUuid,result.outLog.lastPosition,type);
 				}
 			}
