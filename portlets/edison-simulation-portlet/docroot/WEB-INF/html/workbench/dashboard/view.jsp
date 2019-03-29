@@ -1301,18 +1301,20 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 			
 			currScrollH = textarea.prop('scrollHeight');
 			
-			if(isScrollMove){
-				if(result.jobStatus != '1701006'){
+			console.log("status ---> ", result.jobStatus);
+			if(result.jobStatus != '1701006'){
+				if(isScrollMove){
 					if(scrollPage > 1){
 						if(beforeScrollH != 0){
 							var currLogTop = (currScrollH-beforeScrollH)
 							textarea.scrollTop(currLogTop);
 						}
 					}
-				} else {
-					isRunning = true;
 				}
+			} else {
+				isRunning = true;
 			}
+			console.log("isRunning : " + isRunning);
 			
 			textarea.off("scroll");
 			textarea.on("scroll",function(){
@@ -1337,6 +1339,7 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 				$("#"+<portlet:namespace/>parentNamespace+"job-log-modal").css("display", "block");
 				$("#"+<portlet:namespace/>parentNamespace+"system-log").css("display", "block");
 				if(!isRunning){
+					console.log("isRunning : " + isRunning);
 					textarea.scrollTop(textarea.prop("scrollHeight"));
 				}
 			}
