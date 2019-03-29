@@ -1280,13 +1280,11 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 				}
 				
 				if(result.jobStatus == '1701006'){
-					<portlet:namespace/>refreshJobLogTimer = setInterval(<portlet:namespace/>jobSystemLog, 1000*3, simulationUuid,jobUuid,result.outLog.lastPosition,type);
+					<portlet:namespace/>refreshJobLogTimer = setInterval(<portlet:namespace/>jobSystemLog, 1000*3, simulationUuid,jobUuid,result.outLog.lastPosition,type, 0);
 				}
 			}
 			
 			if(!result.errLog && typeof result.errLog!='undefined'){
-				/* var deviLog = '\n\n--------------------------ERROR LOG----------------------------\n';
-				textarea.text(textarea.text()+deviLog+result.errLog.outLog); */
 				
 				errorLogTextarea.text(result.errLog.outLog);
 				if(systemLogDiv.hasClass('col-md-6')){
@@ -1301,20 +1299,20 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 			
 			currScrollH = textarea.prop('scrollHeight');
 			
-			console.log("status ---> ", result.jobStatus);
-			if(result.jobStatus != '1701006'){
-				if(isScrollMove){
+			if(isScrollMove){
+				if(result.jobStatus != '1701006'){
 					if(scrollPage > 1){
 						if(beforeScrollH != 0){
 							var currLogTop = (currScrollH-beforeScrollH)
 							textarea.scrollTop(currLogTop);
 						}
 					}
+				} else {
+					console.log("currScrollH : " + currScrollH + " / beforeScrollH : " + beforeScrollH);
+					console.log(currScrollH-beforeScrollH)
+					isRunning = true;
 				}
-			} else {
-				isRunning = true;
 			}
-			console.log("isRunning : " + isRunning);
 			
 			textarea.off("scroll");
 			textarea.on("scroll",function(){
@@ -1339,7 +1337,6 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 				$("#"+<portlet:namespace/>parentNamespace+"job-log-modal").css("display", "block");
 				$("#"+<portlet:namespace/>parentNamespace+"system-log").css("display", "block");
 				if(!isRunning){
-					console.log("isRunning : " + isRunning);
 					textarea.scrollTop(textarea.prop("scrollHeight"));
 				}
 			}
