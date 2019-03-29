@@ -1240,7 +1240,6 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 	var textarea = null
 	var sysLogMoreBtn = null;
 	var currScrollH = 0;
-	var isInitRunningLog = false;
 	jQuery.ajax({
 		url: '<%=readOutLogURL.toString()%>',
 		type:'POST',
@@ -1285,12 +1284,7 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 				}
 				
 				if(result.jobStatus == '1701006'){
-					if(!isRunning){
-						isRunning = true;
-						isInitRunningLog = true;
-					} else {
-						isInitRunningLog = false
-					}
+					isRunning = true;
 					<portlet:namespace/>refreshJobLogTimer = setInterval(<portlet:namespace/>jobSystemLog, 1000*3, simulationUuid,jobUuid,result.outLog.lastPosition,type);
 				}
 			}
@@ -1345,7 +1339,7 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 			if(scrollPage == 1){
 				$("#"+<portlet:namespace/>parentNamespace+"job-log-modal").css("display", "block");
 				$("#"+<portlet:namespace/>parentNamespace+"system-log").css("display", "block");
-				if(!isRunning || isInitRunningLog){
+				if(!isRunning){
 					textarea.scrollTop(textarea.prop("scrollHeight"));
 				}
 			}
@@ -1772,6 +1766,7 @@ function <portlet:namespace/>init(){
 	$('[data-toggle="tooltip"]').tooltip(); 
 	//Job System Log modal close event
 	$("#"+<portlet:namespace/>parentNamespace+"job-log-modal").on('hidden.bs.modal', function () {
+		isRunning = false;
 		<portlet:namespace/>clearReadOutLogTimer();
 	})
 	
