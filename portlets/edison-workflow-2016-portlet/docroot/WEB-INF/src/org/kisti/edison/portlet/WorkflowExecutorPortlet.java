@@ -332,8 +332,11 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
 			result.put( "jobStatus", jobStatus);
 			response.setContentType("application/json; charset=UTF-8");
 			HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(response);
+			log.info("Send log file....");
+			log.info(result.toString());
 			ServletResponseUtil.write(httpResponse, result.toString());
 		} catch (Exception e) {
+			log.info("log file Exception....");
 			handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
 		}
     }
