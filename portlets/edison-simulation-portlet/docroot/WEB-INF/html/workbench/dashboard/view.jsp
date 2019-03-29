@@ -1237,6 +1237,7 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 	var textarea = null
 	var sysLogMoreBtn = null;
 	var currScrollH = 0;
+	var isRunning = false;
 	jQuery.ajax({
 		url: '<%=readOutLogURL.toString()%>',
 		type:'POST',
@@ -1308,6 +1309,8 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 							textarea.scrollTop(currLogTop);
 						}
 					}
+				} else {
+					isRunning = true;
 				}
 			}
 			
@@ -1327,18 +1330,15 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 			
 			modal.modal({ "backdrop": "static", "keyboard": false });
 		},error:function(jqXHR, textStatus, errorThrown){
-// 			if(jqXHR.responseText !== ''){
-// 				alert("jobSystemLog-->"+textStatus+": "+jqXHR.responseText);
-// 			}else{
-// 				alert("jobSystemLog-->"+textStatus+": "+errorThrown);
-// 			}
 			$.alert(Liferay.Language.get('edison-simulation-monitoring-log-file-is-not-exist'));
 			<portlet:namespace/>clearReadOutLogTimer();
 		}, complete: function(){
 			if(scrollPage == 1){
 				$("#"+<portlet:namespace/>parentNamespace+"job-log-modal").css("display", "block");
 				$("#"+<portlet:namespace/>parentNamespace+"system-log").css("display", "block");
-				textarea.scrollTop(textarea.prop("scrollHeight"));
+				if(!isRunning){
+					textarea.scrollTop(textarea.prop("scrollHeight"));
+				}
 			}
 		}
 	});
