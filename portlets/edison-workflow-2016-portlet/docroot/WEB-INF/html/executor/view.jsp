@@ -669,11 +669,11 @@ function <portlet:namespace/>openJobSystemLog(params) {
 	
 	/* <portlet:namespace/>jobSystemLog(params); */
 	
-	<portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition, type, scrollPage)
+	<portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition, type, scrollPage, jobStatus)
 }
 
 var isRunning = false;
-function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition, type, scrollPage) {
+function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition, type, scrollPage, jobStatus) {
 	
 	console.log("jobSysLog...")
 	if(!isRunning && !scrollPage){
