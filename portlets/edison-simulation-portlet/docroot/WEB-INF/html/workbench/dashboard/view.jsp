@@ -1267,7 +1267,7 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 			var isScrollMove = false;
 			if(textarea[0].scrollTop==0){
 				isScrollMove = true;
-			}else if(textarea[0].scrollTop() < textarea.prop('scrollHeight')){
+			}else if(textarea.scrollTop() < textarea.prop('scrollHeight')){
 				isScrollMove = false;
 			}else if(textarea[0].scrollTop+textarea.outerHeight()>textarea.prop('scrollHeight')){
 				isScrollMove = true;
