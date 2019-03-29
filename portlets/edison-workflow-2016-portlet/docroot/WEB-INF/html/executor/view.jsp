@@ -776,7 +776,6 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 				}
 			});
 			
-			console.log("hasLog : " + hasLog);
 			if(hasLog){
 				modal.modal({ "backdrop": "static", "keyboard": false });
 			} else {
@@ -788,7 +787,6 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 				<portlet:namespace/>moreSystemLogView(textarea, sysLogMoreBtn, params, currScrollH);
 			});
 		},error:function(jqXHR, textStatus, errorThrown){
-			console.log("get log error...")
 			hasLog = false;
 			$.alert(Liferay.Language.get('edison-simulation-monitoring-log-file-is-not-exist'));
 		}, complete: function(){

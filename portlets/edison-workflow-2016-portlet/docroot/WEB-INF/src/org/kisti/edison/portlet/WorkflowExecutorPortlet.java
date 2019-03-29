@@ -294,6 +294,7 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
     	String simulationUuid = CustomUtil.strNull(param.get("simulationUuid"), "");
     	String jobUuid = CustomUtil.strNull(param.get("jobUuid"), "");
     	String type = CustomUtil.strNull(param.get("type"), "");
+    	System.out.println("param : " + param.toString());
     	
         try {
         	JSONObject result = JSONFactoryUtil.createJSONObject();
@@ -302,6 +303,7 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
         	
         	try {
         		String logFile = OSPFileLocalServiceUtil.getJobResultPath(simulationUuid, jobUuid, jobUuid+".out");
+        		System.out.println("logFile : " + logFile);
         		String scrollPage = CustomUtil.strNull(request.getParameter("scrollPage"), "1");
         		JSONObject outLog = getReadLogFile(request, jobUuid, logFile, lastPosition, jobStatus, Long.parseLong(scrollPage));
         		result.put("outLog", outLog);
@@ -332,11 +334,9 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
 			result.put( "jobStatus", jobStatus);
 			response.setContentType("application/json; charset=UTF-8");
 			HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(response);
-			log.info("Send log file....");
 			log.info(result.toString());
 			ServletResponseUtil.write(httpResponse, result.toString());
 		} catch (Exception e) {
-			log.info("log file Exception....");
 			handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
 		}
     }
