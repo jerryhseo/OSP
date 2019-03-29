@@ -649,26 +649,17 @@ function cogClick(nodeId){
 
 var scrollPage = 1;
 var beforeScrollH = 0;
-function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition, type) {
+function <portlet:namespace/>openJobSystemLog(params) {
 	
-	var params = new Object();
+	console.log("opneSyslog....")
+	/* var params = new Object();
 	params.simulationUuid = simulationUuid;
 	params.lastPosition = lastPosition;
 	params.jobStatus = jobStatus;
 	params.jobUuid = jobUuid;
 	params.scrollPage = 0;
-	params.type = type;
+	params.type = type; */
 	
-	console.log(params)
-	<portlet:namespace/>jobSystemLog(params);
-}
-
-function <portlet:namespace/>jobSystemLog(params) {
-	
-	console.log("job System Log...")
-	if(!scrollPage){
-		scrollPage = 1;
-	}
 	var simulationUuid = params.simulationUuid;
 	var lastPosition = params.lastPosition;
 	var scrollPage = params.scrollPage;
@@ -676,9 +667,30 @@ function <portlet:namespace/>jobSystemLog(params) {
 	var jobUuid = params.jobUuid;
 	var type = params.type;
 	
+	/* <portlet:namespace/>jobSystemLog(params); */
+	
+	<portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition, type, scrollPage)
+}
+
+var isRunning = false;
+function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition, type, scrollPage) {
+	
+	console.log("jobSysLog...")
+	if(!isRunning && !scrollPage){
+		scrollPage = 1;
+	} else {
+		scrollPage = 0;
+	}
+	
+	/* var simulationUuid = params.simulationUuid;
+	var lastPosition = params.lastPosition;
+	var scrollPage = params.scrollPage;
+	var jobStatus = params.jobStatus;
+	var jobUuid = params.jobUuid;
+	var type = params.type; */
+	
 	var textarea = null;
 	var hasLog = true;
-	var isRunning = false;
 	jQuery.ajax({
 		url: '<%=readOutLogURL.toString()%>',
 		type:'POST',

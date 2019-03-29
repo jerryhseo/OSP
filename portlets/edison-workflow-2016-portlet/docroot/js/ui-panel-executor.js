@@ -1237,7 +1237,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 		sendDataObj.scrollPage = 1;
 		sendDataObj.type = type;
 
-		var fn = window[namespace + "jobSystemLog"];
+		var fn = window[namespace + "openJobSystemLog"];
 		return fn.apply(null, [sendDataObj]);
     }
     
