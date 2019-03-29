@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -20,16 +19,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.kisti.edison.bestsimulation.model.SimulationJob;
 import org.kisti.edison.model.EdisonExpando;
 import org.kisti.edison.model.EdisonMessageConstants;
 import org.kisti.edison.model.EdisonRoleConstants;
 import org.kisti.edison.model.IcebreakerVcToken;
-import org.kisti.edison.model.Workflow;
 import org.kisti.edison.model.WorkflowSimulationJob;
 import org.kisti.edison.science.model.ScienceApp;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
-import org.kisti.edison.service.WorkflowLocalServiceUtil;
 import org.kisti.edison.service.WorkflowSimulationJobLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.EdisonUserUtil;
@@ -294,7 +290,6 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
     	String simulationUuid = CustomUtil.strNull(param.get("simulationUuid"), "");
     	String jobUuid = CustomUtil.strNull(param.get("jobUuid"), "");
     	String type = CustomUtil.strNull(param.get("type"), "");
-    	System.out.println("param : " + param.toString());
     	
         try {
         	JSONObject result = JSONFactoryUtil.createJSONObject();
@@ -303,7 +298,6 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
         	
         	try {
         		String logFile = OSPFileLocalServiceUtil.getJobResultPath(simulationUuid, jobUuid, jobUuid+".out");
-        		System.out.println("logFile : " + logFile);
         		String scrollPage = CustomUtil.strNull(request.getParameter("scrollPage"), "1");
         		JSONObject outLog = getReadLogFile(request, jobUuid, logFile, lastPosition, jobStatus, Long.parseLong(scrollPage));
         		result.put("outLog", outLog);

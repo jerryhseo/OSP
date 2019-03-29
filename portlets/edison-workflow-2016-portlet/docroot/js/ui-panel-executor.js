@@ -1247,14 +1247,19 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     	switch(statusStr.toUpperCase()){
 	        case "FAILED":
 	        	jobStatus = 1701012;
+	        	break;
 	        case "QUEUED":
 	        	jobStatus = 1701005;
+	        	break;
 	        case "RUNNING":
 	        	jobStatus = 1701006;
+	        	break;
 	        case "CANCELED":
 	        	jobStatus = 1701010;
+	        	break;
 	        case "SUCCESS":
 	        	jobStatus = 1701011;
+	        	break;
     	}
     	
         return jobStatus;
