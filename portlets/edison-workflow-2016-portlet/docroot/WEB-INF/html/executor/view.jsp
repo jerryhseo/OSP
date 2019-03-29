@@ -664,6 +664,7 @@ function <portlet:namespace/>openJobSystemLog(params) {
 
 var isRunning = false;
 function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition, type, scrollPage, jobStatus) {
+	console.log("in jobSystemLog...")
 	<portlet:namespace/>clearReadOutLogTimer();
 	
 	if(!isRunning && !scrollPage){
@@ -704,6 +705,7 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 			var preTextareVal = textarea.text();
 			textarea.empty();
 			
+			console.log(result)
 			if(typeof result.outLog!='undefined'){
 				if(lastPosition === 0){
 					textarea.text(result.outLog.outLog);
@@ -774,6 +776,7 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 		},error:function(jqXHR, textStatus, errorThrown){
 			hasLog = false;
 			$.alert(Liferay.Language.get('edison-simulation-monitoring-log-file-is-not-exist'));
+			<portlet:namespace/>clearReadOutLogTimer();
 		}, complete: function(){
 			if(hasLog && scrollPage == 1){
 				$("#<portlet:namespace/>job-log-modal").css("display", "block");

@@ -319,6 +319,8 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
 						isErrorLogExist = false;
 					}
 				}
+			} else {
+				isErrorLogExist = false;
 			}
 			
 			if(!isOutLogExist&&!isErrorLogExist){
@@ -328,7 +330,6 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
 			result.put( "jobStatus", jobStatus);
 			response.setContentType("application/json; charset=UTF-8");
 			HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(response);
-			log.info(result.toString());
 			ServletResponseUtil.write(httpResponse, result.toString());
 		} catch (Exception e) {
 			handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
