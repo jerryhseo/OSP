@@ -1226,7 +1226,12 @@ function <portlet:namespace/>writeTimeLineAboutShare(customIds, jobTitle, writeT
 }
 
 var scrollPage = 1;
-var beforeScrollH = 0; 
+var beforeScrollH = 0;
+
+function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition, type){
+	<portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition, type, 0);
+}
+
 function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition, type, scrollPage) {
 	<portlet:namespace/>clearReadOutLogTimer();
 	
@@ -1280,7 +1285,7 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 				}
 				
 				if(result.jobStatus == '1701006'){
-					<portlet:namespace/>refreshJobLogTimer = setInterval(<portlet:namespace/>jobSystemLog, 1000*3, simulationUuid,jobUuid,result.outLog.lastPosition,type, 0);
+					<portlet:namespace/>refreshJobLogTimer = setInterval(<portlet:namespace/>jobSystemLog, 1000*3, simulationUuid,jobUuid,result.outLog.lastPosition,type);
 				}
 			}
 			
@@ -1308,8 +1313,6 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 						}
 					}
 				} else {
-					console.log("currScrollH : " + currScrollH + " / beforeScrollH : " + beforeScrollH);
-					console.log(currScrollH-beforeScrollH)
 					isRunning = true;
 				}
 			}
