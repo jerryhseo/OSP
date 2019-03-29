@@ -312,7 +312,9 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
 				}
 			}
         	
+        	log.info("jobStatus ---->> " + jobStatus);
         	if(jobStatus==1701011){
+        		log.info("get Error log...");
 				try{
 					String logFile = OSPFileLocalServiceUtil.getJobResultPath(simulationUuid, jobUuid, jobUuid+".err");
 					com.liferay.portal.kernel.json.JSONObject errLog = getReadLogFile(request, jobUuid, logFile, lastPosition);
@@ -325,6 +327,7 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
 				}
 			}
 			
+        	log.info("isOutLogExist ---->> " + isOutLogExist + " / isErrorLogExist ---->> " + isErrorLogExist);
 			if(!isOutLogExist&&!isErrorLogExist){
 				throw new SystemException();
 			}
@@ -333,6 +336,7 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
 			response.setContentType("application/json; charset=UTF-8");
 			HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(response);
 			ServletResponseUtil.write(httpResponse, result.toString());
+			log.info("Send System Log...");
 		} catch (Exception e) {
 			handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
 		}
