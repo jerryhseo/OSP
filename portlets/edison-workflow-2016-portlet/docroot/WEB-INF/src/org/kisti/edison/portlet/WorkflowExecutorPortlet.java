@@ -309,8 +309,6 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
 				if(e instanceof NoSuchFileException){
 					log.info("No Such System Log File!!!");
 					isOutLogExist = false;
-				}else{
-					throw new SystemException(e);
 				}
 			}
         	
@@ -323,12 +321,8 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
 					if(e instanceof NoSuchFileException){
 						log.info("No Such Error Log File!!!");
 						isErrorLogExist = false;
-					}else{
-						throw new SystemException(e);
 					}
 				}
-			}else{
-				isErrorLogExist = false;
 			}
 			
 			if(!isOutLogExist&&!isErrorLogExist){
