@@ -649,6 +649,18 @@ function cogClick(nodeId){
 
 var scrollPage = 1;
 var beforeScrollH = 0;
+function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition, type) {
+	
+	var params = new Object();
+	params.simulationUuid = simulationUuid;
+	params.lastPosition = lastPosition;
+	params.jobStatus = jobStatus;
+	params.jobUuid = jobUuid;
+	params.type = type;
+	
+	<portlet:namespace/>jobSystemLog(params);
+}
+
 function <portlet:namespace/>jobSystemLog(params) {
 	
 	if(!scrollPage){
@@ -724,9 +736,9 @@ function <portlet:namespace/>jobSystemLog(params) {
 			currScrollH = textarea.prop('scrollHeight');
 			
 			if(isScrollMove){
-				if(result.jobStatus == '1701006'){
-					textarea.scrollTop(0);
-				} else {
+				if(result.jobStatus != '1701006'){
+					/* textarea.scrollTop(0);
+				} else { */
 					if(scrollPage > 1){
 						if(beforeScrollH != 0){
 							var currLogTop = (currScrollH-beforeScrollH)
