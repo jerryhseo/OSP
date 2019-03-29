@@ -664,8 +664,6 @@ function <portlet:namespace/>openJobSystemLog(params) {
 
 var isRunning = false;
 function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition, type, scrollPage, jobStatus) {
-	console.log("in jobSystemLog...")
-	<portlet:namespace/>clearReadOutLogTimer();
 	
 	if(!isRunning && !scrollPage){
 		scrollPage = 1;
