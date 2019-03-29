@@ -345,12 +345,10 @@ public class DashboardController {
 				}catch(Exception e){
 					if(e instanceof NoSuchFileException){
 						isOutLogExist = false;
-					}else{
-						throw new SystemException(e);
 					}
 				}
 				
-				/*if(jobStatus>=1701011){
+				if(jobStatus == 1701012){
 					try{
 						String logFile = OSPFileLocalServiceUtil.getJobResultPath(simulationUuid, jobUuid, jobUuid+".err");
 						com.liferay.portal.kernel.json.JSONObject errLog = getReadLogFile(request, jobUuid, logFile, lastPosition);
@@ -358,13 +356,11 @@ public class DashboardController {
 					}catch(Exception e){
 						if(e instanceof NoSuchFileException){
 							isErrorLogExist = false;
-						}else{
-							throw new SystemException(e);
 						}
 					}
 				}else{
 					isErrorLogExist = false;
-				}*/
+				}
 				
 				if(!isOutLogExist&&!isErrorLogExist){
 					throw new SystemException();
