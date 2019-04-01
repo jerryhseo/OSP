@@ -179,7 +179,7 @@
 			scienceApp.scienceApp_name AS scienceApp_name,
 			scienceApp.scienceAppId AS scienceAppId,
 			ifnull(exe.user_count, 0) AS user_count, 
-			CEIL(ifnull(exe.averageRuntime, 0)/ifnull(exe.searchCount, 0)) AS averageRuntime, 
+			ifnull(CEIL(ifnull(exe.averageRuntime, 0)/ifnull(exe.searchCount, 0)), 0) AS averageRuntime, 
 			ifnull(exe.exe_count, 0) AS exe_count, 
 			scienceApp.scienceApp_affiliation_name AS scienceApp_affiliation_name,
 			scienceApp.mgtName AS mgtName, 
