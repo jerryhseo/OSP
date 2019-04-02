@@ -760,6 +760,7 @@
         };
 
         var openHtmlIndex = function( jsonData, changeAlert ){
+            console.log('openHtmlIndex: ', jsonData, changeAlert);
             if( jsonData ){
                 setCurrentData( jsonData );
             }
@@ -786,7 +787,48 @@
                 success: function(result) {
                     var jsonData = {
                         type_: OSP.Enumeration.PathType.URL,
-                        content_:  OSP.Util.mergePath( result.parentPath, result.fileName )
+                        content_:  OSP.Util.mergePath( result.parentPath, result.fileName),
+                        fileType_: result.fileType
+                    };
+                    loadCanvas( jsonData, changeAlert );
+                    //successFunc( data.parentPath, data.fileInfos );
+                },
+                error:function(ed, e){
+                    console.log('Cannot openHtmlIndex', params, ed, e);
+                },
+                complete: unblockVisualizer
+            }); 
+        };
+
+        var getCopiedTempFilePath = function(contextPath, jsonData, changeAlert){
+            if( jsonData ){
+                setCurrentData( jsonData );
+            }
+
+            var params = {
+                command: 'GET_COPIED_TEMP_FILE_PATH',
+                repositoryType: baseFolder.repositoryType(),
+                userScreenName: currentData.user(),
+                pathType: currentData.type(),
+                parentPath: currentData.parent(),
+                fileName: currentData.name()
+            };
+
+            var formData = createFormData( params );
+
+            $.ajax({
+                type: 'POST',
+                url: resourceURL, 
+                data  : formData,
+                dataType : 'json',
+                processData: false,
+                contentType: false,
+                beforeSend: blockVisualizer,
+                success: function(result) {
+                    var jsonData = {
+                        type_: OSP.Enumeration.PathType.URL,
+                        content_: contextPath+'/'+OSP.Util.mergePath( result.parentPath, result.fileName ),
+                        fileType_: result.fileType
                     };
                     loadCanvas( jsonData, changeAlert );
                     //successFunc( data.parentPath, data.fileInfos );
@@ -927,7 +969,7 @@
             loadCanvasFunc( OSP.Util.toJSON(currentData), changeAlert);
         };
 
-        var downloadCurrentFile = function(){
+        var downloadCurrentFile = function( contextPath ){
             switch( currentData.type() ){
                 case OSP.Enumeration.PathType.FILE:
                 case OSP.Enumeration.PathType.FILE_CONTENT:
@@ -935,7 +977,12 @@
                     downloadFiles( fileNames);
                     break;
                 case OSP.Enumeration.PathType.URL:
-                    window.location.href = currentData.content();
+                    if( contextPath ){
+                        window.location.href = contextPath+currentData.content();
+                    }
+                    else{
+                        window.location.href = currentData.content();
+                    }
                     break;
             }
         };
@@ -1054,6 +1101,14 @@
             fireRequestDataEvent: fireRequestDataEvent,
             fireResponseDataEvent:fireResponseDataEvent,
             getFolderInfo: getFolderInfo,
+            createTempFilePath: function( contextPath, jsonData, changeAlert, linked ){
+               if( linked ){
+                   return getLinkedTempFilePath(contextPath, jsonData, changeAlert);
+               }
+               else{
+                   return getCopiedTempFilePath(contextPath, jsonData, changeAlert);
+               }
+            },
             isDirty: function(){
                 return currentData.dirty();
             },

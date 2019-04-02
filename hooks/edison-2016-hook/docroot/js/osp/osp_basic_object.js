@@ -44,6 +44,7 @@
         DLENTRY_ID: 'dlEntryId_',
         EVENT_ENABLE: 'eventEnable_',
         EVENTS: 'events_',
+        FILE_TYPE:'fileType_',
         HANDSHAKE: 'handshake_',
         HEIGHT: 'height_',
         WIDTH: 'width_',

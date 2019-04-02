@@ -157,8 +157,8 @@ public class OSPFileLocalServiceImpl extends OSPFileLocalServiceBaseImpl {
 	
 	
 	 private String extractExtension( String fileName ){
-		int lastIndex = fileName.lastIndexOf('.');
-		if( lastIndex < 0 )	return fileName;
+		int lastIndex = fileName.lastIndexOf(".");
+		if( lastIndex < 0 )	return "";
 		
 		return fileName.substring(lastIndex+1);
 	}
@@ -644,6 +644,48 @@ public class OSPFileLocalServiceImpl extends OSPFileLocalServiceBaseImpl {
 			PortletRequest portletRequest,
 			PortletResponse portletResponse,
 			String srcScreenName, 
+			String sourceFolder,
+			String fileName,
+			String repoType) throws IOException, PortalException, SystemException{
+		final Path sourcePath = getRepositoryPath(srcScreenName, Paths.get(sourceFolder, fileName).toString(), repoType);
+		if( Files.notExists(sourcePath) )	throw new FileNotFoundException(sourcePath.toString());
+
+		String contextPath = portletRequest.getPortletSession().getPortletContext().getRealPath("");
+		Path tempRealPath = Paths.get(contextPath, TEMP_DIR_NAME);
+		System.out.println("tempRealPath: "+tempRealPath.toString());
+		if( Files.notExists(tempRealPath)){
+			Files.createDirectory(tempRealPath);
+		}
+		
+		Path tempUuidPath = getUniqueUuidFilePath(tempRealPath, "", "");
+		Files.createDirectory(tempUuidPath);
+		tempUuidPath.toFile().deleteOnExit();
+		
+		JSONObject result = JSONFactoryUtil.createJSONObject();
+		if( Files.isRegularFile(sourcePath, LinkOption.NOFOLLOW_LINKS) ){
+			String tempUuidName = tempUuidPath.getFileName().toString();
+			tempUuidPath = tempUuidPath.resolve(sourcePath.getFileName());
+			Files.copy(sourcePath, tempUuidPath, StandardCopyOption.REPLACE_EXISTING);
+			result.put("parentPath", Paths.get(TEMP_DIR_NAME, tempUuidName ).toString());
+			result.put("fileName", tempUuidPath.getFileName().toString());
+			result.put("fileType", extractExtension(fileName) );
+		}
+		else if ( Files.isDirectory(sourcePath, LinkOption.NOFOLLOW_LINKS) ){
+//			System.out.println("tempUuidPath: "+tempUuidPath.toString());
+			Files.walkFileTree(sourcePath,  new OSPFileVisitor( sourcePath, tempUuidPath) );
+			result.put("parentPath", Paths.get(TEMP_DIR_NAME, tempUuidPath.getFileName().toString() ).toString());
+			result.put("fileName", fileName);
+		}
+		else
+			throw new FileNotFoundException(sourcePath.toString()+": is not a regular file.");
+	
+		writeResult(portletResponse, result.toString());
+	}
+	
+	public  void getCopiedTempHtmlIndexPath(
+			PortletRequest portletRequest,
+			PortletResponse portletResponse,
+			String srcScreenName, 
 			String parent,
 			String fileName,
 			String repoType) throws IOException, PortalException, SystemException{
@@ -661,20 +703,17 @@ public class OSPFileLocalServiceImpl extends OSPFileLocalServiceBaseImpl {
 		Files.createDirectory(tempUuidPath);
 		tempUuidPath.toFile().deleteOnExit();
 		
-		if( Files.isRegularFile(sourcePath, LinkOption.NOFOLLOW_LINKS) ){
-			tempUuidPath = tempUuidPath.resolve(sourcePath.getFileName());
-			Files.copy(sourcePath, tempUuidPath, StandardCopyOption.REPLACE_EXISTING);
+		JSONObject result = JSONFactoryUtil.createJSONObject();
+		if ( !Files.isDirectory(sourcePath, LinkOption.NOFOLLOW_LINKS) ){
+			result.put("error", "getCopiedTempHtmlIndexPath: source should be a folder - "+sourcePath.toString());
 		}
-		else if ( Files.isDirectory(sourcePath, LinkOption.NOFOLLOW_LINKS) ){
+		else {
 //			System.out.println("tempUuidPath: "+tempUuidPath.toString());
 			Files.walkFileTree(sourcePath,  new OSPFileVisitor( sourcePath, tempUuidPath) );
+			result.put("parentPath", Paths.get(TEMP_DIR_NAME, tempUuidPath.getFileName().toString() ).toString());
+			result.put("fileName", fileName);
 		}
-		else
-			throw new FileNotFoundException(sourcePath.toString()+": is not a regular file.");
 	
-		JSONObject result = JSONFactoryUtil.createJSONObject();
-		result.put("parentPath", Paths.get(TEMP_DIR_NAME, tempUuidPath.getFileName().toString() ).toString());
-		result.put("fileName", fileName);
 		
 		writeResult(portletResponse, result.toString());
 	}
@@ -1924,6 +1963,21 @@ public class OSPFileLocalServiceImpl extends OSPFileLocalServiceBaseImpl {
 			}
 		}
 		else if( command.equalsIgnoreCase(Commands.READ_HTML_INDEX_URL) ){
+			try {
+				getCopiedTempHtmlIndexPath( 
+							resourceRequest, resourceResponse, userScreenName, parentPath, fileName, repositoryType );
+			} catch (PortalException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SystemException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else if( command.equalsIgnoreCase(Commands.GET_COPIED_TEMP_FILE_PATH) ){
 			try {
 				getCopiedTemporaryFilePath( 
 							resourceRequest, resourceResponse, userScreenName, parentPath, fileName, repositoryType );

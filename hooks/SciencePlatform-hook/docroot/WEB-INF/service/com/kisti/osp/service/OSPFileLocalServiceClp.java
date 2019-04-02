@@ -138,190 +138,191 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 				"java.lang.String"
 			};
 
-		_methodName23 = "getFolderInformation";
+		_methodName23 = "getCopiedTempHtmlIndexPath";
 
 		_methodParameterTypes23 = new String[] {
-				"javax.portlet.PortletRequest", "java.lang.String",
-				"java.lang.String", "java.lang.String"
+				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
+				"java.lang.String", "java.lang.String", "java.lang.String",
+				"java.lang.String"
 			};
 
 		_methodName24 = "getFolderInformation";
 
 		_methodParameterTypes24 = new String[] {
-				"java.lang.String", "java.lang.String", "java.lang.String",
-				"java.lang.String"
+				"javax.portlet.PortletRequest", "java.lang.String",
+				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName25 = "getFileInformation";
+		_methodName25 = "getFolderInformation";
 
 		_methodParameterTypes25 = new String[] {
-				"javax.portlet.PortletRequest", "java.lang.String",
+				"java.lang.String", "java.lang.String", "java.lang.String",
 				"java.lang.String"
 			};
 
 		_methodName26 = "getFileInformation";
 
 		_methodParameterTypes26 = new String[] {
-				"java.lang.String", "java.lang.String", "java.lang.String"
-			};
-
-		_methodName27 = "createFile";
-
-		_methodParameterTypes27 = new String[] {
 				"javax.portlet.PortletRequest", "java.lang.String",
 				"java.lang.String"
+			};
+
+		_methodName27 = "getFileInformation";
+
+		_methodParameterTypes27 = new String[] {
+				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
 		_methodName28 = "createFile";
 
 		_methodParameterTypes28 = new String[] {
-				"java.lang.String", "java.lang.String", "java.lang.String"
-			};
-
-		_methodName29 = "deleteFile";
-
-		_methodParameterTypes29 = new String[] {
 				"javax.portlet.PortletRequest", "java.lang.String",
 				"java.lang.String"
+			};
+
+		_methodName29 = "createFile";
+
+		_methodParameterTypes29 = new String[] {
+				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
 		_methodName30 = "deleteFile";
 
 		_methodParameterTypes30 = new String[] {
-				"java.lang.String", "java.lang.String", "java.lang.String"
+				"javax.portlet.PortletRequest", "java.lang.String",
+				"java.lang.String"
 			};
 
-		_methodName31 = "moveFile";
+		_methodName31 = "deleteFile";
 
 		_methodParameterTypes31 = new String[] {
-				"javax.portlet.PortletRequest", "java.lang.String",
-				"java.lang.String", "boolean", "java.lang.String"
+				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
 		_methodName32 = "moveFile";
 
 		_methodParameterTypes32 = new String[] {
+				"javax.portlet.PortletRequest", "java.lang.String",
+				"java.lang.String", "boolean", "java.lang.String"
+			};
+
+		_methodName33 = "moveFile";
+
+		_methodParameterTypes33 = new String[] {
 				"java.lang.String", "java.lang.String", "java.lang.String",
 				"java.lang.String", "java.lang.String", "java.lang.String",
 				"boolean"
-			};
-
-		_methodName33 = "copyFile";
-
-		_methodParameterTypes33 = new String[] {
-				"javax.portlet.PortletRequest", "java.lang.String",
-				"java.lang.String", "boolean", "java.lang.String"
 			};
 
 		_methodName34 = "copyFile";
 
 		_methodParameterTypes34 = new String[] {
+				"javax.portlet.PortletRequest", "java.lang.String",
+				"java.lang.String", "boolean", "java.lang.String"
+			};
+
+		_methodName35 = "copyFile";
+
+		_methodParameterTypes35 = new String[] {
 				"java.lang.String", "java.lang.String", "java.lang.String",
 				"java.lang.String", "java.lang.String", "java.lang.String",
 				"boolean"
 			};
 
-		_methodName35 = "copyDLEntryFile";
+		_methodName36 = "copyDLEntryFile";
 
-		_methodParameterTypes35 = new String[] {
+		_methodParameterTypes36 = new String[] {
 				"javax.portlet.PortletRequest", "long", "java.lang.String",
 				"boolean", "java.lang.String"
 			};
 
-		_methodName36 = "copyDLEntryFile";
-
-		_methodParameterTypes36 = new String[] {
-				"long", "java.lang.String", "java.lang.String",
-				"java.lang.String", "boolean"
-			};
-
-		_methodName37 = "changeFileOwner";
+		_methodName37 = "copyDLEntryFile";
 
 		_methodParameterTypes37 = new String[] {
-				"javax.portlet.PortletRequest", "java.lang.String",
-				"java.lang.String", "java.lang.String"
+				"long", "java.lang.String", "java.lang.String",
+				"java.lang.String", "boolean"
 			};
 
 		_methodName38 = "changeFileOwner";
 
 		_methodParameterTypes38 = new String[] {
-				"java.lang.String", "java.lang.String", "java.lang.String",
-				"java.lang.String"
-			};
-
-		_methodName39 = "changeFileMode";
-
-		_methodParameterTypes39 = new String[] {
 				"javax.portlet.PortletRequest", "java.lang.String",
 				"java.lang.String", "java.lang.String"
+			};
+
+		_methodName39 = "changeFileOwner";
+
+		_methodParameterTypes39 = new String[] {
+				"java.lang.String", "java.lang.String", "java.lang.String",
+				"java.lang.String"
 			};
 
 		_methodName40 = "changeFileMode";
 
 		_methodParameterTypes40 = new String[] {
-				"java.lang.String", "java.lang.String", "java.lang.String",
-				"java.lang.String"
+				"javax.portlet.PortletRequest", "java.lang.String",
+				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName41 = "duplicated";
+		_methodName41 = "changeFileMode";
 
 		_methodParameterTypes41 = new String[] {
-				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
-				"java.lang.String", "java.lang.String"
+				"java.lang.String", "java.lang.String", "java.lang.String",
+				"java.lang.String"
 			};
 
 		_methodName42 = "duplicated";
 
 		_methodParameterTypes42 = new String[] {
-				"javax.portlet.PortletResponse", "java.lang.String",
+				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
 				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName43 = "upload";
+		_methodName43 = "duplicated";
 
 		_methodParameterTypes43 = new String[] {
-				"javax.portlet.PortletRequest", "java.lang.String",
+				"javax.portlet.PortletResponse", "java.lang.String",
 				"java.lang.String", "java.lang.String"
 			};
 
 		_methodName44 = "upload";
 
 		_methodParameterTypes44 = new String[] {
+				"javax.portlet.PortletRequest", "java.lang.String",
+				"java.lang.String", "java.lang.String"
+			};
+
+		_methodName45 = "upload";
+
+		_methodParameterTypes45 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
 				"java.io.File", "java.lang.String", "java.lang.String",
 				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName45 = "downloadDLEntry";
-
-		_methodParameterTypes45 = new String[] {
-				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
-				"long"
-			};
-
-		_methodName46 = "download";
+		_methodName46 = "downloadDLEntry";
 
 		_methodParameterTypes46 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
-				"java.lang.String", "java.lang.String[][]", "java.lang.String"
+				"long"
 			};
 
 		_methodName47 = "download";
 
 		_methodParameterTypes47 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
+				"java.lang.String", "java.lang.String[][]", "java.lang.String"
+			};
+
+		_methodName48 = "download";
+
+		_methodParameterTypes48 = new String[] {
+				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
 				"java.lang.String", "java.lang.String", "java.lang.String[][]",
 				"java.lang.String"
 			};
 
-		_methodName48 = "downloadFromText";
-
-		_methodParameterTypes48 = new String[] {
-				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
-				"java.lang.String", "java.lang.String"
-			};
-
-		_methodName49 = "checkValidFile";
+		_methodName49 = "downloadFromText";
 
 		_methodParameterTypes49 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
@@ -331,28 +332,28 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		_methodName50 = "checkValidFile";
 
 		_methodParameterTypes50 = new String[] {
-				"javax.portlet.PortletResponse", "java.lang.String",
+				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
 				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName51 = "readFileContent";
+		_methodName51 = "checkValidFile";
 
 		_methodParameterTypes51 = new String[] {
-				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
+				"javax.portlet.PortletResponse", "java.lang.String",
 				"java.lang.String", "java.lang.String"
 			};
 
 		_methodName52 = "readFileContent";
 
 		_methodParameterTypes52 = new String[] {
-				"javax.portlet.PortletResponse", "java.lang.String",
+				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
 				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName53 = "getFile";
+		_methodName53 = "readFileContent";
 
 		_methodParameterTypes53 = new String[] {
-				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
+				"javax.portlet.PortletResponse", "java.lang.String",
 				"java.lang.String", "java.lang.String"
 			};
 
@@ -360,24 +361,24 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 
 		_methodParameterTypes54 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
-				"java.lang.String", "java.lang.String", "java.lang.String"
+				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName55 = "downloadFile";
+		_methodName55 = "getFile";
 
 		_methodParameterTypes55 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
-				"java.lang.String", "java.lang.String"
+				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
 		_methodName56 = "downloadFile";
 
 		_methodParameterTypes56 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
-				"java.lang.String", "java.lang.String", "java.lang.String"
+				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName57 = "readFileContent";
+		_methodName57 = "downloadFile";
 
 		_methodParameterTypes57 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
@@ -387,160 +388,167 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		_methodName58 = "readFileContent";
 
 		_methodParameterTypes58 = new String[] {
-				"javax.portlet.PortletResponse", "java.lang.String",
+				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
 				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
-		_methodName59 = "readFirstFileContent";
+		_methodName59 = "readFileContent";
 
 		_methodParameterTypes59 = new String[] {
-				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
+				"javax.portlet.PortletResponse", "java.lang.String",
 				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
 		_methodName60 = "readFirstFileContent";
 
 		_methodParameterTypes60 = new String[] {
-				"javax.portlet.PortletResponse", "java.lang.String",
+				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
 				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
-		_methodName61 = "readFileContent";
+		_methodName61 = "readFirstFileContent";
 
 		_methodParameterTypes61 = new String[] {
-				"javax.portlet.PortletRequest", "java.lang.String",
-				"java.lang.String"
+				"javax.portlet.PortletResponse", "java.lang.String",
+				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
 		_methodName62 = "readFileContent";
 
 		_methodParameterTypes62 = new String[] {
-				"java.lang.String", "java.lang.String", "java.lang.String"
+				"javax.portlet.PortletRequest", "java.lang.String",
+				"java.lang.String"
 			};
 
-		_methodName63 = "getFirstFileName";
+		_methodName63 = "readFileContent";
 
 		_methodParameterTypes63 = new String[] {
-				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
 				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
 		_methodName64 = "getFirstFileName";
 
 		_methodParameterTypes64 = new String[] {
-				"javax.portlet.PortletResponse", "java.lang.String",
+				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
 				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
-		_methodName65 = "saveFileContent";
+		_methodName65 = "getFirstFileName";
 
 		_methodParameterTypes65 = new String[] {
-				"javax.portlet.PortletRequest", "java.lang.String",
-				"java.lang.String", "java.lang.String"
+				"javax.portlet.PortletResponse", "java.lang.String",
+				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
 		_methodName66 = "saveFileContent";
 
 		_methodParameterTypes66 = new String[] {
+				"javax.portlet.PortletRequest", "java.lang.String",
+				"java.lang.String", "java.lang.String"
+			};
+
+		_methodName67 = "saveFileContent";
+
+		_methodParameterTypes67 = new String[] {
 				"javax.portlet.PortletResponse", "java.lang.String",
 				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
-		_methodName67 = "writeTextFile";
+		_methodName68 = "writeTextFile";
 
-		_methodParameterTypes67 = new String[] {
+		_methodParameterTypes68 = new String[] {
 				"java.lang.String", "java.nio.file.Path"
 			};
 
-		_methodName68 = "readDLAppEntry";
+		_methodName69 = "readDLAppEntry";
 
-		_methodParameterTypes68 = new String[] {
+		_methodParameterTypes69 = new String[] {
 				"javax.portlet.PortletResponse", "long"
 			};
 
-		_methodName69 = "writeToClient";
+		_methodName70 = "writeToClient";
 
-		_methodParameterTypes69 = new String[] {
+		_methodParameterTypes70 = new String[] {
 				"javax.portlet.PortletResponse", "java.lang.String",
 				"com.liferay.portal.kernel.json.JSONObject"
 			};
 
-		_methodName70 = "readTextFile";
+		_methodName71 = "readTextFile";
 
-		_methodParameterTypes70 = new String[] { "java.nio.file.Path" };
-
-		_methodName71 = "readFileAtPosition";
-
-		_methodParameterTypes71 = new String[] {
-				"javax.portlet.PortletRequest", "java.lang.String", "long",
-				"long", "java.lang.String"
-			};
+		_methodParameterTypes71 = new String[] { "java.nio.file.Path" };
 
 		_methodName72 = "readFileAtPosition";
 
 		_methodParameterTypes72 = new String[] {
-				"java.lang.String", "java.lang.String", "long", "long",
-				"java.lang.String"
+				"javax.portlet.PortletRequest", "java.lang.String", "long",
+				"long", "java.lang.String"
 			};
 
-		_methodName73 = "getRepositoryPath";
+		_methodName73 = "readFileAtPosition";
 
 		_methodParameterTypes73 = new String[] {
-				"javax.portlet.PortletRequest", "java.lang.String",
+				"java.lang.String", "java.lang.String", "long", "long",
 				"java.lang.String"
 			};
 
 		_methodName74 = "getRepositoryPath";
 
 		_methodParameterTypes74 = new String[] {
-				"java.lang.String", "java.lang.String", "java.lang.String"
+				"javax.portlet.PortletRequest", "java.lang.String",
+				"java.lang.String"
 			};
 
-		_methodName75 = "getFileURL";
+		_methodName75 = "getRepositoryPath";
 
 		_methodParameterTypes75 = new String[] {
-				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
-				"java.lang.String", "java.lang.String"
+				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
 		_methodName76 = "getFileURL";
 
 		_methodParameterTypes76 = new String[] {
+				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
+				"java.lang.String", "java.lang.String"
+			};
+
+		_methodName77 = "getFileURL";
+
+		_methodParameterTypes77 = new String[] {
 				"javax.portlet.PortletResponse", "java.lang.String",
 				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName77 = "getJobResultPath";
+		_methodName78 = "getJobResultPath";
 
-		_methodParameterTypes77 = new String[] {
+		_methodParameterTypes78 = new String[] {
 				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
-		_methodName78 = "getFileInformation";
+		_methodName79 = "getFileInformation";
 
-		_methodParameterTypes78 = new String[] {
+		_methodParameterTypes79 = new String[] {
 				"javax.portlet.PortletResponse", "java.lang.String",
 				"java.lang.String", "java.lang.String", "java.lang.String",
 				"java.lang.String"
 			};
 
-		_methodName79 = "processOSPResourceAction";
+		_methodName80 = "processOSPResourceAction";
 
-		_methodParameterTypes79 = new String[] {
+		_methodParameterTypes80 = new String[] {
 				"javax.portlet.ResourceRequest",
 				"javax.portlet.ResourceResponse"
 			};
 
-		_methodName80 = "setJobDataWithFileFormOutputData";
+		_methodName81 = "setJobDataWithFileFormOutputData";
 
-		_methodParameterTypes80 = new String[] {
+		_methodParameterTypes81 = new String[] {
 				"java.lang.String", "java.lang.String", "java.lang.String",
 				"com.liferay.portal.kernel.json.JSONObject", "java.lang.String"
 			};
 
-		_methodName81 = "setJobDataWithFileFormInputData";
+		_methodName82 = "setJobDataWithFileFormInputData";
 
-		_methodParameterTypes81 = new String[] {
+		_methodParameterTypes82 = new String[] {
 				"java.lang.String", "com.liferay.portal.kernel.json.JSONObject",
 				"java.lang.String"
 			};
@@ -1257,7 +1265,7 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 	public void getCopiedTemporaryFilePath(
 		javax.portlet.PortletRequest portletRequest,
 		javax.portlet.PortletResponse portletResponse,
-		java.lang.String srcScreenName, java.lang.String parent,
+		java.lang.String srcScreenName, java.lang.String sourceFolder,
 		java.lang.String fileName, java.lang.String repoType)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException,
@@ -1265,6 +1273,57 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		try {
 			_invokableLocalService.invokeMethod(_methodName22,
 				_methodParameterTypes22,
+				new Object[] {
+					ClpSerializer.translateInput(portletRequest),
+					
+				ClpSerializer.translateInput(portletResponse),
+					
+				ClpSerializer.translateInput(srcScreenName),
+					
+				ClpSerializer.translateInput(sourceFolder),
+					
+				ClpSerializer.translateInput(fileName),
+					
+				ClpSerializer.translateInput(repoType)
+				});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof java.io.IOException) {
+				throw (java.io.IOException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+	}
+
+	@Override
+	public void getCopiedTempHtmlIndexPath(
+		javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse,
+		java.lang.String srcScreenName, java.lang.String parent,
+		java.lang.String fileName, java.lang.String repoType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		try {
+			_invokableLocalService.invokeMethod(_methodName23,
+				_methodParameterTypes23,
 				new Object[] {
 					ClpSerializer.translateInput(portletRequest),
 					
@@ -1315,8 +1374,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName23,
-					_methodParameterTypes23,
+			returnObj = _invokableLocalService.invokeMethod(_methodName24,
+					_methodParameterTypes24,
 					new Object[] {
 						ClpSerializer.translateInput(portletRequest),
 						
@@ -1364,8 +1423,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName24,
-					_methodParameterTypes24,
+			returnObj = _invokableLocalService.invokeMethod(_methodName25,
+					_methodParameterTypes25,
 					new Object[] {
 						ClpSerializer.translateInput(screenName),
 						
@@ -1413,8 +1472,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName25,
-					_methodParameterTypes25,
+			returnObj = _invokableLocalService.invokeMethod(_methodName26,
+					_methodParameterTypes26,
 					new Object[] {
 						ClpSerializer.translateInput(portletRequest),
 						
@@ -1460,8 +1519,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName26,
-					_methodParameterTypes26,
+			returnObj = _invokableLocalService.invokeMethod(_methodName27,
+					_methodParameterTypes27,
 					new Object[] {
 						ClpSerializer.translateInput(screenName),
 						
@@ -1507,8 +1566,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName27,
-					_methodParameterTypes27,
+			returnObj = _invokableLocalService.invokeMethod(_methodName28,
+					_methodParameterTypes28,
 					new Object[] {
 						ClpSerializer.translateInput(portletRequest),
 						
@@ -1553,8 +1612,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName28,
-					_methodParameterTypes28,
+			returnObj = _invokableLocalService.invokeMethod(_methodName29,
+					_methodParameterTypes29,
 					new Object[] {
 						ClpSerializer.translateInput(screenName),
 						
@@ -1597,8 +1656,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName29,
-				_methodParameterTypes29,
+			_invokableLocalService.invokeMethod(_methodName30,
+				_methodParameterTypes30,
 				new Object[] {
 					ClpSerializer.translateInput(portletRequest),
 					
@@ -1639,8 +1698,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName30,
-				_methodParameterTypes30,
+			_invokableLocalService.invokeMethod(_methodName31,
+				_methodParameterTypes31,
 				new Object[] {
 					ClpSerializer.translateInput(screenName),
 					
@@ -1685,8 +1744,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName31,
-					_methodParameterTypes31,
+			returnObj = _invokableLocalService.invokeMethod(_methodName32,
+					_methodParameterTypes32,
 					new Object[] {
 						ClpSerializer.translateInput(portletRequest),
 						
@@ -1737,8 +1796,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName32,
-					_methodParameterTypes32,
+			returnObj = _invokableLocalService.invokeMethod(_methodName33,
+					_methodParameterTypes33,
 					new Object[] {
 						ClpSerializer.translateInput(srcScreenName),
 						
@@ -1793,8 +1852,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName33,
-					_methodParameterTypes33,
+			returnObj = _invokableLocalService.invokeMethod(_methodName34,
+					_methodParameterTypes34,
 					new Object[] {
 						ClpSerializer.translateInput(portletRequest),
 						
@@ -1845,8 +1904,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName34,
-					_methodParameterTypes34,
+			returnObj = _invokableLocalService.invokeMethod(_methodName35,
+					_methodParameterTypes35,
 					new Object[] {
 						ClpSerializer.translateInput(srcScreenName),
 						
@@ -1901,8 +1960,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName35,
-					_methodParameterTypes35,
+			returnObj = _invokableLocalService.invokeMethod(_methodName36,
+					_methodParameterTypes36,
 					new Object[] {
 						ClpSerializer.translateInput(portletRequest),
 						
@@ -1952,8 +2011,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName36,
-					_methodParameterTypes36,
+			returnObj = _invokableLocalService.invokeMethod(_methodName37,
+					_methodParameterTypes37,
 					new Object[] {
 						srcDLEntryId,
 						
@@ -2000,8 +2059,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName37,
-				_methodParameterTypes37,
+			_invokableLocalService.invokeMethod(_methodName38,
+				_methodParameterTypes38,
 				new Object[] {
 					ClpSerializer.translateInput(portletRequest),
 					
@@ -2040,8 +2099,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName38,
-				_methodParameterTypes38,
+			_invokableLocalService.invokeMethod(_methodName39,
+				_methodParameterTypes39,
 				new Object[] {
 					ClpSerializer.translateInput(screenName),
 					
@@ -2080,8 +2139,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName39,
-				_methodParameterTypes39,
+			_invokableLocalService.invokeMethod(_methodName40,
+				_methodParameterTypes40,
 				new Object[] {
 					ClpSerializer.translateInput(portletRequest),
 					
@@ -2120,8 +2179,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName40,
-				_methodParameterTypes40,
+			_invokableLocalService.invokeMethod(_methodName41,
+				_methodParameterTypes41,
 				new Object[] {
 					ClpSerializer.translateInput(screenName),
 					
@@ -2161,8 +2220,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName41,
-				_methodParameterTypes41,
+			_invokableLocalService.invokeMethod(_methodName42,
+				_methodParameterTypes42,
 				new Object[] {
 					ClpSerializer.translateInput(portletRequest),
 					
@@ -2206,8 +2265,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName42,
-				_methodParameterTypes42,
+			_invokableLocalService.invokeMethod(_methodName43,
+				_methodParameterTypes43,
 				new Object[] {
 					ClpSerializer.translateInput(portletResponse),
 					
@@ -2251,8 +2310,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName43,
-				_methodParameterTypes43,
+			_invokableLocalService.invokeMethod(_methodName44,
+				_methodParameterTypes44,
 				new Object[] {
 					ClpSerializer.translateInput(portletRequest),
 					
@@ -2297,8 +2356,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName44,
-				_methodParameterTypes44,
+			_invokableLocalService.invokeMethod(_methodName45,
+				_methodParameterTypes45,
 				new Object[] {
 					ClpSerializer.translateInput(portletRequest),
 					
@@ -2347,8 +2406,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName45,
-				_methodParameterTypes45,
+			_invokableLocalService.invokeMethod(_methodName46,
+				_methodParameterTypes46,
 				new Object[] {
 					ClpSerializer.translateInput(portletRequest),
 					
@@ -2391,8 +2450,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName46,
-				_methodParameterTypes46,
+			_invokableLocalService.invokeMethod(_methodName47,
+				_methodParameterTypes47,
 				new Object[] {
 					ClpSerializer.translateInput(portletRequest),
 					
@@ -2439,8 +2498,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName47,
-				_methodParameterTypes47,
+			_invokableLocalService.invokeMethod(_methodName48,
+				_methodParameterTypes48,
 				new Object[] {
 					ClpSerializer.translateInput(portletRequest),
 					
@@ -2488,8 +2547,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName48,
-				_methodParameterTypes48,
+			_invokableLocalService.invokeMethod(_methodName49,
+				_methodParameterTypes49,
 				new Object[] {
 					ClpSerializer.translateInput(portletRequest),
 					
@@ -2533,8 +2592,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName49,
-				_methodParameterTypes49,
+			_invokableLocalService.invokeMethod(_methodName50,
+				_methodParameterTypes50,
 				new Object[] {
 					ClpSerializer.translateInput(portletRequest),
 					
@@ -2578,8 +2637,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName50,
-				_methodParameterTypes50,
+			_invokableLocalService.invokeMethod(_methodName51,
+				_methodParameterTypes51,
 				new Object[] {
 					ClpSerializer.translateInput(portletResponse),
 					
@@ -2623,8 +2682,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName51,
-				_methodParameterTypes51,
+			_invokableLocalService.invokeMethod(_methodName52,
+				_methodParameterTypes52,
 				new Object[] {
 					ClpSerializer.translateInput(portletRequest),
 					
@@ -2668,8 +2727,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName52,
-				_methodParameterTypes52,
+			_invokableLocalService.invokeMethod(_methodName53,
+				_methodParameterTypes53,
 				new Object[] {
 					ClpSerializer.translateInput(portletResponse),
 					
@@ -2713,8 +2772,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName53,
-				_methodParameterTypes53,
+			_invokableLocalService.invokeMethod(_methodName54,
+				_methodParameterTypes54,
 				new Object[] {
 					ClpSerializer.translateInput(portletRequest),
 					
@@ -2759,8 +2818,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName54,
-				_methodParameterTypes54,
+			_invokableLocalService.invokeMethod(_methodName55,
+				_methodParameterTypes55,
 				new Object[] {
 					ClpSerializer.translateInput(portletRequest),
 					
@@ -2806,8 +2865,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName55,
-				_methodParameterTypes55,
+			_invokableLocalService.invokeMethod(_methodName56,
+				_methodParameterTypes56,
 				new Object[] {
 					ClpSerializer.translateInput(portletRequest),
 					
@@ -2852,8 +2911,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName56,
-				_methodParameterTypes56,
+			_invokableLocalService.invokeMethod(_methodName57,
+				_methodParameterTypes57,
 				new Object[] {
 					ClpSerializer.translateInput(portletRequest),
 					
@@ -2900,8 +2959,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName57,
-				_methodParameterTypes57,
+			_invokableLocalService.invokeMethod(_methodName58,
+				_methodParameterTypes58,
 				new Object[] {
 					ClpSerializer.translateInput(portletRequest),
 					
@@ -2947,8 +3006,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName58,
-				_methodParameterTypes58,
+			_invokableLocalService.invokeMethod(_methodName59,
+				_methodParameterTypes59,
 				new Object[] {
 					ClpSerializer.translateInput(portletResponse),
 					
@@ -2995,8 +3054,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName59,
-				_methodParameterTypes59,
+			_invokableLocalService.invokeMethod(_methodName60,
+				_methodParameterTypes60,
 				new Object[] {
 					ClpSerializer.translateInput(portletRequest),
 					
@@ -3043,8 +3102,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName60,
-				_methodParameterTypes60,
+			_invokableLocalService.invokeMethod(_methodName61,
+				_methodParameterTypes61,
 				new Object[] {
 					ClpSerializer.translateInput(portletResponse),
 					
@@ -3091,8 +3150,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName61,
-					_methodParameterTypes61,
+			returnObj = _invokableLocalService.invokeMethod(_methodName62,
+					_methodParameterTypes62,
 					new Object[] {
 						ClpSerializer.translateInput(portletRequest),
 						
@@ -3137,8 +3196,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName62,
-					_methodParameterTypes62,
+			returnObj = _invokableLocalService.invokeMethod(_methodName63,
+					_methodParameterTypes63,
 					new Object[] {
 						ClpSerializer.translateInput(screenName),
 						
@@ -3182,8 +3241,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName63,
-				_methodParameterTypes63,
+			_invokableLocalService.invokeMethod(_methodName64,
+				_methodParameterTypes64,
 				new Object[] {
 					ClpSerializer.translateInput(portletRequest),
 					
@@ -3230,8 +3289,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName64,
-				_methodParameterTypes64,
+			_invokableLocalService.invokeMethod(_methodName65,
+				_methodParameterTypes65,
 				new Object[] {
 					ClpSerializer.translateInput(portletResponse),
 					
@@ -3277,8 +3336,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName65,
-				_methodParameterTypes65,
+			_invokableLocalService.invokeMethod(_methodName66,
+				_methodParameterTypes66,
 				new Object[] {
 					ClpSerializer.translateInput(portletRequest),
 					
@@ -3322,8 +3381,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName66,
-				_methodParameterTypes66,
+			_invokableLocalService.invokeMethod(_methodName67,
+				_methodParameterTypes67,
 				new Object[] {
 					ClpSerializer.translateInput(portletResponse),
 					
@@ -3365,8 +3424,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 	public void writeTextFile(java.lang.String content,
 		java.nio.file.Path target) throws java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName67,
-				_methodParameterTypes67,
+			_invokableLocalService.invokeMethod(_methodName68,
+				_methodParameterTypes68,
 				new Object[] {
 					ClpSerializer.translateInput(content),
 					
@@ -3396,8 +3455,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		throws com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName68,
-				_methodParameterTypes68,
+			_invokableLocalService.invokeMethod(_methodName69,
+				_methodParameterTypes69,
 				new Object[] {
 					ClpSerializer.translateInput(portletResponse),
 					
@@ -3431,8 +3490,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		com.liferay.portal.kernel.json.JSONObject data)
 		throws java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName69,
-				_methodParameterTypes69,
+			_invokableLocalService.invokeMethod(_methodName70,
+				_methodParameterTypes70,
 				new Object[] {
 					ClpSerializer.translateInput(portletResponse),
 					
@@ -3464,8 +3523,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName70,
-					_methodParameterTypes70,
+			returnObj = _invokableLocalService.invokeMethod(_methodName71,
+					_methodParameterTypes71,
 					new Object[] { ClpSerializer.translateInput(path) });
 		}
 		catch (Throwable t) {
@@ -3497,8 +3556,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName71,
-					_methodParameterTypes71,
+			returnObj = _invokableLocalService.invokeMethod(_methodName72,
+					_methodParameterTypes72,
 					new Object[] {
 						ClpSerializer.translateInput(portletRequest),
 						
@@ -3548,8 +3607,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName72,
-					_methodParameterTypes72,
+			returnObj = _invokableLocalService.invokeMethod(_methodName73,
+					_methodParameterTypes73,
 					new Object[] {
 						ClpSerializer.translateInput(screenName),
 						
@@ -3598,8 +3657,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName73,
-					_methodParameterTypes73,
+			returnObj = _invokableLocalService.invokeMethod(_methodName74,
+					_methodParameterTypes74,
 					new Object[] {
 						ClpSerializer.translateInput(portletRequest),
 						
@@ -3639,8 +3698,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName74,
-					_methodParameterTypes74,
+			returnObj = _invokableLocalService.invokeMethod(_methodName75,
+					_methodParameterTypes75,
 					new Object[] {
 						ClpSerializer.translateInput(userName),
 						
@@ -3680,8 +3739,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName75,
-				_methodParameterTypes75,
+			_invokableLocalService.invokeMethod(_methodName76,
+				_methodParameterTypes76,
 				new Object[] {
 					ClpSerializer.translateInput(portletRequest),
 					
@@ -3725,8 +3784,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName76,
-				_methodParameterTypes76,
+			_invokableLocalService.invokeMethod(_methodName77,
+				_methodParameterTypes77,
 				new Object[] {
 					ClpSerializer.translateInput(portletResponse),
 					
@@ -3768,8 +3827,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName77,
-					_methodParameterTypes77,
+			returnObj = _invokableLocalService.invokeMethod(_methodName78,
+					_methodParameterTypes78,
 					new Object[] {
 						ClpSerializer.translateInput(simulationUuid),
 						
@@ -3803,8 +3862,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName78,
-				_methodParameterTypes78,
+			_invokableLocalService.invokeMethod(_methodName79,
+				_methodParameterTypes79,
 				new Object[] {
 					ClpSerializer.translateInput(portletResponse),
 					
@@ -3849,8 +3908,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		javax.portlet.ResourceRequest resourceRequest,
 		javax.portlet.ResourceResponse resourceResponse) {
 		try {
-			_invokableLocalService.invokeMethod(_methodName79,
-				_methodParameterTypes79,
+			_invokableLocalService.invokeMethod(_methodName80,
+				_methodParameterTypes80,
 				new Object[] {
 					ClpSerializer.translateInput(resourceRequest),
 					
@@ -3882,8 +3941,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName80,
-					_methodParameterTypes80,
+			returnObj = _invokableLocalService.invokeMethod(_methodName81,
+					_methodParameterTypes81,
 					new Object[] {
 						ClpSerializer.translateInput(srcScreenName),
 						
@@ -3934,8 +3993,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName81,
-					_methodParameterTypes81,
+			returnObj = _invokableLocalService.invokeMethod(_methodName82,
+					_methodParameterTypes82,
 					new Object[] {
 						ClpSerializer.translateInput(srcScreenName),
 						
@@ -4134,4 +4193,6 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 	private String[] _methodParameterTypes80;
 	private String _methodName81;
 	private String[] _methodParameterTypes81;
+	private String _methodName82;
+	private String[] _methodParameterTypes82;
 }

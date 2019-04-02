@@ -171,6 +171,10 @@
 		InputData.portName = function( portName ){
 			return InputData.property.apply( InputData, OSP.Util.addFirstArgument(OSP.Constants.PORT_NAME, arguments) );
 		};
+
+		InputData.fileType = function( fileType ){
+			return InputData.property.apply( InputData, OSP.Util.addFirstArgument(OSP.Constants.FILE_TYPE, arguments) );
+		};
 		
 		InputData.deserialize = function( jsonInputData ){
 			//console.log( 'jsonInputData: ', jsonInputData );
@@ -193,6 +197,7 @@
 					case OSP.Constants.URI:
 					case OSP.Constants.RELATIVE:
 					case OSP.Constants.PORT_NAME:
+					case OSP.Constants.FILE_TYPE:
 					case 'VERSION':
 						InputData.property( key, jsonInputData[key] );
 						break;

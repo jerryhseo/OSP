@@ -336,12 +336,25 @@ public class OSPFileLocalServiceWrapper implements OSPFileLocalService,
 	public void getCopiedTemporaryFilePath(
 		javax.portlet.PortletRequest portletRequest,
 		javax.portlet.PortletResponse portletResponse,
-		java.lang.String srcScreenName, java.lang.String parent,
+		java.lang.String srcScreenName, java.lang.String sourceFolder,
 		java.lang.String fileName, java.lang.String repoType)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		_ospFileLocalService.getCopiedTemporaryFilePath(portletRequest,
+			portletResponse, srcScreenName, sourceFolder, fileName, repoType);
+	}
+
+	@Override
+	public void getCopiedTempHtmlIndexPath(
+		javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse,
+		java.lang.String srcScreenName, java.lang.String parent,
+		java.lang.String fileName, java.lang.String repoType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		_ospFileLocalService.getCopiedTempHtmlIndexPath(portletRequest,
 			portletResponse, srcScreenName, parent, fileName, repoType);
 	}
 

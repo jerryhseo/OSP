@@ -328,13 +328,26 @@ public class OSPFileLocalServiceUtil {
 	public static void getCopiedTemporaryFilePath(
 		javax.portlet.PortletRequest portletRequest,
 		javax.portlet.PortletResponse portletResponse,
-		java.lang.String srcScreenName, java.lang.String parent,
+		java.lang.String srcScreenName, java.lang.String sourceFolder,
 		java.lang.String fileName, java.lang.String repoType)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		getService()
 			.getCopiedTemporaryFilePath(portletRequest, portletResponse,
+			srcScreenName, sourceFolder, fileName, repoType);
+	}
+
+	public static void getCopiedTempHtmlIndexPath(
+		javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse,
+		java.lang.String srcScreenName, java.lang.String parent,
+		java.lang.String fileName, java.lang.String repoType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		getService()
+			.getCopiedTempHtmlIndexPath(portletRequest, portletResponse,
 			srcScreenName, parent, fileName, repoType);
 	}
 
