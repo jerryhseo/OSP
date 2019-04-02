@@ -14,6 +14,8 @@
 
 <liferay-portlet:resourceURL var="copyParentNodeFilesURL" id="copyParentNodeFiles" copyCurrentRenderParameters="false"/>
 
+<liferay-portlet:resourceURL var="readOutLogURL" id="readOutLog" copyCurrentRenderParameters="false" escapeXml="false" />
+
 <link rel="stylesheet" href="${contextPath}/css/font-awesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="${contextPath}/css/Ionicons/css/ionicons.min.css">
 <link rel="stylesheet" href="${contextPath}/css/adminlte/AdminLTE.css">
@@ -55,6 +57,8 @@ var var_no_available_analyzer_message = Liferay.Language.get("edison-workflow-no
 var var_workflow_status_not_found_message = Liferay.Language.get("edison-workflow-status-not-found");
 var var_workflow_not_exist_job_message = Liferay.Language.get("edison-workflow-not-exist-job-message");
 var var_workflow_include_reuse_node_message = Liferay.Language.get("edison-workflow-include-reuse-node-message");
+var var_workflow_simulation_create_error_message = Liferay.Language.get("edison-workflow-simulation-create-error-message");
+
 var contextPath = '${contextPath}';
 </script>
 
@@ -127,6 +131,28 @@ var contextPath = '${contextPath}';
     	text-align: center;
     	vertical-align: middle !important;
     }
+    
+    .<portlet:namespace/>log-text-area{
+    	margin-top: 10px !important;
+    	min-width: 90% !important;
+    	height: 650px !important;
+    	resize: none !important;
+    }
+    
+    .<portlet:namespace/>log-title{
+        font-size: 15px;
+    }
+    
+    #<portlet:namespace/>sys-log-more-icon{
+		width: 65px;
+		height: 40px;
+		padding: 10px 5px;
+		text-align: center;
+		position: absolute;
+		top: 40px;
+		right: 55px;
+		display: none;
+	}
     
 </style>
 <div class="container-fluid workflow-executor">
@@ -263,6 +289,41 @@ var contextPath = '${contextPath}';
     </div>
   </div>
 </div>
+</div>
+
+<div class="modal fade" id="<portlet:namespace/>job-log-modal" tabindex="-1" role="dialog" aria-labelledby="<portlet:namespace/>job-log-modal" style="display: none;">
+	<div class="vertical-alignment-helper">
+		<div class="modal-dialog vertical-align-center" role="document">
+			<div class="modal-content" style="width: 75%;">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">Job System Log</h4>
+				</div>
+				<div class="modal-body">
+					<div id="<portlet:namespace/>system-log" class="col-md-6">
+						<span class="<portlet:namespace/>log-title">
+							<i class="icon-file-alt"></i>&nbsp;
+							SYSTEM LOG
+						</span>
+						<div id="<portlet:namespace/>sys-log-more-icon" class="btn btn-default">
+							<i class="icon-chevron-sign-up"></i> MORE
+						</div>
+						<textarea class="form-control <portlet:namespace/>log-text-area" id="<portlet:namespace/>log-text" autofocus="autofocus" readonly="readonly" >
+						</textarea>
+					</div>
+					<div id="<portlet:namespace/>error-log" class="col-md-6">
+						<span class="<portlet:namespace/>log-title">
+							<i class="icon-file-alt"></i>&nbsp;
+							ERROR LOG
+						</span>
+						<textarea class="form-control <portlet:namespace/>log-text-area" id="<portlet:namespace/>error-log-text" autofocus="autofocus" readonly="readonly" >
+						 
+						</textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 <script>
@@ -584,6 +645,167 @@ function <portlet:namespace/>copyParentNodeFiles(params){
 
 function cogClick(nodeId){
 	$("#"+nodeId).contextmenu();
+}
+
+var <portlet:namespace/>refreshJobLogTimer;
+var scrollPage = 1;
+var beforeScrollH = 0;
+function <portlet:namespace/>openJobSystemLog(params) {
+	
+	var simulationUuid = params.simulationUuid;
+	var lastPosition = params.lastPosition;
+	var scrollPage = params.scrollPage;
+	var jobStatus = params.jobStatus;
+	var jobUuid = params.jobUuid;
+	var type = params.type;
+	
+	<portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition, type, scrollPage, jobStatus)
+}
+
+var isRunning = false;
+function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition, type, scrollPage, jobStatus) {
+	
+	if(!isRunning && !scrollPage){
+		scrollPage = 1;
+	} else {
+		scrollPage = 0;
+	}
+	
+	var textarea = null;
+	var hasLog = true;
+	jQuery.ajax({
+		url: '<%=readOutLogURL.toString()%>',
+		type:'POST',
+		dataType:'json',
+		data:{
+			"<portlet:namespace/>simulationUuid": simulationUuid,
+			"<portlet:namespace/>lastPosition": lastPosition,
+			"<portlet:namespace/>scrollPage": scrollPage,
+			"<portlet:namespace/>jobStatus": jobStatus,
+			"<portlet:namespace/>jobUuid": jobUuid,
+			"<portlet:namespace/>type": type
+		},
+		success:function(result){
+			var modal = $("#<portlet:namespace/>job-log-modal");
+			textarea = modal.find("textarea#<portlet:namespace/>log-text");
+			var systemLogDiv = modal.find("div#<portlet:namespace/>system-log");
+			var sysLogMoreBtn = modal.find("div#<portlet:namespace/>sys-log-more-icon");
+			var errorLogDiv = modal.find("div#<portlet:namespace/>error-log");
+			var errorLogTextarea = modal.find("textarea#<portlet:namespace/>error-log-text");
+			
+			var isScrollMove = false;
+			if(textarea[0].scrollTop==0){
+				isScrollMove = true;
+			}else if(textarea[0].scrollTop+textarea.outerHeight()>textarea.prop('scrollHeight')){
+				isScrollMove = true;
+			}
+			
+			var preTextareVal = textarea.text();
+			textarea.empty();
+			
+			console.log(result)
+			if(typeof result.outLog!='undefined'){
+				if(lastPosition === 0){
+					textarea.text(result.outLog.outLog);
+				}else{
+					textarea.text(preTextareVal+result.outLog.outLog);
+				}
+				
+				if(result.jobStatus == '1701006'){
+					isRunning = true;
+					<portlet:namespace/>refreshJobLogTimer = setInterval(<portlet:namespace/>jobSystemLog, 1000*3, simulationUuid,jobUuid,result.outLog.lastPosition,type);
+				} else {
+					console.log(result.outLog.outLog)
+					if(!result.outLog.outLog){
+						hasLog = false;
+					}
+				}
+			}
+			
+			if(!result.errLog && typeof result.errLog!='undefined'){
+				errorLogTextarea.text(result.errLog.outLog);
+				if(systemLogDiv.hasClass('col-md-6')){
+					systemLogDiv.removeClass('col-md-12');
+					systemLogDiv.addClass('col-md-6');
+				}
+			} else {
+				systemLogDiv.removeClass('col-md-6');
+				systemLogDiv.addClass('col-md-12');
+				errorLogDiv.hide();
+			}
+			
+			currScrollH = textarea.prop('scrollHeight');
+			
+			if(isScrollMove){
+				if(result.jobStatus != '1701006'){
+					if(scrollPage > 1){
+						if(beforeScrollH != 0){
+							var currLogTop = (currScrollH-beforeScrollH)
+							textarea.scrollTop(currLogTop);
+						}
+					}
+				}
+			}
+			
+			textarea.off("scroll");
+			textarea.on("scroll",function(){
+				var scrollTop = textarea.scrollTop();
+				var scrollH = $(this).prop("scrollHeight");
+				if(result.jobStatus != '1701006'){
+					if(scrollTop < 150){
+						currScrollH = textarea.prop('scrollHeight');
+						sysLogMoreBtn.show();
+					} else {
+						sysLogMoreBtn.hide();
+					}
+				}
+			});
+			
+			if(hasLog){
+				modal.modal({ "backdrop": "static", "keyboard": false });
+			} else {
+				$.alert(Liferay.Language.get('edison-simulation-monitoring-log-file-is-not-exist'));
+			}
+			
+			sysLogMoreBtn.off('click');
+			sysLogMoreBtn.on('click', function(e){
+				<portlet:namespace/>moreSystemLogView(textarea, sysLogMoreBtn, params, currScrollH);
+			});
+		},error:function(jqXHR, textStatus, errorThrown){
+			hasLog = false;
+			$.alert(Liferay.Language.get('edison-simulation-monitoring-log-file-is-not-exist'));
+			<portlet:namespace/>clearReadOutLogTimer();
+		}, complete: function(){
+			if(hasLog && scrollPage == 1){
+				$("#<portlet:namespace/>job-log-modal").css("display", "block");
+				$("#<portlet:namespace/>system-log").css("display", "block");
+				if(!isRunning){
+					textarea.scrollTop(textarea.prop("scrollHeight"));
+				}
+			}
+		}
+	});
+}
+
+//Job System Log modal close event
+$("#<portlet:namespace/>job-log-modal").on('hidden.bs.modal', function () {
+	isRunning = false;
+	<portlet:namespace/>clearReadOutLogTimer();
+})
+
+function <portlet:namespace/>clearReadOutLogTimer(){
+	if(<portlet:namespace/>refreshJobLogTimer){
+		clearInterval(<portlet:namespace/>refreshJobLogTimer);
+	}
+}
+
+function <portlet:namespace/>moreSystemLogView(textarea, systemLogDiv, params, currScrollH){
+	scrollPage += 1;
+	beforeScrollH = currScrollH;
+	systemLogDiv.hide();
+	
+	params.scrollPage = scrollPage;
+	<portlet:namespace/>jobSystemLog(params);
 }
 
 </script>

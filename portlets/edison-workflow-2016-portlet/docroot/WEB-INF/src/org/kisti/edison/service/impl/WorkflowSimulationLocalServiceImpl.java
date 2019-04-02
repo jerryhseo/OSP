@@ -29,6 +29,7 @@ import org.kisti.edison.service.base.WorkflowSimulationLocalServiceBaseImpl;
 import org.kisti.edison.util.CustomUtil;
 import org.springframework.util.StringUtils;
 
+import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -94,19 +95,20 @@ public class WorkflowSimulationLocalServiceImpl extends WorkflowSimulationLocalS
         return workflowSimulationLocalService.createWorkflowSimulation(simulationId);
     }
     
-    public WorkflowSimulation createWorkflowSimulation(Map<String, Object> params, User user) throws SystemException, PortalException{
-        String tetsYnStr = CustomUtil.strNull(params.get("testYn"), "true");
-        boolean testYn = tetsYnStr.equals("true") || tetsYnStr.equals("y") || tetsYnStr.equals("Y");
-        long workflowId = GetterUtil.getLong(params.get("workflowId"));
-        Workflow workflow = WorkflowLocalServiceUtil.getWorkflow(workflowId);
-        WorkflowSimulation simulation = createWorkflowSimulation();
-        simulation.setTitle(CustomUtil.strNull(params.get("title"), "workflow simulation #" + simulation.getSimulationId()));
-        simulation.setWorkflowId(workflowId);
-        simulation.setUserId(user.getUserId());
-        simulation.setTestYn(testYn);
-        simulation.setCreateDate(new Date());
-        simulation = workflowSimulationLocalService.addWorkflowSimulation(simulation);
-        WorkflowSimulationJobLocalServiceUtil.createSimulationJob(simulation, workflow, null);
+    public WorkflowSimulation createWorkflowSimulation(Map<String, Object> params, User user)throws SystemException, PortalException{
+    	String tetsYnStr = CustomUtil.strNull(params.get("testYn"), "true");
+    	boolean testYn = tetsYnStr.equals("true") || tetsYnStr.equals("y") || tetsYnStr.equals("Y");
+    	long workflowId = GetterUtil.getLong(params.get("workflowId"));
+    	Workflow workflow = WorkflowLocalServiceUtil.getWorkflow(workflowId);
+    	WorkflowSimulation simulation = createWorkflowSimulation();
+    	simulation.setTitle(CustomUtil.strNull(params.get("title"), "workflow simulation #" + simulation.getSimulationId()));
+    	simulation.setWorkflowId(workflowId);
+    	simulation.setUserId(user.getUserId());
+    	simulation.setTestYn(testYn);
+    	simulation.setCreateDate(new Date());
+    	CacheRegistryUtil.clear();
+		simulation = workflowSimulationLocalService.addWorkflowSimulation(simulation);
+    	WorkflowSimulationJobLocalServiceUtil.createSimulationJob(simulation, workflow, null);
         return simulation;
     }
     

@@ -60,6 +60,8 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
     /////////////////////////////////////////// renew start
 
     function createSimulation(params, callback, errorCallback) {
+    	console.log("here....")
+    	console.log(errorCallback);
         _clearTimeout(STATUS_TIMER);
         aSyncAjaxHelper.post(URI_PREFIX + "/simulation/create",
             params,
@@ -281,6 +283,9 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
             params,
             function (workflowStatus) {
                 if (callback) {
+                	console.log("workflowStatus : " + workflowStatus);
+                	console.log("workflowStatus1 : " + JSON.parse(workflowStatus));
+                	console.log("workflowStatus2 : " + encodeURIComponent(workflowStatus));
                     callback(workflowStatus);
                 }
             }, errorCallback

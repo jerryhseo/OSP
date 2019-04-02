@@ -14,6 +14,7 @@
 
 package com.kisti.osp.service.impl;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -21,6 +22,7 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -422,21 +424,74 @@ public class OSPFileLocalServiceImpl extends OSPFileLocalServiceBaseImpl {
 		return userName;
 	}
 
+	private TextAndLastPosition readTextAndLastPosition(Path path, long lastPoistion, long jobStatus, long scrollPage) throws IOException{
+		FileChannel fcIn = FileChannel.open(path, StandardOpenOption.READ);
+		ByteBuffer buffer = ByteBuffer.allocateDirect(1024);
+		StringBuffer sb = new StringBuffer();
+		if(lastPoistion > 0){
+			fcIn.position(lastPoistion);
+		}
+		
+		File file = path.toFile();
+		BufferedReader brForLineCnt = new BufferedReader(new FileReader(file));
+		int lineCnt = 0;
+		while(brForLineCnt.readLine() != null){
+			lineCnt++;
+		}
+		
+		int i = 0;
+		// Running Job -> startLine = 0, endLine = 5000
+		// Finished Job -> startLine = lineCnt - 5000 * pageNum, endLine = lineCnt
+		// jobStatus == 1701006 : RUNNING
+		// jobStatus == 1701011 : SUCCESS
+		// jobStatus == 1701012 : FAILED
+		long startLine = 0;
+		long endLine = 0;
+		if(jobStatus == 1701006){
+			endLine = 5000;
+		} else if(jobStatus == 1701011 || jobStatus == 1701012){
+			startLine = lineCnt - (5000 * scrollPage);
+			endLine = lineCnt;
+		}
+		
+		String fileContent = "";
+		BufferedReader brForView = new BufferedReader(new FileReader(file));
+		while((fileContent = brForView.readLine()) != null){
+			if(jobStatus == 1701006 || jobStatus == 1701011 || jobStatus == 1701012){
+				if(i >= startLine && i < endLine){
+					sb.append(fileContent);
+					sb.append("\n");
+				}
+				i++;
+			} else {
+				sb.append(fileContent);
+				sb.append("\n");
+			}
+		}
+		
+		lastPoistion = fcIn.position();
+		fcIn.close();
+		TextAndLastPosition temp = new TextAndLastPosition(sb.toString(), lastPoistion);
+		return temp;
+	}
+	
 	 private TextAndLastPosition readTextAndLastPosition(Path path, long lastPoistion) throws IOException{
 	    FileChannel fcIn = FileChannel.open(path, StandardOpenOption.READ);
 	    ByteBuffer buffer = ByteBuffer.allocateDirect(1024);
 	    StringBuffer sb = new StringBuffer();
 	    if(lastPoistion > 0){
-	     fcIn.position(lastPoistion);   
+	     fcIn.position(lastPoistion);
 	    }
+		
 	    int i = 0;
 	    while(fcIn.read(buffer) != -1){
-	        byte[] bytes = new byte[buffer.position()];
-	        buffer.flip();
-	        buffer.get(bytes);
-	        sb.append(new String(bytes));
-	        buffer.clear();
+	    	byte[] bytes = new byte[buffer.position()];
+	    	buffer.flip();
+	    	buffer.get(bytes);
+	    	sb.append(new String(bytes));
+	    	buffer.clear();
 	    }
+	    
 	    lastPoistion = fcIn.position();
 	    fcIn.close();
 	    TextAndLastPosition temp = new TextAndLastPosition(sb.toString(), lastPoistion);
@@ -1790,8 +1845,16 @@ public class OSPFileLocalServiceImpl extends OSPFileLocalServiceBaseImpl {
 			long size,
 			String repositoryType ) throws PortalException, SystemException, IOException{
 		Path targetPath = getRepositoryPath(portletRequest, target, repositoryType);
+		TextAndLastPosition outLog = null; /*readTextAndLastPosition(targetPath, startPosition, 0, 1);*/
 		
-		TextAndLastPosition outLog = readTextAndLastPosition(targetPath, startPosition);
+		HttpServletRequest httpRequest = PortalUtil.getHttpServletRequest(portletRequest);
+		long jobStatus = (Long) httpRequest.getAttribute("jobStatus");
+		long scrollPage = (Long) portletRequest.getAttribute("scrollPage");
+		if((jobStatus == 1701006 && scrollPage == 1) || jobStatus == 1701011 || jobStatus == 1701012){
+			outLog = readTextAndLastPosition(targetPath, startPosition, jobStatus, scrollPage);
+		} else {
+			outLog = readTextAndLastPosition(targetPath, startPosition);
+		}
 		
 		JSONObject result = JSONFactoryUtil.createJSONObject();
 		result.put("outLog", outLog.getText());

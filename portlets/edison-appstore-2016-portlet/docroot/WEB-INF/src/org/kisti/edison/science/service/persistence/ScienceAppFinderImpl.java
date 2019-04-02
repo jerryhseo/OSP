@@ -746,4 +746,28 @@ public class ScienceAppFinderImpl extends BasePersistenceImpl<ScienceApp> implem
 			closeSession(session);
 		}
 	}
+	
+	public List<Long> getOrganizationRegisteredWithApp(){
+		Session session = null;
+		try{
+			String sql = CustomSQLUtil.get("org.kisti.edison.science.service.persistence.ScienceAppFinder.getOrganizationRegisteredWithApp");
+			session = openSession();
+			Map<String, Object> params = new HashMap<String, Object>();
+			String gBatisQuery = GBatisUtil.getGBatis(params, sql);
+			SQLQuery query = session.createSQLQuery(gBatisQuery);
+			query.addScalar("orgCd", Type.LONG);
+		
+			List<Long> result = (List<Long>) query.list();
+			return result;
+		}catch (Exception e){
+			try{
+			  throw new SystemException(e);
+			}catch (SystemException se){
+			  se.printStackTrace();
+			}
+		}finally{
+			closeSession(session);
+		}
+		return null;
+	}
 }

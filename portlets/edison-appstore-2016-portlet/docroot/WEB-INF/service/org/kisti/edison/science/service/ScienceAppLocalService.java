@@ -1110,4 +1110,11 @@ public interface ScienceAppLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException,
 			javax.persistence.NonUniqueResultException,
 			org.kisti.edison.science.NoSuchScienceAppException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<java.lang.Long> getOrganizationRegisteredWithApp()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			javax.persistence.NonUniqueResultException,
+			org.kisti.edison.science.NoSuchScienceAppException;
 }

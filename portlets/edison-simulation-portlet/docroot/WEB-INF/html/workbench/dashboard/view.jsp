@@ -1225,27 +1225,49 @@ function <portlet:namespace/>writeTimeLineAboutShare(customIds, jobTitle, writeT
 	});
 }
 
-
-function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition, type) {
+var scrollPage = 1;
+var beforeScrollH = 0;
+var isRunning = false;
+function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition, type, scrollPage) {
 	<portlet:namespace/>clearReadOutLogTimer();
+	
+	if(!isRunning && !scrollPage){
+		scrollPage = 1;
+	} else {
+		scrollPage = 0;
+	}
+	
+	var textarea = null
+	var sysLogMoreBtn = null;
+	var currScrollH = 0;
 	jQuery.ajax({
 		url: '<%=readOutLogURL.toString()%>',
 		type:'POST',
 		dataType:'json',
+		async : false,
 		data:{
 			"<portlet:namespace/>simulationUuid": simulationUuid,
 			"<portlet:namespace/>jobUuid": jobUuid,
 			"<portlet:namespace/>lastPosition": lastPosition,
-			"<portlet:namespace/>type": type
+			"<portlet:namespace/>type": type,
+			"<portlet:namespace/>scrollPage": scrollPage
 		},
 		success:function(result){
 // 			console.log(outLog);
 			var modal = $("#"+<portlet:namespace/>parentNamespace+"job-log-modal");
-			var textarea = modal.find("textarea#"+<portlet:namespace/>parentNamespace+"log-text");
+			
+			var systemLogDiv = modal.find("div#"+<portlet:namespace/>parentNamespace+"system-log");
+			textarea = modal.find("textarea#"+<portlet:namespace/>parentNamespace+"log-text");
+			sysLogMoreBtn = modal.find("div#"+<portlet:namespace/>parentNamespace+"sys-log-more-icon");
+			
+			var errorLogDiv = modal.find("div#"+<portlet:namespace/>parentNamespace+"error-log");
+			var errorLogTextarea = modal.find("textarea#"+<portlet:namespace/>parentNamespace+"error-log-text");
 			
 			var isScrollMove = false;
 			if(textarea[0].scrollTop==0){
 				isScrollMove = true;
+			}else if(textarea.scrollTop() < textarea.prop('scrollHeight')){
+				isScrollMove = false;
 			}else if(textarea[0].scrollTop+textarea.outerHeight()>textarea.prop('scrollHeight')){
 				isScrollMove = true;
 			}
@@ -1256,35 +1278,88 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 			if(typeof result.outLog!='undefined'){
 				if(lastPosition === 0){
 					textarea.text(result.outLog.outLog);
+					
 				}else{
 					textarea.text(preTextareVal+result.outLog.outLog);
 				}
 				
 				if(result.jobStatus == '1701006'){
+					isRunning = true;
 					<portlet:namespace/>refreshJobLogTimer = setInterval(<portlet:namespace/>jobSystemLog, 1000*3, simulationUuid,jobUuid,result.outLog.lastPosition,type);
 				}
 			}
 			
-			if(typeof result.errLog!='undefined'){
-				var deviLog = '\n\n--------------------------ERROR LOG----------------------------\n';
-				textarea.text(textarea.text()+deviLog+result.errLog.outLog);
+			if(!result.errLog && typeof result.errLog!='undefined'){
+				
+				errorLogTextarea.text(result.errLog.outLog);
+				if(systemLogDiv.hasClass('col-md-6')){
+					systemLogDiv.removeClass('col-md-12');
+					systemLogDiv.addClass('col-md-6');
+				}
+			} else {
+				systemLogDiv.removeClass('col-md-6');
+				systemLogDiv.addClass('col-md-12');
+				errorLogDiv.hide();
 			}
 			
+			currScrollH = textarea.prop('scrollHeight');
+			
 			if(isScrollMove){
-				textarea.scrollTop(textarea.prop('scrollHeight'));
+				if(isRunning){
+					textarea.scrollTop(textarea.prop('scrollHeight'));
+				} else {
+					if(scrollPage > 1){
+						if(beforeScrollH != 0){
+							var currLogTop = (currScrollH-beforeScrollH)
+							textarea.scrollTop(currLogTop);
+						}
+					}
+				}
 			}
+			
+			textarea.off("scroll");
+			textarea.on("scroll",function(){
+				var scrollTop = textarea.scrollTop();
+				var scrollH = $(this).prop("scrollHeight");
+				if(result.jobStatus != '1701006'){
+					if(scrollTop < 150){
+						currScrollH = textarea.prop('scrollHeight');
+						sysLogMoreBtn.show();
+					} else {
+						sysLogMoreBtn.hide();
+					}
+				}
+			});
+			
 			modal.modal({ "backdrop": "static", "keyboard": false });
 		},error:function(jqXHR, textStatus, errorThrown){
-// 			if(jqXHR.responseText !== ''){
-// 				alert("jobSystemLog-->"+textStatus+": "+jqXHR.responseText);
-// 			}else{
-// 				alert("jobSystemLog-->"+textStatus+": "+errorThrown);
-// 			}
 			$.alert(Liferay.Language.get('edison-simulation-monitoring-log-file-is-not-exist'));
 			<portlet:namespace/>clearReadOutLogTimer();
+		}, complete: function(){
+			if(scrollPage == 1){
+				$("#"+<portlet:namespace/>parentNamespace+"job-log-modal").css("display", "block");
+				$("#"+<portlet:namespace/>parentNamespace+"system-log").css("display", "block");
+				if(!isRunning){
+					textarea.scrollTop(textarea.prop("scrollHeight"));
+				}
+			}
 		}
 	});
 	
+	/* 2019.03. _ More system log view */
+	sysLogMoreBtn.off('click');
+	sysLogMoreBtn.on('click', function(e){
+		<portlet:namespace/>moreSystemLogView(textarea, simulationUuid, jobUuid, sysLogMoreBtn, currScrollH);
+	});
+	
+}
+
+/* 2019.03. _ More system log view */
+function <portlet:namespace/>moreSystemLogView(textarea, simulationUuid, jobUuid, systemLogDiv, currScrollH){
+	scrollPage += 1;
+	beforeScrollH = currScrollH;
+	systemLogDiv.hide();
+	<portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, 0, 'out', scrollPage);
 }
 
 function <portlet:namespace/>clearReadOutLogTimer(){
@@ -1691,6 +1766,7 @@ function <portlet:namespace/>init(){
 	$('[data-toggle="tooltip"]').tooltip(); 
 	//Job System Log modal close event
 	$("#"+<portlet:namespace/>parentNamespace+"job-log-modal").on('hidden.bs.modal', function () {
+		isRunning = false;
 		<portlet:namespace/>clearReadOutLogTimer();
 	})
 	

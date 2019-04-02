@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -176,6 +177,18 @@ public class ScienceAppstoreListController {
 			
 			String upCode = "1501";		//기관 upCode
 			List<Map<String,String>> organList = EdisonExpndoUtil.getCodeListByUpCode(upCode, themeDisplay.getLocale());
+			
+			// 2019.03.22 _ get organization List registered with app.
+			List<Long> organizationListRegisteredWithApp = ScienceAppLocalServiceUtil.getOrganizationRegisteredWithApp();
+			Iterator<Map<String, String>> iter = organList.iterator();
+			while(iter.hasNext()){
+				Map<String, String> organMap = iter.next();
+				
+				long organCd = Long.parseLong(organMap.get("cd"));
+				if(!organizationListRegisteredWithApp.contains(organCd)){
+					iter.remove();
+				}
+			}
 			
 			model.addAttribute("searchField",searchField);
 			model.addAttribute("params", params);

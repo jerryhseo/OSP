@@ -199,8 +199,10 @@
 						EDVIR_VirtualLabUser EVLU,
 						EDVIR_VirtualLabClasses_VirtualLabUsers EVLCVLU
 					WHERE 
-						USER.userId IN (@@userIds@@)
-						AND USER.userId = EVLU.userId
+						USER.userId = EVLU.userId
+						<isNotEmpty property="userIds">
+							AND USER.userId IN (@@userIds@@)
+						</isNotEmpty>
 						AND EVLU.virtualLabUserId = EVLCVLU.virtualLabUserId
 						<isNotEmpty property="classId">
 							AND EVLCVLU.classId = #classId#
@@ -250,9 +252,13 @@
 					FROM
 						EDSIM_Simulation SIM, EDSIM_SimulationJob JOB
 					WHERE
-						SIM.userId IN (@@userIds@@)
-						AND SIM.scienceAppId IN (@@scienceAppIds@@)
-						AND SIM.simulationUuid = JOB.simulationUuid
+						SIM.simulationUuid = JOB.simulationUuid
+						<isNotEmpty property="userIds">
+							AND SIM.userId IN (@@userIds@@)
+						</isNotEmpty>
+						<isNotEmpty property="scienceAppIds">
+							AND SIM.scienceAppId IN (@@scienceAppIds@@)
+						</isNotEmpty>
 						AND JOB.jobSubmit = 1
 					GROUP BY SIM.userId
 				) SIM

@@ -13,6 +13,7 @@ import org.kisti.edison.science.model.ScienceApp;
 import org.kisti.edison.science.service.PortTypeAnalyzerLinkLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppInputPortsLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
+import org.kisti.edison.science.service.ScienceAppLogPortsLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppOutputPortsLocalServiceUtil;
 import org.kisti.edison.service.WorkflowSimulationJobLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
@@ -178,6 +179,29 @@ public class ScienceAppController{
       log.error("error", e);
       throw e;
     }
+  }
+  
+  @RequestMapping(value="/{scienceAppId}/logports")
+  public @ResponseBody String getScienceAppLogPorts(
+      @PathVariable("scienceAppId") long scienceAppId,
+      HttpServletRequest request)
+          throws SystemException, PortalException{
+		try{
+			long logportCnt = ScienceAppLogPortsLocalServiceUtil.getScienceAppLogPortsesCount(scienceAppId);
+			String logPortsJsonStr = ScienceAppLogPortsLocalServiceUtil.getLogPortsJsonString(scienceAppId);
+			if(logportCnt > 0){
+				if(logPortsJsonStr.equals("false")){
+					return "{}";
+				} else {
+					return logPortsJsonStr;
+				}
+			}else{
+				return "{}";
+			}
+		}catch (Exception e){
+			log.error("error", e);
+			throw e;
+		}
   }
   
   @RequestMapping(value = {"/inputports/editor"})

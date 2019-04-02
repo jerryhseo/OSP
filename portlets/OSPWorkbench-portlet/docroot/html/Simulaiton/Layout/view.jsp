@@ -33,6 +33,28 @@
 		padding-left: 0px;
 		padding-right: 0px;
 	}
+	
+	.<portlet:namespace/>log-title{
+		font-size: 15px;
+	} 
+	
+	.<portlet:namespace/>log-text-area{
+		margin-top: 10px !important;
+		min-width: 90% !important;
+		height: 650px !important;
+		resize:none !important;
+	}
+	
+	#<portlet:namespace/>sys-log-more-icon{
+		width: 65px;
+		height: 40px;
+		padding: 10px 5px;
+		text-align: center;
+		position: absolute;
+		top: 40px;
+		right: 55px;
+		display: none;
+	}
 </style>
 
 <liferay-portlet:resourceURL var="serveResourceURL"	id="serveResource" copyCurrentRenderParameters="false">
@@ -67,9 +89,26 @@
 					<h4 class="modal-title">Job System Log</h4>
 				</div>
 				<div class="modal-body">
-					<textarea class="form-control" id="<portlet:namespace/>log-text" style="min-width: 90%;height: 650px;resize:none;" autofocus="autofocus" readonly="readonly" >
-					
-					</textarea>
+					<div id="<portlet:namespace/>system-log" class="col-md-6">
+						<span class="<portlet:namespace/>log-title">
+							<i class="icon-file-alt"></i>&nbsp;
+							SYSTEM LOG
+						</span>
+						<div id="<portlet:namespace/>sys-log-more-icon" class="btn btn-default">
+							<i class="icon-chevron-sign-up"></i> MORE
+						</div>
+						<textarea class="form-control <portlet:namespace/>log-text-area" id="<portlet:namespace/>log-text" autofocus="autofocus" readonly="readonly" >
+						</textarea>
+					</div>
+					<div id="<portlet:namespace/>error-log" class="col-md-6">
+						<span class="<portlet:namespace/>log-title">
+							<i class="icon-file-alt"></i>&nbsp;
+							ERROR LOG
+						</span>
+						<textarea class="form-control <portlet:namespace/>log-text-area" id="<portlet:namespace/>error-log-text" autofocus="autofocus" readonly="readonly" >
+						 
+						</textarea>
+					</div>
 				</div>
 			</div>
 		</div>

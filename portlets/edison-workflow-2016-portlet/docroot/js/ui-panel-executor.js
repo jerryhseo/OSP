@@ -7,6 +7,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     var currJobs = eStruct("id", "data")
     var currInputPorts = eStruct("id")
     var currOutputPorts = eStruct("id")
+    var currLogPorts = eStruct("id")
     var currOpenPort = eMap()
     var currPageJob = 1
     var JQ_PORTLET_BOUNDARY_ID = "#p_p_id" + namespace;
@@ -671,6 +672,8 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             $("#" + namespace + "header-li-reuse-run").show();
         }
         if (workflowStatus && workflowStatus.workflow && workflowStatus.workflow.simulations) {
+        	var isJobFinish = false;
+        	var jobStatus = "";
             $.each(workflowStatus.workflow.simulations, function () {
                 var simulation = this
                 var nodeId = simulation.clientId
@@ -703,6 +706,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                     "WAITING CANCELED CREATED NOT_FOUND RUNNING " +
                     "FAILED DONE SUCCESS COMPLETED PAUSED")
                 $("#" + nodeId).addClass(statusCode)
+                /* statusCode가 Success일 때 해당 앱의 context-menu의 reuse 출력 */
                 setReUseNodeStatus(node)
                 $("#" + nodeId + " .wf-node-execute-status").text(statusCode)
                 if(statusCode === "RUNNING") {
@@ -710,7 +714,27 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 } else {
                     $("#" + nodeId + " .top-cog-icon").removeClass("fa-spin")
                 }
+                
+                if(node.data.status.childNodes.length == 0){
+                	if(statusCode != CONSTS.WF_STATUS_CODE.SUCCESS && statusCode != CONSTS.WF_STATUS_CODE.DONE && statusCode != CONSTS.WF_STATUS_CODE.FAILED){
+                		jobStatus = statusCode;
+                		isJobFinish = false;
+                	} else {
+                		if(jobStatus != CONSTS.WF_STATUS_CODE.FAILED){
+                			jobStatus = statusCode;
+                		}
+                		isJobFinish = true;
+                	}
+                }
             })
+            
+            var currSimJob = currJobs.selected();
+            var currSimJobId = currSimJob.simulationJobId;
+        	if($(".job-li[job-id="+currSimJobId+"]").attr("job-status") == CONSTS.WF_STATUS_CODE.RUNNING && isJobFinish) {
+            	$(".job-li[job-id="+currSimJobId+"]").attr("job-status", jobStatus);
+            	/* TODO reuse menu */
+            	/*location.reload();*/
+            }
         }
         // console.log(workflowStatus)
     }
@@ -793,7 +817,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             '</li>' +
             '{{#jobs}}' +
             '<li class="treeview" job-id="{{simulationJobId}}">\n' +
-            '  <a href="#" class="sidebar-btn job-li" job-id=\"{{simulationJobId}}\" job-status=\"{{status}}\">\n' +
+            '  <a href="#" class="sidebar-btn job-li {{status}}" job-id=\"{{simulationJobId}}\" job-status=\"{{status}}\">\n' +
             '    <i class="fa fa-file"></i>\n' +
             '    <div>{{title}}</div>\n' +
             '  <span class="label label-primary pull-right sidebar-btn">\n' +
@@ -1006,20 +1030,29 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     function addPortHandler(that, nodeId, isInput) {
         var portId = $(that).attr("port-id")
         var port = isInput ? currInputPorts.get(portId) : currOutputPorts.get(portId)
+        if(!port){
+        	port = currLogPorts.get(portId);
+        }
         $(that).children("a").click(function (e) {
-            if (port.dataType_.name === CONSTS.WF_APP_TYPES.CONTROLLER.INPUT_DATA_TYPE) {
-                return
-            }
-            if (port.dataType_.name === CONSTS.WF_APP_TYPES.CONTROLLER.OUTPUT_DATA_TYPE) {
-                return
-            }
-            if (port.dataType_.name === CONSTS.WF_APP_TYPES.DYNAMIC_CONVERTER.INPUT_DATA_TYPE) {
-                return
-            }
+        	if(port){
+        		if (port.dataType_.name === CONSTS.WF_APP_TYPES.CONTROLLER.INPUT_DATA_TYPE) {
+        			return
+        		}
+        		if (port.dataType_.name === CONSTS.WF_APP_TYPES.CONTROLLER.OUTPUT_DATA_TYPE) {
+        			return
+        		}
+        		if (port.dataType_.name === CONSTS.WF_APP_TYPES.DYNAMIC_CONVERTER.INPUT_DATA_TYPE) {
+        			return
+        		}
+        	}
             if (isInput) {
                 openInputPort(nodeId, portId)
             } else {
-                openOutputPort(nodeId, portId)
+            	if($(that).hasClass("output")){
+            		openOutputPort(nodeId, portId)
+            	} else if($(that).hasClass("log")){
+                    openLogPort(nodeId, portId);
+            	}
             }
         })
         $(that).children("a").hover(
@@ -1068,19 +1101,20 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             '       {{/data.arrInputPorts}}' +
             '       </ul>' +
             '    </li>\n' +
-           /* '    <li class="treeview log">' +
+            
+            '    {{#data.arrLogPorts}}' +
+            '    <li class="treeview log">' +
             '       <a href="#"><i class="fa fa-laptop"></i><div>log</div></a>' +
             '       <ul class="treeview-menu">' +
-            '          {{#data.arrLogPorts}}' +
             '             <li class="treeview port-li log" port-id="{{id}}">\n' +
             '                 <a href="#" class="sidebar-btn job-li" port-id=\"{{id}}\">\n' +
             '                     <i class="fa fa-edit"></i>\n' +
             '                     <div>{{name_}}</div>\n' +
             '                 </a>\n' +
             '             </li>' +
-            '          {{/data.arrLogPorts}}' +
             '       </ul>' +
-            '    </li>\n' +*/
+            '    </li>\n' +
+            '    {{/data.arrLogPorts}}' +
             
             '    <li class="treeview output">' +
             '       <a href="#"><i class="fa fa-laptop"></i><div>output</div></a>' +
@@ -1109,6 +1143,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         // var screenLogic = jpInstance.exportData({ type: "json" })
         var inputPorts = []
         var outputPorts = []
+        var logPorts = []
         var dataComponentNodes = []
         currNodes.set(
             designer.getCurrentJsPlumbInstance().getNodes(),
@@ -1122,10 +1157,19 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             pushPorts(node.id, node.data.outputPorts, outputPorts, node.data.arrOutputPorts)
             setPortsId(node.id, node.data.inputPorts, CONSTS.WF_JSPLUMB_TYPES.INPUT)
             setPortsId(node.id, node.data.outputPorts, CONSTS.WF_JSPLUMB_TYPES.OUTPUT)
+            
+            if(!!node.data.logPorts){
+            	node.data.arrLogPorts = [];
+            	pushPorts(node.id, node.data.logPorts, logPorts, node.data.arrLogPorts);
+            	setPortsId(node.id, node.data.logPorts, CONSTS.WF_JSPLUMB_TYPES.LOG);
+            }
         })
 
         currInputPorts.set(inputPorts)
         currOutputPorts.set(outputPorts)
+        if(logPorts.length > 0){
+        	currLogPorts.set(logPorts);
+        }
 
         $.each(currNodes.getArray(), function(i, node){
             setDataComponent(node)
@@ -1181,6 +1225,78 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 })
             })
     }
+    
+    function jobSystemLog(simulationUuid, jobUuid, lastPosition, type) {
+    	var sendDataObj = new Object();
+    	var simulationJob = currJobs.selected()
+    	var jobStatus = getLongTypeCodeByStatus(simulationJob.status);
+		sendDataObj.simulationUuid = simulationUuid;
+		sendDataObj.lastPosition = lastPosition;
+		sendDataObj.jobStatus = jobStatus;
+		sendDataObj.jobUuid = jobUuid;
+		sendDataObj.scrollPage = 1;
+		sendDataObj.type = type;
+
+		var fn = window[namespace + "openJobSystemLog"];
+		return fn.apply(null, [sendDataObj]);
+    }
+    
+    function getLongTypeCodeByStatus(statusStr){
+    	var jobStatus = 0;
+    	
+    	switch(statusStr.toUpperCase()){
+	        case "FAILED":
+	        	jobStatus = 1701012;
+	        	break;
+	        case "QUEUED":
+	        	jobStatus = 1701005;
+	        	break;
+	        case "RUNNING":
+	        	jobStatus = 1701006;
+	        	break;
+	        case "CANCELED":
+	        	jobStatus = 1701010;
+	        	break;
+	        case "SUCCESS":
+	        	jobStatus = 1701011;
+	        	break;
+    	}
+    	
+        return jobStatus;
+	}
+    
+    function jobResultFileView(simulationUuid, jobUuid) {
+    	$("body").css('overflow','hidden');
+    	AUI().use("liferay-portlet-url", function(a) {
+    		var portletURL = Liferay.PortletURL.createRenderURL();
+    		portletURL.setPortletMode("view");
+    		portletURL.setWindowState("pop_up");
+    		portletURL.setParameter("jobUuid", jobUuid);
+    		portletURL.setPortletId("SimulationResultFileViewer_WAR_edisonsimulationportlet");
+    		Liferay.Util.openWindow({
+    			dialog: {
+    				width:1024,
+    				height:750,
+    				cache: false,
+    				draggable: false,
+    				resizable: false,
+    				modal: true,
+    				destroyOnClose: true,
+    				className:'homepage-ui-dialog',
+    				after: {
+    					render: function(event) {
+    						$("button.btn.close").on("click", function(e){
+    							$("body").css('overflow','');
+    						});
+    					}
+    				}
+    			},
+    			id: "simulationResultFileViewDialog",
+    			uri: portletURL.toString(),
+    			title: "Result File View"
+    		});
+    	});
+    }
 
     function updatePortData(prevPortData, inputData) {
         prevPortData[OSP.Constants.INPUTS] = inputData
@@ -1191,14 +1307,22 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     	var portId = nodeId + "." + portName;
     	var portData = {};
     	var isInput = false;
+    	var isOutput = false;
     	
     	var currPortData = null;
     	if(currInputPorts.get(portId)){
     		currPortData = $.extend({}, currInputPorts.get(portId));
     		isInput= true;
     	} else {
-    		currPortData = $.extend({}, currOutputPorts.get(portId));
     		isInput= false;
+    		
+    		if(currOutputPorts.get(portId)){
+    			currPortData = $.extend({}, currOutputPorts.get(portId));
+    			isOutput = true;
+    		} else {
+    			currPortData = $.extend({}, currLogPorts.get(portId));
+    			isOutput = false;
+    		}
     	}
     	
         delete currPortData.id;
@@ -1206,7 +1330,11 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         if(isInput){
         	portData[currInputPorts.get(portId)[OSP.Constants.NAME]] = currPortData;
         } else {
-        	portData[currOutputPorts.get(portId)[OSP.Constants.NAME]] = currPortData;
+        	if(isOutput){
+        		portData[currOutputPorts.get(portId)[OSP.Constants.NAME]] = currPortData;
+        	} else {
+        		portData[currLogPorts.get(portId)[OSP.Constants.NAME]] = currPortData;
+        	}
         }
     	
     	return portData;
@@ -1271,6 +1399,18 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         popPortDialog(node, portId, portData, isDataComponentCall);
     }
     
+    /* 2019.03.08 _ Open Log port */
+    function openLogPort(nodeId, portId) {
+    	var node = currNodes.get(nodeId);
+    	var portData = {};
+        var currPortData = $.extend({}, currLogPorts.get(portId));
+    	delete currPortData.id;
+    	
+    	portData[currLogPorts.get(portId)[OSP.Constants.NAME]] = currPortData;
+    	
+    	popPortDialog(node, portId, portData);
+    }
+    
     function popPortDialog(node, portId, portData, isDataComponentCall) {
         var portName = ''
         var nodeId = node.id
@@ -1287,8 +1427,15 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             return false
         }
         if (currOpenPort.containsKey(portId)) {
-        	toastr['warning']('', 'Already open')
-        	return false
+        	/* ESC - hasClass modal-hidden */
+        	var portPopupByPortId =$('.wf-port-popup[data-port-id="' + portId+ '"]');
+        	if(portPopupByPortId.hasClass('modal-hidden')){
+        		currOpenPort.remove(portId)
+        		portPopupByPortId.remove();
+        	} else {
+        		toastr['warning']('', 'Already open')
+        		return false
+        	}
         }
         
         var dialogId = namespace + getGUID()
@@ -1311,7 +1458,18 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 //            portletURL.setParameter('portData', JSON.stringify(portData));
             
             portletURL.setParameter('portName', portName);
-            portletURL.setParameter('portType',currInputPorts.contains(portId) ? CONSTS.WF_JSPLUMB_TYPES.INPUT_PORTS : CONSTS.WF_JSPLUMB_TYPES.OUTPUT_PORTS);
+            
+            var portType = null;
+            if(currInputPorts.contains(portId)){
+            	portType = CONSTS.WF_JSPLUMB_TYPES.INPUT_PORTS;
+            } else {
+            	if(currInputPorts.contains(portId)){
+            		portType = CONSTS.WF_JSPLUMB_TYPES.OUTPUT_PORTS;
+            	} else {
+            		portType = CONSTS.WF_JSPLUMB_TYPES.LOG_PORTS;
+            	}
+            }
+            portletURL.setParameter('portType', portType);
             portletURL.setParameter('nodeId', nodeId);
             portletURL.setParameter('userId', userId);
             portletURL.setParameter('dialogId', dialogId);
@@ -1358,9 +1516,10 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             		destroyOnClose: true,
             		after: {
             			render: function (event) {
-            				$('#' + dialogId).addClass('wf-port-popup')
+            				$('#' + dialogId).addClass('wf-port-popup').attr("data-port-id", portId);
             				$("button.btn.close").on("click", function (e) {
             					currOpenPort.remove(portId)
+            					$('#' + dialogId).remove();
             				});
             			},
             		},
@@ -1369,15 +1528,15 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             	uri: portletURL.toString(),
             	title: (isDataComponentCall ? 'DataComponent' : node.data.scienceAppData.name ) + " " + portName
             });
-        	
+ 
 //            A.one('body').on('key', function(event){
-//        		openPortPopup.once('visibleChange', function(event){
-//        			if(event.prevVal == true){
-//        				event.newVal = true;
-//        			}
-//        		});
-//        	}, 'esc');
-        	
+//          	openPortPopup.once('visibleChange', function(event){
+//         		    if(event.prevVal == true){
+//                     	event.newVal = true;
+//          		}
+//        	    });
+//        }, 'esc');
+
             $('#' + dialogId).css('top', positionTop+'px').css('left', positionLeft+'px')
         });
     }
@@ -1477,6 +1636,11 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                     })
                     toastr["success"]("", var_create_success_message);
 
+                }, function(){
+                	toastr["error"]("", var_workflow_simulation_create_error_message);
+                	setTimeout(function () {
+                		location.reload();
+                    }, 1000)
                 });
                 closePanel();
             };
@@ -2696,6 +2860,8 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 		"setReuseNode" : setReuseNode,
 		// "insertIbUuid" : insertIbUuid,
 		"pauseNode" : pauseNode,
+		"jobSystemLog" : jobSystemLog,
+		"jobResultFileView" : jobResultFileView,
 		"isEmpty" : function() {
 			return _isEmpty(PANEL_DATA.setting.form.workflowId
 					&& PANEL_DATA.setting.form.simulationId);

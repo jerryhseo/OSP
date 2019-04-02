@@ -25,6 +25,7 @@
 <liferay-portlet:renderURL var="currentUrl" copyCurrentRenderParameters="false"/>
 
 <liferay-portlet:renderURL var="workbenchURL" copyCurrentRenderParameters="false" plid="${workBenchPlid}" 
+  windowState="<%=LiferayWindowState.POP_UP.toString()%>"
   portletName="SimulationWorkbench_WAR_OSPWorkbenchportlet">
     <liferay-portlet:param name="workbenchType" value="SIMULATION_WITH_APP"/>
 </liferay-portlet:renderURL>

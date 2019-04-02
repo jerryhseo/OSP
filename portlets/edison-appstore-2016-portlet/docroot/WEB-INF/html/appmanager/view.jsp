@@ -196,7 +196,8 @@
 	}
 	
 	function <portlet:namespace/>appTest(){
-		window.location.href = "<%=appTestURL%>";
+		var url = "<%=appTestURL%>";
+		window.open(url, "_blank");
 	}
 	
 	function <portlet:namespace/>deleteFile(p_fileEntryId,fileType,objectClass,language){

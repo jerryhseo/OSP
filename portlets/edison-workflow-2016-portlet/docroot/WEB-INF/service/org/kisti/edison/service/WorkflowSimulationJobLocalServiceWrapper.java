@@ -523,10 +523,10 @@ public class WorkflowSimulationJobLocalServiceWrapper
 	public org.kisti.edison.model.WorkflowSimulationJob reuseCopyWorkflowEngineJson(
 		long simulationJobId, java.lang.String strNodes,
 		java.lang.String userName, java.lang.String ibToken,
-		javax.servlet.http.HttpServletRequest request, java.lang.String title)
+		javax.servlet.http.HttpServletRequest request, java.lang.String newTitle)
 		throws org.kisti.edison.WFEngine500Exception {
 		return _workflowSimulationJobLocalService.reuseCopyWorkflowEngineJson(simulationJobId,
-			strNodes, userName, ibToken, request, title);
+			strNodes, userName, ibToken, request, newTitle);
 	}
 
 	@Override
