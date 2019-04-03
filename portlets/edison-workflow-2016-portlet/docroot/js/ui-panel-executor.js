@@ -165,14 +165,20 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     }
 
     function setReuseNode(node, isReUsable) {
-        if (node) {
-            node.data.isReUseNode = !!isReUsable
-            setReUseNodeStatus(node)
-            
-            if(!!isReUsable){
-            	setReuseParentNodes(node);
-            }
-        }
+    	var currJob = currJobs.selected();
+    	if(currJob && currJob.status && (currJob.status === CONSTS.WF_STATUS_CODE.SUCCESS || currJob.status === CONSTS.WF_STATUS_CODE.FAILED)){
+    		if (node) {
+    			node.data.isReUseNode = !!isReUsable
+    			setReUseNodeStatus(node);
+    			
+    			if(!!isReUsable){
+    				setReuseParentNodes(node);
+    			}
+    			
+    		}
+    	} else {
+    		toastr["error"]("", var_workflow_set_reuse_error_message);
+    	}
     }
     
     /* 2019.02.25 _ Set reuse flag in parentNodes */
@@ -731,9 +737,13 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             var currSimJob = currJobs.selected();
             var currSimJobId = currSimJob.simulationJobId;
         	if($(".job-li[job-id="+currSimJobId+"]").attr("job-status") == CONSTS.WF_STATUS_CODE.RUNNING && isJobFinish) {
-            	$(".job-li[job-id="+currSimJobId+"]").attr("job-status", jobStatus);
-            	/* TODO reuse menu */
-            	/*location.reload();*/
+        		$(".job-li[job-id="+currSimJobId+"]").attr("job-status", jobStatus);
+        		currSimJob.status = jobStatus;
+        		
+        		if($(".job-li[job-id="+currSimJobId+"]").hasClass("RUNNING")){
+        			$(".job-li[job-id="+currSimJobId+"]").removeClass("RUNNING");
+        			$(".job-li[job-id="+currSimJobId+"]").addClass(jobStatus);
+        		}
             }
         }
         // console.log(workflowStatus)

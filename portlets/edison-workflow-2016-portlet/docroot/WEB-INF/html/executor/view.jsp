@@ -58,6 +58,7 @@ var var_workflow_status_not_found_message = Liferay.Language.get("edison-workflo
 var var_workflow_not_exist_job_message = Liferay.Language.get("edison-workflow-not-exist-job-message");
 var var_workflow_include_reuse_node_message = Liferay.Language.get("edison-workflow-include-reuse-node-message");
 var var_workflow_simulation_create_error_message = Liferay.Language.get("edison-workflow-simulation-create-error-message");
+var var_workflow_set_reuse_error_message = Liferay.Language.get("edison-workflow-set-reuse-error-message");
 
 var contextPath = '${contextPath}';
 </script>
