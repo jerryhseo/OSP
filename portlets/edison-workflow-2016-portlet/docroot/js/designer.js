@@ -918,8 +918,9 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                         }
                     };
                     if (!isDesigner && uiPanelInstance) {
-                    	if(uiPanelInstance.isReUsableJob()){
-                    		if(uiPanelInstance.isReUsableNode(node)){
+                    	var isReusableNode = node.data.status.status == CONSTS.WF_STATUS_CODE.SUCCESS ? true : false;
+                    	if(uiPanelInstance.isReUsableJob() || isReusableNode){
+                    		if(uiPanelInstance.isReUsableNode(node) || isReusableNode){
                     			var isReUseNode = (!!node && !!node.data && !!node.data.isReUseNode)
                     			items["items"]["open-reuse-handler"] = {
                     				name: isReUseNode ? "Do not reuse" : "ReUse",
@@ -932,12 +933,14 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                     	}
                         if(uiPanelInstance.isPauseAbleNode(node)){
                             var status = node.data.status.status
-                            items["items"]["open-pause-handler"] = {
-                                name: "Pause",
-                                icon: "fa-pause-circle",
-                                callback: function(key, options) {
-                                    uiPanelInstance.pauseNode(node, true)
-                                }
+                            if(status != CONSTS.WF_STATUS_CODE.SUCCESS){
+                            	items["items"]["open-pause-handler"] = {
+                            			name: "Pause",
+                            			icon: "fa-pause-circle",
+                            			callback: function(key, options) {
+                            				uiPanelInstance.pauseNode(node, true)
+                            			}
+                            	}
                             }
                         } else if(uiPanelInstance.isResumeAbleNode(node)) {
                             var status = node.data.status.status
