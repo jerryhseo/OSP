@@ -504,13 +504,13 @@ public class SimulationJobLocalServiceImpl
 				result.put("groupId", simulationJob.getGroupId());
 				result.put("jobUuid", simulationJob.getJobUuid());
 				result.put("jobStatus", simulationJob.getJobStatus());
-				result.put("jobStatusNm", EdisonExpndoUtil.getCommonCdSearchFieldValue(String.valueOf(simulationJob.getJobStatus()), EdisonExpando.CDNM + "_" + locale.toString()));
+				result.put("jobStatusNm", CustomUtil.strNull(EdisonExpndoUtil.getCommonCdSearchFieldValue(String.valueOf(simulationJob.getJobStatus()), EdisonExpando.CDNM + "_" + locale.toString()),""));
 				result.put("jobStartDt", simulationJob.getJobStartDt());
 				result.put("jobEndDt", simulationJob.getJobEndDt());
 				result.put("jobTitle", simulationJob.getJobTitle());
 				result.put("jobExecPath", simulationJob.getJobExecPath());
 				result.put("jobPhase", simulationJob.getJobPhase());
-				result.put("jobPhaseNm", EdisonExpndoUtil.getCommonCdSearchFieldValue(String.valueOf(simulationJob.getJobPhase()), EdisonExpando.CDNM + "_" + locale.toString()));				
+				result.put("jobPhaseNm", CustomUtil.strNull(EdisonExpndoUtil.getCommonCdSearchFieldValue(String.valueOf(simulationJob.getJobPhase()), EdisonExpando.CDNM + "_" + locale.toString()),""));
 				result.put("jobSubmitDt", simulationJob.getJobSubmitDt());
 				result.put("jobUniversityField", simulationJob.getJobUniversityField());
 				result.put("jobInputDeckYn", simulationJob.getJobInputDeckYn());
@@ -765,7 +765,7 @@ public class SimulationJobLocalServiceImpl
 				//모니터링 목록에서 해당 job의 jobSeqNo가 1을 조회 하기 때문에 
 				//해당 simulationUuid에 해당하는 jobSeqNo를 -1을 하여 update한다.
 				if(jobSeqNo==1){
-					List<Map<String,Object>> simulationJobList =  getListSimulationJob(groupId, simulationUuid, 1301003, 0, Locale.KOREA);
+					List<Map<String,Object>> simulationJobList =  getListSimulationJob(groupId, simulationUuid, 0, 0, Locale.KOREA);
 					if(simulationJobList.size()!=0){
 						for(Map<String,Object> simulationJobMap : simulationJobList){
 							long jobSeqNoModel = GetterUtil.getLong(simulationJobMap.get("jobSeqNo"),0);
@@ -850,12 +850,13 @@ public class SimulationJobLocalServiceImpl
 			IcebreakerVcToken vcToken = SimulationLocalServiceUtil.getOrCreateToken(simulationJob.getGroupId(), user);
 			
 			int deleteResult = SimulationLocalServiceUtil.deleteSimulationJob(icebreakerUrl, vcToken.getVcToken(), simulationJob.getSimulationUuid(), simulationJob.getJobUuid());
-			if(deleteResult!=200){
+			SimulationJobLocalServiceUtil.deleteSimulationJob(simulationJob);
+			/*if(deleteResult!=200){
 				returnResult = "--simulation_uuid:"+simulationJob.getSimulationUuid();
 				returnResult += ", job_uuid:"+simulationJob.getJobUuid();
 				returnResult += ",deletejob error_code:"+String.valueOf(deleteResult);
 				deleteSuccess = false;
-			}
+			}*/
 		}
 /*		if(cancleSuccess&&deleteSuccess){
 			SimulationJobLocalServiceUtil.deleteSimulationJob(simulationJobPK);

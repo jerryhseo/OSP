@@ -150,7 +150,7 @@ public class SimulationJobFinderImpl extends BasePersistenceImpl<SimulationJob> 
             
             params.put("groupId", groupId);
             params.put("simulationUuid", simulationUuid);
-            params.put("jobPhase", jobPhase);
+            /*params.put("jobPhase", jobPhase);*/
             if(jobSeqNo > 0) {
             	params.put("jobSeqNo", jobSeqNo);
             }
