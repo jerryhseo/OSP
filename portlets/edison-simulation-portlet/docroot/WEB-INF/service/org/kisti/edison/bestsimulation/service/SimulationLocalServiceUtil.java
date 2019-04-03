@@ -326,8 +326,8 @@ public class SimulationLocalServiceUtil {
 	/**
 	* New Simulation With SimulationJob
 	*
-	* @param user                - 占쎌겱占쎌삺 占쎌젔占쎈꺗占쎈립 User 揶쏆빘猿�, EX)User user = PortalUtil.getUser(request);
-	* @param groupId             - Portal 占쎈뼄占쎈뻬 占쎌뵬 野껋럩�뒭 APP占쎌벥 groupId�몴占� 筌〓㈇��, 域밸챷�뇚 siteGroupId 占쎈�묕옙�샒
+	* @param user                - 현재 접속한 User 객체, EX)User user = PortalUtil.getUser(request);
+	* @param groupId             - Portal 실행 일 경우 APP의 groupId를 참고, 그외 siteGroupId 셋팅
 	* @param simulationTitle
 	* @param scienceAppId
 	* @param scienceAppName
@@ -364,7 +364,7 @@ public class SimulationLocalServiceUtil {
 	/**
 	* New Simulation With SimulationJob
 	*
-	* @param user                - 占쎌겱占쎌삺 占쎌젔占쎈꺗占쎈립 User 揶쏆빘猿�, EX)User user = PortalUtil.getUser(request);
+	* @param user                - 현재 접속한 User 객체, EX)User user = PortalUtil.getUser(request);
 	* @param groupId             - Portal GroupId
 	* @param scienceAppName
 	* @param scienceAppVersion
@@ -398,7 +398,7 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* 占쎈뻻獒뺁됱쟿占쎌뵠占쎈�� 占쎈땾占쎈뻬
+	* 시뮬레이션 수행
 	*
 	* @simulationUuid
 	* @fileId
@@ -419,7 +419,7 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* 占쎈뻻獒뺁됱쟿占쎌뵠占쎈�� 占쎈땾占쎈뻬
+	* 시뮬레이션 수행
 	*
 	* @simulationUuid
 	* @job_uuid
@@ -435,11 +435,11 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* 占쎈뻻獒뺁됱쟿占쎌뵠占쎈�� 占쎈땾占쎌젟
+	* 시뮬레이션 수정
 	*
 	* @throws JSONException
-	* @Token : 占쎌뵥筌앾옙 占쎈꽅占쎄쿃
-	* @uuid : 占쎈뻻獒뺁됱쟿占쎌뵠占쎈�� 占쎈툡占쎌뵠占쎈탵
+	* @Token : 인증 토큰
+	* @uuid : 시뮬레이션 아이디
 	* @return int resultCode
 	*/
 	public static int updateSimulation(java.lang.String icebreakerUrl,
@@ -452,7 +452,7 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* 占쎈솁占쎌뵬 占쎈씜嚥≪뮆諭�
+	* 파일 업로드
 	*
 	* @param params
 	String    Token
@@ -471,7 +471,7 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* 占쎈솁占쎌뵬 占쎄텣占쎌젫
+	* 파일 삭제
 	*
 	* @param icebreakerUrl
 	* @param vcToken
@@ -485,7 +485,7 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* serverFile 筌뤴뫖以�
+	* serverFile 목록
 	*/
 	public static java.lang.String getServerFileList(
 		java.lang.String icebreakerUrl, java.lang.String cmd_directory,
@@ -497,7 +497,7 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* job癰귨옙 野껉퀗�궢 占쎈솁占쎌뵬 zip占쎌굨占쎄묶嚥∽옙 占쎈뼄占쎌뒲嚥≪뮆諭�
+	* job별 결과 파일 zip형태로 다운로드
 	*
 	* @simulationUuid
 	* @job_uuid
@@ -512,7 +512,7 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* job error 癰귣떯由�
+	* job error 보기
 	*
 	* @param params
 	* @throws IOException
@@ -525,7 +525,7 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* 占쎈솁占쎌뵬 ID 占쎌넇占쎌뵥
+	* 파일 ID 확인
 	*
 	* @throws IOException
 	*/
@@ -538,8 +538,8 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* 占쎈탵占쎌젂占쎈꽅�뵳占� 占쎈솁占쎌뵬 鈺곌퀬�돳
-	* 占쎌뵬獄쏆꼷�읅占쎌뵥 占쎌뜎筌ｌ꼶�봺疫뀐옙 筌뤴뫖以됵옙占� dir = result
+	* 디렉토리 파일 조회
+	* 일반적인 후처리기 목록은 dir = result
 	*
 	* @throws IOException
 	*/
@@ -578,7 +578,7 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* simulation job 餓λ쵐占�
+	* simulation job 중지
 	*
 	* @param params
 	* @return
@@ -594,7 +594,7 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* Cluster List 鈺곌퀬�돳
+	* Cluster List 조회
 	*
 	* @param params
 	* @return
@@ -608,7 +608,7 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* job error 癰귣떯由�
+	* job error 보기
 	*
 	* @param params
 	* @throws IOException
@@ -621,7 +621,7 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* file 鈺곌퀬�돳
+	* file 조회
 	*
 	* @param params
 	* @throws IOException
@@ -634,7 +634,7 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* webgl占쎌뱽 占쎌맄占쎈립 占쎈솁占쎌뵬 占쎄문占쎄쉐 占쎌뜎 url �뵳�뗪쉘(占쎌뿫占쎈뻻 占쎄텢占쎌뒠-�빊酉��뜎 占쎈땾占쎌젟 占쎌굙占쎌젟)
+	* webgl을 위한 파일 생성 후 url 리턴(임시 사용-추후 수정 예정)
 	*
 	* @param params
 	* @throws IOException
@@ -662,7 +662,7 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* getUserRepositorySize 鈺곌퀬�돳
+	* getUserRepositorySize 조회
 	*
 	* @param params
 	* @return
@@ -684,11 +684,11 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* 占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏
-	* 占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏
-	* 占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏 Icebreaker Service End 占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏
-	* 占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏
-	* 占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏占쎈폏
+	* ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	* ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	* ■■■■■■■■■ Icebreaker Service End ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	* ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	* ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	*/
 	public static java.util.List<org.kisti.edison.bestsimulation.model.Simulation> findByUserIdAndGroupId(
 		long groupId, long userId)
