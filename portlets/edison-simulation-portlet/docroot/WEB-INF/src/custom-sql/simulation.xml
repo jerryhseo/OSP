@@ -66,6 +66,9 @@
 		<isNotEmpty property="simulationUuid">
 			AND	simulationUuid = #simulationUuid#
 		</isNotEmpty>
+		<isNotEmpty property="jobPhase">
+			AND	jobPhase = #jobPhase#
+		</isNotEmpty>
 		<isNotEmpty property="jobSeqNo">
 			AND	jobSeqNo = #jobSeqNo#
 		</isNotEmpty>
