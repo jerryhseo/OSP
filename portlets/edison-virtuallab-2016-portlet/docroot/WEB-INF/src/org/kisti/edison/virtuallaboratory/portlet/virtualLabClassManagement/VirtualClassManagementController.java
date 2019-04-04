@@ -226,6 +226,10 @@ public class VirtualClassManagementController {
 							|| UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabManager.getRoleId(), virtualLabId))) {
 				EdisonUserUtil.addSiteRole(user, groupId, EdisonRoleConstants.VIRTUAL_CLASS_OWNER);	// 가상 클래스 오너 권한 부여
 				UserGroupRoleCustomLocalServiceUtil.addUserGroupRoleCustom(user.getUserId(), groupId, virtualClassOwner.getRoleId(), virtualLabClass.getClassId());	// 가상 클래스 오너 커스텀 롤 부여
+				// 강좌 생성 시 TUTOR_GROUP 권한 부여
+				if(!EdisonUserUtil.isGroup(user, EdisonRoleConstants.TUTOR_GROUP)){
+					EdisonUserUtil.addGroup(user, EdisonRoleConstants.TUTOR_GROUP);
+				}
 			}
 			
 			// 주소창에 virtualLabId 를 get 방식으로 넘겨줘야 네비게이션에서 클릭했을때 다시 가상실험실 관리 페이지로 돌아갈수 있음
