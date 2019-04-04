@@ -265,7 +265,7 @@
 									<tr id="row_${model.jobUuid}" sub-job="${model.jobCnt}"class="${trClass}">
 								</c:when>
 								<c:otherwise>
-									<tr id="row_${model.jobUuid}" data-status="${model.jobStatus}" sub-job="${model.jobCnt}" simulation-id="${model.simulationUuid}" scienceApp-id="${model.scienceAppId}" cluster="${model.cluster}" class="${trClass}">
+									<tr id="row_${model.jobUuid}" data-status="${model.jobStatus}" sub-job="${model.jobCnt}" simulation-id="${model.simulationUuid}" scienceApp-id="${model.scienceAppId}" seq-no="${model.jobSeqNo}" cluster="${model.cluster}" class="${trClass}">
 								</c:otherwise>
 							</c:choose>
 							
