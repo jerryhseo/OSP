@@ -608,6 +608,13 @@ AUI().ready(function() {
 		var dataPathType = targetObejct.outputDataPathType();
 		var result = true;
 		
+		/* 2019.04.04 _ Add suffix when data path type is Folder */
+		if(dataPathType == "folder"){
+			if(value.substr(value.length-1) != "/"){
+				value += "/";
+			}
+		}
+		
 		// value에 / 포함 여부 체크
 		var name = value;
 		var stringRegx = /\//gi;
@@ -763,8 +770,6 @@ AUI().ready(function() {
 					alert("Port 정보 변경으로 인하여 Layout을 새롭게 작성 해야 합니다.");
 					$("#<portlet:namespace/>initLayout").val("true");
 				}
-				
-				
 			}
 			
 			/* 2018.11.13 _ Set Default Parent File Path */
