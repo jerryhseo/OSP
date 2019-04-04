@@ -1897,7 +1897,7 @@ function <portlet:namespace/>closePanel() {
 		<tr>
 			<th><liferay-ui:message key='status'/></th>
 			<td>
-				<img src="${contextPath}/images/monitoring/ko_KR/{{form.jobStatusImg}}" onerror='this.src="${contextPath}/images/monitoring/ko_KR/monitor_QUEUED.png"'/>
+				<img src="${contextPath}/images/monitoring/ko_KR/{{form.jobStatusImg}}" onerror='this.src="${contextPath}/images/monitoring/ko_KR/monitor_INITIALIZED_icon.png"'/>
 				{{form.jobStatusNm}}
 			</td>
 		</tr>
