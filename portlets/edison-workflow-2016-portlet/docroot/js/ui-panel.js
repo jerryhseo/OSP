@@ -561,7 +561,13 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
                 PANEL_DATA[panelType].form.workflowId :
                 PANEL_DATA[panelType].form.selected;
         var workflow = currWorkflows.get(workflowId);
-        var screenLogic = JSON.parse(workflow.screenLogic);
+        var screenLogic = "";
+        try{
+        	screenLogic = JSON.parse(workflow.screenLogic);
+        } catch(e){
+        	toastr["error"]("", var_prepare_remove_workflow_message);
+        	return false;
+        }
         if(_isEmpty(workflowId, var_select_workflow_first_message)){
             return false;
         }
