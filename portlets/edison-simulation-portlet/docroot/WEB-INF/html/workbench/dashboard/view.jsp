@@ -1935,18 +1935,18 @@ function <portlet:namespace/>closePanel() {
 			</td>
 		</tr>
 		{{/form.resultFile}}
-		<tr>
+		<!-- <tr>
 			<th><liferay-ui:message key='edison-table-list-header-is-project-share'/></th>
 			<td>
 				{{form.isShare}}
 			</td>
-		</tr>
+		</tr> -->
 	</table>
   </div>
   {{#form.isEdit}}
   <div class="box-footer">
     <button type="button" class="btn btn-primary btn-flat func" name="update">Save</button>
-	<button type="button" class="btn btn-info btn-flat func" name="share">Share</button>
+	<!-- <button type="button" class="btn btn-info btn-flat func" name="share">Share</button> -->
     <button type="button" class="btn btn-danger btn-flat pull-right func" name="delete">Delete</button>
   </div>
   {{/form.isEdit}}
