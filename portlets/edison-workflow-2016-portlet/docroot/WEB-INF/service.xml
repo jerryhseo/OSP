@@ -6,7 +6,7 @@
   
     <entity name="Workflow" local-service="true" remote-service="false">
     <!-- PK fields -->
-    <column name="workflowId" type="long" primary="true" id-type="increment"/>
+    <column name="workflowId" type="long" primary="true"/>
     <!-- Audit fields -->
     <column name="companyId" type="long" />
     <column name="userId" type="long" />
@@ -69,7 +69,7 @@
    
   <entity name="WorkflowSimulation" local-service="true" remote-service="false" cache-enabled="false">
     <!-- PK fields -->
-    <column name="simulationId" type="long" primary="true" id-type="increment"/>
+    <column name="simulationId" type="long" primary="true"/>
     <!-- Main fields -->
     <!-- Audit fields -->
     <column name="userId" type="long" />
@@ -118,7 +118,7 @@
 
   <entity name="WorkflowSimulationJob" local-service="true" remote-service="false">
     <!-- PK fields -->
-    <column name="simulationJobId" type="long" primary="true" id-type="increment"/>
+    <column name="simulationJobId" type="long" primary="true" />
     <column name="simulationId" type="long"/>
     
     <!-- Audit fields -->

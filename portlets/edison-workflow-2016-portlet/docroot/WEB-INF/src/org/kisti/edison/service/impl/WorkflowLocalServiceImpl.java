@@ -116,7 +116,7 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
     }
 
     public Workflow createWorkflow() throws SystemException{
-        long workflowId = super.counterLocalService.increment();
+        long workflowId = super.counterLocalService.increment(Workflow.class.getName());
         return super.workflowLocalService.createWorkflow(workflowId);
     }
 

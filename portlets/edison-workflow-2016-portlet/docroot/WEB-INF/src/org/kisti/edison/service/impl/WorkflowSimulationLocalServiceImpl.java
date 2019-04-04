@@ -91,7 +91,7 @@ public class WorkflowSimulationLocalServiceImpl extends WorkflowSimulationLocalS
     }
     
     public WorkflowSimulation createWorkflowSimulation() throws SystemException{
-        long simulationId = super.counterLocalService.increment();
+        long simulationId = super.counterLocalService.increment(WorkflowSimulation.class.getName());
         return workflowSimulationLocalService.createWorkflowSimulation(simulationId);
     }
     

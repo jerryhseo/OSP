@@ -8,7 +8,7 @@
 	<class name="org.kisti.edison.model.impl.WorkflowImpl" table="EDWF_Workflow">
 		<cache usage="read-write" />
 		<id name="workflowId" type="long">
-			<generator class="increment" />
+			<generator class="assigned" />
 		</id>
 		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
@@ -21,7 +21,7 @@
 	</class>
 	<class name="org.kisti.edison.model.impl.WorkflowSimulationImpl" table="EDWF_WorkflowSimulation">
 		<id name="simulationId" type="long">
-			<generator class="increment" />
+			<generator class="assigned" />
 		</id>
 		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="createDate" type="org.hibernate.type.TimestampType" />
@@ -35,7 +35,7 @@
 	<class name="org.kisti.edison.model.impl.WorkflowSimulationJobImpl" table="EDWF_WorkflowSimulationJob">
 		<cache usage="read-write" />
 		<id name="simulationJobId" type="long">
-			<generator class="increment" />
+			<generator class="assigned" />
 		</id>
 		<property name="simulationId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />

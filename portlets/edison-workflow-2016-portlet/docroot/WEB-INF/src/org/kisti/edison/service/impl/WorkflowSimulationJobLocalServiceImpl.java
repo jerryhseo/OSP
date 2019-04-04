@@ -803,7 +803,7 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
     }
     
     public WorkflowSimulationJob createWorkflowSimulationJob() throws SystemException{
-        long simulationJobId = super.counterLocalService.increment();
+        long simulationJobId = super.counterLocalService.increment(WorkflowSimulationJob.class.getName());
         return super.workflowSimulationJobLocalService.createWorkflowSimulationJob(simulationJobId);
     }
     
