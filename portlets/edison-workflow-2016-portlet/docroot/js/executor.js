@@ -283,10 +283,8 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
             params,
             function (workflowStatus) {
                 if (callback) {
-                	console.log("workflowStatus : " + workflowStatus);
-                	console.log("workflowStatus1 : " + JSON.parse(workflowStatus));
-                	console.log("workflowStatus2 : " + encodeURIComponent(workflowStatus));
-                    callback(workflowStatus);
+                	var workflowStatus = JSON.stringify(workflowStatus);
+                    callback(JSON.parse(workflowStatus));
                 }
             }, errorCallback
         );

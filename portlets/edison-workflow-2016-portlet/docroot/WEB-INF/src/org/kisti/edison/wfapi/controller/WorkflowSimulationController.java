@@ -1,10 +1,12 @@
 package org.kisti.edison.wfapi.controller;
 
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.codehaus.jackson.JsonNode;
 import org.kisti.edison.model.Workflow;
@@ -355,16 +357,20 @@ public class WorkflowSimulationController{
     @RequestMapping(value = {
         "/{simulationId}/job/{simulationJobId}/export", 
         "/job/{simulationJobId}/export"}, method = RequestMethod.POST)
-    public @ResponseBody String exportSimulationJob(
+    public void exportSimulationJob(
         @PathVariable("simulationId") long simulationId, 
         @PathVariable("simulationJobId") long simulationJobId, 
         @RequestParam("strNodes") String strNodes,
         @RequestParam("icebreakerVcToken") String icebreakerVcToken,
-        HttpServletRequest request) throws Exception{
+        HttpServletRequest request,HttpServletResponse response) throws Exception{
         try{
             User user = PortalUtil.getUser(request);
-            return WorkflowSimulationJobLocalServiceUtil.exportWorkflowEngineJson(
-                simulationJobId, strNodes, user.getScreenName(), icebreakerVcToken, request);
+            String obj = WorkflowSimulationJobLocalServiceUtil.exportWorkflowEngineJson(
+                  simulationJobId, strNodes, user.getScreenName(), icebreakerVcToken, request);
+            
+            response.setContentType("application/json; charset=UTF-8");
+            PrintWriter out = response.getWriter();
+            out.write(obj.toString());
         }catch (Exception e){
             log.error("error", e);
             throw e;

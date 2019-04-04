@@ -1917,15 +1917,20 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                     groupId: token.groupId,
                     strNodes: JSON.stringify(json.nodes)
                 }, function(exportJson) {
-                    // console.log(submitData)
+//                	var exportJson = JSON.parse(exportJson);
+                    if(exportJson.workflow.accessToken){
+                    	delete exportJson.workflow.accessToken;
+                    }
                     toastr['success']('', CONSTS.MESSAGE.edison_wfsimulation_export_success_message)
                     var currJob = currJobs.selected()
                     var currSimulation = currSimulations.selected()
+                    
+                    //한글일 경우 filename이 삭제됨.. replace 하는 이유는 잘 모르겠음.
                     var fileName = currSimulation.title + '-' + currJob.title
                     fileName = fileName ? fileName.replace(/[^a-z0-9]/gi, '_').toLowerCase() : 'workflowExport';
                     bEnd()
                     try {
-                        var blob = new Blob([exportJson], {type: "application/json;charset=utf-8"})
+                        var blob = new Blob([JSON.stringify(exportJson)], {type: "application/json;charset=utf-8"})
                         window.saveAs(blob, fileName)
                     } catch (e) {
                         if(console) {
