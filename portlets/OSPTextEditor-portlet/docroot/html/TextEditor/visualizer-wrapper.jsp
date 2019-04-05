@@ -166,7 +166,7 @@ $('#<portlet:namespace/>openLocalFile').click(function(){
 	if( <portlet:namespace/>disabled )
 		return;
 
-	<portlet:namespace/>visualizer.openLocalFile( true );
+	<portlet:namespace/>visualizer.openLocalFile( null, true );
 });
 
 $('#<portlet:namespace/>openServerFile').click(function(){

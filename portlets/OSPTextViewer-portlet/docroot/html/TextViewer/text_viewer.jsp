@@ -74,14 +74,17 @@ OSPVisualizerConfig visualizerConfig = OSPVisualizerUtil.getVisualizerConfig(ren
 /***********************************************************************
  * Canvas functions
 ***********************************************************************/
-function <portlet:namespace/>loadText( jsonData, changeAlert ){	
+function <portlet:namespace/>loadText( jsonData, changeAlert ){
+	OSP.Debug.eventTrace('<portlet:namespace/>', 'loadText', jsonData);
 	switch( jsonData.type_ ){
 	case OSP.Enumeration.PathType.FILE:
 	    <portlet:namespace/>visualizer.readServerFile();
 		break;
 	case OSP.Enumeration.PathType.FOLDER:
 	case OSP.Enumeration.PathType.EXT:
+		/*
 	    <portlet:namespace/>visualizer.readFirstServerFile();
+	    */
 		break;
 	case OSP.Enumeration.PathType.CONTENT:
 	case OSP.Enumeration.PathType.FILE_CONTENT:
@@ -155,7 +158,8 @@ function <portlet:namespace/>responseDataEventHandler( data, callbackParams ){
 function <portlet:namespace/>initializeEventHandler( data, callbackParams ){
 	console.log('[<portlet:namespace/>initializeEventHandler] ');
 	
-	<portlet:namespace/>visualizer.processInitAction( data, true );
+	<portlet:namespace/>visualizer.processInitAction( data, false );
+	$('#<portlet:namespace/>canvas').empty();
 }
 </script>
 
