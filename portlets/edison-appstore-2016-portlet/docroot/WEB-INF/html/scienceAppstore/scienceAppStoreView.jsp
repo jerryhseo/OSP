@@ -842,13 +842,26 @@
 									</c:if>
 								</c:if>
 								
-								<c:if test="${solver.appType eq 'Solver' and workBenchPlid ne 0 and isSignedIn and solver.openLevel ne downloadOnly}">
-									<a class="btn btn-primary <portlet:namespace/>executeRun <portlet:namespace/>executeBtn" onclick="<portlet:namespace/>moveWorkbench('${params.solverId}');">
-										<b>
-											<i class="fa fa-play-circle-o" style="margin-right: 5px;"></i>
-											Run
-										</b>
-									</a>
+								<!-- solver.appType eq 'Solver' -->
+								<c:if test="${workBenchPlid ne 0 and isSignedIn and solver.openLevel ne downloadOnly}">
+									<c:choose>
+										<c:when test="${solver.appType eq 'Solver'}">
+											<a class="btn btn-primary <portlet:namespace/>executeRun <portlet:namespace/>executeBtn" onclick="<portlet:namespace/>moveWorkbench('${params.solverId}');">
+												<b>
+													<i class="fa fa-play-circle-o" style="margin-right: 5px;"></i>
+													Run
+												</b>
+											</a>
+										</c:when>
+										<c:otherwise>
+											<a class="btn btn-primary <portlet:namespace/>executeRun <portlet:namespace/>executeBtn" onclick="<portlet:namespace/>edisonModuleExecute('${solver.exeFileName}');">
+												<b>
+													<i class="fa fa-play-circle-o" style="margin-right: 5px;"></i>
+													Run
+												</b>
+											</a>
+										</c:otherwise>
+									</c:choose>
 								</c:if>
 								
 								<c:if test="${solver.appType eq 'Solver' and workBenchPlid ne 0 and isSignedIn and solver.openLevel eq downloadOnly}">
@@ -2061,6 +2074,40 @@ function <portlet:namespace/>deleteFavoriteApp(solverId,groupId) {
 function <portlet:namespace/>historyBack(){
 	location.href = "${redirectOrignURL}";
 }
+/* Editor,Analyzer 실행 : 사이언스앱 Run */
+function <portlet:namespace/>edisonModuleExecute(targetPortletId){
+	$("body").css('overflow','hidden');
+	AUI().use("liferay-portlet-url", function(a) {
+		var portletURL = Liferay.PortletURL.createRenderURL();
+		portletURL.setPortletMode("view");
+		portletURL.setWindowState("pop_up");
+		portletURL.setPortletId(targetPortletId);
+		Liferay.Util.openWindow(
+			{
+				dialog: {
+// 					width:1024,
+// 					height:900,
+					cache: false,
+					draggable: false,
+					resizable: false,
+					modal: true,
+					destroyOnClose: true,
+					after: {
+						render: function(event) {
+							$("button.btn.close").on("click", function(e){
+								$("body").css('overflow','');
+							});
+						}
+					}
+				},
+			id: "dataTypeSearchDialog",
+			uri: portletURL.toString(),
+			title: "Edison Tool Execute"
+			}
+		);
+	});
+}
+
 
 /* 워크밴치 실행 : 사이언스앱 Run */
 function <portlet:namespace/>moveWorkbench(targetScienceAppId){
@@ -3163,7 +3210,7 @@ function <portlet:namespace/>moveWorkflow(targetWorkflowId){
 		/* scienceAppDescriptionContent.replace(/(<([^>]+)>)/gi, ""); */
 		
 		/* $("<meta name='description' content='" + scienceAppDescriptionContent + "'>").appendTo(pageFirstHeadElement); */
-		$("<meta name='keywords' content=''>").appendTo(pageFirstHeadElement);
+// 		$("<meta name='keywords' content=''>").appendTo(pageFirstHeadElement);
 		
 	}
 	

@@ -502,20 +502,37 @@
 						}
 						
 						/* 실행 */
-						if(dataMap.dataList[i].openLevel != "DOWNLOAD_ONLY" && dataMap.dataList[i].appType == "Solver" && ${workBenchPlid} != 0){
-							$("<td/>").css("text-align","center").append(
-									$("<img/>").attr("src","${contextPath}/images/btn_run.jpg")
-												.attr("id","manualLinkBtn")
-												.attr("onClick", "<portlet:namespace/>moveWorkbenchFromList('" + dataMap.dataList[i].scienceAppId + "')")
-												.css("height", "28px")
-												.css("cursor","pointer")
-												.css("vertical-align","middle")
-												.hover(
-												  function(){
-												  	$(this).attr("src","${contextPath}/images/btn_run.jpg");
-												  }
-												)
-							).appendTo($vRow);
+						if(dataMap.dataList[i].openLevel != "DOWNLOAD_ONLY" && ${workBenchPlid} != 0){
+							if( dataMap.dataList[i].appType == "Solver"){
+								$("<td/>").css("text-align","center").append(
+										$("<img/>").attr("src","${contextPath}/images/btn_run.jpg")
+													.attr("id","manualLinkBtn")
+													.attr("onClick", "<portlet:namespace/>moveWorkbenchFromList('" + dataMap.dataList[i].scienceAppId + "')")
+													.css("height", "28px")
+													.css("cursor","pointer")
+													.css("vertical-align","middle")
+													.hover(
+													  function(){
+													  	$(this).attr("src","${contextPath}/images/btn_run.jpg");
+													  }
+													)
+								).appendTo($vRow);
+								
+							}else if( dataMap.dataList[i].appType == "Editor"||dataMap.dataList[i].appType == "Analyzer"){
+								$("<td/>").css("text-align","center").append(
+										$("<img/>").attr("src","${contextPath}/images/btn_run.jpg")
+													.attr("id","manualLinkBtn")
+													.attr("onClick", "<portlet:namespace/>edisonModuleExecute('" + dataMap.dataList[i].exeFileName + "')")
+													.css("height", "28px")
+													.css("cursor","pointer")
+													.css("vertical-align","middle")
+													.hover(
+													  function(){
+													  	$(this).attr("src","${contextPath}/images/btn_run.jpg");
+													  }
+													)
+								).appendTo($vRow);
+							}
 						} else if(dataMap.dataList[i].openLevel == "DOWNLOAD_ONLY"){
 							$("<td/>").css("text-align","center").append(
 									$("<img/>").attr("src","${contextPath}/images/download_btn.gif")
@@ -683,6 +700,39 @@
 		var params = "&" + thisPortletNamespace + "solverId=" + scienceAppId;
 		params += "&" + thisPortletNamespace + "groupId=" + groupId;
 		location.href = "<%=scienceAppDetailUrl%>" + params;
+	}
+	
+	function <portlet:namespace/>edisonModuleExecute(targetPortletId){
+		$("body").css('overflow','hidden');
+		AUI().use("liferay-portlet-url", function(a) {
+			var portletURL = Liferay.PortletURL.createRenderURL();
+			portletURL.setPortletMode("view");
+			portletURL.setWindowState("pop_up");
+			portletURL.setPortletId(targetPortletId);
+			Liferay.Util.openWindow(
+				{
+					dialog: {
+//	 					width:1024,
+//	 					height:900,
+						cache: false,
+						draggable: false,
+						resizable: false,
+						modal: true,
+						destroyOnClose: true,
+						after: {
+							render: function(event) {
+								$("button.btn.close").on("click", function(e){
+									$("body").css('overflow','');
+								});
+							}
+						}
+					},
+				id: "dataTypeSearchDialog",
+				uri: portletURL.toString(),
+				title: "Edison Tool Execute"
+				}
+			);
+		});
 	}
 	
 	function <portlet:namespace/>moveWorkbenchFromList(targetScienceAppId) {
