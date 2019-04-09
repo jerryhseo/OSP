@@ -160,9 +160,8 @@ public class OSPFileLocalServiceImpl extends OSPFileLocalServiceBaseImpl {
 	
 	 private String extractExtension( String fileName ){
 		int lastIndex = fileName.lastIndexOf(".");
-		if( lastIndex < 0 )	return "";
-		
-		return fileName.substring(lastIndex+1);
+		if( lastIndex < 0 )	return fileName;
+		else	return fileName.substring(lastIndex+1);
 	}
 	
 	 private JSONArray lookUpFolder( File folder, String filter ) throws IOException{
@@ -1697,6 +1696,8 @@ public class OSPFileLocalServiceImpl extends OSPFileLocalServiceBaseImpl {
 		
 		JSONObject result = JSONFactoryUtil.createJSONObject();
 		
+		System.out.println("Target Path in getFirstFileName(): "+targetPath.toString());
+		System.out.println("File Search Filter: "+extractExtension(filter));
 		File[] files;
 		if( Validator.isNotNull(filter) ){
 			files = targetPath.toFile().listFiles( new FileExtensionFilter(extractExtension(filter)) );

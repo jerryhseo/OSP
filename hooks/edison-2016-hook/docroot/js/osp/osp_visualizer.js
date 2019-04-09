@@ -274,6 +274,8 @@
                 parentPath: currentData.parent()
             };
 
+            OSP.Debug.eventTrace('getFirstFileName()', 'Params', params);
+
             if( baseFolder.type() === OSP.Enumeration.PathType.EXT){
                 params.fileName = baseFolder.name();
             }
@@ -289,7 +291,7 @@
                 contentType: false,  // tell jQuery not to set contentType
                 beforeSend: blockVisualizer,
                 success : function(data) {
-                       // console.log( 'currentData after readFile: ', currentData );
+                       console.log( 'currentData after readFile: ', data );
                        if( data.result === 'no-file' ){
                            return;
                        }
@@ -299,6 +301,7 @@
                             parent_: data.parentPath,
                             name_:data.fileName
                         };
+                        OSP.Debug.eventTrace('result of getFirstFileName', data, result);
                         setCurrentData( result );
 
                         successFunc();

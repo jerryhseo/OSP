@@ -9,7 +9,7 @@ String launcherURL = (String)renderRequest.getAttribute("launcherURL");
 <portlet:resourceURL var="serveResourceURL"></portlet:resourceURL>
  
  <div class="container-fluid osp-visualizer">
- 	<div class="row-fluid no-header-frame">
+ 	<div class="row-fluid osp-no-header-frame">
 		<iframe 
 				class="col-sm-12 osp-iframe-canvas"  
 				style="<%=visualizerConfig.getDisplayStyle()%>" 
