@@ -39,6 +39,7 @@
 
 <liferay-portlet:resourceURL var="deployWarURL" escapeXml="false" id="deployWar" copyCurrentRenderParameters="false"/>
 
+<liferay-portlet:resourceURL var="getSourceFileInfoURL" escapeXml="false" id="getSourceFileInfo" copyCurrentRenderParameters="false"/>
 
 <liferay-portlet:resourceURL var="addScienceAppFileURL" id="addScienceAppFile" copyCurrentRenderParameters="false">
 	<portlet:param name="appName" value="${data.name}"/>
@@ -116,6 +117,50 @@
 	}
 	.aui .tooltip {
 		display: none;
+	}
+	
+	.<portlet:namespace/>upload-type,
+	.<portlet:namespace/>upload-type > label {
+		text-align: center;
+		font-size: inherit !important;
+		font-weight: normal !important;
+		font-family: inherit !important;
+		line-height: inherit !important;
+	}
+	
+	#<portlet:namespace/>fileEditor,
+	#<portlet:namespace/>goParentFolder,
+	.<portlet:namespace/>file-editor{
+		display: none;
+	}
+	
+	textarea.<portlet:namespace/>exe-file-info{
+		width: 100%;
+		resize: none;
+	}
+	
+	div.<portlet:namespace/>exe-file-info{
+		padding: 5px 10px;
+		border: 1px solid #ccc;
+		border-radius: 5px;
+	}
+	
+	#<portlet:namespace/>sourceFileLog{
+		margin-bottom: 10px;
+	}
+	
+	#<portlet:namespace/>sourceFile{
+		display: inline-block;
+	}
+	
+	#<portlet:namespace/>exeFileList,
+	.<portlet:namespace/>no-exe-data{
+		text-align: center;
+	}
+	
+	#<portlet:namespace/>goParentFolder:HOVER,
+	.<portlet:namespace/>exe-folder:HOVER{
+		cursor: pointer;
 	}
 	
 </style>
@@ -204,6 +249,88 @@
                     
 				</td>
 			</tr>
+			
+			<%-- <tr>
+				<th>File Upload</th>
+				
+				<td class="<portlet:namespace/>upload-type">
+					<label>
+						<input type="radio" name="<portlet:namespace/>uploadType" value="executeFile" />
+						<liferay-ui:message key='edison-science-appstore-exe-file' />
+					</label>
+					&emsp;&emsp;
+					<label>
+						<input type="radio" name="<portlet:namespace/>uploadType" value="sourceFile" />
+						Source File
+					</label>
+				</td>
+				
+				<td id="sourceFileTd" colspan="2">
+					<input type="file" id="<portlet:namespace/>sourceFile" name="<portlet:namespace/>sourceFile" disabled="disabled" onchange="<portlet:namespace/>disableDeploy()">
+					<input type="button" id="<portlet:namespace/>sourceFileUpload" class="btn btn-default" value="Upload" />
+					<c:if test="${data.sourceFileId ne null}">
+						<div class="down_date sourceFileClass"  onclick="<portlet:namespace/>fileDownload('${data.sourceFileId }')" style="cursor: pointer;display: inline-block;">
+							${data.sourceFileTitle}
+						</div>
+						<img src='${contextPath}/images/icon_dustbin.png' class="sourceFileClass noUpdateHidden" 
+                        width='13' height='14' style="cursor:pointer" onClick="<portlet:namespace/>deleteFile('${data.sourceFileId}','soruceFile','sourceFileClass');"/>
+					</c:if>
+                    
+				</td>
+			</tr>
+			
+			<tr id="<portlet:namespace/>fileEditor">
+				<th></th>
+				<td class="<portlet:namespace/>file-editor" colspan="3">
+					<div id="<portlet:namespace/>sourceFileLog">
+						<div class="<portlet:namespace/>file-editor-title">Build Log</div>
+						<div class="h10"></div>
+						<textarea class="<portlet:namespace/>exe-file-info" rows="5" draggable="false" readonly="readonly">Log...</textarea>
+					</div>
+					
+					<div class="<portlet:namespace/>file-editor-title">실행 파일 폴더</div>
+					<div class="h10"></div>
+					
+					<div class="<portlet:namespace/>exe-file-info">
+						<i class="icon-home"></i>
+						<div id="<portlet:namespace/>exeFolderBreadCrumb" style="display: inline-block;">
+						</div>
+						<div id="<portlet:namespace/>goParentFolder" style="display: inline-block; float: right; margin-right: 10px;">
+							<liferay-ui:message key='parent-folder' /> <i class="icon-level-up"></i>
+						</div>
+						<div></div>
+						<div class="h10"></div>
+						
+						<input type="hidden" id="<portlet:namespace/>exeRootFolderPath" value="" />
+						<input type="hidden" id="<portlet:namespace/>exeFolders" value="" />
+						<input type="hidden" id="<portlet:namespace/>exeFiles" value="" />
+						<span class="<portlet:namespace/>file-editor-title-sub">Folder</span>
+						<div id="<portlet:namespace/>exeFolderList">
+						</div>
+						
+						<div class="h10"></div>
+						
+						<span class="<portlet:namespace/>file-editor-title-sub">File</span>
+						<div id="<portlet:namespace/>exeFileList">
+							<table id="<portlet:namespace/>exeFileListTable" style="width: 100%; display: none;">
+								<colgroup>
+									<col width="75%">
+									<col width="25%">
+								</colgroup>
+								
+								<thead>
+									<th>Name</th>
+									<th>File Size</th>
+								</thead>
+								
+								<tbody id="<portlet:namespace/>exeFileListBody">
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</td>
+			</tr> --%>
+			
 			<c:choose>
 				<c:when test="${data.isPort}">
 					<tr>
@@ -460,10 +587,10 @@
 
 <script type="text/javascript">
 var <portlet:namespace/>isDisableDeploy = false;
+	$(document).ready(function () {
 <%
 if(mode.equals(Constants.UPDATE)){
 %>
-	$(document).ready(function () {
 	    $('.deploy').hide();
 	    changeOpenLevel('${data.openLevel}');
 //		changeRunType('${data.runType}');
@@ -480,14 +607,17 @@ if(mode.equals(Constants.UPDATE)){
 		
 		/* Select Run Type */
 		$("#<portlet:namespace/>runType option[value='${data.runType}']").attr("selected", "selected");
-		
-	});
 <%} else { %>
-	$(document).ready(function () {
 		<portlet:namespace/>getClusterList();
 		$('.deploy').hide();
-	});
 <%}%>
+		
+		/* var sourceFileId = "${data.sourceFileId}";
+		var uploadType = '';
+		if(!!sourceFileId){
+			<portlet:namespace/>getSourceFileInfo(uploadType, sourceFileId, '');
+		} */
+	});
 
 /* 클러스터 리스트 가져오기 */
 function <portlet:namespace/>getClusterList(){
@@ -577,8 +707,8 @@ AUI().ready(function() {
 		complete: function(xhr) {
 // 			$("#progress_bar_wrap2").dialog("close");
 			bEnd();
-// 			var out =  $.parseJSON(xhr.responseText);
-// 			var fileName = out.fileName;
+ 			var out =  $.parseJSON(xhr.responseText);
+ 			var fileName = out.fileName;
 			var binFolderListToStr = out.binFolderListToStr;
 			$("#commandTextArea").val(binFolderListToStr);
 			$("#fileUpladMsg").text(Liferay.Language.get('edison-science-appstore-toolkit-file-upload-success-message'));
@@ -979,4 +1109,157 @@ function changeUploadCaseSelect(val){
 		$("#<portlet:namespace/>uploadOption_compileUrl").show();
 	}
 }
+
+function <portlet:namespace/>sourceFileView(uploadType){
+	$("#<portlet:namespace/>fileEditor").show();
+	
+	$(".<portlet:namespace/>file-editor").show();
+	if(uploadType === 'sourceFile'){
+		$("#<portlet:namespace/>sourceFileLog").show();
+	} else {
+		$("#<portlet:namespace/>sourceFileLog").hide();
+	}
+}
+
+$("#<portlet:namespace/>sourceFileUpload").click(function(){
+	var uploadType = $("input:radio[name=<portlet:namespace/>uploadType]:checked").val();
+	var sourceFile = $("#<portlet:namespace/>sourceFile").val();
+	
+	if(!uploadType && !sourceFile){
+		alert(Liferay.Language.get('this-field-is-mandatory'));
+		$("input:radio[name=<portlet:namespace/>uploadType]").focus();
+		return false;
+	}
+	
+	/* File upload - return : sourFileId */
+	<portlet:namespace/>sourceFileView(uploadType);
+	/* <portlet:namespace/>getSourceFileInfo(uploadType, '', ''); */
+});
+
+function <portlet:namespace/>getSourceFileInfo(uploadType, sourceFileId, folderPath){
+	
+	jQuery.ajax({
+		type: "POST",
+		url: "<%=getSourceFileInfoURL%>",
+		data  : { 
+		    <portlet:namespace/>sourceFileId: sourceFileId
+		},
+		dataType: 'json',
+		success: function(result) {
+			console.log(result)
+			var rootFolderPath = result.rootFolderPath;
+			var folder = result.folders;
+			var file = result.files;
+			
+			$("#<portlet:namespace/>exeRootFolderPath").val(rootFolderPath);
+			if(folder.length > 0){
+				$("#<portlet:namespace/>exeFolders").val(JSON.stringify(folder));
+				<portlet:namespace/>drawSourceFolderList(true, folderPath);
+			} else {
+				$("#<portlet:namespace/>exeFolderList").addClass('<portlet:namespace/>no-exe-data').text(Liferay.Language.get('edison-workflow-data-empty-message'));
+			}
+			
+			if(file.length > 0){
+				$("#<portlet:namespace/>exeFileListTable").show();
+				$("#<portlet:namespace/>exeFiles").val(JSON.stringify(file));
+				<portlet:namespace/>drawSourceFolderList(false, folderPath);
+			} else {
+				$("#<portlet:namespace/>exeFileListTable").hide();
+				$("#<portlet:namespace/>exeFileList").text(Liferay.Language.get('edison-workflow-data-empty-message'));
+			}
+			
+		}, error: function(jqXHR, textStatus, errorThrown){
+			alert(textStatus+": "+errorThrown);
+		}, complete: function(){
+			bEnd();
+		}
+		
+	});
+	
+	<portlet:namespace/>sourceFileView(uploadType);
+}
+
+function <portlet:namespace/>selectedSourceFolder(folderPath, parentFolderPath){
+	$("#<portlet:namespace/>goParentFolder").attr("parentFolderPath", parentFolderPath);
+	<portlet:namespace/>drawSourceFolderList(true, folderPath);
+	<portlet:namespace/>drawSourceFolderList(false, folderPath);
+}
+
+function <portlet:namespace/>drawSourceFolderList(isFolder, folderPath){
+	
+	if(!folderPath){
+		$("#<portlet:namespace/>goParentFolder").hide();
+		folderPath = $("#<portlet:namespace/>exeRootFolderPath").val();
+	} else {
+		if(folderPath != $("#<portlet:namespace/>exeRootFolderPath").val()){
+			$("#<portlet:namespace/>goParentFolder").show()
+		} else {
+			$("#<portlet:namespace/>goParentFolder").hide();
+		}
+	}
+	$("#<portlet:namespace/>exeFolderBreadCrumb").text(" " + folderPath);
+	
+	if(isFolder){
+		$("#<portlet:namespace/>exeFolderList").html("");
+		
+		var data = JSON.parse($("#<portlet:namespace/>exeFolders").val());
+		var subFolderCnt = 0;
+		for(var idx=0; idx<data.length; idx++){
+			var folder = data[idx];
+			if(folder.parentFolderPath.trim() == folderPath.trim()){
+				var folderName = $("<i/>").addClass("icon-folder-open").text(" " + folder.name);
+				var folderSpan = $("<span/>").addClass("<portlet:namespace/>exe-folder")
+											.attr("onclick", "<portlet:namespace/>selectedSourceFolder('" + folder.folderPath + "', '" + folder.parentFolderPath + "')")
+											.attr("folderPath", folder.folderPath)
+											.attr("parentFolderPath", folder.parentFolderPath)
+											.css("padding", "5px 10px")
+											.css("margin", "5px 10px")
+											.css("border", "1px solid #000")
+											.css("border-radius", "5px")
+											.append(folderName);
+				
+				$("#<portlet:namespace/>exeFolderList").removeClass('<portlet:namespace/>no-exe-data').append(folderSpan);
+				subFolderCnt += 1;
+			}
+		}
+		
+		if(subFolderCnt <= 0){
+			$("#<portlet:namespace/>exeFolderList").addClass('<portlet:namespace/>no-exe-data').text(Liferay.Language.get('edison-workflow-data-empty-message'));
+		}
+	} else{
+		$("#<portlet:namespace/>exeFileListBody").html("");
+		
+		var data = JSON.parse($("#<portlet:namespace/>exeFiles").val());
+		var subFileCnt = 0;
+		for(var idx=0; idx<data.length; idx++){
+			var file = data[idx];
+			if(file.folderPath.trim() == folderPath.trim()){
+				var fileTr = $("<tr/>").attr("folderPath", file.folderPath);
+				var fileName = $("<i/>").addClass("icon-file-2").text(" " + file.name);
+				$("<td/>").css("text-align", "left").append(fileName).appendTo(fileTr);
+				
+				var fileSize=0;
+				var fileSizeByte = file.fileSize;
+				if(fileSizeByte < 1024){
+					fileSize = fileSizeByte + " Byte";
+				} else {
+					fileSize = (fileSizeByte/1024).toFixed(3) + " KB";
+				}
+				$("<td/>").addClass("center").css("text-align", "right").text(fileSize).appendTo(fileTr);
+				
+				$("#<portlet:namespace/>exeFileListBody").append(fileTr);
+				subFileCnt += 1;
+			}
+		}
+		
+		if(subFileCnt <= 0){
+			$("#<portlet:namespace/>exeFileList").text(Liferay.Language.get('edison-workflow-data-empty-message'));
+		}
+	}
+}
+
+$("#<portlet:namespace/>goParentFolder").click(function(){
+	var parentFolderPath = $(this).attr("parentFolderPath");
+})
+
 </script>

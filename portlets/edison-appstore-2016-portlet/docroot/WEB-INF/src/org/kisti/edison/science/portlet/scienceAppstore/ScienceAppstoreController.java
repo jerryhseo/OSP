@@ -27,6 +27,7 @@ import org.kisti.edison.model.EdisonExpando;
 import org.kisti.edison.model.EdisonFileConstants;
 import org.kisti.edison.model.EdisonMessageConstants;
 import org.kisti.edison.model.EdisonRoleConstants;
+import org.kisti.edison.science.NoSuchScienceAppException;
 import org.kisti.edison.science.model.ScienceApp;
 import org.kisti.edison.science.model.ScienceAppCategoryLink;
 import org.kisti.edison.science.model.ScienceAppDescription;
@@ -52,6 +53,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
+import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 import com.kisti.osp.icecap.model.DataType;
@@ -104,10 +106,52 @@ import net.sf.json.JSONObject;
 public class ScienceAppstoreController {
 	private static Log log = LogFactoryUtil.getLog(ScienceAppstoreController.class);
 	
+	@RenderMapping(params="myRender=friendlyAppRender")
+	public String solverRender(RenderRequest request, RenderResponse response, ModelMap model){
+		Map params = RequestUtil.getParameterMap(request);
+		
+		String scienceAppName = params.get("name").toString();
+		String scienceAppVersion = params.get("version").toString().replaceAll("-", ".");
+		
+		boolean isError = false;
+		long solverId = 0;
+		long groupId = 0;
+		try {
+			ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppName, scienceAppVersion);
+			solverId = scienceApp.getScienceAppId();
+			groupId = scienceApp.getGroupId();
+			if(scienceApp.getStatus()==1901003){
+				throw new PortalException("NO Status");
+			}
+		} catch (NoSuchScienceAppException e) {
+			isError = true;
+			SessionMessages.add(request, EdisonMessageConstants.SEARCH_NO_DATA);
+		} catch (SystemException e) {
+			e.printStackTrace();
+			SessionErrors.add(request, EdisonMessageConstants.SEARCH_ERROR);
+			isError = true;
+		}catch (PortalException e) {
+			isError = true;
+			SessionMessages.add(request, EdisonMessageConstants.SEARCH_NO_STATUS);
+		} finally {
+			if(isError){
+				return "scienceAppstore/friendlyViewError";
+			}else{
+				params.put("solverId", solverId);
+				params.put("groupId", groupId);
+				return viewRender(request, response, model, params);
+			}
+		}
+	}
+	
 	@RequestMapping//default
 	public String view(RenderRequest request, RenderResponse response,ModelMap model){
+		Map params = RequestUtil.getParameterMap(request);
+		return viewRender(request, response, model, params);
+	}
+	
+	protected String viewRender(RenderRequest request, RenderResponse response,ModelMap model,Map params) {
 		try {
-			Map params = RequestUtil.getParameterMap(request);
 			boolean copyParam = GetterUtil.getBoolean(params.get("edionCopyParam"));
 			if(copyParam){
 				model.addAttribute("returnParams", params);
@@ -468,6 +512,7 @@ public class ScienceAppstoreController {
 		}
 		return "scienceAppstore/scienceAppStoreView";
 	}
+	
 	
 	@ResourceMapping(value="edisonFileDownload")
 	public void edisonFileDownload(ResourceRequest request, ResourceResponse response) throws SystemException, JSONException, IOException, PortalException, ParseException, PortletModeException{
