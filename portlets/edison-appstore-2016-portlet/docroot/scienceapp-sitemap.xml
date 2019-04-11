@@ -1,2511 +1,2399 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_Joukowski/1-0-0/view</loc>
-    <lastmod>2018-06-12 10:34:12</lastmod>
-  </url>
-  <url>
-    <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_Ychannel/1-0-0/view</loc>
-    <lastmod>2017-05-30 19:40:52</lastmod>
-  </url>
-  <url>
-    <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_MEA/1-0-0/view</loc>
-    <lastmod>2016-08-22 16:41:09</lastmod>
-  </url>
-  <url>
-    <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/edCAV2d/1-0-0/view</loc>
-    <lastmod>2016-08-22 16:40:47</lastmod>
-  </url>
-  <url>
-    <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_Channel/1-0-0/view</loc>
-    <lastmod>2016-08-22 16:40:14</lastmod>
-  </url>
-  <url>
-    <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_UST_Forced_VIB/1-0-0/view</loc>
-    <lastmod>2016-08-22 16:39:21</lastmod>
-  </url>
-  <url>
-    <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_YUHT_5/1-0-0/view</loc>
-    <lastmod>2016-08-22 16:38:55</lastmod>
-  </url>
-  <url>
-    <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Iso_par/1-0-0/view</loc>
-    <lastmod>2016-08-22 16:38:35</lastmod>
-  </url>
-  <url>
-    <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/pattern_search/1-0-0/view</loc>
-    <lastmod>2016-08-22 16:37:49</lastmod>
-  </url>
-  <url>
-    <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/edCAV3d/1-0-0/view</loc>
-    <lastmod>2016-08-22 16:37:03</lastmod>
-  </url>
-  <url>
-    <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_SubCas/1-0-0/view</loc>
-    <lastmod>2017-05-30 19:42:20</lastmod>
-  </url>
-  <url>
-    <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_TranCas/1-0-0/view</loc>
-    <lastmod>2018-05-23 09:21:12</lastmod>
-  </url>
-  <url>
-    <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_SupEuCas/1-0-0/view</loc>
-    <lastmod>2017-05-30 19:41:48</lastmod>
-  </url>
-  <url>
-    <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_boundary_layer/1-0-0/view</loc>
-    <lastmod>2016-08-22 16:34:57</lastmod>
-  </url>
-  <url>
-    <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Axi_Comp/1-0-0/view</loc>
-    <lastmod>2016-08-22 16:34:33</lastmod>
-  </url>
-  <url>
-    <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/KFLOW_EDISON_1/1-0-0/view</loc>
-    <lastmod>2016-08-22 16:33:36</lastmod>
-  </url>
-  <url>
-    <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/KFLOW_EDISON_2/1-0-0/view</loc>
-    <lastmod>2016-08-22 16:32:55</lastmod>
-  </url>
-  <url>
-    <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/KFLOW_EDISON_3/1-0-0/view</loc>
-    <lastmod>2018-09-07 15:22:28</lastmod>
-  </url>
-  <url>
-    <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/KFLOW_EDISON_5/1-0-0/view</loc>
-    <lastmod>2018-09-07 15:34:38</lastmod>
-  </url>
-  <url>
-    <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/KFLOW_EDISON_6/1-0-0/view</loc>
-    <lastmod>2016-08-30 15:07:33</lastmod>
-  </url>
-  <url>
-    <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/KFLOW_EDISON_7/1-0-0/view</loc>
-    <lastmod>2016-08-22 16:28:36</lastmod>
-  </url>
-  <url>
-    <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/KFLOW_EDISON_8/1-0-0/view</loc>
-    <lastmod>2016-08-22 16:26:22</lastmod>
-  </url>
-  <url>
-    <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/KFLOW_EDISON_9/1-0-0/view</loc>
-    <lastmod>2016-08-22 16:25:24</lastmod>
-  </url>
-  <url>
-    <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_UST_FREE_VIB/1-0-0/view</loc>
-    <lastmod>2016-08-22 15:51:35</lastmod>
-  </url>
-  <url>
-    <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Lumped_Vortex/1-0-0/view</loc>
-    <lastmod>2018-06-12 10:35:35</lastmod>
-  </url>
-  <url>
-    <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_P_SDV/1-0-0/view</loc>
-    <lastmod>2018-06-12 10:39:04</lastmod>
-  </url>
-  <url>
-    <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_UST_TORSION_VIB/1-0-0/view</loc>
-    <lastmod>2016-08-22 15:49:59</lastmod>
-  </url>
-  <url>
-    <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_P_SD/1-0-0/view</loc>
-    <lastmod>2018-06-12 10:44:15</lastmod>
-  </url>
-  <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_SPM/1-0-0/view</loc>
-    <lastmod>2018-06-12 10:41:30</lastmod>
+    <lastmod>2018-06-12</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_VPM/1-0-0/view</loc>
-    <lastmod>2018-06-12 10:42:23</lastmod>
+    <lastmod>2018-06-12</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Flow_Path_Design_Algorithm/1-0-0/view</loc>
-    <lastmod>2018-09-07 15:03:10</lastmod>
+    <lastmod>2018-09-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_Comp_correction/1-0-0/view</loc>
-    <lastmod>2017-05-30 19:36:32</lastmod>
+    <lastmod>2017-05-30</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_Comp_critical_mach/1-0-0/view</loc>
-    <lastmod>2018-06-12 10:32:40</lastmod>
+    <lastmod>2018-06-12</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_SDP_M/1-0-0/view</loc>
-    <lastmod>2017-05-30 19:33:36</lastmod>
+    <lastmod>2017-05-30</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_YUIBM_1/1-3-0/view</loc>
-    <lastmod>2018-09-07 14:59:19</lastmod>
+    <lastmod>2018-09-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_YUIBM_2/1-2-0/view</loc>
-    <lastmod>2016-08-22 15:42:31</lastmod>
+    <lastmod>2016-08-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_YUIBM_3/1-1-0/view</loc>
-    <lastmod>2018-09-07 14:59:53</lastmod>
+    <lastmod>2018-09-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_YUHT_1/1-1-0/view</loc>
-    <lastmod>2018-09-07 14:58:03</lastmod>
+    <lastmod>2018-09-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_YUHT_2/1-1-0/view</loc>
-    <lastmod>2016-08-22 15:41:27</lastmod>
+    <lastmod>2016-08-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_YUHT_3/1-1-0/view</loc>
-    <lastmod>2016-08-22 15:41:12</lastmod>
+    <lastmod>2016-08-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_YUHT_4/1-1-0/view</loc>
-    <lastmod>2018-09-07 14:58:34</lastmod>
+    <lastmod>2018-09-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SNUFOAM_Laminar_2D_for_EDISON/1-0-0/view</loc>
-    <lastmod>2016-08-22 15:39:53</lastmod>
+    <lastmod>2016-08-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_Ychannel_Pillar/1-0-0/view</loc>
-    <lastmod>2017-05-30 19:41:06</lastmod>
+    <lastmod>2017-05-30</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_AnnularCyl/1-0-0/view</loc>
-    <lastmod>2017-05-30 19:39:24</lastmod>
+    <lastmod>2017-05-30</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_Duct/1-0-0/view</loc>
-    <lastmod>2017-05-30 19:40:11</lastmod>
+    <lastmod>2017-05-30</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/edLam2dAxi/1-0-0/view</loc>
-    <lastmod>2016-08-22 15:38:06</lastmod>
+    <lastmod>2016-08-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SNUFOAM_ShipRes/1-0-0/view</loc>
-    <lastmod>2018-09-07 16:06:41</lastmod>
+    <lastmod>2018-09-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/edTurb2dAxi/1-0-0/view</loc>
-    <lastmod>2016-08-22 15:37:28</lastmod>
+    <lastmod>2016-08-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SNUFOAM_Freesurf_2D/1-0-0/view</loc>
-    <lastmod>2016-08-22 15:36:49</lastmod>
+    <lastmod>2016-08-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/edWAVE2d/1-0-0/view</loc>
-    <lastmod>2016-08-22 15:34:50</lastmod>
+    <lastmod>2016-08-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_SingleAV/1-0-0/view</loc>
-    <lastmod>2018-06-12 11:13:05</lastmod>
+    <lastmod>2018-06-12</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_MultiAV/1-0-0/view</loc>
-    <lastmod>2018-06-12 11:02:32</lastmod>
+    <lastmod>2018-06-12</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Sensitivity_FD/1-0-0/view</loc>
-    <lastmod>2016-08-22 15:32:50</lastmod>
+    <lastmod>2016-08-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Geometry_Kernel/1-0-0/view</loc>
-    <lastmod>2016-08-22 15:32:24</lastmod>
+    <lastmod>2016-08-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Sensitivity_AD/1-0-0/view</loc>
-    <lastmod>2016-08-22 15:32:00</lastmod>
+    <lastmod>2016-08-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Sensitivity_Complex/1-0-0/view</loc>
-    <lastmod>2016-08-22 15:31:40</lastmod>
+    <lastmod>2016-08-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/LHD_Sampling/1-0-0/view</loc>
-    <lastmod>2016-08-22 15:31:15</lastmod>
+    <lastmod>2016-08-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Genetic_Algorithm/1-0-0/view</loc>
-    <lastmod>2016-08-22 15:30:28</lastmod>
+    <lastmod>2016-08-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Polynomial_Regression/1-0-0/view</loc>
-    <lastmod>2016-08-22 15:29:58</lastmod>
+    <lastmod>2016-08-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/KFLOW_EDISON_2DAir/1-0-0/view</loc>
-    <lastmod>2018-09-21 11:19:43</lastmod>
+    <lastmod>2018-09-21</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/KFLOW_EDISON_2D3DOF/1-0-0/view</loc>
-    <lastmod>2018-09-07 15:13:54</lastmod>
+    <lastmod>2018-09-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_YUIBRANS_1/1-0-0/view</loc>
-    <lastmod>2018-09-07 15:01:00</lastmod>
+    <lastmod>2018-09-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/EDISON_Airfoil_Design/3-0-0/view</loc>
-    <lastmod>2018-09-07 15:01:25</lastmod>
+    <lastmod>2018-09-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/EDISON_Global_Design/1-0-0/view</loc>
-    <lastmod>2016-08-22 15:27:39</lastmod>
+    <lastmod>2016-08-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CoKriging/1-0-0/view</loc>
-    <lastmod>2016-08-30 15:09:56</lastmod>
+    <lastmod>2016-08-30</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Multipoint_design_3D_wing/1-0-0/view</loc>
-    <lastmod>2016-08-22 15:26:38</lastmod>
+    <lastmod>2016-08-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Multipoint_design_2D_airfoil/1-0-0/view</loc>
-    <lastmod>2018-09-07 15:04:10</lastmod>
+    <lastmod>2018-09-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SNUFOAM_Propell_Openwater/1-0-0/view</loc>
-    <lastmod>2017-05-30 21:12:29</lastmod>
+    <lastmod>2017-05-30</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_Comp_P/3-0-0/view</loc>
-    <lastmod>2018-09-17 17:41:52</lastmod>
+    <lastmod>2018-09-17</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_uComp_P/1-0-0/view</loc>
-    <lastmod>2018-09-05 13:15:49</lastmod>
+    <lastmod>2018-09-05</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_Incomp_P/3-0-0/view</loc>
-    <lastmod>2018-09-05 13:11:55</lastmod>
+    <lastmod>2018-09-05</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_SEDIMENTATION/1-0-0/view</loc>
-    <lastmod>2016-08-22 15:17:00</lastmod>
+    <lastmod>2016-08-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_SEDIMENTATION/1-0-0/view</loc>
-    <lastmod>2016-08-22 15:16:52</lastmod>
+    <lastmod>2016-08-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_DKT/1-0-0/view</loc>
-    <lastmod>2016-08-22 15:16:27</lastmod>
+    <lastmod>2016-08-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SNUFOAM_ShipMesh_Advanced/2-0-0/view</loc>
-    <lastmod>2018-06-18 14:57:34</lastmod>
+    <lastmod>2018-06-18</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SNUFOAM_ShipRes_freesurf_ADV/2-0-0/view</loc>
-    <lastmod>2018-09-07 16:08:03</lastmod>
+    <lastmod>2018-09-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SNUFOAM_POW_for_EDISON_ADVANCED/2-0-0/view</loc>
-    <lastmod>2018-09-07 15:57:23</lastmod>
+    <lastmod>2018-09-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/TRUSSSolver/1-3-2/view</loc>
-    <lastmod>2018-08-08 14:57:07</lastmod>
+    <lastmod>2018-08-08</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/LPSolver/1-0-0/view</loc>
-    <lastmod>2018-08-08 14:57:04</lastmod>
+    <lastmod>2018-08-08</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CSTMesher2D/1-2-0/view</loc>
-    <lastmod>2018-08-08 14:57:00</lastmod>
+    <lastmod>2018-08-08</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/math_equation_optimizationSW/1-0-0/view</loc>
-    <lastmod>2016-08-22 16:59:30</lastmod>
+    <lastmod>2016-08-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Traveling_Salesman_Problem/1-0-0/view</loc>
-    <lastmod>2016-08-22 16:59:02</lastmod>
+    <lastmod>2016-08-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Heatsink_design_opti_SW/1-0-0/view</loc>
-    <lastmod>2016-08-22 16:58:36</lastmod>
+    <lastmod>2016-08-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CSTFDM/1-1-0/view</loc>
-    <lastmod>2018-08-08 14:56:56</lastmod>
+    <lastmod>2018-08-08</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/TRUSSFDM/1-0-0/view</loc>
-    <lastmod>2018-08-08 14:56:51</lastmod>
+    <lastmod>2018-08-08</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2DTopology_Beginner/1-1-0/view</loc>
-    <lastmod>2018-08-08 14:56:47</lastmod>
+    <lastmod>2018-08-08</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2DTopology_Professional/1-1-0/view</loc>
-    <lastmod>2018-08-08 14:56:39</lastmod>
+    <lastmod>2018-08-08</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Product_web_visualizer/1-0-0/view</loc>
-    <lastmod>2016-11-30 18:27:56</lastmod>
+    <lastmod>2016-11-30</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/JansenOptSolver/1-0-0/view</loc>
-    <lastmod>2018-08-08 14:56:31</lastmod>
+    <lastmod>2018-08-08</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/LHSExperimentDesign/1-0-0/view</loc>
-    <lastmod>2016-11-30 18:36:37</lastmod>
+    <lastmod>2016-11-30</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/OPT_PROPELLER/1-0-0/view</loc>
-    <lastmod>2016-11-30 18:22:26</lastmod>
+    <lastmod>2016-11-30</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Ksec2d_WM/1-5-0/view</loc>
-    <lastmod>2019-04-03 14:02:46</lastmod>
+    <lastmod>2019-04-03</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CSD_TOTAL/1-1-0/view</loc>
-    <lastmod>2018-07-04 13:18:16</lastmod>
+    <lastmod>2018-07-04</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/fe_q4_st/1-0-0/view</loc>
-    <lastmod>2018-09-11 17:36:03</lastmod>
+    <lastmod>2018-09-11</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CR_static/1-1-0/view</loc>
-    <lastmod>2018-09-10 17:55:35</lastmod>
+    <lastmod>2018-09-10</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CBEAM/1-0-0/view</loc>
-    <lastmod>2019-04-03 12:36:42</lastmod>
+    <lastmod>2019-04-03</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/cr2d_pl/1-0-0/view</loc>
-    <lastmod>2018-06-19 20:14:09</lastmod>
+    <lastmod>2018-06-19</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CSD_UPDATED/1-1-0/view</loc>
-    <lastmod>2018-07-04 13:17:41</lastmod>
+    <lastmod>2018-07-04</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CSD_HYPOELAST/1-1-0/view</loc>
-    <lastmod>2018-07-04 13:17:11</lastmod>
+    <lastmod>2018-07-04</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CASADSolver/1-0-0/view</loc>
-    <lastmod>2018-06-12 15:16:19</lastmod>
+    <lastmod>2018-06-12</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/opt_cr/1-0-0/view</loc>
-    <lastmod>2019-03-05 19:39:59</lastmod>
+    <lastmod>2019-03-05</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/incomp_cr/1-0-0/view</loc>
-    <lastmod>2018-09-13 01:34:24</lastmod>
+    <lastmod>2018-09-13</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Ksec2d_AE/1-7-0/view</loc>
-    <lastmod>2019-04-03 13:58:48</lastmod>
+    <lastmod>2019-04-03</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CSD_ELAST/1-1-0/view</loc>
-    <lastmod>2018-07-04 13:16:36</lastmod>
+    <lastmod>2018-07-04</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CSD_EPLAST_SMALL/1-1-0/view</loc>
-    <lastmod>2018-07-04 13:15:51</lastmod>
+    <lastmod>2018-07-04</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CSD_EPLAST/1-1-0/view</loc>
-    <lastmod>2018-07-04 13:15:23</lastmod>
+    <lastmod>2018-07-04</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CSD_EPLAST_A/1-1-0/view</loc>
-    <lastmod>2018-07-04 13:14:51</lastmod>
+    <lastmod>2018-07-04</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CSD5_P2_3/1-0-0/view</loc>
-    <lastmod>2018-06-12 16:39:46</lastmod>
+    <lastmod>2018-06-12</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CORBA-CSD5-P2-1/1-0-0/view</loc>
-    <lastmod>2016-08-11 16:47:45</lastmod>
+    <lastmod>2016-08-11</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2d_matching_contact/1-0-1/view</loc>
-    <lastmod>2018-09-17 18:34:49</lastmod>
+    <lastmod>2018-09-17</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/solutions/1-0-0/view</loc>
-    <lastmod>2016-09-05 14:35:50</lastmod>
+    <lastmod>2016-09-05</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/melts/1-0-0/view</loc>
-    <lastmod>2016-09-05 14:36:02</lastmod>
+    <lastmod>2016-09-05</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/MSD_calculator/1-0-0/view</loc>
-    <lastmod>2018-09-14 10:12:04</lastmod>
+    <lastmod>2018-09-14</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/sfe_calc/3-0-0/view</loc>
-    <lastmod>2016-08-23 11:05:22</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Relaxation_Time_Calculator/1-0-0/view</loc>
-    <lastmod>2018-09-14 10:54:19</lastmod>
+    <lastmod>2018-09-14</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/PNU_PILLAR_MC/1-0-0/view</loc>
-    <lastmod>2018-09-14 18:23:38</lastmod>
+    <lastmod>2018-09-14</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/PNU_LATTICE_MC/2-0-0/view</loc>
-    <lastmod>2018-09-14 18:24:34</lastmod>
+    <lastmod>2018-09-14</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/epbs/1-2-10/view</loc>
-    <lastmod>2016-08-23 11:03:20</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/GEN_NF/1-1-0/view</loc>
-    <lastmod>2016-08-23 11:02:50</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/MC_NF/1-0-0/view</loc>
-    <lastmod>2016-08-23 11:02:25</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/metal_alloy/1-0-0/view</loc>
-    <lastmod>2016-11-21 11:10:44</lastmod>
+    <lastmod>2016-11-21</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_MD/1-0-0/view</loc>
-    <lastmod>2016-08-23 11:01:48</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/epbs/2-0-0/view</loc>
-    <lastmod>2016-08-23 11:01:24</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/MIFgen/1-0-0/view</loc>
-    <lastmod>2016-08-23 11:00:57</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Dyn_2lev_cpulse/1-0-0/view</loc>
-    <lastmod>2016-08-23 11:00:21</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/K-EHT/1-0-0/view</loc>
-    <lastmod>2016-08-26 14:10:18</lastmod>
+    <lastmod>2016-08-26</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/trem/1-0-0/view</loc>
-    <lastmod>2016-09-05 14:36:41</lastmod>
+    <lastmod>2016-09-05</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Dyn_2lev_pipulse/1-0-0/view</loc>
-    <lastmod>2016-08-23 10:51:59</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/wabars/1-0-0/view</loc>
-    <lastmod>2016-08-23 10:51:34</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Flex_Dock/1-0-0/view</loc>
-    <lastmod>2018-09-17 09:41:07</lastmod>
+    <lastmod>2018-09-17</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Dyn_wavepackets_2V/1-0-0/view</loc>
-    <lastmod>2016-08-23 10:50:43</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_MD_rst/1-0-0/view</loc>
-    <lastmod>2016-08-23 10:49:48</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/PNU_RANDOM_WALK/1-0-0/view</loc>
-    <lastmod>2018-09-14 18:21:35</lastmod>
+    <lastmod>2018-09-14</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/rot_noise_model_act_mat/1-1-0/view</loc>
-    <lastmod>2018-09-13 17:24:56</lastmod>
+    <lastmod>2018-09-13</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/symmetry/1-11-0/view</loc>
-    <lastmod>2016-08-23 10:47:58</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/EPNP/1-2-0/view</loc>
-    <lastmod>2016-08-23 10:47:45</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/gen_pol/1-0-0/view</loc>
-    <lastmod>2018-06-26 15:00:46</lastmod>
+    <lastmod>2018-06-26</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/nanorod/1-0-0/view</loc>
-    <lastmod>2016-08-23 10:46:52</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/nanosphere/1-0-0/view</loc>
-    <lastmod>2016-08-23 10:46:31</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/mc_pol/1-0-0/view</loc>
-    <lastmod>2018-06-26 16:51:51</lastmod>
+    <lastmod>2018-06-26</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/BrowniandynamicsInitial/1-0-0/view</loc>
-    <lastmod>2016-08-23 10:45:56</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/trem/2-0-0/view</loc>
-    <lastmod>2016-09-05 14:37:06</lastmod>
+    <lastmod>2016-09-05</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/qrem/1-0-0/view</loc>
-    <lastmod>2017-02-27 18:05:59</lastmod>
+    <lastmod>2017-02-27</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Brownian_dynamics_Rerun/1-0-0/view</loc>
-    <lastmod>2016-09-05 14:36:51</lastmod>
+    <lastmod>2016-09-05</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/quantum_water/1-0-0/view</loc>
-    <lastmod>2016-08-23 10:44:24</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Dock/1-0-0/view</loc>
-    <lastmod>2018-09-17 09:42:12</lastmod>
+    <lastmod>2018-09-17</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/MD_Dock/1-0-0/view</loc>
-    <lastmod>2018-09-17 09:39:11</lastmod>
+    <lastmod>2018-09-17</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Moleshuffle/1-1-0/view</loc>
-    <lastmod>2016-08-23 10:42:59</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/gamess/1-0-0/view</loc>
-    <lastmod>2019-04-09 16:56:22</lastmod>
+    <lastmod>2019-04-09</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/gen_dna_channel/1-0-0/view</loc>
-    <lastmod>2016-08-23 10:40:42</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/LagChem/1-0-0/view</loc>
-    <lastmod>2016-09-05 14:36:32</lastmod>
+    <lastmod>2016-09-05</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/sejong_lj/1-0-0/view</loc>
-    <lastmod>2016-09-05 14:36:24</lastmod>
+    <lastmod>2016-09-05</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/mc_dna_channel/1-0-0/view</loc>
-    <lastmod>2016-08-23 10:38:17</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/dmd_pol/1-0-0/view</loc>
-    <lastmod>2016-09-05 14:35:55</lastmod>
+    <lastmod>2016-09-05</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Qdyn_freeprop/1-0-0/view</loc>
-    <lastmod>2016-08-23 10:35:52</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/huckel/1-0-0/view</loc>
-    <lastmod>2016-08-23 10:29:43</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/tdLagChem/1-0-0/view</loc>
-    <lastmod>2017-05-30 16:15:15</lastmod>
+    <lastmod>2017-05-30</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Ising/1-0-0/view</loc>
-    <lastmod>2018-09-14 09:38:05</lastmod>
+    <lastmod>2018-09-14</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/sfe_calc_v2/1-0-0/view</loc>
-    <lastmod>2016-08-23 10:27:04</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/solv_freeE/2-0-0/view</loc>
-    <lastmod>2016-08-23 10:25:41</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/epnp3/1-0-0/view</loc>
-    <lastmod>2016-08-23 10:25:12</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/DPD_Linear_Polymer/1-0-0/view</loc>
-    <lastmod>2018-09-13 18:16:44</lastmod>
+    <lastmod>2018-09-13</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/MC_co_non_sol_lin_ring_poly/1-0-0/view</loc>
-    <lastmod>2018-09-13 17:32:06</lastmod>
+    <lastmod>2018-09-13</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Bond_FlucMod_MulDim_Ring_Poly/1-0-0/view</loc>
-    <lastmod>2016-08-23 10:20:25</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SGU_FCC/1-0-0/view</loc>
-    <lastmod>2016-09-05 14:30:43</lastmod>
+    <lastmod>2016-09-05</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/general_MD/1-0-0/view</loc>
-    <lastmod>2016-11-30 17:47:51</lastmod>
+    <lastmod>2016-11-30</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/TqREM/1-0-0/view</loc>
-    <lastmod>2016-11-30 17:46:32</lastmod>
+    <lastmod>2016-11-30</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/QM_Dock_ESP/1-0-0/view</loc>
-    <lastmod>2018-09-17 09:38:06</lastmod>
+    <lastmod>2018-09-17</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/QM_Dock_Docking/1-0-0/view</loc>
-    <lastmod>2018-09-17 09:38:19</lastmod>
+    <lastmod>2018-09-17</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Gen-polyelectrolyte/1-0-0/view</loc>
-    <lastmod>2016-11-30 17:40:57</lastmod>
+    <lastmod>2016-11-30</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/mc_polyelec/1-0-0/view</loc>
-    <lastmod>2016-11-30 17:39:16</lastmod>
+    <lastmod>2016-11-30</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/gcmc_polyelec_diode/1-0-0/view</loc>
-    <lastmod>2016-11-30 17:35:53</lastmod>
+    <lastmod>2016-11-30</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/tb_utb/1-1-0/view</loc>
-    <lastmod>2019-03-22 15:07:22</lastmod>
+    <lastmod>2019-03-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/acuteSTMtip/1-0-0/view</loc>
-    <lastmod>2016-08-23 14:47:39</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/roundSTMtip/1-0-0/view</loc>
-    <lastmod>2018-09-28 10:03:03</lastmod>
+    <lastmod>2018-09-28</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/BandVASPLAB/1-1-0/view</loc>
-    <lastmod>2016-08-23 14:47:12</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CNTPhononLab/1-0-0/view</loc>
-    <lastmod>2016-08-25 19:40:03</lastmod>
+    <lastmod>2016-08-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/coulombdart/1-0-0/view</loc>
-    <lastmod>2018-09-28 10:05:44</lastmod>
+    <lastmod>2018-09-28</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Time_Evolution_of_Bound_State/1-0-0/view</loc>
-    <lastmod>2018-09-28 09:51:07</lastmod>
+    <lastmod>2018-09-28</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/tbnw/1-0-0/view</loc>
-    <lastmod>2018-07-03 18:43:14</lastmod>
+    <lastmod>2018-07-03</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/tb_bulk/1-0-0/view</loc>
-    <lastmod>2019-03-21 17:59:22</lastmod>
+    <lastmod>2019-03-21</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/OneD_diffusion/1-0-0/view</loc>
-    <lastmod>2016-08-23 14:41:04</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/thm_dist/1-0-0/view</loc>
-    <lastmod>2016-08-23 14:40:22</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/tbm/1-0-0/view</loc>
-    <lastmod>2018-09-28 11:00:53</lastmod>
+    <lastmod>2018-09-28</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/1DBoundStateLAB/1-0-0/view</loc>
-    <lastmod>2018-09-28 09:31:04</lastmod>
+    <lastmod>2018-09-28</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/multislit01/1-0-0/view</loc>
-    <lastmod>2016-08-23 14:37:13</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Haynes_Shockley_Exp/1-0-0/view</loc>
-    <lastmod>2016-08-23 14:36:33</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Free_Gaussian_Wave_Packet/1-0-0/view</loc>
-    <lastmod>2017-06-23 17:57:56</lastmod>
+    <lastmod>2017-06-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/sc3d/1-0-0/view</loc>
-    <lastmod>2018-05-28 18:02:14</lastmod>
+    <lastmod>2018-05-28</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/parabolicmotionLAB/1-0-0/view</loc>
-    <lastmod>2016-09-05 14:59:49</lastmod>
+    <lastmod>2016-09-05</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/electricfieldLAB/1-0-0/view</loc>
-    <lastmod>2016-09-05 14:59:44</lastmod>
+    <lastmod>2016-09-05</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Harmonic_Oscillator/1-0-0/view</loc>
-    <lastmod>2017-06-23 22:49:55</lastmod>
+    <lastmod>2017-06-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Classical_HOLAB/1-0-0/view</loc>
-    <lastmod>2016-08-23 14:12:47</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Bowling/1-0-0/view</loc>
-    <lastmod>2018-09-28 10:00:14</lastmod>
+    <lastmod>2018-09-28</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/transmission/1-0-0/view</loc>
-    <lastmod>2017-06-23 22:50:18</lastmod>
+    <lastmod>2017-06-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/gravityslingshot/1-0-0/view</loc>
-    <lastmod>2018-09-28 10:07:53</lastmod>
+    <lastmod>2018-09-28</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/BJT_analyze/1-0-0/view</loc>
-    <lastmod>2016-08-23 14:04:35</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/pianostring/1-0-0/view</loc>
-    <lastmod>2018-09-28 10:18:40</lastmod>
+    <lastmod>2018-09-28</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Crystal_Builder/1-0-0/view</loc>
-    <lastmod>2016-08-23 14:03:24</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/gwp2d/1-0-0/view</loc>
-    <lastmod>2017-06-23 16:32:47</lastmod>
+    <lastmod>2017-06-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/STMlab/1-0-0/view</loc>
-    <lastmod>2016-08-23 14:01:20</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/LaplaceVLab/2-0-0/view</loc>
-    <lastmod>2016-08-23 14:00:45</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CapacitorLab/1-0-0/view</loc>
-    <lastmod>2016-08-23 14:00:22</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/MAGPARLab/1-0-0/view</loc>
-    <lastmod>2016-08-23 13:57:50</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/MagneticLAB/1-0-0/view</loc>
-    <lastmod>2016-08-23 13:57:29</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CollisionLAB/2-0-0/view</loc>
-    <lastmod>2016-08-23 13:57:09</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/1_D_Phonon/2-0-0/view</loc>
-    <lastmod>2017-06-26 15:44:18</lastmod>
+    <lastmod>2017-06-26</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2d_Collision_Simulator/1-0-0/view</loc>
-    <lastmod>2018-09-28 09:53:59</lastmod>
+    <lastmod>2018-09-28</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Percolation/1-0-0/view</loc>
-    <lastmod>2016-08-23 13:49:20</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/WaveGuide/1-0-0/view</loc>
-    <lastmod>2016-08-23 13:49:00</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CarbonPhononTransLab/1-0-0/view</loc>
-    <lastmod>2016-08-23 13:48:33</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Implant/1-0-0/view</loc>
-    <lastmod>2018-09-28 10:11:20</lastmod>
+    <lastmod>2018-09-28</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SolarCell/1-0-0/view</loc>
-    <lastmod>2016-08-23 13:42:51</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Amorphous_modeler/1-0-0/view</loc>
-    <lastmod>2017-06-26 15:46:14</lastmod>
+    <lastmod>2017-06-26</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Amorphous_analyzer/1-0-0/view</loc>
-    <lastmod>2017-06-26 15:47:25</lastmod>
+    <lastmod>2017-06-26</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/KG/1-0-0/view</loc>
-    <lastmod>2016-08-25 19:10:38</lastmod>
+    <lastmod>2016-08-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Tersoff_potential_SW/1-0-0/view</loc>
-    <lastmod>2017-06-26 15:48:58</lastmod>
+    <lastmod>2017-06-26</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Tight_Binding_simulator/1-2-0/view</loc>
-    <lastmod>2018-09-28 10:42:30</lastmod>
+    <lastmod>2018-09-28</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/1_D_TAT_modeler/1-0-0/view</loc>
-    <lastmod>2017-06-26 15:50:19</lastmod>
+    <lastmod>2017-06-26</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Carrier_transport/1-0-0/view</loc>
-    <lastmod>2017-06-26 15:54:02</lastmod>
+    <lastmod>2017-06-26</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/ht3D/1-0-0/view</loc>
-    <lastmod>2016-08-23 17:05:00</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/TB_TMDC/1-0-0/view</loc>
-    <lastmod>2016-08-23 13:38:07</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/spin/2-2-0/view</loc>
-    <lastmod>2016-08-23 13:37:33</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Surface_HeterojunctionLab/1-0-0/view</loc>
-    <lastmod>2016-08-23 13:34:26</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Spin_time_evolution/2-0-0/view</loc>
-    <lastmod>2017-06-23 17:50:15</lastmod>
+    <lastmod>2017-06-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Diffuse/1-0-0/view</loc>
-    <lastmod>2016-08-23 13:34:54</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Surface_HeterojunctionLab/2-0-0/view</loc>
-    <lastmod>2016-08-23 13:35:19</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/pwLAB/1-0-0/view</loc>
-    <lastmod>2016-09-05 14:59:38</lastmod>
+    <lastmod>2016-09-05</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Dislocation_Visualizer/1-0-0/view</loc>
-    <lastmod>2016-08-23 13:32:57</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/1DoscillationLAB/1-0-0/view</loc>
-    <lastmod>2016-09-05 14:59:31</lastmod>
+    <lastmod>2016-09-05</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/PNPN_Junc/1-0-0/view</loc>
-    <lastmod>2016-08-23 13:31:58</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/1dPhononLab/1-0-0/view</loc>
-    <lastmod>2017-06-26 15:40:48</lastmod>
+    <lastmod>2017-06-26</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/TunnelingGWPLAB/1-2-0/view</loc>
-    <lastmod>2017-06-23 14:52:05</lastmod>
+    <lastmod>2017-06-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/UTB_FET/1-0-0/view</loc>
-    <lastmod>2018-06-12 18:48:16</lastmod>
+    <lastmod>2018-06-12</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/KP_PMTLAB/1-0-0/view</loc>
-    <lastmod>2016-08-23 13:25:44</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/elastic_wave/1-0-0/view</loc>
-    <lastmod>2016-08-23 13:25:26</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/terstLAB/1-0-0/view</loc>
-    <lastmod>2016-09-05 14:59:20</lastmod>
+    <lastmod>2016-09-05</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/terenLAB/1-0-0/view</loc>
-    <lastmod>2016-09-05 14:59:13</lastmod>
+    <lastmod>2016-09-05</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CNT_FET/1-0-0/view</loc>
-    <lastmod>2019-03-15 18:54:07</lastmod>
+    <lastmod>2019-03-15</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/mos1d/1-0-0/view</loc>
-    <lastmod>2018-07-05 13:43:59</lastmod>
+    <lastmod>2018-07-05</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CNTModeler/1-0-0/view</loc>
-    <lastmod>2018-09-28 10:01:55</lastmod>
+    <lastmod>2018-09-28</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/GNRModeler/1-0-0/view</loc>
-    <lastmod>2016-08-23 13:19:19</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Disk_Collision_Simulator/1-0-0/view</loc>
-    <lastmod>2016-08-23 13:17:46</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Gravity_Slingshot_3d/1-0-0/view</loc>
-    <lastmod>2016-08-23 13:17:07</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/TB_EM_NEGF/1-0-0/view</loc>
-    <lastmod>2018-09-28 09:27:28</lastmod>
+    <lastmod>2018-09-28</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/PhaseDiagramSW/1-0-0/view</loc>
-    <lastmod>2018-09-28 10:17:21</lastmod>
+    <lastmod>2018-09-28</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Gspice/1-0-0/view</loc>
-    <lastmod>2018-09-28 10:09:54</lastmod>
+    <lastmod>2018-09-28</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/TB_EM_NEGF_TMD/1-0-0/view</loc>
-    <lastmod>2016-08-23 11:58:25</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/TB_EM_NW/1-0-0/view</loc>
-    <lastmod>2018-09-28 10:23:43</lastmod>
+    <lastmod>2018-09-28</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/rollercoaster/1-0-0/view</loc>
-    <lastmod>2016-08-23 11:45:12</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_phononic_Crystal/1-0-0/view</loc>
-    <lastmod>2018-07-06 13:15:27</lastmod>
+    <lastmod>2018-07-06</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Stern-Gerlach_Simulator/1-0-0/view</loc>
-    <lastmod>2016-08-23 11:44:16</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Li-ionBatterySimulator/1-0-0/view</loc>
-    <lastmod>2016-08-23 11:43:36</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/spin2/1-0-0/view</loc>
-    <lastmod>2016-08-23 11:43:16</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Bfield_Distribution/1-0-0/view</loc>
-    <lastmod>2016-08-23 11:42:11</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/FranckHertz_Experiment/1-0-0/view</loc>
-    <lastmod>2016-08-23 11:41:18</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/measurement_of_specific_charge/1-0-0/view</loc>
-    <lastmod>2016-08-30 15:10:52</lastmod>
+    <lastmod>2016-08-30</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Grating/1-0-0/view</loc>
-    <lastmod>2016-08-23 11:36:10</lastmod>
+    <lastmod>2016-08-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/informatics/1-0-0/view</loc>
-    <lastmod>2018-07-05 15:30:19</lastmod>
+    <lastmod>2018-07-05</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3d_spin_model_simulator/1-0-0/view</loc>
-    <lastmod>2016-11-30 18:00:22</lastmod>
+    <lastmod>2016-11-30</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Sensitivity_Adjoint/1-0-0/view</loc>
-    <lastmod>2018-06-12 11:28:32</lastmod>
+    <lastmod>2018-06-12</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/L_bracket_PSO/1-0-0/view</loc>
-    <lastmod>2017-02-07 11:44:31</lastmod>
+    <lastmod>2017-02-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3dTATmodeler/1-0-0/view</loc>
-    <lastmod>2018-09-28 09:56:13</lastmod>
+    <lastmod>2018-09-28</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/solvation_entropy_decomposition_calculator/4-0-0/view</loc>
-    <lastmod>2016-11-30 17:36:40</lastmod>
+    <lastmod>2016-11-30</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/mutipleorganic/1-0-0/view</loc>
-    <lastmod>2017-06-26 15:43:16</lastmod>
+    <lastmod>2017-06-26</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Global_Design_WF/1-0-0/view</loc>
-    <lastmod>2017-02-07 12:05:11</lastmod>
+    <lastmod>2017-02-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Waveguide/1-2-0/view</loc>
-    <lastmod>2018-09-28 10:48:15</lastmod>
+    <lastmod>2018-09-28</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/pnjuncLAB/1-0-0/view</loc>
-    <lastmod>2018-03-09 20:27:42</lastmod>
+    <lastmod>2018-03-09</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_YUIBRANS_2/1-0-0/view</loc>
-    <lastmod>2016-08-22 15:12:28</lastmod>
+    <lastmod>2016-08-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Antenna/1-0-0/view</loc>
-    <lastmod>2016-11-30 17:50:24</lastmod>
+    <lastmod>2016-11-30</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/PNU_AFM_LBM/1-0-0/view</loc>
-    <lastmod>2017-01-18 17:24:00</lastmod>
+    <lastmod>2017-01-18</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SemiRandPointGen/1-0-0/view</loc>
-    <lastmod>2018-06-12 16:08:04</lastmod>
+    <lastmod>2018-06-12</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/ConBeamFracAnalysisProgram/2-0-0/view</loc>
-    <lastmod>2018-06-12 16:02:24</lastmod>
+    <lastmod>2018-06-12</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/LinearBeamAnalysisProgram/2-0-0/view</loc>
-    <lastmod>2019-03-11 15:44:37</lastmod>
+    <lastmod>2019-03-11</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/1D_Shocktube_2Fluids/1-0-0/view</loc>
-    <lastmod>2018-06-18 14:50:53</lastmod>
+    <lastmod>2018-06-18</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2DS_uComp/3-0-0/view</loc>
-    <lastmod>2018-09-05 13:17:01</lastmod>
+    <lastmod>2018-09-05</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/EDISON_Design/1-0-0/view</loc>
-    <lastmod>2016-11-30 17:16:10</lastmod>
+    <lastmod>2016-11-30</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/KFLOW_3D_Rotor/1-0-0/view</loc>
-    <lastmod>2018-06-12 09:57:40</lastmod>
+    <lastmod>2018-06-12</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/KFLOW_3D_Wing/1-0-0/view</loc>
-    <lastmod>2018-09-07 15:26:09</lastmod>
+    <lastmod>2018-09-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Pre_Adjoint/1-0-0/view</loc>
-    <lastmod>2016-11-30 17:21:35</lastmod>
+    <lastmod>2016-11-30</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Turbo_Performance/1-0-0/view</loc>
-    <lastmod>2016-11-30 17:23:26</lastmod>
+    <lastmod>2016-11-30</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/ProductionSchedulingAnalyzer/1-0-0/view</loc>
-    <lastmod>2016-11-30 18:13:16</lastmod>
+    <lastmod>2016-11-30</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/x3dom_viewer_demo/1-0-0/view</loc>
-    <lastmod>2016-11-30 18:09:03</lastmod>
+    <lastmod>2016-11-30</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/ProductionSchedulingOptimizer/1-0-1/view</loc>
-    <lastmod>2016-11-30 18:02:00</lastmod>
+    <lastmod>2016-11-30</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/cr2d_st/2-0-1/view</loc>
-    <lastmod>2018-09-05 22:48:11</lastmod>
+    <lastmod>2018-09-05</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_Comp/1-0-1/view</loc>
-    <lastmod>2018-06-18 14:54:28</lastmod>
+    <lastmod>2018-06-18</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/GEBA/1-0-0/view</loc>
-    <lastmod>2018-12-18 12:38:29</lastmod>
+    <lastmod>2018-12-18</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Heat_transfer/1-0-1/view</loc>
-    <lastmod>2018-09-17 18:34:11</lastmod>
+    <lastmod>2018-09-17</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_CONTINUUM_ANALYSIS/1-0-1/view</loc>
-    <lastmod>2018-06-12 15:01:05</lastmod>
+    <lastmod>2018-06-12</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/LCAODFTLab/1-1-0/view</loc>
-    <lastmod>2018-09-28 10:12:11</lastmod>
+    <lastmod>2018-09-28</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/KFLOW_EDISON_4/1-0-1/view</loc>
-    <lastmod>2018-09-07 15:31:13</lastmod>
+    <lastmod>2018-09-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/NonCompartEdison/1-1-0/view</loc>
-    <lastmod>2018-12-26 10:49:22</lastmod>
+    <lastmod>2018-12-26</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3DTopology/1-0-0/view</loc>
-    <lastmod>2018-08-08 14:56:20</lastmod>
+    <lastmod>2018-08-08</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/egcmc2/1-0-0/view</loc>
-    <lastmod>2017-07-04 21:25:41</lastmod>
+    <lastmod>2017-07-04</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CaffeineEdison/1-0-0/view</loc>
-    <lastmod>2018-06-18 16:43:54</lastmod>
+    <lastmod>2018-06-18</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/HanyangMagicSquare/1-0-0/view</loc>
-    <lastmod>2018-08-08 14:56:16</lastmod>
+    <lastmod>2018-08-08</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/eklgcmc2/1-0-0/view</loc>
-    <lastmod>2017-07-04 21:24:48</lastmod>
+    <lastmod>2017-07-04</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/euler/1-0-1/view</loc>
-    <lastmod>2018-09-17 11:05:49</lastmod>
+    <lastmod>2018-09-17</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/BAND_DOSLab/1-0-1/view</loc>
-    <lastmod>2018-09-28 09:58:00</lastmod>
+    <lastmod>2018-09-28</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/GalaxyCassiopeia/1-0-1/view</loc>
-    <lastmod>2017-01-18 14:26:35</lastmod>
+    <lastmod>2017-01-18</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/GalaxyTongDock/1-0-0/view</loc>
-    <lastmod>2018-03-19 14:05:56</lastmod>
+    <lastmod>2018-03-19</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/GalaxyRefineComplex/1-0-0/view</loc>
-    <lastmod>2018-03-19 14:06:20</lastmod>
+    <lastmod>2018-03-19</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/GalaxyTBM/1-0-1/view</loc>
-    <lastmod>2017-02-07 10:24:04</lastmod>
+    <lastmod>2017-02-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/GalaxyTLC/1-0-1/view</loc>
-    <lastmod>2017-02-07 10:22:49</lastmod>
+    <lastmod>2017-02-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/GalaxyQA/1-0-1/view</loc>
-    <lastmod>2017-02-07 10:21:39</lastmod>
+    <lastmod>2017-02-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/GalaxyPepDock/1-0-1/view</loc>
-    <lastmod>2017-02-07 10:20:18</lastmod>
+    <lastmod>2017-02-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/GalaxyFill/1-0-1/view</loc>
-    <lastmod>2017-02-07 10:19:08</lastmod>
+    <lastmod>2017-02-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/GalaxyDock/2-0-1/view</loc>
-    <lastmod>2017-02-07 10:18:52</lastmod>
+    <lastmod>2017-02-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/GalaxyRefine/1-0-1/view</loc>
-    <lastmod>2017-02-07 10:18:14</lastmod>
+    <lastmod>2017-02-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/GalaxySC/1-0-1/view</loc>
-    <lastmod>2017-02-07 10:16:53</lastmod>
+    <lastmod>2017-02-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/GalaxyGen/1-0-1/view</loc>
-    <lastmod>2017-02-07 10:14:57</lastmod>
+    <lastmod>2017-02-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/GalaxyFill/2-0-1/view</loc>
-    <lastmod>2017-02-07 10:13:44</lastmod>
+    <lastmod>2017-02-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/GalaxyGemini/1-0-1/view</loc>
-    <lastmod>2017-02-07 10:09:18</lastmod>
+    <lastmod>2017-02-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/GalaxyRefine/2-0-1/view</loc>
-    <lastmod>2017-02-07 10:07:50</lastmod>
+    <lastmod>2017-02-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/GalaxyLongloop/1-0-1/view</loc>
-    <lastmod>2017-02-07 10:06:17</lastmod>
+    <lastmod>2017-02-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/TRUSSSolver/1-3-4/view</loc>
-    <lastmod>2018-08-08 14:56:11</lastmod>
+    <lastmod>2018-08-08</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CSTSolver/1-3-3/view</loc>
-    <lastmod>2018-08-08 14:56:07</lastmod>
+    <lastmod>2018-08-08</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CardiacMuscleContractionModel/1-0-1/view</loc>
-    <lastmod>2018-09-17 11:00:34</lastmod>
+    <lastmod>2018-09-17</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/PNU_TILT_LBM_EDU/1-0-1/view</loc>
-    <lastmod>2017-07-04 15:35:07</lastmod>
+    <lastmod>2017-07-04</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/PNU_TILT_LBM/1-0-1/view</loc>
-    <lastmod>2017-07-04 15:34:51</lastmod>
+    <lastmod>2017-07-04</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/1d_Ising_model_MC/1-0-0/view</loc>
-    <lastmod>2018-09-13 17:51:43</lastmod>
+    <lastmod>2018-09-13</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/epnp2/2-0-0/view</loc>
-    <lastmod>2017-03-21 17:01:55</lastmod>
+    <lastmod>2017-03-21</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CSD_EVPLAST_DAMAGE/1-1-0/view</loc>
-    <lastmod>2018-07-04 13:13:59</lastmod>
+    <lastmod>2018-07-04</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/meshn/1-0-4/view</loc>
-    <lastmod>2019-03-11 15:41:48</lastmod>
+    <lastmod>2019-03-11</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/cr2d_dyn/2-0-1/view</loc>
-    <lastmod>2018-09-05 22:49:40</lastmod>
+    <lastmod>2018-09-05</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Plate_shell_analysis/1-0-1/view</loc>
-    <lastmod>2018-09-17 18:33:20</lastmod>
+    <lastmod>2018-09-17</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/NMW2017/1-0-0/view</loc>
-    <lastmod>2019-02-07 11:23:03</lastmod>
+    <lastmod>2019-02-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/FETI_Q4_static/1-0-0/view</loc>
-    <lastmod>2018-09-03 15:01:41</lastmod>
+    <lastmod>2018-09-03</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/RDSAC/1-1-0/view</loc>
-    <lastmod>2019-04-03 14:03:53</lastmod>
+    <lastmod>2019-04-03</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/1D_Shocktube/1-0-1/view</loc>
-    <lastmod>2018-09-05 13:13:48</lastmod>
+    <lastmod>2018-09-05</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Cerebrovascular_Arterial_Model_integrated_Yang_V8/1-0-0/view</loc>
-    <lastmod>2018-09-17 11:02:14</lastmod>
+    <lastmod>2018-09-17</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/NWBTE/1-0-0/view</loc>
-    <lastmod>2017-06-24 16:10:17</lastmod>
+    <lastmod>2017-06-24</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CSD_EVPLAST_FAILURE/1-1-0/view</loc>
-    <lastmod>2018-07-04 13:13:23</lastmod>
+    <lastmod>2018-07-04</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/PBC2D/v-1-0-0/view</loc>
-    <lastmod>2018-08-08 14:55:58</lastmod>
+    <lastmod>2018-08-08</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/PKsimEV/1-0-0/view</loc>
-    <lastmod>2018-08-07 16:31:05</lastmod>
+    <lastmod>2018-08-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/PKsimIV/1-0-1/view</loc>
-    <lastmod>2018-08-07 16:30:39</lastmod>
+    <lastmod>2018-08-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Rocket_Launching/1-0-0/view</loc>
-    <lastmod>2018-09-28 10:38:48</lastmod>
+    <lastmod>2018-09-28</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/THz/1-0-0/view</loc>
-    <lastmod>2017-07-09 21:17:48</lastmod>
+    <lastmod>2017-07-09</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SHE/1-0-0/view</loc>
-    <lastmod>2017-07-09 22:14:45</lastmod>
+    <lastmod>2017-07-09</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SGU_QASSO/1-0-2/view</loc>
-    <lastmod>2017-04-28 11:06:30</lastmod>
+    <lastmod>2017-04-28</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/WaveSimulation/1-0-0/view</loc>
-    <lastmod>2018-09-28 10:50:24</lastmod>
+    <lastmod>2018-09-28</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/mc_nvt/1-0-3/view</loc>
-    <lastmod>2017-04-28 13:52:25</lastmod>
+    <lastmod>2017-04-28</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/KFLOW_EDISON_Specialized/1-0-0/view</loc>
-    <lastmod>2018-10-03 23:42:46</lastmod>
+    <lastmod>2018-10-03</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CSD5_P3_3/1-0-1/view</loc>
-    <lastmod>2018-06-12 17:13:59</lastmod>
+    <lastmod>2018-06-12</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CSD_VISCOPLAST/1-1-0/view</loc>
-    <lastmod>2018-07-04 13:12:51</lastmod>
+    <lastmod>2018-07-04</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/4BarMechanism/3-0-1/view</loc>
-    <lastmod>2018-08-08 14:55:50</lastmod>
+    <lastmod>2018-08-08</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/LBracketOptimizer/1-0-1/view</loc>
-    <lastmod>2018-08-08 14:55:44</lastmod>
+    <lastmod>2018-08-08</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/TMDD_GC1118/1-0-0/view</loc>
-    <lastmod>2018-08-07 16:30:13</lastmod>
+    <lastmod>2018-08-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SurfaceJunctionModeler/1-0-0/view</loc>
-    <lastmod>2017-06-26 15:44:51</lastmod>
+    <lastmod>2017-06-26</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Mapping_Calcium/1-0-2/view</loc>
-    <lastmod>2018-10-23 06:01:49</lastmod>
+    <lastmod>2018-10-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_Incomp/1-0-0/view</loc>
-    <lastmod>2018-09-11 16:15:08</lastmod>
+    <lastmod>2018-09-11</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Moving_Scalar/1-0-2/view</loc>
-    <lastmod>2018-10-23 06:00:51</lastmod>
+    <lastmod>2018-10-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Linearization/1-0-0/view</loc>
-    <lastmod>2018-10-23 06:00:23</lastmod>
+    <lastmod>2018-10-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Mapping_Scalar/1-0-4/view</loc>
-    <lastmod>2018-10-23 05:55:37</lastmod>
+    <lastmod>2018-10-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/KFLOW_EDISON_Specialized/1-0-1/view</loc>
-    <lastmod>2018-10-03 23:37:13</lastmod>
+    <lastmod>2018-10-03</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/LJ_C_molecular_dynamics/1-0-0/view</loc>
-    <lastmod>2018-09-10 11:21:23</lastmod>
+    <lastmod>2018-09-10</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_Continuum_structure_analysis/1-0-0/view</loc>
-    <lastmod>2018-09-17 18:08:35</lastmod>
+    <lastmod>2018-09-17</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Axisymmetric_structure_analysis/1-0-0/view</loc>
-    <lastmod>2018-09-17 18:32:41</lastmod>
+    <lastmod>2018-09-17</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Band_calculator/1-0-0/view</loc>
-    <lastmod>2017-06-26 15:10:57</lastmod>
+    <lastmod>2017-06-26</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Find_pocket/1-0-0/view</loc>
-    <lastmod>2018-09-17 09:35:14</lastmod>
+    <lastmod>2018-09-17</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/runWTE/1-0-1/view</loc>
-    <lastmod>2017-09-25 11:44:26</lastmod>
+    <lastmod>2017-09-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_Mechanical/1-0-4/view</loc>
-    <lastmod>2018-09-21 17:43:12</lastmod>
+    <lastmod>2018-09-21</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/spin3/1-0-1/view</loc>
-    <lastmod>2017-06-27 14:58:05</lastmod>
+    <lastmod>2017-06-27</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/FEM/1-0-0/view</loc>
-    <lastmod>2017-07-09 23:09:51</lastmod>
+    <lastmod>2017-07-09</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/DFT_BASED_NEGF_2D/1-0-0/view</loc>
-    <lastmod>2017-06-20 12:26:24</lastmod>
+    <lastmod>2017-06-20</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Band_alignment/1-0-0/view</loc>
-    <lastmod>2017-06-26 15:08:55</lastmod>
+    <lastmod>2017-06-26</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/effective_mass_calculator/1-0-0/view</loc>
-    <lastmod>2017-06-26 15:10:00</lastmod>
+    <lastmod>2017-06-26</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/TB_NEGF_GNR/1-0-0/view</loc>
-    <lastmod>2017-06-20 12:23:08</lastmod>
+    <lastmod>2017-06-20</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/cr_3dpl/1-0-0/view</loc>
-    <lastmod>2019-03-26 18:32:36</lastmod>
+    <lastmod>2019-03-26</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2d_nonmatching_contact/1-0-0/view</loc>
-    <lastmod>2018-09-17 18:29:37</lastmod>
+    <lastmod>2018-09-17</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/ATOMISTIC_MOSFET/1-0-0/view</loc>
-    <lastmod>2017-06-22 18:05:29</lastmod>
+    <lastmod>2017-06-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Thermal_analysis/1-0-0/view</loc>
-    <lastmod>2018-09-17 18:17:31</lastmod>
+    <lastmod>2018-09-17</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/atomlab/1-0-0/view</loc>
-    <lastmod>2017-06-26 13:49:14</lastmod>
+    <lastmod>2017-06-26</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/OORI_QDOT/1-0-0/view</loc>
-    <lastmod>2017-06-26 13:37:53</lastmod>
+    <lastmod>2017-06-26</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CMTopology2D/1-0-0/view</loc>
-    <lastmod>2018-08-08 14:55:38</lastmod>
+    <lastmod>2018-08-08</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/ACE_UV_analysis/1-0-0/view</loc>
-    <lastmod>2019-01-16 12:34:02</lastmod>
+    <lastmod>2019-01-16</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/GHKequation/1-0-0/view</loc>
-    <lastmod>2017-06-29 11:43:12</lastmod>
+    <lastmod>2017-06-29</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/humansanode/1-0-0/view</loc>
-    <lastmod>2017-06-29 14:58:26</lastmod>
+    <lastmod>2017-06-29</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleBarrier/1-0-0/view</loc>
-    <lastmod>2017-06-29 16:53:47</lastmod>
+    <lastmod>2017-06-29</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/hemodialysis/1-0-2/view</loc>
-    <lastmod>2018-10-25 02:29:12</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Brownian_dynamics_simulation_of_polymers/1-0-0/view</loc>
-    <lastmod>2018-06-28 15:49:35</lastmod>
+    <lastmod>2018-06-28</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/mixed_gen_pimd/1-0-0/view</loc>
-    <lastmod>2017-07-05 18:26:09</lastmod>
+    <lastmod>2017-07-05</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/BerryCurvatureCalculator/1-0-1/view</loc>
-    <lastmod>2017-07-05 14:55:14</lastmod>
+    <lastmod>2017-07-05</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/cb_cms_beam_mode_analysis/1-0-1/view</loc>
-    <lastmod>2019-03-26 18:45:29</lastmod>
+    <lastmod>2019-03-26</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/pk1cima/1-0-0/view</loc>
-    <lastmod>2018-06-12 17:44:33</lastmod>
+    <lastmod>2018-06-12</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/pk1coma/1-0-0/view</loc>
-    <lastmod>2017-07-10 11:45:16</lastmod>
+    <lastmod>2017-07-10</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Aero_Turbine_2D/1-0-0/view</loc>
-    <lastmod>2018-09-17 17:52:31</lastmod>
+    <lastmod>2018-09-17</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Turbine_snapshot_v1/1-0-0/view</loc>
-    <lastmod>2018-04-17 15:14:27</lastmod>
+    <lastmod>2018-04-17</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Turbine_FOM_v1/1-0-0/view</loc>
-    <lastmod>2018-04-17 15:14:14</lastmod>
+    <lastmod>2018-04-17</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Turbine_ROM_v2/1-0-0/view</loc>
-    <lastmod>2018-04-17 15:13:33</lastmod>
+    <lastmod>2018-04-17</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/AntihypertensiveDrugs/1-0-2/view</loc>
-    <lastmod>2018-08-07 16:29:48</lastmod>
+    <lastmod>2018-08-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Intravenous_HBIG/1-0-0/view</loc>
-    <lastmod>2018-08-07 16:27:18</lastmod>
+    <lastmod>2018-08-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CRM_simulation/1-0-0/view</loc>
-    <lastmod>2018-08-07 16:26:50</lastmod>
+    <lastmod>2018-08-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/KDFT/2-0-3/view</loc>
-    <lastmod>2019-03-13 15:12:41</lastmod>
+    <lastmod>2019-03-13</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_Electrophysiology_HumanHF/1-0-7/view</loc>
-    <lastmod>2018-09-21 17:41:06</lastmod>
+    <lastmod>2018-09-21</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_Electrophysiology_CanineHF/1-0-5/view</loc>
-    <lastmod>2018-09-21 17:38:30</lastmod>
+    <lastmod>2018-09-21</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_Electrophysiology_CanineN/1-0-4/view</loc>
-    <lastmod>2018-09-21 17:39:42</lastmod>
+    <lastmod>2018-09-21</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Single_Cell_Mechanical/1-0-5/view</loc>
-    <lastmod>2018-11-03 04:08:15</lastmod>
+    <lastmod>2018-11-03</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Single_Cell_Electrophysiology/1-0-10/view</loc>
-    <lastmod>2018-10-25 02:21:41</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Single_Cell_Mechanical/1-0-7/view</loc>
-    <lastmod>2018-10-25 02:20:55</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/KFLOW_EDISON_NOZZLE/1-0-1/view</loc>
-    <lastmod>2018-10-03 18:28:37</lastmod>
+    <lastmod>2018-10-03</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Generic_Electrophysiology/1-0-2/view</loc>
-    <lastmod>2018-03-11 01:01:06</lastmod>
+    <lastmod>2018-03-11</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/uChem/4-0-2/view</loc>
-    <lastmod>2018-11-15 15:25:47</lastmod>
+    <lastmod>2018-11-15</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/pndiode/1-0-1/view</loc>
-    <lastmod>2018-11-08 17:43:32</lastmod>
+    <lastmod>2018-11-08</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/BEAM_TRUSS_ANALYSIS/1-0-2/view</loc>
-    <lastmod>2018-06-12 15:15:07</lastmod>
+    <lastmod>2018-06-12</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/vasp2qe/1-0-0/view</loc>
-    <lastmod>2017-11-29 13:44:37</lastmod>
+    <lastmod>2017-11-29</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/MOSFET_analyzer/1-0-1/view</loc>
-    <lastmod>2018-09-14 16:59:00</lastmod>
+    <lastmod>2018-09-14</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/RDSAC/1-2-0/view</loc>
-    <lastmod>2019-04-03 13:52:50</lastmod>
+    <lastmod>2019-04-03</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CSD_HYPERELAST_Mooney_Rivlin/1-1-1/view</loc>
-    <lastmod>2019-03-22 11:55:48</lastmod>
+    <lastmod>2019-03-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/GEBA_T/1-0-1/view</loc>
-    <lastmod>2018-12-18 12:39:50</lastmod>
+    <lastmod>2018-12-18</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/incomp_linear/1-0-1/view</loc>
-    <lastmod>2018-09-13 01:42:27</lastmod>
+    <lastmod>2018-09-13</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CORBA77_MEMB/1-0-3/view</loc>
-    <lastmod>2019-04-03 12:55:27</lastmod>
+    <lastmod>2019-04-03</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/FDS_SURFACE/1-0-1/view</loc>
-    <lastmod>2018-11-28 17:13:49</lastmod>
+    <lastmod>2018-11-28</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/FDS_MATERIAL/1-0-1/view</loc>
-    <lastmod>2018-11-27 01:53:47</lastmod>
+    <lastmod>2018-11-27</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/FDS_WALL/1-0-1/view</loc>
-    <lastmod>2018-11-29 06:00:06</lastmod>
+    <lastmod>2018-11-29</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/FDS_OPERATOR/1-0-1/view</loc>
-    <lastmod>2018-12-06 11:37:04</lastmod>
+    <lastmod>2018-12-06</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Skeletal/1-0-0/view</loc>
-    <lastmod>2018-03-14 00:41:59</lastmod>
+    <lastmod>2018-03-14</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleChannelSimulation/1-0-0/view</loc>
-    <lastmod>2018-03-14 14:07:05</lastmod>
+    <lastmod>2018-03-14</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleChannelState/1-0-0/view</loc>
-    <lastmod>2018-03-14 15:36:47</lastmod>
+    <lastmod>2018-03-14</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/HH_Markov/1-0-0/view</loc>
-    <lastmod>2018-03-14 20:46:53</lastmod>
+    <lastmod>2018-03-14</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/GalaxyOligoTongDock/1-0-1/view</loc>
-    <lastmod>2018-03-20 09:57:48</lastmod>
+    <lastmod>2018-03-20</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/35bar_truss_optimization_based_on_GA_with_CSD_solver/1-0-0/view</loc>
-    <lastmod>2018-08-17 14:02:36</lastmod>
+    <lastmod>2018-08-17</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CSD_HYPERELAST_NEO_OGDEN/1-1-0/view</loc>
-    <lastmod>2019-03-22 11:33:06</lastmod>
+    <lastmod>2019-03-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CSD_HYPERELAST_TEST/1-1-0/view</loc>
-    <lastmod>2019-03-22 11:27:07</lastmod>
+    <lastmod>2019-03-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CSD_ELAST_SHELL/1-1-0/view</loc>
-    <lastmod>2018-07-04 13:09:09</lastmod>
+    <lastmod>2018-07-04</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/qt2d/1-0-4/view</loc>
-    <lastmod>2018-09-07 17:34:48</lastmod>
+    <lastmod>2018-09-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/FDS_SIMULATOR/1-0-0/view</loc>
-    <lastmod>2018-06-24 13:20:29</lastmod>
+    <lastmod>2018-06-24</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Linear_Eigensolver/1-0-0/view</loc>
-    <lastmod>2018-09-17 18:18:48</lastmod>
+    <lastmod>2018-09-17</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/ERROR_ESTIMATION/1-0-0/view</loc>
-    <lastmod>2019-03-06 14:38:49</lastmod>
+    <lastmod>2019-03-06</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Exp_EP/1-0-0/view</loc>
-    <lastmod>2018-04-02 11:38:31</lastmod>
+    <lastmod>2018-04-02</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CSD5_P1_3/1-1-1/view</loc>
-    <lastmod>2018-06-12 16:36:48</lastmod>
+    <lastmod>2018-06-12</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CSD5_P4_3/1-0-1/view</loc>
-    <lastmod>2018-06-12 17:16:10</lastmod>
+    <lastmod>2018-06-12</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/cr3d_st/1-0-0/view</loc>
-    <lastmod>2018-12-26 23:52:40</lastmod>
+    <lastmod>2018-12-26</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/cr3d_dyn/1-0-0/view</loc>
-    <lastmod>2019-03-05 19:47:54</lastmod>
+    <lastmod>2019-03-05</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/DiscreteReinforcemenentGeneration/1-0-4/view</loc>
-    <lastmod>2018-06-12 16:06:10</lastmod>
+    <lastmod>2018-06-12</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/FiberAnalysis/2-0-0/view</loc>
-    <lastmod>2019-03-11 14:49:42</lastmod>
+    <lastmod>2019-03-11</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/NCORBA/1-0-0/view</loc>
-    <lastmod>2019-04-03 13:09:14</lastmod>
+    <lastmod>2019-04-03</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/PEC_Periodic_Slit_Transmittance_MMT/1-0-0/view</loc>
-    <lastmod>2018-06-22 15:24:13</lastmod>
+    <lastmod>2018-06-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/ViscoPlasticDamageDRBSN/1-0-0/view</loc>
-    <lastmod>2018-06-12 16:20:09</lastmod>
+    <lastmod>2018-06-12</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/TimeIntegralNonFractureAnalysis/1-0-0/view</loc>
-    <lastmod>2019-03-11 10:52:43</lastmod>
+    <lastmod>2019-03-11</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/TimeIntegralFractureAnalysis/1-0-0/view</loc>
-    <lastmod>2018-06-12 16:19:17</lastmod>
+    <lastmod>2018-06-12</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Nonlinear_buckling/1-0-0/view</loc>
-    <lastmod>2018-09-17 18:25:28</lastmod>
+    <lastmod>2018-09-17</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/cb_cms_3d_solid_mode_analysis/1-0-0/view</loc>
-    <lastmod>2019-03-26 18:26:00</lastmod>
+    <lastmod>2019-03-26</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/cb_cms_2d_plane_generate_Reduced_SubStruc/1-0-0/view</loc>
-    <lastmod>2019-03-26 18:14:49</lastmod>
+    <lastmod>2019-03-26</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/cb_cms_2d_plane_merge_substruc_mode_analysis/1-0-0/view</loc>
-    <lastmod>2019-03-26 18:14:03</lastmod>
+    <lastmod>2019-03-26</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/correlation_analysis/1-1-1/view</loc>
-    <lastmod>2018-04-28 18:21:08</lastmod>
+    <lastmod>2018-04-28</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Curve_Fitting/1-1-1/view</loc>
-    <lastmod>2018-04-28 18:38:29</lastmod>
+    <lastmod>2018-04-28</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/montecarlo/1-1-1/view</loc>
-    <lastmod>2018-04-28 18:47:29</lastmod>
+    <lastmod>2018-04-28</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/NonParametric_Analysis/1-1-1/view</loc>
-    <lastmod>2018-04-28 18:52:49</lastmod>
+    <lastmod>2018-04-28</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/PCA_analysis/1-1-1/view</loc>
-    <lastmod>2018-04-29 15:12:16</lastmod>
+    <lastmod>2018-04-29</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Regression_Analysis/1-1-1/view</loc>
-    <lastmod>2018-04-29 15:29:47</lastmod>
+    <lastmod>2018-04-29</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Spatial_Temporal_Analysis/1-1-1/view</loc>
-    <lastmod>2018-04-29 15:29:44</lastmod>
+    <lastmod>2018-04-29</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Timeseries_Analysis/1-1-1/view</loc>
-    <lastmod>2018-04-29 15:29:42</lastmod>
+    <lastmod>2018-04-29</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Bcoil/1-0-0/view</loc>
-    <lastmod>2018-09-12 10:00:37</lastmod>
+    <lastmod>2018-09-12</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Brownian_dynamics_simulation_of_polymers_simulator/1-0-2/view</loc>
-    <lastmod>2018-08-22 17:52:50</lastmod>
+    <lastmod>2018-08-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Helicopter/1-0-0/view</loc>
-    <lastmod>2018-06-12 13:49:07</lastmod>
+    <lastmod>2018-06-12</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/PipeCostCal/1-0-0/view</loc>
-    <lastmod>2019-01-09 04:30:39</lastmod>
+    <lastmod>2019-01-09</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/plate_shell_topology_optimization/1-0-1/view</loc>
-    <lastmod>2018-05-30 10:49:49</lastmod>
+    <lastmod>2018-05-30</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleCell_EP_Luo1994/1-0-0/view</loc>
-    <lastmod>2018-10-25 02:19:14</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/eMEGA/4-0-3/view</loc>
-    <lastmod>2018-09-07 12:06:01</lastmod>
+    <lastmod>2018-09-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/eDAVA/4-0-2/view</loc>
-    <lastmod>2018-09-07 09:22:00</lastmod>
+    <lastmod>2018-09-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/eGWing/1-1-1/view</loc>
-    <lastmod>2018-09-07 09:22:33</lastmod>
+    <lastmod>2018-09-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/qMEGA/3-0-1/view</loc>
-    <lastmod>2018-09-07 09:22:52</lastmod>
+    <lastmod>2018-09-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/T_test_analysis/1-1-2/view</loc>
-    <lastmod>2018-10-23 20:35:52</lastmod>
+    <lastmod>2018-10-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleCell_EP_Faber2000/1-0-1/view</loc>
-    <lastmod>2018-10-25 02:16:40</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleCell_EP_TN2004endo/1-0-1/view</loc>
-    <lastmod>2018-10-25 02:16:24</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleCell_EP_TN2006epi/1-0-1/view</loc>
-    <lastmod>2018-10-25 02:15:58</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleCell_EP_TN2004epi/1-0-1/view</loc>
-    <lastmod>2018-10-25 02:15:39</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleCell_EP_TN2004m/1-0-1/view</loc>
-    <lastmod>2018-10-25 02:15:19</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleCell_EP_TN2006m/1-0-1/view</loc>
-    <lastmod>2018-10-25 02:15:04</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleCell_EP_TN2006endo/1-0-1/view</loc>
-    <lastmod>2018-10-25 02:14:49</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/WDS_Valve_Segment_Identification/1-0-0/view</loc>
-    <lastmod>2018-09-20 19:33:46</lastmod>
+    <lastmod>2018-09-20</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleCell_EP_Iyer2007/1-0-0/view</loc>
-    <lastmod>2018-10-25 02:14:30</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleCell_EP_Shannon2004a/1-0-0/view</loc>
-    <lastmod>2018-10-25 02:13:54</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleCell_EP_Shannon2004b/1-0-0/view</loc>
-    <lastmod>2018-10-25 02:13:30</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Non_Parametric_Analysis/1-1-2/view</loc>
-    <lastmod>2018-10-23 03:40:49</lastmod>
+    <lastmod>2018-10-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleCell_EP_Iyer2004/1-0-1/view</loc>
-    <lastmod>2018-10-25 02:13:12</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleCell_EP_Courtemanche1998/1-0-1/view</loc>
-    <lastmod>2018-10-25 06:18:36</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleCell_EP_luo1991/1-0-0/view</loc>
-    <lastmod>2018-10-25 02:12:28</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleCell_EP_Mastuoka2003/1-0-0/view</loc>
-    <lastmod>2018-10-25 02:11:56</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/EdisonPrePost/1-0-0/view</loc>
-    <lastmod>2018-07-10 16:31:59</lastmod>
+    <lastmod>2018-07-10</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleCell_EP_Grandi2010/1-0-1/view</loc>
-    <lastmod>2018-10-25 02:11:28</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/FDTD_Human_contents/1-0-0/view</loc>
-    <lastmod>2018-10-22 05:47:49</lastmod>
+    <lastmod>2018-10-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Correlation_Analysis/1-1-2/view</loc>
-    <lastmod>2018-11-29 08:42:24</lastmod>
+    <lastmod>2018-11-29</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Cross_Auto_Corrleation_Analysis/1-1-2/view</loc>
-    <lastmod>2018-11-29 08:42:01</lastmod>
+    <lastmod>2018-11-29</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Regression_Analysis/1-1-2/view</loc>
-    <lastmod>2018-11-29 08:41:31</lastmod>
+    <lastmod>2018-11-29</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleCell_EP_Ohara2011endo/1-0-0/view</loc>
-    <lastmod>2018-10-25 02:10:30</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleCell_EP_Ohara2011m/1-0-0/view</loc>
-    <lastmod>2018-10-25 02:10:01</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleCell_EP_Ohara2011epi/1-0-0/view</loc>
-    <lastmod>2018-10-25 02:09:35</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleCell_EP_Sarai2003/1-0-0/view</loc>
-    <lastmod>2018-10-25 02:09:10</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleCell_EP_Priebe1998/1-0-0/view</loc>
-    <lastmod>2018-10-25 02:08:51</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleCell_EP_Priebe1998failing/1-0-0/view</loc>
-    <lastmod>2018-10-25 02:08:38</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleCell_EP_Fink2008/1-0-0/view</loc>
-    <lastmod>2018-10-25 02:08:25</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleCell_EP_Hund2004/1-0-0/view</loc>
-    <lastmod>2018-10-25 02:08:10</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Time_Series_Analysis/1-1-3/view</loc>
-    <lastmod>2018-09-13 02:37:37</lastmod>
+    <lastmod>2018-09-13</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/WDS_ValveControlled_Segement/1-0-0/view</loc>
-    <lastmod>2018-09-20 19:38:35</lastmod>
+    <lastmod>2018-09-20</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/WDS_ValveControlled_SelectedPipes_Segment/1-0-0/view</loc>
-    <lastmod>2018-09-20 19:41:08</lastmod>
+    <lastmod>2018-09-20</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/WDS_ValveControlled_UnintendedIsolation/1-0-0/view</loc>
-    <lastmod>2018-09-20 19:43:07</lastmod>
+    <lastmod>2018-09-20</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/WDS_ValveControlled_CutOff_WaterSupply/1-0-0/view</loc>
-    <lastmod>2018-07-18 16:46:20</lastmod>
+    <lastmod>2018-07-18</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleCell_EP_Noble1989/1-0-0/view</loc>
-    <lastmod>2018-10-25 02:07:56</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleCell_EP_Pandit2001endo/1-0-0/view</loc>
-    <lastmod>2018-10-25 02:07:35</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleCell_EP_Pandit2001epi/1-0-0/view</loc>
-    <lastmod>2018-10-25 02:07:18</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleCell_EP_Hodgkin1952/1-0-0/view</loc>
-    <lastmod>2018-11-07 15:52:56</lastmod>
+    <lastmod>2018-11-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleCell_EP_Mahajan2000/1-0-0/view</loc>
-    <lastmod>2018-10-25 02:06:41</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Monte_carlo_Analysis/1-1-2/view</loc>
-    <lastmod>2018-11-29 08:40:29</lastmod>
+    <lastmod>2018-11-29</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/MLFMM_Scattering_Solver/1-0-2/view</loc>
-    <lastmod>2018-11-01 18:48:46</lastmod>
+    <lastmod>2018-11-01</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/MLFMM_Scattering_Post/1-0-2/view</loc>
-    <lastmod>2018-11-01 18:47:03</lastmod>
+    <lastmod>2018-11-01</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/MLFMM_Radiation_Solver/1-0-4/view</loc>
-    <lastmod>2018-11-01 18:48:19</lastmod>
+    <lastmod>2018-11-01</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/MLFMM_Radiation_Post/1-0-4/view</loc>
-    <lastmod>2018-11-01 18:48:34</lastmod>
+    <lastmod>2018-11-01</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_EP_Grandi2010Endo/1-0-0/view</loc>
-    <lastmod>2018-10-25 01:58:50</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_EP_Grandi2010Epi/1-0-0/view</loc>
-    <lastmod>2018-10-25 01:59:32</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_EP_TN2006Endo/1-0-0/view</loc>
-    <lastmod>2018-10-25 02:00:32</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_EP_TN2006M/1-0-0/view</loc>
-    <lastmod>2018-10-25 02:01:01</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_EP_TN2006Epi/1-0-0/view</loc>
-    <lastmod>2018-10-25 02:01:22</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_EP_Courtemanche1998/1-0-0/view</loc>
-    <lastmod>2018-10-25 02:01:56</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_EP_TN2004Endo/1-0-0/view</loc>
-    <lastmod>2018-10-24 14:15:30</lastmod>
+    <lastmod>2018-10-24</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_EP_Hund2004a/1-0-0/view</loc>
-    <lastmod>2018-10-25 02:02:21</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_EP_TN2004M/1-0-0/view</loc>
-    <lastmod>2018-10-24 14:14:23</lastmod>
+    <lastmod>2018-10-24</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_EP_Ohara2011M/1-0-0/view</loc>
-    <lastmod>2018-10-25 02:03:00</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_EP_Ohara2011Epi/1-0-0/view</loc>
-    <lastmod>2018-10-25 02:03:19</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_EP_Ohara2011Endo/1-0-0/view</loc>
-    <lastmod>2018-10-25 02:03:36</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_EP_Mahajan2008/1-0-0/view</loc>
-    <lastmod>2018-10-25 02:03:52</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_EP_Faber2000/1-0-0/view</loc>
-    <lastmod>2018-10-25 02:04:24</lastmod>
+    <lastmod>2018-10-25</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_EP_TN2004Epi/1-0-0/view</loc>
-    <lastmod>2018-10-24 11:07:39</lastmod>
+    <lastmod>2018-10-24</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_EP_Luo1994/1-0-0/view</loc>
-    <lastmod>2018-10-24 11:07:17</lastmod>
+    <lastmod>2018-10-24</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_EP_Luo1991/1-0-0/view</loc>
-    <lastmod>2018-10-24 11:06:44</lastmod>
+    <lastmod>2018-10-24</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/KSFDTD_FILTER_POSTPROCESSOR/1-0-0/view</loc>
-    <lastmod>2018-10-18 13:10:21</lastmod>
+    <lastmod>2018-10-18</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_Percolation_WF/1-0-1/view</loc>
-    <lastmod>2018-08-15 01:15:16</lastmod>
+    <lastmod>2018-08-15</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Stepped_Impedance_Low_Pass_Filter/1-0-0/view</loc>
-    <lastmod>2018-11-05 11:52:26</lastmod>
+    <lastmod>2018-11-05</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Parallel_Coupled_Filter/1-0-0/view</loc>
-    <lastmod>2018-11-05 11:52:18</lastmod>
+    <lastmod>2018-11-05</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Dispersive_FDTD_Human_contents/1-0-0/view</loc>
-    <lastmod>2018-11-08 14:44:24</lastmod>
+    <lastmod>2018-11-08</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/KSFDTD_FILTER_SOLVER/1-0-0/view</loc>
-    <lastmod>2018-11-12 14:11:03</lastmod>
+    <lastmod>2018-11-12</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Simple_cube_structure_mesh_generator/1-0-0/view</loc>
-    <lastmod>2018-11-07 12:53:30</lastmod>
+    <lastmod>2018-11-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SimpleFDTD/1-0-0/view</loc>
-    <lastmod>2019-01-07 10:46:50</lastmod>
+    <lastmod>2019-01-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_EP_Courtemanche1998/1-0-0/view</loc>
-    <lastmod>2018-12-14 19:17:40</lastmod>
+    <lastmod>2018-12-14</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_EP_Priebe1998/1-0-0/view</loc>
-    <lastmod>2018-10-24 11:06:11</lastmod>
+    <lastmod>2018-10-24</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_Electrophysiology_HumanHF/1-0-8/view</loc>
-    <lastmod>2018-09-21 17:40:38</lastmod>
+    <lastmod>2018-09-21</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_Electrophysiology_CanineHF/1-0-6/view</loc>
-    <lastmod>2018-08-18 09:53:06</lastmod>
+    <lastmod>2018-08-18</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_Electrophysiology_CanineN/1-0-5/view</loc>
-    <lastmod>2018-08-18 10:06:31</lastmod>
+    <lastmod>2018-08-18</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_EP_Priebe1998failing/1-0-0/view</loc>
-    <lastmod>2018-10-24 11:04:51</lastmod>
+    <lastmod>2018-10-24</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_EP_Shannon4a/1-0-0/view</loc>
-    <lastmod>2018-10-24 11:04:13</lastmod>
+    <lastmod>2018-10-24</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_EP_Faber2000/1-0-0/view</loc>
-    <lastmod>2018-10-22 13:41:44</lastmod>
+    <lastmod>2018-10-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_EP_Grandi2010_Endo/1-0-0/view</loc>
-    <lastmod>2018-10-22 13:38:28</lastmod>
+    <lastmod>2018-10-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_EP_Grandi2010_Epi/1-0-0/view</loc>
-    <lastmod>2018-10-22 13:39:26</lastmod>
+    <lastmod>2018-10-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_EP_Hund2004/1-0-0/view</loc>
-    <lastmod>2018-10-22 13:35:27</lastmod>
+    <lastmod>2018-10-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_EP_Luo1991/1-0-0/view</loc>
-    <lastmod>2018-10-22 13:33:09</lastmod>
+    <lastmod>2018-10-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_EP_Luo1994/1-0-0/view</loc>
-    <lastmod>2018-10-22 13:30:52</lastmod>
+    <lastmod>2018-10-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_EP_Mahajan2008/1-0-0/view</loc>
-    <lastmod>2018-10-22 13:24:58</lastmod>
+    <lastmod>2018-10-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_EP_Ohara2011_Endo/1-0-0/view</loc>
-    <lastmod>2018-10-22 13:21:18</lastmod>
+    <lastmod>2018-10-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_EP_Ohara2011_Epi/1-0-0/view</loc>
-    <lastmod>2018-10-22 13:19:51</lastmod>
+    <lastmod>2018-10-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_EP_Ohara2011_M/1-0-0/view</loc>
-    <lastmod>2018-10-22 13:17:54</lastmod>
+    <lastmod>2018-10-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_EP_Priebe1998/1-0-0/view</loc>
-    <lastmod>2018-10-22 13:15:14</lastmod>
+    <lastmod>2018-10-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/End_Coupled_Filter/1-0-0/view</loc>
-    <lastmod>2018-11-05 11:52:09</lastmod>
+    <lastmod>2018-11-05</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_EP_Priebe1998failing/1-0-0/view</loc>
-    <lastmod>2018-10-22 13:13:57</lastmod>
+    <lastmod>2018-10-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_EP_Shannon4a/1-0-0/view</loc>
-    <lastmod>2018-10-22 13:11:31</lastmod>
+    <lastmod>2018-10-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_EP_TN2004Endo/1-0-0/view</loc>
-    <lastmod>2018-10-22 13:05:09</lastmod>
+    <lastmod>2018-10-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_EP_TN2004Epi/1-0-0/view</loc>
-    <lastmod>2018-10-22 13:03:47</lastmod>
+    <lastmod>2018-10-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_EP_TN2004M/1-0-0/view</loc>
-    <lastmod>2018-10-22 13:02:17</lastmod>
+    <lastmod>2018-10-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_EP_TN2006Endo/1-0-0/view</loc>
-    <lastmod>2018-10-22 12:58:56</lastmod>
+    <lastmod>2018-10-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_EP_TN2006M/1-0-0/view</loc>
-    <lastmod>2018-10-22 13:00:20</lastmod>
+    <lastmod>2018-10-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/CASADSolver_integrated/1-0-0/view</loc>
-    <lastmod>2019-03-06 15:02:21</lastmod>
+    <lastmod>2019-03-06</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/opt_linear/1-0-4/view</loc>
-    <lastmod>2018-09-10 10:16:22</lastmod>
+    <lastmod>2018-09-10</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/EdisonDesigner/4-0-0/view</loc>
-    <lastmod>2018-09-10 10:28:06</lastmod>
+    <lastmod>2018-09-10</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Patch_Antenn/1-0-0/view</loc>
-    <lastmod>2018-11-05 11:51:59</lastmod>
+    <lastmod>2018-11-05</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Web_IO_SIESTA/1-0-3/view</loc>
-    <lastmod>2018-12-20 12:17:51</lastmod>
+    <lastmod>2018-12-20</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/read_molecule/1-0-0/view</loc>
-    <lastmod>2018-10-31 10:09:17</lastmod>
+    <lastmod>2018-10-31</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/basis_631gd/1-0-0/view</loc>
-    <lastmod>2018-10-31 10:08:57</lastmod>
+    <lastmod>2018-10-31</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/KFLOW_EDISON_UNSTEADY/1-0-0/view</loc>
-    <lastmod>2018-09-21 04:12:38</lastmod>
+    <lastmod>2018-09-21</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/basis_631g/1-0-0/view</loc>
-    <lastmod>2018-10-31 10:08:47</lastmod>
+    <lastmod>2018-10-31</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/HSandT/1-0-0/view</loc>
-    <lastmod>2018-11-19 17:54:23</lastmod>
+    <lastmod>2018-11-19</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Huckel_Guess/1-0-0/view</loc>
-    <lastmod>2018-10-31 10:08:18</lastmod>
+    <lastmod>2018-10-31</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/B3LYP_Energy/1-0-0/view</loc>
-    <lastmod>2018-10-31 10:07:59</lastmod>
+    <lastmod>2018-10-31</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/B3LYP_RHF_Gradient/1-0-0/view</loc>
-    <lastmod>2018-10-31 10:07:48</lastmod>
+    <lastmod>2018-10-31</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/rhf_energy/1-0-0/view</loc>
-    <lastmod>2018-10-31 10:07:34</lastmod>
+    <lastmod>2018-10-31</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/rhf_gradient/1-0-0/view</loc>
-    <lastmod>2018-10-31 10:07:18</lastmod>
+    <lastmod>2018-10-31</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/initial_hessian/1-0-0/view</loc>
-    <lastmod>2018-11-19 20:18:09</lastmod>
+    <lastmod>2018-11-19</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/new_coordinates/1-0-0/view</loc>
-    <lastmod>2018-11-19 20:17:37</lastmod>
+    <lastmod>2018-11-19</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/KSFDTD_ANTENNA_SOLVER/1-0-0/view</loc>
-    <lastmod>2018-11-12 14:09:21</lastmod>
+    <lastmod>2018-11-12</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/EDISON_KFLOW_PREFLOW/1-0-3/view</loc>
-    <lastmod>2018-10-17 11:24:32</lastmod>
+    <lastmod>2018-10-17</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/KSFDTD_ANTENNA_POSTPROCESSOR/1-0-0/view</loc>
-    <lastmod>2018-10-18 13:09:35</lastmod>
+    <lastmod>2018-10-18</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/RcAnalysis/2-0-0/view</loc>
-    <lastmod>2019-03-11 14:56:07</lastmod>
+    <lastmod>2019-03-11</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/dft_sc3d/1-0-0/view</loc>
-    <lastmod>2018-12-11 19:55:00</lastmod>
+    <lastmod>2018-12-11</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Reflectance_Transmittance_Periodic_Absorber/1-0-1/view</loc>
-    <lastmod>2018-10-11 10:31:57</lastmod>
+    <lastmod>2018-10-11</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Mesoscale/2-0-1/view</loc>
-    <lastmod>2019-03-11 15:21:44</lastmod>
+    <lastmod>2019-03-11</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/PO_PTD_MONOSTATIC_RCS/1-0-0/view</loc>
-    <lastmod>2018-10-18 18:04:30</lastmod>
+    <lastmod>2018-10-18</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/MANOVA_Analysis/1-1-3/view</loc>
-    <lastmod>2018-10-23 20:38:55</lastmod>
+    <lastmod>2018-10-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/ANOVA_Analysis/1-1-3/view</loc>
-    <lastmod>2018-10-23 20:37:46</lastmod>
+    <lastmod>2018-10-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/GAMESS_by_KNU/1-0-0/view</loc>
-    <lastmod>2019-04-09 18:36:11</lastmod>
+    <lastmod>2019-04-09</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/KFLOW_EDISON_13/1-0-5/view</loc>
-    <lastmod>2018-10-27 22:28:54</lastmod>
+    <lastmod>2018-10-27</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SemDesk/1-1-0/view</loc>
-    <lastmod>2019-03-17 18:00:46</lastmod>
+    <lastmod>2019-03-17</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/genGeom/1-0-0/view</loc>
-    <lastmod>2018-11-19 22:28:02</lastmod>
+    <lastmod>2018-11-19</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/XYZ_TO_LAMMPS_input/1-0-0/view</loc>
-    <lastmod>2018-11-19 22:27:28</lastmod>
+    <lastmod>2018-11-19</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/aeroelasticty_linsup/1-0-0/view</loc>
-    <lastmod>2018-12-12 14:15:53</lastmod>
+    <lastmod>2018-12-12</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/FiberElementGeneration/2-0-0/view</loc>
-    <lastmod>2019-03-11 15:34:19</lastmod>
+    <lastmod>2019-03-11</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/KFLOW_EDISON_13/1-0-7/view</loc>
-    <lastmod>2018-12-02 18:08:21</lastmod>
+    <lastmod>2018-12-02</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/cr3d_stress/1-0-0/view</loc>
-    <lastmod>2018-12-20 17:57:03</lastmod>
+    <lastmod>2018-12-20</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/SingleCell_EP_kurata2002/1-0-0/view</loc>
-    <lastmod>2018-12-20 10:53:46</lastmod>
+    <lastmod>2018-12-20</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Hemisphere_Radome_Enclosed_Antenna/1-0-0/view</loc>
-    <lastmod>2018-12-24 08:40:44</lastmod>
+    <lastmod>2018-12-24</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Economic_Analysis_of_Reclaimed_Water_Reuse_to_GolfClub/2-0-0/view</loc>
-    <lastmod>2018-12-24 11:39:00</lastmod>
+    <lastmod>2018-12-24</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Tank_Cost_Calculator/1-0-0/view</loc>
-    <lastmod>2019-01-08 18:25:59</lastmod>
+    <lastmod>2019-01-08</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Valve_Cost_Calculator/1-0-0/view</loc>
-    <lastmod>2019-01-08 18:26:46</lastmod>
+    <lastmod>2019-01-08</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Pump_Cost_Calculator/1-0-0/view</loc>
-    <lastmod>2019-01-08 18:33:20</lastmod>
+    <lastmod>2019-01-08</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/edisonBE/1-0-0/view</loc>
-    <lastmod>2018-12-26 17:05:48</lastmod>
+    <lastmod>2018-12-26</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Single_Cell_mutation/1-0-0/view</loc>
-    <lastmod>2018-12-26 16:39:53</lastmod>
+    <lastmod>2018-12-26</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/3D_mutation/1-0-0/view</loc>
-    <lastmod>2018-12-26 16:55:48</lastmod>
+    <lastmod>2018-12-26</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/edisonPKPD/1-0-0/view</loc>
-    <lastmod>2018-12-27 10:36:11</lastmod>
+    <lastmod>2018-12-27</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/PKPD_reversible_metabolism/1-0-0/view</loc>
-    <lastmod>2018-12-27 13:10:43</lastmod>
+    <lastmod>2018-12-27</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Pump_Operation_Cost_Calculator/1-0-0/view</loc>
-    <lastmod>2019-01-08 18:35:49</lastmod>
+    <lastmod>2019-01-08</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/MetaCellSolver/1-0-0/view</loc>
-    <lastmod>2019-01-07 13:59:55</lastmod>
+    <lastmod>2019-01-07</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/IrisFilterGenerator/1-0-0/view</loc>
-    <lastmod>2019-02-08 13:15:28</lastmod>
+    <lastmod>2019-02-08</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/MOMwithFDTD/1-0-0/view</loc>
-    <lastmod>2019-01-23 22:51:39</lastmod>
+    <lastmod>2019-01-23</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Nodal_Pressure_Standard_Solver/1-0-0/view</loc>
-    <lastmod>2019-01-08 19:05:44</lastmod>
+    <lastmod>2019-01-08</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Pipe_Velocity_Standard_Solver/1-0-0/view</loc>
-    <lastmod>2019-01-08 19:07:28</lastmod>
+    <lastmod>2019-01-08</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Evac_Agent_Generator/1-0-0/view</loc>
-    <lastmod>2019-01-22 12:26:55</lastmod>
+    <lastmod>2019-01-22</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Evac_Agent_Behavior/1-0-0/view</loc>
-    <lastmod>2019-02-06 03:50:40</lastmod>
+    <lastmod>2019-02-06</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Acoustic_analysis_with_sommerfiled_boundary/1-0-0/view</loc>
-    <lastmod>2019-01-30 09:08:48</lastmod>
+    <lastmod>2019-01-30</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/trusssolver_for_msketch/1-0-0/view</loc>
-    <lastmod>2019-01-31 09:11:08</lastmod>
+    <lastmod>2019-01-31</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Evac_Simulator/1-0-0/view</loc>
-    <lastmod>2019-02-06 14:19:01</lastmod>
+    <lastmod>2019-02-06</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Evac_Road_Analysis/1-0-0/view</loc>
-    <lastmod>2019-02-06 14:19:49</lastmod>
+    <lastmod>2019-02-06</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Evac_Map_Generator/1-0-0/view</loc>
-    <lastmod>2019-02-08 15:45:39</lastmod>
+    <lastmod>2019-02-08</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Evac_Road_Connector/1-0-0/view</loc>
-    <lastmod>2019-02-08 15:52:16</lastmod>
+    <lastmod>2019-02-08</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/GEBA_modal/1-0-0/view</loc>
-    <lastmod>2019-02-19 21:29:15</lastmod>
+    <lastmod>2019-02-19</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/2D_Contact_Process/2-0-0/view</loc>
-    <lastmod>2019-03-18 18:17:19</lastmod>
+    <lastmod>2019-03-18</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/ViscoElasticPlasticModelAnalysis/1-0-0/view</loc>
-    <lastmod>2019-03-29 14:57:58</lastmod>
+    <lastmod>2019-03-29</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Nanowire_FET/1-1-0/view</loc>
-    <lastmod>2019-03-29 12:05:46</lastmod>
+    <lastmod>2019-03-29</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/ReinforcedConcreteAnalysisUnderDynamicLoad/1-0-0/view</loc>
-    <lastmod>2019-04-01 17:30:28</lastmod>
+    <lastmod>2019-04-01</lastmod>
   </url>
   <url>
     <loc>https://www.edison.re.kr/web/portal/scienceappstore/-/scienceapp/Case3/1-0-0/view</loc>
-    <lastmod>2019-04-08 16:05:58</lastmod>
+    <lastmod>2019-04-08</lastmod>
   </url>
 </urlset>
