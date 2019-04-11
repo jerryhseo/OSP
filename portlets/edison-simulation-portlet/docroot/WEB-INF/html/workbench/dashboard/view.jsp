@@ -1332,10 +1332,7 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 			});
 			
 			modal.modal({ "backdrop": "static", "keyboard": false });
-		},error:function(jqXHR, textStatus, errorThrown){
-			$.alert(Liferay.Language.get('edison-simulation-monitoring-log-file-is-not-exist'));
-			<portlet:namespace/>clearReadOutLogTimer();
-		}, complete: function(){
+			
 			if(scrollPage == 1){
 				$("#"+<portlet:namespace/>parentNamespace+"job-log-modal").css("display", "block");
 				$("#"+<portlet:namespace/>parentNamespace+"system-log").css("display", "block");
@@ -1343,6 +1340,9 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 					textarea.scrollTop(textarea.prop("scrollHeight"));
 				}
 			}
+		},error:function(jqXHR, textStatus, errorThrown){
+			$.alert(Liferay.Language.get('edison-simulation-monitoring-log-file-is-not-exist'));
+			<portlet:namespace/>clearReadOutLogTimer();
 		}
 	});
 	
