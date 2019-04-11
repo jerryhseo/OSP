@@ -3,6 +3,8 @@ package org.kisti.edison.science.portlet.appmanager;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -366,7 +368,9 @@ public class AppManagerController{
 					}catch (NoSuchScienceAppCompileException e){
 						
 					}
-				}else{
+				}
+				/*else{*/
+				// 2019.04.10 _ 실행파일 업로드 UI 변경으로 인한 조건식 제외 
   				//실행 파일 업로드 확인
 					boolean exeFileUpload = false;
 					
@@ -379,7 +383,7 @@ public class AppManagerController{
 					exeFileUpload = ScienceAppLocalServiceUtil.existScienceAppPath(targetPath);
 					model.addAttribute("exeFileUpload",exeFileUpload);
 				
-				}
+				/*}*/
 				
 			}else if(clickTab.equals("m03")){
 				long inputCnt = ScienceAppInputPortsLocalServiceUtil.getScienceAppInputPortsesCount(scienceAppId);
@@ -1235,23 +1239,29 @@ public class AppManagerController{
 				
 				//파일 올렸을 떄 isCompile 상태값 변경
 				//compile 테이블 값 삭제
+				boolean isCompile = false;
 				if(uploadSelect.equals("upload")){//upload 일때
-  				if(appId != 0){
-  					ScienceAppCompile compileApp =  ScienceAppCompileLocalServiceUtil.compileFindByScienceAppId(appId);
-  					if(compileApp != null){
-  						ScienceAppCompileLocalServiceUtil.deleteCompileAndScienceApp(companyId, appId, appName, appVersion);
-  					}
-  				}
+	  				if(appId != 0){
+	  					ScienceAppCompile compileApp =  ScienceAppCompileLocalServiceUtil.compileFindByScienceAppId(appId);
+	  					if(compileApp != null){
+	  						ScienceAppCompileLocalServiceUtil.deleteCompileAndScienceApp(companyId, appId, appName, appVersion);
+	  					}
+	  				}
 				}else if(uploadSelect.equals("compile")){//git file upload
 					//compile update
 					ScienceAppCompileLocalServiceUtil.updateCompileAndScienceApp(appId, themeDisplay.getUserId(), "", "");
+					isCompile = true;
 				}
 
-				ScienceAppLocalServiceUtil.addScienceAppFile(companyId, appName, appVersion, fileName, upload.getFileAsStream("scienceAppFile", false));
+				ScienceAppLocalServiceUtil.addScienceAppFile(companyId, appName, appVersion, fileName, upload.getFileAsStream("scienceAppFile", false), isCompile);
+				String appBasePath = PrefsPropsUtil.getString(companyId, EdisonPropsUtil.SCIENCEAPP_BASE_PATH) + appName + File.separator + appVersion;
+				JSONObject getFolderAndFileObject = getFolderAndFileListInUploadFile(themeDisplay, appId, appName, appVersion, appBasePath);
 				
 				String binFolderListToStr = ScienceAppCompileLocalServiceUtil.retrieveListTartgetDir(companyId, appName, appVersion);
 				
 				net.sf.json.JSONObject obj = new net.sf.json.JSONObject();
+				/* Upload Path, folderList, FileList */
+				obj.put("uploadFileInfo", getFolderAndFileObject.toString());
 				obj.put("binFolderListToStr", binFolderListToStr);
 				obj.put("fileName", fileName);
 				response.setContentType("application/json; charset=UTF-8");
@@ -1268,7 +1278,6 @@ public class AppManagerController{
 		}
 	}
 	
-
 	@ResourceMapping(value="searchCommonLib")
 	public void searchCommonLib(ResourceRequest request, ResourceResponse response) throws IOException{
 		Map params = RequestUtil.getParameterMap(request);
@@ -2077,6 +2086,48 @@ public class AppManagerController{
 		}
 	}
 	
+	@ResourceMapping(value="fileUploadCompile")
+	public void fileUploadCompile(ResourceRequest request, ResourceResponse response) throws IOException{
+		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+		try{
+
+			String resultTxt = "";
+			long companyId = themeDisplay.getCompanyId();
+			long scienceAppId = ParamUtil.getLong(request, "scienceAppId");
+			String appName = ParamUtil.getString(request, "appName");
+			String appVersion = ParamUtil.getString(request, "appVersion");
+			
+			if(System.getProperty("os.name").toUpperCase().contains("WINDOWS")){
+				throw new ScienceAppException(ScienceAppException.SCIENCE_APP_FILE_NOT_SUPPORT_OS);
+			}else{
+				
+				if(appName.equals("")||appVersion.equals("")){
+					throw new Exception("AppName OR AppVersion IS NULL");
+				}
+				
+				resultTxt += ScienceAppCompileLocalServiceUtil.cleanMakeFileToTargetScienceApp(companyId, appName, appVersion);
+				resultTxt += "<br/>"+ScienceAppCompileLocalServiceUtil.makeFileToTargetScienceApp(companyId, appName, appVersion);
+				
+				ScienceAppCompileLocalServiceUtil.updateCompileAndScienceApp(scienceAppId, themeDisplay.getUserId(), "", resultTxt);
+			}
+
+			JSONObject obj = JSONFactoryUtil.createJSONObject();
+			
+			String binFolderListToStr = ScienceAppCompileLocalServiceUtil.retrieveListTartgetDir(companyId, appName, appVersion);
+			obj.put("binFolderListToStr", binFolderListToStr);
+			obj.put("result", resultTxt);
+			response.setContentType("application/json; charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.write(obj.toString());
+			
+		}catch (Exception e){
+			e.printStackTrace();
+			if(e instanceof ScienceAppException){
+					handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-appstore-file-not-support-os"));
+			}
+		}
+	}
+	
 	@ResourceMapping(value="getScienceAppInfo")
 	public void getScienceAppInfo(ResourceRequest request, ResourceResponse response) throws IOException{
 		Map params = RequestUtil.getParameterMap(request);
@@ -2149,6 +2200,132 @@ public class AppManagerController{
 			PrintWriter out = response.getWriter();
 			out.write(obj.toString());
 			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/* Get upload execute file and folder */
+	@ResourceMapping(value="getUploadFolderList")
+	public void getUploadFolderList(ResourceRequest request, ResourceResponse response) throws IOException{
+		Map params = RequestUtil.getParameterMap(request);
+		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+		
+		Long appId = GetterUtil.getLong(params.get("appId"),0);
+		String appName = GetterUtil.getString(params.get("appName"),"");
+		String appVersion = GetterUtil.getString(params.get("appVersion"),"");
+		String selectedPath = GetterUtil.getString(params.get("selectedPath"),"");
+		
+		JSONObject getFolderAndFileObject = getFolderAndFileListInUploadFile(themeDisplay, appId, appName, appVersion, selectedPath);
+		
+		net.sf.json.JSONObject obj = new net.sf.json.JSONObject();
+		obj.put("uploadFileInfo", getFolderAndFileObject.toString());
+		response.setContentType("application/json; charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		out.write(obj.toString());
+	}
+	
+	private JSONObject getFolderAndFileListInUploadFile(ThemeDisplay themeDisplay, long appId, String appName, String appVersion, String selectedPath){
+		
+		JSONObject folderAndFileObj = JSONFactoryUtil.createJSONObject();
+		JSONArray folderArray = JSONFactoryUtil.createJSONArray();
+		JSONArray fileArray = JSONFactoryUtil.createJSONArray();
+		
+		try {
+			long companyId = themeDisplay.getCompanyId();
+			String rootPath = PrefsPropsUtil.getString(companyId, EdisonPropsUtil.SCIENCEAPP_BASE_PATH) + appName + File.separator + appVersion;
+			if(selectedPath == null || selectedPath.equals("")){
+				selectedPath = rootPath;
+			}
+			
+			File uploadFolder = new File(selectedPath);
+			File[] fileList = uploadFolder.listFiles();
+			for(File file : fileList){
+				JSONObject getFileObj = JSONFactoryUtil.createJSONObject();
+				
+				if(file.isFile()){
+					getFileObj.put("type", "file");
+					getFileObj.put("name", file.getName());
+					getFileObj.put("size", file.length());
+					getFileObj.put("path", file.getPath());
+					getFileObj.put("parentPath", file.getParent());
+					fileArray.put(getFileObj);
+				} else if(file.isDirectory()){
+					getFileObj.put("type", "folder");
+					getFileObj.put("name", file.getName());
+					getFileObj.put("path", file.getPath());
+					getFileObj.put("parentPath", file.getParent());
+					folderArray.put(getFileObj);
+					
+					JSONObject folderAndFileArrayObj = getFolderAndFileListInUploadFile(themeDisplay, appId, appName, appVersion, file.getPath());
+					JSONArray getFolderList = folderAndFileArrayObj.getJSONArray("folderList");
+					JSONArray getFileList = folderAndFileArrayObj.getJSONArray("fileList");
+					for(int i=0; i<getFolderList.length(); i++){
+						folderArray.put(getFolderList.getJSONObject(i));
+					}
+					for(int i=0; i<getFileList.length(); i++){
+						fileArray.put(getFileList.getJSONObject(i));
+					}
+				}
+			}
+			
+			folderAndFileObj.put("folderList", folderArray);
+			folderAndFileObj.put("fileList", fileArray);
+			folderAndFileObj.put("rootPath", rootPath);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return folderAndFileObj;
+	}
+	
+	/* Read simrc or simpost file */
+	@ResourceMapping(value="readSimFile")
+	public void readSimFile(ResourceRequest request, ResourceResponse response){
+		Map params = RequestUtil.getParameterMap(request);
+		String filePath = CustomUtil.strNull(params.get("filePath"),"");
+		File simFile = new File(filePath);
+		
+		BufferedReader br = null;
+		StringBuffer sb = new StringBuffer();
+		try {
+			br = new BufferedReader(new FileReader(simFile));
+			String line = null;
+			while((line = br.readLine()) != null){
+				sb.append(line+'\n');
+			}
+			
+			net.sf.json.JSONObject obj = new net.sf.json.JSONObject();
+			obj.put("content", sb.toString());
+			response.setContentType("application/json; charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.write(obj.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/* Read simrc or simpost file */
+	@ResourceMapping(value="writeSimFile")
+	public void writeSimFile(ResourceRequest request, ResourceResponse response){
+		Map params = RequestUtil.getParameterMap(request);
+		String fileName = CustomUtil.strNull(params.get("fileName"),"");
+		String folderPath = CustomUtil.strNull(params.get("folderPath"),"");
+		String content = CustomUtil.strNull(params.get("content"),"");
+		
+		File simFile = new File(folderPath + File.separator + fileName);
+		FileWriter writer = null;
+		try{
+			writer = new FileWriter(simFile, false);
+			writer.write(content);
+			writer.flush();
+			
+			net.sf.json.JSONObject obj = new net.sf.json.JSONObject();
+			obj.put("saveSimFile", "true");
+			response.setContentType("application/json; charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.write(obj.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

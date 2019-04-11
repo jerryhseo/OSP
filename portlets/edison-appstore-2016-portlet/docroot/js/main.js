@@ -47,9 +47,8 @@ function bStart(){
         message: $('#loadingBox'),
         css: { 
         	color: '#FFF',
-            top:  ($(window).height() - 400) /2 + 'px', 
-            left: (window.innerWidth - 700) /2 + 'px',  
-//            left: '500px',
+            top:  '50%', 
+            left: '50%',  
             width: '700px' 
         }, 
         onBlock: function() { 
