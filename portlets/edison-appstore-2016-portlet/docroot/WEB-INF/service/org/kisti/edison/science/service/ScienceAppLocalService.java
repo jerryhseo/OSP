@@ -922,6 +922,11 @@ public interface ScienceAppLocalService extends BaseLocalService,
 		java.io.InputStream uploadedInputStream)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
+	public void addScienceAppFile(long companyId, java.lang.String appName,
+		java.lang.String appVersion, java.lang.String fileName,
+		java.io.InputStream uploadedInputStream, boolean isCompile)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
 	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> retrieveListAppTest(
 		java.util.Map<java.lang.String, java.lang.Object> params)
 		throws com.liferay.portal.kernel.exception.PortalException,

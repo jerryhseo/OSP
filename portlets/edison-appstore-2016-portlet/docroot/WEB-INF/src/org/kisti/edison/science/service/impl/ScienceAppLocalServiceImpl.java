@@ -2154,11 +2154,34 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 			String srcPath = appBasePath + File.separator + "src";
 			String binPath = appBasePath + File.separator + "bin";
 			this.saveToScienceAppStorage(srcPath, fileName, uploadedInputStream);
-
-			this.unzipScienceAppZipFile(srcPath + File.separator + fileName, binPath);
+			this.unzipScienceAppZipFile(appBasePath + File.separator + fileName, binPath);
 
 		}catch (Exception e){
 			throw new SystemException(e);
+		}
+	}
+	
+	public void addScienceAppFile(long companyId, String appName, String appVersion, String fileName,InputStream uploadedInputStream, boolean isCompile) throws SystemException{
+		if(isCompile){
+			try{
+				String appBasePath = PrefsPropsUtil.getString(companyId, EdisonPropsUtil.SCIENCEAPP_BASE_PATH) + appName
+						+ File.separator + appVersion;
+				
+				this.saveToScienceAppStorage(appBasePath, fileName, uploadedInputStream);
+				this.unzipScienceAppZipFile(appBasePath + File.separator + fileName, appBasePath);
+				
+				String unzipFile = appBasePath + File.separator + fileName;
+				String unzipFolder = appBasePath + File.separator + fileName.substring(0, fileName.lastIndexOf("."));
+				if(this.existScienceAppPath(unzipFolder)){
+					this.executeCommand("mv " + unzipFolder + "/* " + appBasePath);
+					this.executeCommand("rm -rf " + unzipFolder + " " + unzipFile);
+				}
+				
+			}catch (Exception e){
+				throw new SystemException(e);
+			}
+		} else {
+			addScienceAppFile(companyId, appName, appVersion, fileName, uploadedInputStream);
 		}
 	}
 	

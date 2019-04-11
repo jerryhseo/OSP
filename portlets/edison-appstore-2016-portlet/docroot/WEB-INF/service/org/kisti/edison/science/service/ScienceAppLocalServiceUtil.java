@@ -1120,6 +1120,16 @@ public class ScienceAppLocalServiceUtil {
 			uploadedInputStream);
 	}
 
+	public static void addScienceAppFile(long companyId,
+		java.lang.String appName, java.lang.String appVersion,
+		java.lang.String fileName, java.io.InputStream uploadedInputStream,
+		boolean isCompile)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getService()
+			.addScienceAppFile(companyId, appName, appVersion, fileName,
+			uploadedInputStream, isCompile);
+	}
+
 	public static java.util.List<java.util.Map<java.lang.String, java.lang.Object>> retrieveListAppTest(
 		java.util.Map<java.lang.String, java.lang.Object> params)
 		throws com.liferay.portal.kernel.exception.PortalException,
