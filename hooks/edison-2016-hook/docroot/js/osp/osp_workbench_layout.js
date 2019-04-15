@@ -2696,8 +2696,10 @@
                     }
 
                     var dataName = data[OSP.Constants.NAME];
-                    dataName = dataName.replace(/ /gi, '');
-                    data[OSP.Constants.NAME] = dataName;
+                    if(!!dataName){
+                    	dataName = dataName.replace(/ /gi, '');
+                    	data[OSP.Constants.NAME] = dataName;
+                    }
                     
                     console.log('Data Changed data: ', data);
                     var changedData = new OSP.InputData(data);
