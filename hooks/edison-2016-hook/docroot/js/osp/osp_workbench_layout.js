@@ -2695,6 +2695,10 @@
                         return;
                     }
 
+                    var dataName = data[OSP.Constants.NAME];
+                    dataName = dataName.replace(/ /gi, '_');
+                    data[OSP.Constants.NAME] = dataName;
+                    
                     console.log('Data Changed data: ', data);
                     var changedData = new OSP.InputData(data);
                     changedData.portName(port.name());
