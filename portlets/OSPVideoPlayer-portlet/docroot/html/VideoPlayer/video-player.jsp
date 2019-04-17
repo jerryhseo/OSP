@@ -36,6 +36,7 @@ OSPVisualizerConfig visualizerConfig = OSPVisualizerUtil.getVisualizerConfig(ren
 			<video 
 					id="<portlet:namespace/>player"
 					controls autoplay
+					width="100%"
 					>
 			</video>
 		</div>
@@ -60,7 +61,7 @@ OSPVisualizerConfig visualizerConfig = OSPVisualizerUtil.getVisualizerConfig(ren
 					'OSP_RESPONSE_DATA':<portlet:namespace/>responseDataEventHandler,
 					'OSP_INITIALIZE': <portlet:namespace/>initializeEventHandler
 			},
-			loadCanvas: <portlet:namespace/>loadText,
+			loadCanvas: <portlet:namespace/>loadVideoFile,
 			procFuncs:{
 				readServerFile: function( jsonData ){
 					console.log('Custom function for readServerFile....');
@@ -76,7 +77,7 @@ OSPVisualizerConfig visualizerConfig = OSPVisualizerUtil.getVisualizerConfig(ren
 /***********************************************************************
  * Canvas functions
 ***********************************************************************/
-function <portlet:namespace/>loadText( jsonData, changeAlert ){	
+function <portlet:namespace/>loadVideoFile( jsonData, changeAlert ){	
 	switch( jsonData.type_ ){
 	case OSP.Enumeration.PathType.FILE:
 	    <portlet:namespace/>visualizer.createTempFilePath('<%=request.getContextPath()%>', {}, changeAlert, false);
@@ -88,14 +89,20 @@ function <portlet:namespace/>loadText( jsonData, changeAlert ){
 	case OSP.Enumeration.PathType.URL:
 		<portlet:namespace/>setTitle(jsonData.name_);
 		console.log('Video URL: ', jsonData );
-		/*
-		if( jsonData.fileType_ !== 'mp4' ){
-			return;
-		}
-		*/
 		
 		var videoNode = document.getElementById('<portlet:namespace/>player');
-		videoNode.src = jsonData.content_;
+
+		var srcType;
+		switch( jsonData.dataType_.name ){
+		case 'mp4':
+		case 'webm':
+		case 'ogg':
+			srcType='video/'+jsonData.dataType_.name;
+			videoNode.src = jsonData.content_;
+			videoNode.type= srcType;
+			// videoNode.style='width:100%;';
+		}
+		
 		break;
 	case OSP.Enumeration.PathType.CONTENT:
 	case OSP.Enumeration.PathType.FILE_CONTENT:
@@ -132,7 +139,9 @@ function <portlet:namespace/>processInitAction( jsonInitData ){
 		jsonInitData.name_ = '';
 	}
 	
+	/*
 	 $(<portlet:namespace/>player).attr('height', $(<portlet:namespace/>canvas).height() );
+	*/
 	
 	<portlet:namespace/>visualizer.processInitAction( jsonInitData, false );
 }
@@ -148,6 +157,7 @@ $('#<portlet:namespace/>openLocalFile').click(function(){
 	domFileSelector.on(
 			'change',
 			function(event){
+				console.log('File Selected!!!');
 				var URL = window.URL || window.webkitURL;
 				
 				var file = this.files[0];
@@ -156,11 +166,13 @@ $('#<portlet:namespace/>openLocalFile').click(function(){
 				var videoNode = document.getElementById('<portlet:namespace/>player');
 				var canPlay = videoNode.canPlayType(type);
 				if (canPlay === '') {
+					console.log('OSPVideoPlayer annot play this file type: '+type);
 					return;
 				}
 
 				var fileURL = URL.createObjectURL(file);
 				videoNode.src = fileURL;
+				console.log('videoNode.src: '+videoNode.src);
 			}
 	);
 });

@@ -89,7 +89,7 @@ function <portlet:namespace/>loadText( jsonData, changeAlert ){
 	case OSP.Enumeration.PathType.CONTENT:
 	case OSP.Enumeration.PathType.FILE_CONTENT:
 		$('#<portlet:namespace/>canvas').text(jsonData.content_);
-		<portlet:namespace/>setTitle(OSP.Util.mergePath(jsonData.parent_, jsonData.name_));
+		<portlet:namespace/>setTitle(jsonData.name_);
 		break;
 	default:
 		alert('Un supported yet.');
@@ -158,8 +158,13 @@ function <portlet:namespace/>responseDataEventHandler( data, callbackParams ){
 function <portlet:namespace/>initializeEventHandler( data, callbackParams ){
 	console.log('[<portlet:namespace/>initializeEventHandler] ');
 	
+	/*
+	<portlet:namespace/>visualizer.refresh();
+	*/
+
 	<portlet:namespace/>visualizer.processInitAction( data, false );
 	$('#<portlet:namespace/>canvas').empty();
+	<portlet:namespace/>setTitle('');
 }
 </script>
 

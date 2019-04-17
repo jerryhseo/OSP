@@ -84,6 +84,7 @@ function <portlet:namespace/>loadProtein( jsonData, changeAlert ){
 			break;
 		case OSP.Enumeration.PathType.URL:
 		    <portlet:namespace/>visualizer.callIframeFunc('loadProtein', null, jsonData.content_ );
+		    <portlet:namespace/>setTitle( jsonData.name_ );
 			break;
 		default:
 			<portlet:namespace/>visualizer.showAlert('Un-supported type: '+jsonData.type_);
@@ -152,6 +153,7 @@ function <portlet:namespace/>responseDataEventHandler( data, params ){
 function <portlet:namespace/>initializeEventHandler( data, params ){
 	<portlet:namespace/>visualizer.callIframeFunc('cleanCanvas', null);
 	<portlet:namespace/>visualizer.processInitAction( null, false );
+	<portlet:namespace/>setTitle( '' );
 }
 
 </script>
