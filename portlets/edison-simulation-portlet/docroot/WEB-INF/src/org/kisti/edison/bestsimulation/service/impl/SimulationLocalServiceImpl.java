@@ -395,7 +395,6 @@ public class SimulationLocalServiceImpl extends SimulationLocalServiceBaseImpl {
 							resultMap.put("hasSimulationInfo", false);
 						}
 					} else {
-						System.out.println("2...");
 						resultMap.put("hasSimulationInfo", false);
 					}
 				}else if (conn.getResponseCode() == 400) {
