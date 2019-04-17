@@ -1266,10 +1266,10 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 			var isScrollMove = false;
 			if(textarea[0].scrollTop==0){
 				isScrollMove = true;
-			}else if(textarea.scrollTop() < textarea.prop('scrollHeight')){
-				isScrollMove = false;
 			}else if(textarea[0].scrollTop+textarea.outerHeight()>textarea.prop('scrollHeight')){
 				isScrollMove = true;
+			}else if(textarea.scrollTop() < textarea.prop('scrollHeight')){
+				isScrollMove = false;
 			}
 			
 			var preTextareVal = textarea.text();
@@ -1301,7 +1301,6 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 				systemLogDiv.addClass('col-md-12');
 				errorLogDiv.hide();
 			}
-			
 			currScrollH = textarea.prop('scrollHeight');
 			
 			if(isScrollMove){
