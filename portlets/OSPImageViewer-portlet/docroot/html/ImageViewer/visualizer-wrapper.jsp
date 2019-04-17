@@ -62,11 +62,23 @@ OSPVisualizerConfig visualizerConfig = OSPVisualizerUtil.getVisualizerConfig(ren
 };
  
  var <portlet:namespace/>visualizer;
+ var <portlet:namespace/>allLoaded = 0;
+ $($('#<portlet:namespace/>canvas')[0].contentWindow).on('load',function(){
+		console.log('iframe loaded');
+		<portlet:namespace/>allLoaded++;
+	});
+
+	$(window).on('load', function(){
+		console.log('window loaded...');
+		<portlet:namespace/>allLoaded++;
+	});
+
+/*	
  $('#<portlet:namespace/>canvas').load( function(){
 	<portlet:namespace/>visualizer = OSP.Visualizer(<portlet:namespace/>config);
 	<portlet:namespace/>processInitAction( JSON.parse( '<%=visualizerConfig.initData%>' ) );
  });
-
+*/
 /***********************************************************************
  * Canvas functions
  ***********************************************************************/
@@ -156,6 +168,8 @@ function <portlet:namespace/>initializeEventHandler( data, params ){
 	
 	<portlet:namespace/>visualizer.callIframeFunc('loadImage', null, '<%=renderRequest.getContextPath()%>/images/OSP.png' );
 	<portlet:namespace/>visualizer.processInitAction( null, false );
+	<portlet:namespace/>setTitle('');
 }
+
 
 </script>

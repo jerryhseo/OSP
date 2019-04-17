@@ -27,6 +27,7 @@
         var attachedEventHandlers = {};
         var fileExplorerId;
         var fileExplorerDialog;
+        var dirDirty = false;
 
         var getPortletSection = function(){
             var portlet = $('#p_p_id'+namespace);
@@ -168,6 +169,8 @@
                 });
             }
             else{
+                refreshFileExplorer();
+
                 fileExplorerDialog.dialog('option', 'buttons', buttons );
                 fileExplorerDialog.dialog('open');
                 fileExplorerDialog.find('button').css('width','100px');
@@ -339,6 +342,10 @@
         };
 
         var refreshFileExplorer = function(){
+            if( !dirDirty ){
+                return;
+            }
+
             var eventData = {
                         portletId: portletId,
                         targetPortlet: fileExplorerId,
@@ -354,6 +361,12 @@
                         }
             };
             Liferay.fire(OSP.Event.OSP_LOAD_DATA, eventData );
+
+            dirDirty = false;
+        };
+
+        var refresh = function(){
+            Liferay.Portlet.refresh('#p_p_id'+namespace);
         };
 
         var saveAtServerAs = function( folderPath, fileName, content ){
@@ -382,8 +395,7 @@
                         currentData.name(fileName);
                         currentData.content(content);
                         currentData.dirty( false );
-
-                        refreshFileExplorer();
+                        dirDirty = true;
                 },
                 error: function(data, e ){
                     console.log('Error read file: ', data, e);
@@ -1133,6 +1145,7 @@
             readFirstServerFileURL:readFirstServerFileURL,
             readServerFile: readServerFile,
             readServerFileURL: readServerFileURL,
+            refresh: refresh,
             runProcFuncs: runProcFuncs,
             saveAtLocal: saveAtLocal,
             saveAtServer: saveAtServer,
