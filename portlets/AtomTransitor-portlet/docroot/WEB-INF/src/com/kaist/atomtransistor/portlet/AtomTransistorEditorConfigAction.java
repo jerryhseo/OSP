@@ -1,13 +1,12 @@
-package com.kisti.osp.editor.portlet.fileexplorer;
-
-import com.liferay.portal.kernel.portlet.DefaultConfigurationAction;
+package com.kaist.atomtransistor.portlet;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletConfig;
-import javax.portlet.PortletPreferences;
 
-public class FileExplorerPortletConfigAction extends DefaultConfigurationAction {
+import com.liferay.portal.kernel.portlet.DefaultConfigurationAction;
+
+public class AtomTransistorEditorConfigAction extends DefaultConfigurationAction{
 	@Override
 	public void processAction(
 	    PortletConfig portletConfig, ActionRequest actionRequest,

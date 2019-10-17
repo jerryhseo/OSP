@@ -80,33 +80,41 @@ $('#<portlet:namespace/>canvas').load(function(){
  * Canvas functions
  ***********************************************************************/
 function <portlet:namespace/>loadCanvas( jsonData, changeAlert ){
-	//console.log( 'jsonData: ', jsonData );
+	
 	
 	switch( jsonData.type_){
-		case OSP.Enumeration.PathType.FILE:
-			<portlet:namespace/>visualizer.readServerFile( jsonData, changeAlert );
-			break;
-		case OSP.Enumeration.PathType.CONTENT:
-		case OSP.Enumeration.PathType.FILE_CONTENT:
-			if( jsonData.name_ )
-				<portlet:namespace/>setTitle( OSP.Util.mergePath(jsonData.parent_, jsonData.name_) );
-				<portlet:namespace/>visualizer.callIframeFunc('setParameters', null, jsonData.content_ );
+	case OSP.Enumeration.PathType.FILE:
+		<portlet:namespace/>visualizer.readServerFile( jsonData, changeAlert );
+		break;
+	case OSP.Enumeration.PathType.CONTENT:
+	case OSP.Enumeration.PathType.FILE_CONTENT:
+		if( jsonData.name_ )
+			<portlet:namespace/>setTitle( OSP.Util.mergePath(jsonData.parent_, jsonData.name_) );
+			<portlet:namespace/>visualizer.callIframeFunc('setParameters', null, jsonData.content_ );
 
-			if( !<portlet:namespace/>disabled && changeAlert )
-				<portlet:namespace/>visualizer.fireDataChangedEvent();
-			break;
-		case OSP.Enumeration.PathType.DLENTRY_ID:
-			<portlet:namespace/>visualizer.readDLFileEntry(changeAlert);
-			break;
-		case OSP.Enumeration.PathType.URL:
-			alert( 'Un-supported yet.');
-			changeAlert = false;
-			break;
-		default:
-			console.log('Path Type Error: Cannot display with this path type', jsonData );
-			changeAlert = false;
-			return;
-	}
+		if( !<portlet:namespace/>disabled && changeAlert )
+			<portlet:namespace/>visualizer.fireDataChangedEvent();
+		break;
+	case OSP.Enumeration.PathType.DLENTRY_ID:
+		<portlet:namespace/>visualizer.readDLFileEntry(changeAlert);
+		break;
+	case OSP.Enumeration.PathType.URL:
+		alert( 'Un-supported yet.');
+		changeAlert = false;
+		break;
+	default:
+		console.log('Path Type Error: Cannot display with this path type', jsonData );
+		changeAlert = false;
+		return;
+    }
+	
+//	else
+	//{
+		//alert("this is ham" );
+	//}
+ 	
+
+
 	
 };
 
@@ -134,14 +142,12 @@ function <portlet:namespace/>processInitAction( jsonInitData, changeAlert ){
  /***********************************************************************
   * Functions called by iframe jsp 
   ***********************************************************************/
-function <portlet:namespace/>fireDataChangedEvent( content ){
+function <portlet:namespace/>fireDataChangedEvent( content ){	
 	console.log('fireDataChangedEvent in text editor wrapper...');
-	
 	<portlet:namespace/>visualizer.fireDataChangedEvent({
 		type_: "content",
 		content_: content 
 	});
-	
 };
 
 
@@ -160,22 +166,15 @@ $('#<portlet:namespace/>openLocalFile').click(function(){
 	if( <portlet:namespace/>disabled )
 		return;
 
-	<portlet:namespace/>visualizer.openLocalFile(true);
+	<portlet:namespace/>visualizer.openLocalFile(null, true);
 	
-	<portlet:namespace/>visualizer.callIframeFunc('setParameters', function( content ){
-		
-	});
-
-
-	
-	//alert(<portlet:namespace/>visualizer.openLocalFile(true));
 });
 
 $('#<portlet:namespace/>openServerFile').click(function(){
 	if( <portlet:namespace/>disabled )
 		return;
 
-	<portlet:namespace/>visualizer.openServerFile(true);
+	<portlet:namespace/>visualizer.openServerFile(null, true);
 });
 
 $('#<portlet:namespace/>save').click(function(){
@@ -209,18 +208,19 @@ $('#<portlet:namespace/>saveAtLocal').click(function(){
 function <portlet:namespace/>loadDataEventHandler( data, params ){
 	//console.log('[<portlet:namespace/>loadDataEventHandler] ', data );
 	
-	<portlet:namespace/>visualizer.loadCanvas( data, params.changeAlert );
+	<portlet:namespace/>visualizer.loadCanvas( data, params.changeAlert );	
+	
 }
 
 function <portlet:namespace/>requestDataEventHandler( data, params ){
-	console.log('[<portlet:namespace/>requestDataEventHandler]', data, params);
+//	console.log('[<portlet:namespace/>requestDataEventHandler]', data, params);
 	<portlet:namespace/>visualizer.callIframeFunc('getParameters', function(content){
 		<portlet:namespace/>visualizer.fireResponseDataEvent({content_: content}, params );
 	});
 }
 
 function <portlet:namespace/>responseDataEventHandler( data, params ){
-	console.log('[<portlet:namespace/>responseDataEventHandler]', data, params);
+//	console.log('[<portlet:namespace/>responseDataEventHandler]', data, params);
 	
 	switch( params.procFunc ){
 	case 'readServerFile':
@@ -236,7 +236,7 @@ function <portlet:namespace/>responseDataEventHandler( data, params ){
 }
 
 function <portlet:namespace/>initializeEventHandler( data, params ){
-	console.log('[<portlet:namespace/>initializeEventHandler] ', data, params );
+	//console.log('[<portlet:namespace/>initializeEventHandler] ', data, params );
 	
 	<portlet:namespace/>visualizer.processInitAction();
 	<portlet:namespace/>visualizer.callIframeFunc('initParameters', null );
@@ -244,7 +244,7 @@ function <portlet:namespace/>initializeEventHandler( data, params ){
 }
 
 function <portlet:namespace/>disableControlsEventHandler( data, params ){
-	console.log('[<portlet:namespace/>disableControlsEventHandler] ');
+	//console.log('[<portlet:namespace/>disableControlsEventHandler] ');
 	<portlet:namespace/>disabled = params.disabled;
 	<portlet:namespace/>visualizer.disabled( params.disabled );
 	<portlet:namespace/>visualizer.callIframeFunc('disableControls', null, params.disabled);

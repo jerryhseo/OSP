@@ -10,7 +10,7 @@
 	<script src="<%= request.getContextPath() %>/js/three/font/helvetiker_regular.typeface.js" type="text/javascript"></script>
 	 -->
 
-<!-- JQuery
+<!-- JQuery -->
 <script src="<%= request.getContextPath() %>/js/jquery/jquery-2.2.3.min.js"></script>
 <script src="<%= request.getContextPath() %>/js/jquery/jquery-ui.min.js"></script>
 <script src="<%= request.getContextPath() %>/js/jquery/jquery.blockUI.js"></script>
@@ -19,11 +19,10 @@
 <link href="<%= request.getContextPath() %>/css/main.css" rel="stylesheet" type="text/css">
 <link href="<%= request.getContextPath() %>/js/jquery/bootstrap-toggle.min.css" rel="stylesheet">
 <script src="<%= request.getContextPath() %>/js/jquery/bootstrap-toggle.min.js"></script>
--->
-<!-- bootstrap
+
+<!-- bootstrap -->
 <link href="<%= request.getContextPath() %>/js/jquery/bootstrap.min.css" rel="stylesheet">
 <script src="<%= request.getContextPath() %>/js/jquery/bootstrap.min.js"></script>
--->
 
 <style>
 	body{ background-color: rgb(255,255,255); }
@@ -41,7 +40,8 @@
 
 
 var namespace;
-var imagePath = parent.atomTransitorAnalyzerImagePath;
+//var imagePath = parent.sc3dviewerImagePath;
+var imagePath = "<%= request.getContextPath() %>/html/sc3dviewer/pallet.png";
 
 var L_channel;
 var L_gate ;
@@ -64,6 +64,8 @@ var Transparent = new Array();
 var scene_width =700;
 var scene_height=700;
 
+var input_parameters;
+
 
 var scene = new THREE.Scene();
 var renderer = new THREE.WebGLRenderer();
@@ -78,7 +80,13 @@ var DeviceFrame = new THREE.Object3D();
 
 var Device = new THREE.Object3D();
 
-var camera = new THREE.PerspectiveCamera(45, scene_width / scene_height, 0.1, 1000);
+var camera ; //= new THREE.PerspectiveCamera(45, scene_width / scene_height, 0.1, 1000);
+
+
+var ini_camera_Px=0, ini_camera_Py=-60, ini_camera_Pz=0;  
+
+var Old_target_x, Old_target_y, Old_target_z;
+var Old_camera_x, Old_camera_y, Old_camera_z;
 
 //var camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
 
@@ -199,6 +207,8 @@ var arrow_plates = new Array(3);
 
 var N_Range=150;
 
+var F_exi_Dirtext=1;
+
 var Plate = function() {
 	this.mesh = function( mesh ) {
 		if ( mesh ) this.Mesh = mesh;
@@ -300,16 +310,30 @@ var Canvas = function( container )
 		return plate.material();
 	};
 
-
-
 	container.appendChild( renderer.domElement );
 
-	renderer.render(scene, camera);
+	//renderer.render(scene, camera);
 
 };
 
 var animate = function() {
+	
+	Old_target_x = trackballControl.target.x;	Old_target_y = trackballControl.target.y;	Old_target_z = trackballControl.target.z;
+	Old_camera_x = camera.position.x;	        Old_camera_y = camera.position.y;	        Old_camera_z = camera.position.z;
+		
 	trackballControl.update();
+
+
+	if(Old_camera_x!=camera.position.x || Old_camera_y!=camera.position.y|| Old_camera_z!=camera.position.z || trackballControl.target.x !=Old_target_x || trackballControl.target.y !=Old_target_y || trackballControl.target.z !=Old_target_z )
+	{		
+		camera_x = camera.position.x; camera_y = camera.position.y; camera_z = camera.position.z;
+		target_x=trackballControl.target.x; target_y=trackballControl.target.y; target_z=trackballControl.target.z;
+	
+		document.getElementById("Views").value = getViews();
+	 
+	   camera.up = new THREE.Vector3(0.0, 0.0, 1.0);	  
+	}
+
 	renderer.render(scene, camera );
 	requestAnimationFrame(animate);
 
@@ -318,6 +342,8 @@ var animate = function() {
 
 function loadEPData( data ) {
 
+	camera = new THREE.PerspectiveCamera(45, scene_width / scene_height, 0.1, 1000);
+	
 	removeAllObjects();
 
 var fin_i=0;
@@ -455,66 +481,39 @@ container_elem=document.getElementById("container");
 	setArrows('yz');
 	setArrows('zx');
 
-	document.removeEventListener( 'click', onDocumentMouseMove, false );
-	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-
-
 	window.addEventListener( 'resize', onWindowResize, false );
 	
-	//window.addEventListener( 'resize', onWindowResize, false );
-
 	Draw_DeviceFrame();
-
+		
 	animate();
-}
-
-function load_Struc(data)
-{
-
-	removeAllObjects();
-
-
-
-	Write_input();
-
-container_elem=document.getElementById("container");
-
-	canvas = new Canvas( container_elem );
-
-	pointLight[0].position.set( 100, 100, 100);
-	pointLight[1].position.set(-100, -100, -100);
-	pointLight[2].position.set(-100, 100, 100);
-	pointLight[3].position.set(-100, -100, 100);
-
-	trackballControl = new THREE.TrackballControls(camera, renderer.domElement);
-
-	trackballControl.target = new THREE.Vector3(0.0, 0.0, 0.0);
-
-	trackballControl.rotateSpeed = 1.0;
-	trackballControl.zoomSpeed = 1.0;
-	trackballControl.panSpeed = 1.0;
-
-	camera.up = new THREE.Vector3(0.0, 0.0, 1.0);
-	camera.rotation.z = Math.PI*0.5;
-
-	//camera.position.set(-camera_Vscale*(ymx+zmx)-xmx*0.5, camera_Vscale*(zmx+xmx)+ymx*0.5, camera_Vscale*(xmx+ymx)+zmx*0.5);
-	camera.position.set(0, -60, 0);
-
-	Draw_Device(data); //scene.add( Atoms );
-	
-	window.addEventListener( 'resize', onWindowResize, false );
-
-	animate();
-
 }
 
 function load_Struc_file(data)
-{
+{		
+	camera           = new THREE.PerspectiveCamera(45, scene_width / scene_height, 0.1, 1000);
+	trackballControl = new THREE.TrackballControls(camera, renderer.domElement);
+	
+	input_parameters=data;
+			
 	removeAllObjects();
-
-
-
+	
+	//-------------------------------------------
+	var Dirtext;
+	var F_Dirtext=0;
+	F_exi_Dirtext=1;
+	
+	if (document.getElementById("Views") ==null) F_exi_Dirtext = 0; 
+	
+	if ( F_exi_Dirtext == 1 && document.getElementById("Views").value !="") 
+	{
+		F_Dirtext = 1; Dirtext = document.getElementById("Views").value; 		
+	
+	}
+	//-------------------------------------------
+	
 	Write_input();
+	
+	if (F_Dirtext == 1 ) {document.getElementById("Views").value = Dirtext ;   }
 
 container_elem=document.getElementById("container");
 
@@ -525,25 +524,49 @@ container_elem=document.getElementById("container");
 	pointLight[2].position.set(-100, 100, 100);
 	pointLight[3].position.set(-100, -100, 100);
 
-	trackballControl = new THREE.TrackballControls(camera, renderer.domElement);
+	
+	if ( F_exi_Dirtext == 0 ) 
+	{
+		Find_max(input_parameters);
+		
+		camera_x=0.0; camera_y=ymx*50.0; camera_z=0.0;
+		target_x=0.0; target_y= 0.0    ; target_z=0.0;
+		
+		camera.position.set(camera_x, camera_y, camera_z);		
+		
+		trackballControl.target = new THREE.Vector3(target_x, target_y, target_z);// is this needed?
 
-	trackballControl.target = new THREE.Vector3(0.0, 0.0, 0.0);
+		document.getElementById("Views").value = getViews();
+		
+	}
+	else 
+	{		
+		
+		var dummy0 = document.getElementById("Views").value;
+		var dummy1 = dummy0.split(' ');
+
+		camera_x=Number(dummy1[1]);	camera_y=Number(dummy1[2]);	camera_z=Number(dummy1[3]) ;		
+		target_x=Number(dummy1[4]); target_y=Number(dummy1[5]); target_z=Number(dummy1[6]);
+		
+		camera.position.set(camera_x, camera_y, camera_z);
+		
+		trackballControl.target = new THREE.Vector3(target_x, target_y, target_z);
+		
+	}
+	
+	camera.up = new THREE.Vector3(0.0, 0.0, 1.0);
 
 	trackballControl.rotateSpeed = 1.0;
 	trackballControl.zoomSpeed = 1.0;
 	trackballControl.panSpeed = 1.0;
 
-	camera.up = new THREE.Vector3(0.0, 0.0, 1.0);
-	camera.rotation.z = Math.PI*0.5;
-
-	//camera.position.set(-camera_Vscale*(ymx+zmx)-xmx*0.5, camera_Vscale*(zmx+xmx)+ymx*0.5, camera_Vscale*(xmx+ymx)+zmx*0.5);
-	camera.position.set(0, -60, 0);
-
-	Draw_Device_file(data); //scene.add( Atoms );
+	Draw_Device_file(input_parameters); //scene.add( Atoms );
 	
 	window.addEventListener( 'resize', onWindowResize, false );
 
+	//alert("-----");
 	animate();
+
 }
 
 function toggleView( plateId ) {
@@ -613,7 +636,7 @@ function movePlate( plateId ) {
 			if (Draw_VR[0].checked) { document.getElementById(posInput).value = Vertices['0'][zi-1].z; }
 			if (Draw_VR[1].checked) { document.getElementById(posInput).value = Rhos['0'][zi-1].z; }
 
-		//	alert(zi+" "+Vertices['0'][zi-1].z);
+		
 
 			break;
 		case 'yz':
@@ -644,9 +667,6 @@ function movePlate( plateId ) {
 
 
 
-function ON_MouseMove(){ document.addEventListener( 'mousemove', onDocumentMouseMove, false );}
-
-function OFF_MouseMove(){ document.removeEventListener( 'mousemove', onDocumentMouseMove, false ); }
 
 function changeOpacity( plateId ) {
 
@@ -777,8 +797,7 @@ function setArrows( plateId )
 				  {
 					  var ord = order(j,k);
 
-					//  console.log("ord=", ord);
-
+					
 						 var y0=vertices[ord].y- Grad[ord].y*arrow_L*expan;
 						 var z0=vertices[ord].z- Grad[ord].z*arrow_L*expan;
 						 var y1=vertices[ord].y+ Grad[ord].y*arrow_L*expan;
@@ -990,7 +1009,7 @@ if (ON_save_V===0) return;
 
 			func[i]=parseFloat(line);
 
-			//if (i==6) alert(func[i]);
+			
 
 			if (func[i]>c3 && func[i]<=1.0) { R_col= 1.0 ; G_col= (1.0-func[i])/(1.0-c3) ; B_col= 0.0 ; }
 	   else if (func[i]>c2 && func[i]<=c3 ) { R_col= (func[i]-c2)/(c3-c2) ; G_col= 1.0 ; B_col= 0.0 ; }
@@ -1010,8 +1029,7 @@ if (ON_save_V===0) return;
 
 		}
 
-	//	alert(Vertices['0'][5].cr+":"+Vertices['0'][5].cg+":"+Vertices['0'][5].cb+":"+Vertices['0'][5].p);
-
+	
 		//--------------- to get E field  --------------
 
 		var ord = new Array(Nx);
@@ -1057,9 +1075,6 @@ if (ON_save_V===0) return;
 			if (grad_fy[i]> grad_fy_mx) grad_fy_mx = grad_fy[i]; if (grad_fy[i]< grad_fy_mn) grad_fy_mn = grad_fy[i];
 			if (grad_fz[i]> grad_fz_mx) grad_fz_mx = grad_fz[i]; if (grad_fz[i]< grad_fz_mn) grad_fz_mn = grad_fz[i];
 
-		//	if (i==9605) alert(xi_L+" "+yi_L+" "+zi_L+" "+(func[ord[xi_L+1][yi_L][zi_L]]-func[ord[xi_L-1][yi_L][zi_L]])+" "+(func[ord[xi_L][yi_L+1][zi_L]]- func[ord[xi_L][yi_L-1][zi_L]]) +" "+ (func[ord[xi_L][yi_L][zi_L+1]]-func[ord[xi_L][yi_L][zi_L-1]]));
-			//if (i==9605) alert(dx_L+" "+dy_L+" "+dz_L );
-			//if (i==9605) alert(grad_fx[i]+" "+grad_fy[i]+" "+grad_fz[i] );
 
 		}
 
@@ -1107,10 +1122,6 @@ if (ON_save_V===0) return;
 			};
 			Grad.push( xyz );
 
-	//		if (i==9605) alert(Norm_grad_x+" "+Norm_grad_y+" "+Norm_grad_z);
-
-
-			//if (i==6) alert(Norm_grad_x+" "+ Norm_grad_y+" "+ Norm_grad_z);
 		}
 
 
@@ -1208,7 +1219,6 @@ if (ON_save_V===0) return;
 			}
 		};
 
-		//alert(Nx+" "+Ny+" "+Nz+" "+N_nod+" "+N_t+" "+xmx+" "+ymx+" "+zmx+" "+xmn+" "+ymn+" "+zmn);
 
 		   Dxx = xmx-xmn;
 		   Dyy = ymx-ymn;
@@ -1297,6 +1307,9 @@ function removeAllObjects()
 	scene.remove(DeviceFrame);
 
 	for (var i=0; i<3;i++){ scene.remove(plateViewers[i]); scene.remove(arrow_plates[i]);}
+	
+	DeviceFrame = new THREE.Object3D();
+	Device      = new THREE.Object3D();
 
 }
 function Draw_DeviceFrame()
@@ -1332,322 +1345,69 @@ function Draw_DeviceFrame()
 	}
 
 	scene.add( DeviceFrame );
-
-
-
-
+ 
 
 }
+
 //----------------------------------------------------------------------------------------------------------------
-function Draw_Device(data)
+
+function Find_max(data)
 {
-	//console.log( 'Draw_Device', data );
-	//alert(data);
-var lines = data.split('\n');
+	
+	//camera.up = new THREE.Vector3(0.0, 0.0, 1.0);
+	
+    data = data.replace(/	/gi, ' ');
+    data = data.replace(/\t/gi,  ' ');
+    data = data.replace(/=/gi,   ' ');
+    data = data.replace(/\(/gi,   ' ');
+    data = data.replace(/\)/gi,   ' ');
+    data = data.replace(/,/gi,   ' ');
+    data = data.replace(/ +/gi,  " ");
+       	    
+	var lines = data.split('\n');
+		
+	var N_deve=0;
+		
+	for( var i in lines )
+	{
+		var line = lines[i].trim();
+		var dummy = line.split(' ');
+				
+		if(dummy[0]=="DEV_Dimen")
+		{
+			     if(dummy[1]=="Lchn_Lgate"  ) { L_channel=Number(dummy[2]) ; if(isNaN(dummy[3])) L_gate    = L_channel;  else L_gate    =Number(dummy[3]); N_deve++; }
+		    else if(dummy[1]=="Lsrc_Ldrn"   ) { L_source =Number(dummy[2]) ; if(isNaN(dummy[3])) L_drain   = L_source;   else L_drain   =Number(dummy[3]); N_deve++;}
+			else if(dummy[1]=="Tchn_Wchn"   ) { T_channel=Number(dummy[2]) ; if(isNaN(dummy[3])) W_channel = T_channel;  else W_channel =Number(dummy[3]); N_deve++;}
+			else if(dummy[1]=="ox_thickness") { T0_oxide =Number(dummy[2]) ; if(isNaN(dummy[3])) {T1_oxide  = T2_oxide=T3_oxide=T0_oxide;} else {T1_oxide =Number(dummy[3]) ; T2_oxide=Number(dummy[4]) ; T3_oxide=Number(Number(dummy[5])) } ; N_deve++; }
+			else if(dummy[1]=="gate_type"   ) { Gate_Type=dummy[2] ; N_deve++;}
+			   //  alert("L_channel "+L_channel);
+		}
+		else if(dummy[0]=="DEV_Mat")
+		{
+			     if(dummy[1]=="src_drn_doping") { DopType_source = DopType_drain = dummy[2] ; Dop_source = Dop_drain = Number(dummy[3]); N_deve++;}
+			else if(dummy[1]=="chn_doping")     { DopType_channel= dummy[2]                 ; Dop_channel= Number(dummy[3]) ; N_deve++;  }
+		}
 
-	L_channel=Number(lines[0].trim());
-	L_gate =Number(lines[1].trim());
-	L_source =Number(lines[2].trim());
-	L_drain =Number(lines[3].trim());
-
-	T_channel=Number(lines[4].trim());
-	W_channel=Number(lines[5].trim());
-	T0_oxide =Number(lines[6].trim());
-	T1_oxide =Number(lines[7].trim());
-	T2_oxide =Number(lines[8].trim());
-	T3_oxide =Number(lines[9].trim());
-
-	Dop_source =Number(lines[10].trim());
-	Dop_drain =Number(lines[11].trim());
-	Dop_channel =Number(lines[12].trim());
-
-	Gate_Type = lines[13].trim();
-
-	DopType_source = lines[14].trim();
-	DopType_drain = lines[15].trim();
-	DopType_channel = lines[16].trim();
-
+	}
+	
+	
 	zmx = L_source + L_channel + L_drain;
 	xmx = zmx;
 	ymx = T_channel + T2_oxide+T3_oxide;
+	
+//	alert(L_source +" "+ L_channel +" "+ L_drain +" "+ T_channel +" "+ T2_oxide +" "+ T3_oxide);
 
-//alert(T0_oxide+T1_oxide+T2_oxide+T3_oxide);
-
-scene.remove(Device);
-Device = new THREE.Object3D();
-
-var Geo = new Array();
-var Mater = new Array();
-var Compo = new Array();
-
-	var z_T=-0;
-	var x_T=0 ;
-	var y_T=0 ;
-
-	var T_gate = 2;
-
-	var L_oxide = L_channel+L_source+L_drain;
-
-	Opacity[0]=1.0; // source
-	Opacity[1]=1.0; // drain
-	Opacity[2]=1.0; // channel
-	Opacity[3]=0.6; // gate
-	Opacity[4]=0.65; // oxide
-
-	//--------source  --------------------------------------
-
-	  var Color_gate = new THREE.Color( 0.8, 0.4, 0.0 );
-	  var Color_oxide = new THREE.Color( 0.6, 0.6, 0.6 );
-	  var Color_semi;
-	  //var Color_semi= 0x333333+ (1-Dop_ratio)*(0x00ff00)+ (1-Dop_ratio)*(0x0000ff) ;
-
-	  Determine_color(DopType_source, Dop_source);
-	  Color_semi= new THREE.Color( R_col, G_col, B_col );
-
-	   Geo[0] = new THREE.BoxGeometry( L_source, W_channel, T_channel );
-
-	  Mater[0] = new THREE.MeshStandardMaterial({opacity:Opacity[0], color: Color_semi, transparent:false});
-	  Compo[0] = new THREE.Mesh(Geo[0], Mater[0]);
-	  Compo[0].position.set(-L_channel*0.5 - 0.5*L_source+x_T, y_T, z_T);
-
-	  Device.add(Compo[0]);
-	//--------drain --------------------------------------
-
-	  Determine_color(DopType_drain, Dop_drain);
-	  Color_semi= new THREE.Color( R_col, G_col, B_col );
-
-	  Geo[1] = new THREE.BoxGeometry(L_drain, W_channel, T_channel );
-	  Mater[1] = new THREE.MeshStandardMaterial({opacity:Opacity[1], color: Color_semi, transparent:false});
-	  //scene.remove(Compo[1]);
-	  Compo[1] = new THREE.Mesh(Geo[1], Mater[1]);
-	  Compo[1].position.set(L_channel*0.5 + 0.5*L_drain+x_T, y_T, z_T);
-	  Device.add(Compo[1]);
-
-	  //--------channel--------------------------------------
-
-	  Determine_color(DopType_channel, Dop_channel);
-	  Color_semi= new THREE.Color( R_col, G_col, B_col );
-
-	  Geo[2] = new THREE.BoxGeometry(L_channel, W_channel, T_channel);
-	  Mater[2] = new THREE.MeshStandardMaterial({opacity:Opacity[2], color: Color_semi, transparent:false});
-	  //scene.remove(Compo[2]);
-	  Compo[2] = new THREE.Mesh(Geo[2], Mater[2]);
-	  Compo[2].position.set(x_T,y_T,z_T);
-	  Device.add(Compo[2]);
-
-	  //--------gate   --------------------------------------
-	   Mater[4] = new THREE.MeshStandardMaterial({opacity:Opacity[4], color: Color_oxide, transparent:true, side: THREE.DoubleSide});
-	   Mater[3] = new THREE.MeshStandardMaterial({opacity:Opacity[3], color: Color_gate, transparent:true, side: THREE.DoubleSide});
-
-
-	  if (Gate_Type=='Double')
-	  {
-
-		  var x_shift ;
-
-		  var H_T_channel_gate = (T_channel+T_gate)*0.5 ;
-
-		  Geo[3] = new THREE.BoxGeometry(L_gate, W_channel, T_gate);
-		  Compo[3] = new THREE.Mesh(Geo[3], Mater[3]);
-
-		  var z_shift = H_T_channel_gate + T0_oxide;
-		  Compo[3].position.set(x_T, y_T, z_T+ z_shift);
-
-		  z_shift = H_T_channel_gate + T1_oxide;
-
-		  var Compo3_clone = Compo[3].clone();
-		  Compo3_clone.position.set(x_T, y_T, z_T- z_shift);
-
-		//--------oxide   --------------------------------------
-
-		  Geo[4] = new THREE.BoxGeometry(L_oxide, W_channel, T0_oxide);
-
-		  Compo[4] = new THREE.Mesh(Geo[4], Mater[4]);
-
-		  x_shift= (L_source-L_drain)*0.5 ;
-		  z_shift=T_channel*0.5+T0_oxide*0.5;
-
-		  Compo[4].position.set(x_T-x_shift, y_T, z_T + z_shift);
-
-		  Geo[4] = new THREE.BoxGeometry(L_oxide, W_channel, T1_oxide);
-
-		  var Compo4_1 = new THREE.Mesh(Geo[4], Mater[4]);
-
-		  z_shift=T_channel*0.5+T1_oxide*0.5;
-
-		  Compo4_1.position.set(x_T-x_shift, y_T, z_T- z_shift);
-
-		  Device.add(Compo[4]);
-		  Device.add(Compo4_1);
-
-		  Device.add(Compo[3]);
-		  Device.add(Compo3_clone);
-	  }
-	  if (Gate_Type=='Tri')
-	  {
-		  var ox_shift0=(T0_oxide-T1_oxide)*0.5;
-		  var ox_shift1=(T2_oxide-T3_oxide)*0.5;
-
-		//--------oxide   --------------------------------------
-		var dummy_Geo0= new THREE.BoxGeometry(L_oxide, W_channel+T2_oxide+T3_oxide , T_channel+T0_oxide+T1_oxide);
-		var dummy_Geo1= new THREE.BoxGeometry(L_oxide, W_channel , T_channel );
-		var dummy_Geo2= new THREE.BoxGeometry(L_gate , W_channel+T2_oxide+T3_oxide+T_gate*2, T_channel+T0_oxide+T1_oxide+ T_gate);
-
-		var dummy0_BSP = new THREE.Mesh(dummy_Geo0, Mater[4]); dummy0_BSP.position.set(x_T, y_T+ox_shift1, z_T+ ox_shift0);
-	    var dummy1_BSP = new THREE.Mesh(dummy_Geo1, Mater[4]);
-	        dummy1_BSP = new ThreeBSP(dummy1_BSP);
-		var dummy2_BSP = new THREE.Mesh(dummy_Geo2, Mater[3]); dummy2_BSP.position.set(x_T, y_T+ox_shift1, z_T+ T_gate*0.5 + ox_shift0);
-
-		var dummy3_BSP = new ThreeBSP(dummy0_BSP);
-
-		dummy2_BSP = new ThreeBSP(dummy2_BSP).subtract(dummy3_BSP);
-		dummy0_BSP = new ThreeBSP(dummy0_BSP).subtract(dummy1_BSP);
-
-	     Compo[4]     = dummy0_BSP.toMesh(Mater[4]); // oxide
-	     Compo[3]     = dummy2_BSP.toMesh(Mater[3]); // gate
-
-	     Compo[3].position.set(x_T, y_T+ox_shift1, z_T+ T_gate*0.5+ ox_shift0);
-
-	     var x_shift= (L_source-L_drain)*0.5;
-
-		  Compo[4].position.set(x_T-x_shift, y_T+ox_shift1, z_T + ox_shift0);
-
-		  Device.add(Compo[4]);
-		  Device.add(Compo[3]);
-
-	  }
-	  if (Gate_Type=='Pi')
-	  {
-		  var ox_shift0=(T0_oxide-T1_oxide)*0.5;
-		  var ox_shift1=(T2_oxide-T3_oxide)*0.5;
-
-		var dummy_Geo0= new THREE.BoxGeometry(L_oxide, W_channel+T2_oxide+T3_oxide , T_channel+T0_oxide+T1_oxide*2);
-		var dummy_Geo1= new THREE.BoxGeometry(L_oxide, W_channel , T_channel );
-		var dummy_Geo2= new THREE.BoxGeometry(L_gate , W_channel+T2_oxide+T3_oxide+T_gate*2, T_channel+T0_oxide+T1_oxide*2+ T_gate); // gate
-
-		var dummy0_BSP = new THREE.Mesh(dummy_Geo0, Mater[4]); dummy0_BSP.position.set(x_T, y_T+ox_shift1, z_T- T1_oxide*0.5+ox_shift0);
-	    var dummy1_BSP = new THREE.Mesh(dummy_Geo1, Mater[4]);
-	        dummy1_BSP = new ThreeBSP(dummy1_BSP);
-		var dummy2_BSP = new THREE.Mesh(dummy_Geo2, Mater[3]); dummy2_BSP.position.set(x_T, y_T+ox_shift1, z_T+(T_gate-T1_oxide)*0.5 +ox_shift0); // gate
-
-		var dummy3_BSP = new ThreeBSP(dummy0_BSP);
-
-			dummy2_BSP = new ThreeBSP(dummy2_BSP).subtract(dummy3_BSP);
-			dummy0_BSP = new ThreeBSP(dummy0_BSP).subtract(dummy1_BSP);
-
-	     Compo[4]     = dummy0_BSP.toMesh(Mater[4]); // oxide
-	     Compo[3]     = dummy2_BSP.toMesh(Mater[3]); // gate
-
-	     var x_shift= (L_source-L_drain)*0.5;
-
-		  Compo[4].position.set(x_T-x_shift, y_T+ox_shift1, z_T- T1_oxide*0.5+ox_shift0);
-
-		  Device.add(Compo[4]);
-		  Device.add(Compo[3]);
-
-	  }
-	  if (Gate_Type=='Omega')
-	  {
-		  var ox_shift0=(T0_oxide-T1_oxide)*0.5;
-		  var ox_shift1=(T2_oxide-T3_oxide)*0.5;
-		  var x_shift =(L_source-L_drain)*0.5;
-
-		var dummy_Geo0= new THREE.BoxGeometry(L_oxide, W_channel+T2_oxide+T3_oxide         , T_channel+T0_oxide+T1_oxide+ T_gate); // oxide
-		var dummy_Geo1= new THREE.BoxGeometry(L_oxide, W_channel , T_channel );
-		var dummy_Geo2= new THREE.BoxGeometry(L_gate , W_channel+T2_oxide+T3_oxide+T_gate*2, T_channel+T0_oxide+T1_oxide+ 2*T_gate); // gate
-		var dummy_L_Geo4= new THREE.BoxGeometry(L_oxide*2, T2_oxide+W_channel*0.1, T_gate);
-		var dummy_R_Geo4= new THREE.BoxGeometry(L_oxide*2, T3_oxide+W_channel*0.1, T_gate);
-
-		var dummy0_BSP = new THREE.Mesh(dummy_Geo0, Mater[4]); dummy0_BSP.position.set(x_T-x_shift, y_T+ox_shift1, z_T- T_gate*0.5+ox_shift0);     // oxide
-	    var dummy1_BSP = new THREE.Mesh(dummy_Geo1, Mater[4]);
-	        dummy1_BSP = new ThreeBSP(dummy1_BSP);
-		var dummy2_BSP = new THREE.Mesh(dummy_Geo2, Mater[3]); dummy2_BSP.position.set(x_T, y_T+ox_shift1, z_T + ox_shift0);  // gate
-
-		var y_shift = (W_channel+T2_oxide)*0.5-W_channel*0.05, z_shift = T_channel*0.5+T1_oxide+T_gate*0.5 ;
-
-		var dummy4_L_BSP = new THREE.Mesh(dummy_L_Geo4, Mater[3]); dummy4_L_BSP.position.set(x_T, y_T+y_shift , z_T-z_shift);
-
-		y_shift = (W_channel+T3_oxide)*0.5-W_channel*0.05
-
-		var dummy4_R_BSP = new THREE.Mesh(dummy_R_Geo4, Mater[3]); dummy4_R_BSP.position.set(x_T, y_T-y_shift , z_T-z_shift);
-
-			dummy4_L_BSP = new ThreeBSP(dummy4_L_BSP);
-			dummy4_R_BSP = new ThreeBSP(dummy4_R_BSP);
-
-		 dummy0_BSP = new ThreeBSP(dummy0_BSP).subtract(dummy4_L_BSP);  // oxide
-		 dummy0_BSP = dummy0_BSP.toMesh(Mater[4]); // oxide
-		 dummy0_BSP = new ThreeBSP(dummy0_BSP).subtract(dummy4_R_BSP);  // oxide
-		 dummy0_BSP = dummy0_BSP.toMesh(Mater[4]); // oxide
-		 dummy0_BSP = new ThreeBSP(dummy0_BSP).subtract(dummy1_BSP);  // oxide
-		 Compo[4]   = dummy0_BSP.toMesh(Mater[4]); // oxide
-
-		 var dummy3_BSP = new ThreeBSP(Compo[4]);
-
-	     dummy2_BSP = new ThreeBSP(dummy2_BSP).subtract(dummy3_BSP); // gate
-	     Compo[3]     = dummy2_BSP.toMesh(Mater[3]); // gate
-
-	     Compo[3].position.set(x_T, y_T+ox_shift1, z_T+ox_shift0  );  // gate
-
-
-	 //Compo[4]= new THREE.Mesh(dummy_Geo0, Mater[4]);
-
-		  Compo[4].position.set(x_T-x_shift, y_T+ox_shift1, z_T- T_gate*0.5+ox_shift0);   // oxide
-
-	 //    alert((T_channel+T0_oxide+T1_oxide+ T_gate)+" "+(z_T- T_gate*0.5+ox_shift0));
-
-		  Device.add(Compo[4]);
-		  Device.add(Compo[3]);
-
-
-
-	  }
-	  if (Gate_Type=='GAA')
-	  {
-		  var ox_shift0=(T0_oxide-T1_oxide)*0.5;
-		  var ox_shift1=(T2_oxide-T3_oxide)*0.5;
-		//  alert("GAA");
-
-		var dummy_Geo0= new THREE.BoxGeometry(L_oxide, W_channel+T2_oxide+T3_oxide         , T_channel+T0_oxide+T1_oxide); // oxide
-		var dummy_Geo1= new THREE.BoxGeometry(L_oxide, W_channel , T_channel );
-		var dummy_Geo2= new THREE.BoxGeometry(L_gate , W_channel+T2_oxide+T3_oxide+T_gate*2, T_channel+T0_oxide+T1_oxide+ 2*T_gate); // gate
-		var dummy_Geo4= new THREE.BoxGeometry(L_oxide, T2_oxide+W_channel*0.1, T_gate);
-
-		var dummy0_BSP = new THREE.Mesh(dummy_Geo0, Mater[4]); dummy0_BSP.position.set(x_T, y_T+ox_shift1, z_T+ox_shift0);     // oxide
-	    var dummy1_BSP = new THREE.Mesh(dummy_Geo1, Mater[4]);
-	        dummy1_BSP = new ThreeBSP(dummy1_BSP);
-		var dummy2_BSP = new THREE.Mesh(dummy_Geo2, Mater[3]); dummy2_BSP.position.set(x_T, y_T+ox_shift1, z_T+ox_shift0);  // gate
-
-		 dummy0_BSP = new ThreeBSP(dummy0_BSP).subtract(dummy1_BSP);  // oxide
-		 Compo[4]   = dummy0_BSP.toMesh(Mater[4]); // oxide
-
-		 var dummy3_BSP = new ThreeBSP(Compo[4]);
-
-	     dummy2_BSP = new ThreeBSP(dummy2_BSP).subtract(dummy3_BSP); // gate
-	     Compo[3]     = dummy2_BSP.toMesh(Mater[3]); // gate
-
-	     Compo[3].position.set(x_T, y_T+ox_shift1, z_T+ox_shift0  );  // gate
-
-	     var x_shift= (L_source-L_drain)*0.5;
-
-		  Compo[4].position.set(x_T-x_shift, y_T+ox_shift1, z_T+ox_shift0);   // oxide
-
-		  Device.add(Compo[4]);
-		  Device.add(Compo[3]);
-
-	  }
-
-
-
-
-	  scene.add(Device);
 
 }
+
 
 //----------------------------------------------------------------------------------------------------------------
 
 function Draw_Device_file(data)
 {
-	//if(data!="") alert(data);
+	
+	camera.up = new THREE.Vector3(0.0, 0.0, 1.0);
+	
     data = data.replace(/	/gi, ' ');
     data = data.replace(/\t/gi,  ' ');
     data = data.replace(/=/gi,   ' ');
@@ -1659,29 +1419,38 @@ function Draw_Device_file(data)
 	   
        	    
 	var lines = data.split('\n');
-	//console.log( 'Draw_Device', lines );
-	//alert(JSON.stringify(lines));
-	//data="";
+		
+		
+	var N_deve=0;
 	
+		
 	for( var i in lines )
 	{
 		var line = lines[i].trim();
 		var dummy = line.split(' ');
 		
-		if(dummy[0]=="DEV_Dimen" && dummy[1]=="Lchn_Lgate"    ) { L_channel=Number(dummy[2]) ; L_gate   =Number(dummy[3]) ; }
-		if(dummy[0]=="DEV_Dimen" && dummy[1]=="Lsrc_Ldrn"     ) { L_source =Number(dummy[2]) ; L_drain  =Number(dummy[3]) ; } 
-		if(dummy[0]=="DEV_Dimen" && dummy[1]=="Tchn_Wchn"     ) { T_channel=Number(dummy[2]) ; W_channel=Number(dummy[3]) ; }
-		if(dummy[0]=="DEV_Dimen" && dummy[1]=="ox_thickness"  ) { T0_oxide =Number(dummy[2]) ; T1_oxide =Number(dummy[3]) ; T2_oxide=Number(dummy[4]) ; T3_oxide=Number(Number(dummy[5])) ;}
-		if(dummy[0]=="DEV_Dimen" && dummy[1]=="gate_type"     ) { Gate_Type=dummy[2] ;  }
-		if(dummy[0]=="DEV_Mat"   && dummy[1]=="src_drn_doping") { DopType_source = DopType_drain = dummy[2] ; Dop_source = Dop_drain = Number(dummy[3]); }
-		if(dummy[0]=="DEV_Mat"   && dummy[1]=="chn_doping"    ) { DopType_channel= dummy[2]                 ; Dop_channel= Number(dummy[3]) ; break; }
+				
+		if(dummy[0]=="DEV_Dimen")
+		{
+			     if(dummy[1]=="Lchn_Lgate"  ) { L_channel=Number(dummy[2]) ; if(isNaN(dummy[3])) L_gate    = L_channel;  else L_gate    =Number(dummy[3]); N_deve++; }
+		    else if(dummy[1]=="Lsrc_Ldrn"   ) { L_source =Number(dummy[2]) ; if(isNaN(dummy[3])) L_drain   = L_source;   else L_drain   =Number(dummy[3]); N_deve++;}
+			else if(dummy[1]=="Tchn_Wchn"   ) { T_channel=Number(dummy[2]) ; if(isNaN(dummy[3])) W_channel = T_channel;  else W_channel =Number(dummy[3]); N_deve++;}
+			else if(dummy[1]=="ox_thickness") { T0_oxide =Number(dummy[2]) ; if(isNaN(dummy[3])) {T1_oxide  = T2_oxide=T3_oxide=T0_oxide;} else {T1_oxide =Number(dummy[3]) ; T2_oxide=Number(dummy[4]) ; T3_oxide=Number(Number(dummy[5])) } ; N_deve++; }
+			else if(dummy[1]=="gate_type"   ) { Gate_Type=dummy[2] ; N_deve++;}
+			   //  alert("L_channel "+L_channel);
+		}
+		else if(dummy[0]=="DEV_Mat")
+		{
+			     if(dummy[1]=="src_drn_doping") { DopType_source = DopType_drain = dummy[2] ; Dop_source = Dop_drain = Number(dummy[3]); N_deve++;}
+			else if(dummy[1]=="chn_doping")     { DopType_channel= dummy[2]                 ; Dop_channel= Number(dummy[3]) ; N_deve++;  }
+		}
+		
+		//if(N_deve==7) break;
 	}
-
-	//console.log( 'Draw_Device', data );
 	
-	//alert(L_channel+" "+L_gate+" "+L_source+" "+L_drain+" "+T_channel+" "+W_channel+" "+T0_oxide+" "+T1_oxide+" "+T2_oxide+" "+T3_oxide+" "+Gate_Type+" "+DopType_source+" "+Dop_source+" "+DopType_channel+" "+Dop_channel);
 	
-
+	//camera.up = new THREE.Vector3(0.0,0.0,1.0);
+	
 	zmx = L_source + L_channel + L_drain;
 	xmx = zmx;
 	ymx = T_channel + T2_oxide+T3_oxide;
@@ -1906,7 +1675,6 @@ var Compo = new Array();
 
 		  Compo[4].position.set(x_T-x_shift, y_T+ox_shift1, z_T- T_gate*0.5+ox_shift0);   // oxide
 
-	 //    alert((T_channel+T0_oxide+T1_oxide+ T_gate)+" "+(z_T- T_gate*0.5+ox_shift0));
 
 		  Device.add(Compo[4]);
 		  Device.add(Compo[3]);
@@ -1918,7 +1686,6 @@ var Compo = new Array();
 	  {
 		  var ox_shift0=(T0_oxide-T1_oxide)*0.5;
 		  var ox_shift1=(T2_oxide-T3_oxide)*0.5;
-		//  alert("GAA");
 
 		var dummy_Geo0= new THREE.BoxGeometry(L_oxide, W_channel+T2_oxide+T3_oxide         , T_channel+T0_oxide+T1_oxide); // oxide
 		var dummy_Geo1= new THREE.BoxGeometry(L_oxide, W_channel , T_channel );
@@ -1959,17 +1726,8 @@ var Compo = new Array();
 
 
 
-function CBox_replace_Atom()
-{
-}
-//---------------------------------------------------------------------
-function onDocumentMouseMove( event )
-{
 
 
-
-	//movePlate('xy');
-}
 
 //-------------------------------
 function onDocumentMouseClick()
@@ -1999,7 +1757,7 @@ function Determine_color(DopType_region,Dop )
 			 if (Dop_ratio> c2 && Dop_ratio<=1.0) { R_col= (Dop_ratio-c2)/(1.0-c2)*0.5 ; G_col= 0 ; B_col= ((1.0-Dop_ratio)/(1.0-c2)+1)*0.5 ; }
 		else if (Dop_ratio>=c1 && Dop_ratio<=c2 ) { R_col= 0 ; G_col= (c2-Dop_ratio)/(c2-c1) ; B_col= 1 ; }
 		else if (Dop_ratio>= 0 && Dop_ratio< c1 ) { R_col= 0 ; G_col= 1.0 ; B_col= (Dop_ratio)/(c1-0.0) ; }
-	//  alert(DopType_region);
+
 	  }
 	  if (DopType_region=="i")
 	  {
@@ -2102,7 +1860,7 @@ function Write_ouput()
 
 	var document_string="";
 
-	document.open();
+	//document.open();
 	document_string +="<table style=\"width:100%;\"> ";
 	document_string +="<tr>";
 	document_string +="<td>";
@@ -2205,52 +1963,81 @@ function Write_ouput()
 	document_string +="</tr>";
 	document_string +="</table> ";
 
+	document.body.innerHTML = '';
 	document.write(document_string);
 
-	document.close();
+//	document.close();
 
 
 }
+
+
+
+
 //---------------------------------------------------------------------------------------------------------
 function Write_input()
 {
 
 	var document_string="";
 
-	//document.open();
-	document_string +="<table style=\"width:100%;\"> ";
+//	document.open();
+	document_string +="<table style=\"width:100%;\" > ";
 	document_string +="<tr>";
-	document_string +="<td><div id=\"container\" style=\"width:100%;margin: auto;\"> <\div></td>";
+	document_string +="<td><div id=\"container\" style=\"width:100%;margin: auto;\" > <\div></td>";
 	document_string +="</tr>";
 	document_string +="</table > ";
+	document_string +="<input type=\"textbox\" id=\"Views\" size=\"100\" style=\"display:none\" > ";
+	
+	//document_string += "<input type=\"button\" id=\"button1\" onclick=\"button1_click();\" value=\"Click\" />";
+	//document_string += "<input type=\"button\" id=\"button1\" onclick=\"button2_click();\" value=\"Click2\" />";
+	
+	
+	
 //	<input id='PxyRange' type='range' style='width:90%;' value='0'  min='1' max='"+Nz+"' step='1' oninput=\"movePlate('xy')\" onmouseover=\"OFF_MouseMove()\" onmouseleave=\"ON_MouseMove()\" autocomplete='off'/>
+
+    document.body.innerHTML = '';
 	document.write(document_string);
 
-	//document.close();
+//	document.close();
 
+}
+
+function getViews()
+{	
+	  var dummy;
+	  var dummy0, dummy1, dummy2, dummy3;
+	  var string="";
+
+	  string+= "--Views--: " + camera.position.x +" "+ camera.position.y +" "+camera.position.z + " " + trackballControl.target.x + " " + trackballControl.target.y + " " + trackballControl.target.z ;
+
+	  
+    return string;
+    
 }
 
 
 function setNamespace(ns) {
-	 namespace = ns;
-	 namespace = ns;
+	 namespace = ns;	 
 }
+//--- from editor
+function fireDataChangedEvent() {
+		
+		setTimeout(
+				function() {
+					if ( namespace ) {
+						var data = getViews();	
+						
+					//	alert("fire ============="+ data);
 
-function fireSendStrucEvent(data) {
-
-	setTimeout(
-			function() {
-				if ( namespace ) {
-
-					window.parent[namespace+'Send_Struc_to_Editor']( data );
-				}
-				else {
-					fireSendStrucEvent(data);
-				}
-			},
-			10
-	);
-}
+						window.parent[namespace+'fireDataChangedEvent']( data );
+					}
+					else {
+						fireDataChangedEvent();
+					}
+				},
+				10
+		);
+	}
 
 
 </script>

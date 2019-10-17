@@ -64,7 +64,6 @@ var <portlet:namespace/>config = {
 			}
 };
 
-console.log('++++++++++++++++++++++++++++++++++++++++++++++');
 var <portlet:namespace/>visualizer;
 $('#<portlet:namespace/>canvas').load(function(){
 	console.log('*****************************************************');
@@ -76,17 +75,31 @@ $('#<portlet:namespace/>canvas').load(function(){
  * Canvas functions
  ***********************************************************************/
 function <portlet:namespace/>loadCanvas( jsonData, changeAlert ){
-	//console.log( 'jsonData: ', jsonData );
-	
+	//alert("--------");
+	var dataType;
+	if( jsonData.dataType_ ){
+	dataType = jsonData.dataType_.name;
+	};
 	switch( jsonData.type_){
 		case OSP.Enumeration.PathType.FILE:
 			<portlet:namespace/>visualizer.readServerFile( jsonData, changeAlert );
 			break;
 		case OSP.Enumeration.PathType.CONTENT:
+			var dotIndex = jsonData.name_.lastIndexOf('.');
+			var ext = jsonData.name_.slice(dotIndex+1);
+			OSP.Debug.eventTrace('extention', ext);
+
+			if( ext === 'js' ){ 	dataType = 'sc3d_output'; }	else{ dataType = 'sc3d_device';	}
+			//alert("dataType: "+dataType);
 		case OSP.Enumeration.PathType.FILE_CONTENT:
-			if( jsonData.name_ )
-				<portlet:namespace/>setTitle(  jsonData.name_ );
-				<portlet:namespace/>visualizer.callIframeFunc('load_Struc_file', null, jsonData.content_ );
+			if( jsonData.name_ ) <portlet:namespace/>setTitle(  jsonData.name_ );
+			//<portlet:namespace/>visualizer.callIframeFunc('load_Struc_file', null, jsonData.content_ );
+			//alert("dataType:==== "+dataType);
+			
+		         if(dataType === 'sc3d_device' ){<portlet:namespace/>visualizer.callIframeFunc('load_Struc_file', null, jsonData.content_ );		}
+			else if(dataType === 'sc3d_output'){<portlet:namespace/>visualizer.callIframeFunc('loadEPData', null, jsonData.content_ );		}
+			else{ return;}			// Error Message
+							
 			break;
 		case OSP.Enumeration.PathType.URL:
 			alert( 'Un-supported yet.');
@@ -97,6 +110,7 @@ function <portlet:namespace/>loadCanvas( jsonData, changeAlert ){
 			changeAlert = false;
 			return;
 	}
+
 	
 };
 
@@ -122,9 +136,6 @@ function <portlet:namespace/>processInitAction( jsonInitData, changeAlert ){
 
 
 
-
-
-
 /***********************************************************************
  * Window Event binding functions 
  ***********************************************************************/
@@ -132,16 +143,12 @@ function <portlet:namespace/>processInitAction( jsonInitData, changeAlert ){
 
 $('#<portlet:namespace/>openLocalFile').click(function(){
 		
-	<portlet:namespace/>visualizer.openLocalFile(false);
-	//alert("ttttiii");
-	//<portlet:namespace/>visualizer.callIframeFunc('Draw_Device_file', function( content ){
-		//alert("tttt");
-//	});
+	<portlet:namespace/>visualizer.openLocalFile(null, false);
 });
 
 $('#<portlet:namespace/>openServerFile').click(function(){
 	
-	<portlet:namespace/>visualizer.openServerFile(false);
+	<portlet:namespace/>visualizer.openServerFile(null, false);
 });
 
 $('#<portlet:namespace/>download').click(function(){
@@ -153,15 +160,16 @@ $('#<portlet:namespace/>download').click(function(){
  * Handling OSP Events and event handlers
  ***********************************************************************/
 function <portlet:namespace/>loadDataEventHandler( data, params ){
-	console.log('[<portlet:namespace/>loadDataEventHandler] ', data );
+	
 	
 	<portlet:namespace/>visualizer.loadCanvas( data, params.changeAlert );
+	
 }
 
 
 
 function <portlet:namespace/>responseDataEventHandler( data, params ){
-	console.log('[<portlet:namespace/>responseDataEventHandler]', data, params);
+	//console.log('[<portlet:namespace/>responseDataEventHandler]', data, params);
 	
 	switch( params.procFunc ){
 	case 'readServerFile':
@@ -169,15 +177,31 @@ function <portlet:namespace/>responseDataEventHandler( data, params ){
 		break;
 	
 	}
+	
 }
 
 function <portlet:namespace/>initializeEventHandler( data, params ){
-	console.log('[<portlet:namespace/>initializeEventHandler] ', data, params );
+	//console.log('[<portlet:namespace/>initializeEventHandler] ', data, params );
 	
 	<portlet:namespace/>visualizer.processInitAction();
 	
 	<portlet:namespace/>visualizer.callIframeFunc('removeAllObjects', null);
+	
+
 }
+
+
+//----from editor----
+function <portlet:namespace/>fireDataChangedEvent( content ){
+	
+	//alert(content);
+	
+	//console.log('fireDataChangedEvent in text editor wrapper...');
+	<portlet:namespace/>visualizer.fireDataChangedEvent({
+		type_: "content",
+		content_: content 
+	});
+};
 
 
 </script>

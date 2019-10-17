@@ -153,7 +153,6 @@ Band_Range(eV)
 
 <tr><td colspan="3"><hr></td></tr>
 
-
 <tr>
 <td rowspan="6"> Device dimension </td>
 <td>Source length </td> <td><input id='Source_length_text' type='text' style = "text-align:right;" value='10.0' size='4' oninput="change_struc(0, 0, 0)"  > nm<input id='Source_length_range' type='range' style='width:90%;' value='10'  min='1' max='20' step='0.1' oninput="change_struc(0, 0, 1)"  autocomplete='off'/> </td>
@@ -446,6 +445,24 @@ Band_Range(eV)
 </div>
 
 <script>
+let SC3D = {};
+let SC3D.Params = {};
+let SC3D.Params.hamiltonian = {
+		SIESTA_SYSTEM_LABEL: {
+			value: 'Graphyne'
+		},
+		Make_xyz_r_switch: {
+			toLine: function(){
+				return 'Make_xyz.r(on.off) ' + this.value;
+			},
+			value: 'on'
+		},
+		toText: function(){
+			let section = '*ham*\n';
+			
+		}
+};
+
 
 var fdf_text="";
 
@@ -583,130 +600,133 @@ namespace = ns;
 
 function disableControls(flag){
 	// disable all controls if flag is true otherwise enable all controls.
-	//  
 	
-	  document.getElementById('ham_label').disabled =true ;
-	  document.getElementById('sel_Make_xyz').disabled =true ;	  
-	  document.getElementById('text_Ux').disabled =true ;
-	  document.getElementById('text_Uy').disabled =true ;
-	  document.getElementById('text_Uz').disabled =true ;
-	  document.getElementById('text_Natoms_in_Uxyz').disabled =true ;	  
-	  document.getElementById('sel_BandCalculation').disabled =true ;	  
-	  document.getElementById('text_BandLineScale').disabled =true ;
-	  document.getElementById('text_NumberOfBands').disabled =true ;
-	  document.getElementById('Band_path').disabled =true ;
-	  document.getElementById('Band_Range_i').disabled =true
-	  document.getElementById('Band_Range_f').disabled =true ;
+	//var F_dis;
+	
+//	if(flag===true) F_dis= 
+	
+	  document.getElementById('ham_label').disabled =flag ;
+	  document.getElementById('sel_Make_xyz').disabled =flag ;	  
+	  document.getElementById('text_Ux').disabled =flag ;
+	  document.getElementById('text_Uy').disabled =flag ;
+	  document.getElementById('text_Uz').disabled =flag ;
+	  document.getElementById('text_Natoms_in_Uxyz').disabled =flag ;	  
+	  document.getElementById('sel_BandCalculation').disabled =flag ;	  
+	  document.getElementById('text_BandLineScale').disabled =flag ;
+	  document.getElementById('text_NumberOfBands').disabled =flag ;
+	  document.getElementById('Band_path').disabled =flag ;
+	  document.getElementById('Band_Range_i').disabled =flag
+	  document.getElementById('Band_Range_f').disabled =flag ;
 
 	  /////  --em-----
 
-      document.getElementById('sel_Complex_U').disabled =true ;
-	  document.getElementById('text_Nz').disabled =true ;
-	  document.getElementById('text_q_values').disabled =true ;
-	  document.getElementById('text_Max_Num_Mode').disabled =true ;
-	  document.getElementById('text_Max_Iteration').disabled =true ;
-	  document.getElementById('text_Energy_Window' ).disabled =true;
-	  document.getElementById('text_Energy_Window_1').disabled =true;	  
-	  document.getElementById('text_UTB_Ewindowmin').disabled =true ;
-	  document.getElementById('text_E_Extension_Gamma').disabled =true ;
-	  document.getElementById('text_E_Extension_Plot').disabled =true ;
-	  document.getElementById('text_Max_No_Subbands').disabled =true ;
-	  document.getElementById('text_Selection_by_GEVP').disabled =true ;
-	  document.getElementById('text_Selection_by_kEVP').disabled =true ;
-	  document.getElementById('text_SVE_tol_U').disabled =true ;
-	  document.getElementById('text_SVE_tol_Z').disabled =true ;
-	  document.getElementById('text_E_tol_UPB_check').disabled =true ;
-  	  document.getElementById('text_Fraction_Gray_Area').disabled =true ;
-	  document.getElementById('text_Minimum_Gray_Area').disabled =true ;
-	  document.getElementById('sel_Inspect_Mode_Wavefn').disabled =true ;	  
-	  document.getElementById('text_Tol_Stuck_Modes').disabled =true ;
-	  document.getElementById('sel_Write_Umode').disabled =true ;	  
-	  document.getElementById('sel_Print_for_Debugging').disabled =true ;	  
-	  document.getElementById('sel_Runtime_display').disabled =true ;	  
-	  document.getElementById('sel_method').disabled =true ;	  
-	  document.getElementById('text_Mini_Max_Iteration').disabled =true ;
-	  document.getElementById('text_Tolerance').disabled =true ;
-	  document.getElementById('sel_Use_Default_Stop_Rule').disabled =true ;
+      document.getElementById('sel_Complex_U').disabled =flag ;
+	  document.getElementById('text_Nz').disabled =flag ;
+	  document.getElementById('text_q_values').disabled =flag ;
+	  document.getElementById('text_Max_Num_Mode').disabled =flag ;
+	  document.getElementById('text_Max_Iteration').disabled =flag ;
+	  document.getElementById('text_Energy_Window' ).disabled =flag;
+	  document.getElementById('text_Energy_Window_1').disabled =flag;	  
+	  document.getElementById('text_UTB_Ewindowmin').disabled =flag ;
+	  document.getElementById('text_E_Extension_Gamma').disabled =flag ;
+	  document.getElementById('text_E_Extension_Plot').disabled =flag ;
+	  document.getElementById('text_Max_No_Subbands').disabled =flag ;
+	  document.getElementById('text_Selection_by_GEVP').disabled =flag ;
+	  document.getElementById('text_Selection_by_kEVP').disabled =flag ;
+	  document.getElementById('text_SVE_tol_U').disabled =flag ;
+	  document.getElementById('text_SVE_tol_Z').disabled =flag ;
+	  document.getElementById('text_E_tol_UPB_check').disabled =flag ;
+  	  document.getElementById('text_Fraction_Gray_Area').disabled =flag ;
+	  document.getElementById('text_Minimum_Gray_Area').disabled =flag ;
+	  document.getElementById('sel_Inspect_Mode_Wavefn').disabled =flag ;	  
+	  document.getElementById('text_Tol_Stuck_Modes').disabled =flag ;
+	  document.getElementById('sel_Write_Umode').disabled =flag ;	  
+	  document.getElementById('sel_Print_for_Debugging').disabled =flag ;	  
+	  document.getElementById('sel_Runtime_display').disabled =flag ;	  
+	  document.getElementById('sel_method').disabled =flag ;	  
+	  document.getElementById('text_Mini_Max_Iteration').disabled =flag ;
+	  document.getElementById('text_Tolerance').disabled =flag ;
+	  document.getElementById('sel_Use_Default_Stop_Rule').disabled =flag ;
 	  
 	  //------sc3d---------------
 
-	  document.getElementById('sel_dev').disabled =true ;
-	  document.getElementById('sel_SO').disabled =true ;
-	  document.getElementById('sel_import').disabled =true ;
-	  document.getElementById('Channel_length_text').disabled =true ;
-	  document.getElementById('Gate_length_text').disabled =true ;	  
-	  document.getElementById('Source_length_text').disabled =true ;
-	  document.getElementById('Drain_length_text').disabled =true ;
-	  document.getElementById('Channel_thickness_text').disabled =true ;
-	  document.getElementById('Channel_width_text').disabled =true ;	  
-	  document.getElementById('Oxide_thickness0_text').disabled =true ;
-	  document.getElementById('Oxide_thickness1_text').disabled =true ;
-	  document.getElementById('Oxide_thickness2_text').disabled =true ;
-	  document.getElementById('Oxide_thickness3_text').disabled =true ;	  
-	  document.getElementById('sel_gate_type').disabled =true ;	  
-	  document.getElementById('dop_type_Source').disabled =true ;
-	  document.getElementById('dop_type_Drain').disabled =true ;
-	  document.getElementById('Source_dop_text').disabled =true ;
-	  document.getElementById('Drain_dop_text').disabled =true ;
-	  document.getElementById('dop_type_Channel').disabled =true ;
-	  document.getElementById('Channel_dop_text').disabled =true ;
-	  document.getElementById('chn_dielec_const').disabled =true;
-	  document.getElementById('ox_dielec_const').disabled =true ;
-	  document.getElementById('exx_0').disabled =true;
-	  document.getElementById('exx_1').disabled =true;
-	  document.getElementById('VOLT_Vd').disabled =true ;	  
-	  document.getElementById('VOLT_Vg_0').disabled =true;
-	  document.getElementById('VOLT_Vg_1').disabled =true;
-	  document.getElementById('VOLT_Vg_2').disabled =true;	  
-	  document.getElementById('sc_conv_eps').disabled =true ;
-	  document.getElementById('sc_max_iter_0').disabled =true;
-	  document.getElementById('sc_max_iter_1').disabled =true;	  
-	  document.getElementById('num_ky').disabled =true ;
-	  document.getElementById('E_cut').disabled =true ;
-	  document.getElementById('adj_to_near_flag').disabled =true ;	  
-	  document.getElementById('VOLT_Temp').disabled =true ;
-	  document.getElementById('VOLT_Phig_offset').disabled =true ;
-	  document.getElementById('NEGF_hamil_eta').disabled =true ;
-	  document.getElementById('self_energy_routine').disabled =true ;	  
-	  document.getElementById('solver').disabled =true ;	  
-	  document.getElementById('n3d_alloc_model').disabled =true ;	  
-	  document.getElementById('EGRID_level_1_0').disabled =true;
-	  document.getElementById('EGRID_level_1_1').disabled =true;	  
-	  document.getElementById('EGRID_level_2_0').disabled =true;
-	  document.getElementById('EGRID_level_2_1').disabled =true;
-  	  document.getElementById('EGRID_level_3_0').disabled =true;
-  	  document.getElementById('EGRID_level_3_1').disabled =true;	  
-	  document.getElementById('EGRID_around_top_0').disabled =true;
-	  document.getElementById('EGRID_around_top_1').disabled =true;	  
-	  document.getElementById('EGRID_maxNe').disabled =true ;
-	  document.getElementById('pot3d_flag').disabled =true ;	  
-	  document.getElementById('nq3d_flag').disabled =true ;
-	  document.getElementById('Jx_flag').disabled =true ;	  
-	  document.getElementById('JE_flag').disabled =true ;
-	  document.getElementById('Ebe_iky_flag').disabled =true ;	  
-	  document.getElementById('JE_iky_flag').disabled =true ;	  
-	  document.getElementById('read_pot3d_flag').disabled =true ;	  
-	  document.getElementById('check_dimen_and_exit').disabled =true ;	  
+	  document.getElementById('sel_dev').disabled =flag ;
+	  document.getElementById('sel_SO').disabled =flag ;
+	  document.getElementById('sel_import').disabled =flag ;
+	  document.getElementById('Channel_length_text').disabled =flag ;
+	  document.getElementById('Gate_length_text').disabled =flag ;	  
+	  document.getElementById('Source_length_text').disabled =flag ;
+	  document.getElementById('Drain_length_text').disabled =flag ;
+	  document.getElementById('Channel_thickness_text').disabled =flag ;
+	  document.getElementById('Channel_width_text').disabled =flag ;	  
+	  document.getElementById('Oxide_thickness0_text').disabled =flag ;
+	  document.getElementById('Oxide_thickness1_text').disabled =flag ;
+	  document.getElementById('Oxide_thickness2_text').disabled =flag ;
+	  document.getElementById('Oxide_thickness3_text').disabled =flag ;	  
+	  document.getElementById('sel_gate_type').disabled =flag ;	  
+	  document.getElementById('dop_type_Source').disabled =flag ;
+	  document.getElementById('dop_type_Drain').disabled =flag ;
+	  document.getElementById('Source_dop_text').disabled =flag ;
+	  document.getElementById('Drain_dop_text').disabled =flag ;
+	  document.getElementById('dop_type_Channel').disabled =flag ;
+	  document.getElementById('Channel_dop_text').disabled =flag ;
+	  document.getElementById('chn_dielec_const').disabled =flag;
+	  document.getElementById('ox_dielec_const').disabled =flag ;
+	  document.getElementById('exx_0').disabled =flag;
+	  document.getElementById('exx_1').disabled =flag;
+	  document.getElementById('VOLT_Vd').disabled =flag ;	  
+	  document.getElementById('VOLT_Vg_0').disabled =flag;
+	  document.getElementById('VOLT_Vg_1').disabled =flag;
+	  document.getElementById('VOLT_Vg_2').disabled =flag;	  
+	  document.getElementById('sc_conv_eps').disabled =flag ;
+	  document.getElementById('sc_max_iter_0').disabled =flag;
+	  document.getElementById('sc_max_iter_1').disabled =flag;	  
+	  document.getElementById('num_ky').disabled =flag ;
+	  document.getElementById('E_cut').disabled =flag ;
+	  document.getElementById('adj_to_near_flag').disabled =flag ;	  
+	  document.getElementById('VOLT_Temp').disabled =flag ;
+	  document.getElementById('VOLT_Phig_offset').disabled =flag ;
+	  document.getElementById('NEGF_hamil_eta').disabled =flag ;
+	  document.getElementById('self_energy_routine').disabled =flag ;	  
+	  document.getElementById('solver').disabled =flag ;	  
+	  document.getElementById('n3d_alloc_model').disabled =flag ;	  
+	  document.getElementById('EGRID_level_1_0').disabled =flag;
+	  document.getElementById('EGRID_level_1_1').disabled =flag;	  
+	  document.getElementById('EGRID_level_2_0').disabled =flag;
+	  document.getElementById('EGRID_level_2_1').disabled =flag;
+  	  document.getElementById('EGRID_level_3_0').disabled =flag;
+  	  document.getElementById('EGRID_level_3_1').disabled =flag;	  
+	  document.getElementById('EGRID_around_top_0').disabled =flag;
+	  document.getElementById('EGRID_around_top_1').disabled =flag;	  
+	  document.getElementById('EGRID_maxNe').disabled =flag ;
+	  document.getElementById('pot3d_flag').disabled =flag ;	  
+	  document.getElementById('nq3d_flag').disabled =flag ;
+	  document.getElementById('Jx_flag').disabled =flag ;	  
+	  document.getElementById('JE_flag').disabled =flag ;
+	  document.getElementById('Ebe_iky_flag').disabled =flag ;	  
+	  document.getElementById('JE_iky_flag').disabled =flag ;	  
+	  document.getElementById('read_pot3d_flag').disabled =flag ;	  
+	  document.getElementById('check_dimen_and_exit').disabled =flag ;	  
 	  
-	  document.getElementById('Source_length_range').disabled =true ;
-	  document.getElementById('Drain_length_range').disabled =true ;
-	  document.getElementById('Channel_length_range').disabled =true ;
-	  document.getElementById('Gate_length_range').disabled =true ;
-	  document.getElementById('Channel_thickness_range').disabled =true ;
-	  document.getElementById('Channel_width_range').disabled =true ;
-	  document.getElementById('Oxide_thickness0_range').disabled =true ;
-	  document.getElementById('Oxide_thickness1_range').disabled =true ;
-	  document.getElementById('Oxide_thickness2_range').disabled =true ;
-	  document.getElementById('Oxide_thickness3_range').disabled =true ;
-	  document.getElementById('Source_dop_range').disabled =true ;
-	  document.getElementById('Drain_dop_range').disabled =true ;
-	  document.getElementById('Channel_dop_range').disabled =true ;
+	  document.getElementById('Source_length_range').disabled =flag ;
+	  document.getElementById('Drain_length_range').disabled =flag ;
+	  document.getElementById('Channel_length_range').disabled =flag ;
+	  document.getElementById('Gate_length_range').disabled =flag ;
+	  document.getElementById('Channel_thickness_range').disabled =flag ;
+	  document.getElementById('Channel_width_range').disabled =flag ;
+	  document.getElementById('Oxide_thickness0_range').disabled =flag ;
+	  document.getElementById('Oxide_thickness1_range').disabled =flag ;
+	  document.getElementById('Oxide_thickness2_range').disabled =flag ;
+	  document.getElementById('Oxide_thickness3_range').disabled =flag ;
+	  document.getElementById('Source_dop_range').disabled =flag ;
+	  document.getElementById('Drain_dop_range').disabled =flag ;
+	  document.getElementById('Channel_dop_range').disabled =flag ;
 	  
 }
 
 
 function fireDataChangedEvent() {
-	// disableControls();
+	//disableControls(true);
 		setTimeout(
 				function() {
 					if ( namespace ) {
@@ -749,10 +769,14 @@ function change_struc(i,j, option ) {
 
 		 fireDataChangedEvent();
 }
+
+
 function draw_struc(g_type ) {
 
-
 	//fireStrucChangedEvent();
+	
+	
+
 	fireDataChangedEvent();
 
 }
@@ -817,28 +841,17 @@ function draw_struc(g_type ) {
 			
 		document.getElementById('Oxide_thickness1_text' ).value = document.getElementById('Oxide_thickness0_text' ).value;
 		document.getElementById('Oxide_thickness2_text' ).value = document.getElementById('Oxide_thickness0_text' ).value;
-		document.getElementById('Oxide_thickness3_text' ).value = document.getElementById('Oxide_thickness0_text' ).value;
-				
-		//dummy = document.getElementById('sel_gate_type'); string += dummy.options[dummy.selectedIndex].value+"\n";
+		document.getElementById('Oxide_thickness3_text' ).value = document.getElementById('Oxide_thickness0_text' ).value;		
 
 		dummy = document.getElementById('sel_gate_type');
 		
-		dummy.options[dummy.selectedIndex].value=0; 
+		dummy.options[dummy.selectedIndex].value="Double"; 
 		
 		
 	}
 	
 	function setParameters(data)
 	{
-		//console.log("setParameters: ", data);
-		
-	
-	// <----------------------------
-//		var keys = {
-	//			SIESTA_SYSTEM_LABEL: false,
-		//Make_xyz.r(on,off):false,
-	//};
-	
 	
 	var N_key= 46;
 	var keyws = new Array();
@@ -1371,8 +1384,10 @@ function draw_struc(g_type ) {
 		  string+="DEV_Dimen ox_thickness ("+dummy0+", "+dummy1+", "+dummy2+", "+dummy3+")\n";
 
 		  dummy = document.getElementById('sel_gate_type');
-
+		  
 		  string+="DEV_Dimen gate_type "+dummy.options[dummy.selectedIndex].value+"\n";
+		  
+		  //alert(dummy.options[dummy.selectedIndex].value);
 
 		  dummy = document.getElementById('dop_type_Source');
 

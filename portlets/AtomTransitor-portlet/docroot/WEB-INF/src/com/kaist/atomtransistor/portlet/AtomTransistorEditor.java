@@ -9,15 +9,11 @@ import javax.portlet.ResourceResponse;
 import com.kisti.osp.service.OSPFileLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
-
-
 /**
- * Portlet implementation class AtomTransistorAnalyzer
+ * Portlet implementation class AtomTransistorEditor
  */
-public class AtomTransistorAnalyzer extends MVCPortlet {
-
-	
-
+public class AtomTransistorEditor extends MVCPortlet {
+ 
 	@Override
 	public void serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 			throws IOException, PortletException {

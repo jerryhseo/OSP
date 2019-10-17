@@ -5,6 +5,7 @@
 <head>
 	<script src="<%= request.getContextPath() %>/js/three/libs/Three_R86.js" type="text/javascript"></script>
 	<script src="<%= request.getContextPath() %>/js/three/libs/TrackballControls_R68.js" type="text/javascript"></script>
+	<script src="<%= request.getContextPath() %>/js/three/libs/MarchingCubes.js" type="text/javascript"></script>
 	<!--
 	<script src="<%= request.getContextPath() %>/js/three/font/helvetiker_regular.typeface.js" type="text/javascript"></script>
 	 -->
@@ -31,10 +32,18 @@
 </head>
 
 <body style="height:100%;">
+<div id="SIESTAInputData_Controls"></div>
+<div id="siesta_2_Controls"></div>
 
 <script type="text/javascript">
 var atomAnalyzerNamespace;
 var disabled=false;
+
+var Old_target_x, Old_target_y, Old_target_z;
+var Old_camera_x, Old_camera_y, Old_camera_z;
+
+var target_x, target_y, target_z;
+var camera_x, camera_y, camera_z;
 
 var imagePath = parent.atomTransitorAnalyzerImagePath;
 
@@ -46,7 +55,7 @@ var renderer = new THREE.WebGLRenderer();
 renderer.setClearColor( 0xffffff, 1 );
 renderer.setSize(scene_width, scene_height);
 renderer.shadowMapEnabled = true;
-renderer.sortObjects = false;
+renderer.sortObjects = true;
 
 var raycaster = new THREE.Raycaster();
 
@@ -63,7 +72,7 @@ var BoxLineGroup = new THREE.Object3D();
 //var Boxes;
 var BoxGroup = new THREE.Object3D();
 
-var camera = new THREE.PerspectiveCamera(45, scene_width / scene_height, 0.01, 10000);
+var camera;// = new THREE.PerspectiveCamera(45, scene_width / scene_height, 0.01, 10000);
 
 //var camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
 
@@ -96,6 +105,10 @@ var Nx, Ny, Nz;
 var Nzy;
 var xmx, ymx, zmx;
 var xmn, ymn, zmn;
+var fdf_text;
+
+var N01_P;
+var N01_R;
 
 var P_max=-1e1000, P_min=1e1000;
 var R_max=-1e1000, R_min=1e1000;
@@ -118,7 +131,7 @@ var Lattice_C ;
 var unit ;
 var R_Bohr = 0.53;
 
-var mmx=Lattice_C/R_Bohr;
+var scale_fac;
 
 var um = 1e-6;
 
@@ -145,6 +158,10 @@ var ON_save_R=0;
 
 var t_i=0;
 var Vertices = {};
+var Iso_vertices_EP = {};
+var Iso_vertices_ER = {};
+
+var N_Iso=100;
 
 var Max_N_Species =50;
 
@@ -188,6 +205,8 @@ var N_index_max =1000
 
 var camera_Vscale=1;
 
+var F_exi_Dirtext=1;
+
 //var Nx, Ny,Nz;
 
 var Atom_Name=["Removed",
@@ -220,7 +239,7 @@ var Atom_color = [ '000000',
 
 var Atom_R = [ ];
 
-for (var i=1; i<=118; i++) Atom_R[i]=i*0.01+0.3;
+for (var i=1; i<=118; i++) Atom_R[i]=i*0.01+0.15;
 
 var Is_N_spe = new Array(119);
 for ( var i=0; i<119; i++ ) Is_N_spe[i]=0;
@@ -235,7 +254,7 @@ var Draw_VR ;
 
 var xi, yi, zi;
 
-var EBeam_color=0xddccff;
+var Link_color=0xddccff;
 
 var x_cam=10.5, y_cam=-10.5, z_cam=10.5;
 
@@ -244,6 +263,8 @@ var Rhos = {};
 
 var ang = Math.PI*15/180;
 
+var AtomicCoordinatesFormat ;
+
 var canvas ;
 
 var trackballControl ;
@@ -251,10 +272,16 @@ var trackballControl ;
 var container_elem;
 
 var plateViewers = new Array(3);
-
 var arrow_plates = new Array(3);
 
+var IsoGeo_EP = new Array(N_Iso); var IsoGeo_ER = new Array(N_Iso);
+var IsoMat_EP = new Array(N_Iso); var IsoMat_ER = new Array(N_Iso);
+var Iso_EP    = new Array(N_Iso); var Iso_ER    = new Array(N_Iso);
+
+
 var N_Range=150;
+
+var test_count=0;
 
 var Plate = function() {
 	this.mesh = function( mesh ) {
@@ -357,16 +384,29 @@ var Canvas = function( container )
 		return plate.material();
 	};
 
-
-
 	container.appendChild( renderer.domElement );
 
-	renderer.render(scene, camera);
+	//renderer.render(scene, camera);
 
 };
 
 var animate = function() {
+	
+	Old_target_x = trackballControl.target.x;	Old_target_y = trackballControl.target.y;	Old_target_z = trackballControl.target.z;
+	Old_camera_x = camera.position.x;	        Old_camera_y = camera.position.y;	        Old_camera_z = camera.position.z;
+		
 	trackballControl.update();
+
+	if(Old_camera_x!=camera.position.x || Old_camera_y!=camera.position.y|| Old_camera_z!=camera.position.z || trackballControl.target.x !=Old_target_x || trackballControl.target.y !=Old_target_y || trackballControl.target.z !=Old_target_z )
+	{		
+		camera_x = camera.position.x        ; camera_y = camera.position.y        ; camera_z = camera.position.z;
+		target_x = trackballControl.target.x; target_y = trackballControl.target.y; target_z = trackballControl.target.z;
+	
+		document.getElementById("Views").value = getViews();
+	 
+	   camera.up = new THREE.Vector3(0.0, 0.0, 1.0);	  
+	}
+	
 	renderer.render(scene, camera );
 	requestAnimationFrame(animate);
 
@@ -374,7 +414,10 @@ var animate = function() {
 
 
 function loadEPData( data ) {
-
+	
+	camera = new THREE.PerspectiveCamera(45, scene_width / scene_height, 0.01, 10000);
+	trackballControl = new THREE.TrackballControls(camera, renderer.domElement);
+	
 	removeAllObjects();
 
 	var fin_i=0;
@@ -391,15 +434,49 @@ function loadEPData( data ) {
 		line=line.replace(/ +/g, " ");
 
 		var keyVal = line.split(' ');
+		 
 		switch( keyVal[0].trim())
-		{
-		case 'LatticeConstant' : Lattice_C = Number(keyVal[1]); mmx=Lattice_C/R_Bohr; fin_i++; break;
-		case 'SaveRho' : if (keyVal[1]=='T' || keyVal[1]=='.true.') ON_save_R=1; fin_i++; break;
+		{		
+		case 'LatticeConstant'           : Lattice_C = Number(keyVal[1]);  fin_i++; break;
+		case 'AtomicCoordinatesFormat'   : AtomicCoordinatesFormat = keyVal[1]; fin_i++; break;
+		case 'SaveRho'                   : if (keyVal[1]=='T' || keyVal[1]=='.true.') ON_save_R=1; fin_i++; break;
 		case 'SaveElectrostaticPotential': if (keyVal[1]=='T' || keyVal[1]=='.true.') ON_save_P=1; fin_i++; break;
 		}
-		if (fin_i==3) break;
+		if (fin_i==4) break;
+	}
+	
+	  if(AtomicCoordinatesFormat==='Bohr'        || AtomicCoordinatesFormat==='NotScaledCartesianBohr') scale_fac = R_Bohr;
+		else if(AtomicCoordinatesFormat==='Ang'         || AtomicCoordinatesFormat==='NotScaledCartesianAng')  scale_fac = 1.0;
+		else if(AtomicCoordinatesFormat==='ScaledCartesian')                                                   scale_fac = R_Bohr;
+		else if(AtomicCoordinatesFormat==='Fractional'  || AtomicCoordinatesFormat==='ScaledByLatticeVectors') scale_fac = Lattice_C;
+		else scale_fac=1.0;
+	  
+	  	
+	if (ON_save_P==1)
+	{
+	
+	  //for(var i=0; i<N_Iso; i++) 
+	  //{
+		  
+		  /*
+		  var i=0;
+		  
+		  IsoGeo_EP[i] = new THREE.Geometry();
+		  IsoMat_EP[i] = new THREE.MeshBasicMaterial({transparent:false, color: 0xeeeeee} );
+		  
+		  IsoMat_EP[i].side = THREE.DoubleSide;
+		  
+		  
+		  scene.remove(Iso_EP[i]);
+		  
+		  Iso_EP[i]    = new THREE.Mesh( IsoGeo_EP[i], IsoMat_EP[i] );		  
+		  scene.add(Iso_EP[i]);
+		  */
+		  
+	  //}
 
 	}
+	
 
 	for ( var index=0; index<lines.length; index++ ) {
 		var line = lines[index].trim();
@@ -422,7 +499,9 @@ function loadEPData( data ) {
 					parseLinkCoor( lines.slice(start, end));
 
 					break;
-				case 'EP_data': parseEPData( lines.slice(start, end)); break;				
+				case 'EP_data' : parseEPData( lines.slice(start, end)); break;
+				//case 'EP_iso'  : parseEPIso( lines.slice(start, end)); break;
+				//case 'ER_iso'  : parseERIso( lines.slice(start, end)); break;
 				case 'Rho_data': parseRhoData( lines.slice(start, end)); break;
 				case 'params': parseParams( lines.slice(start, end)); break;
 				default: alert( 'File type mismatch......');
@@ -445,23 +524,19 @@ function loadEPData( data ) {
 
 		}
 
-
-
 	}
 
 	xi=1; yi=1; zi=1;
 
-	Write_ouput();
+	Write_output();
 
 	Draw_VR = document.getElementsByName('Draw_VR');
-
-	//text_Atom_Type = document.getElementById("Atom_Type");
 	text_Atom_Name = document.getElementById("Atom_Name");
 	text_x = document.getElementById("position_x");
 	text_y = document.getElementById("position_y");
 	text_z = document.getElementById("position_z");
 
-container_elem=document.getElementById("container");
+container_elem = document.getElementById("container");
 
 	canvas = new Canvas( container_elem );
 
@@ -474,9 +549,7 @@ container_elem=document.getElementById("container");
 	//pointLight.position.set( 3*xmx, 3*ymx, 3*zmx );
 	//pointLight2.position.set(-3*xmx, -3*ymx, -3*zmx);
 
-	trackballControl = new THREE.TrackballControls(camera, renderer.domElement);
-
-	trackballControl.target = new THREE.Vector3((Dxx)*0.5, (Dyy)*0.5, (Dzz)*0.5);
+	
 
 	trackballControl.rotateSpeed = 1.0;
 	trackballControl.zoomSpeed = 1.0;
@@ -487,8 +560,8 @@ container_elem=document.getElementById("container");
 	camera.rotation.z=Math.PI*0.5;
 
 	camera.position.set(camera_Vscale*(Dyy+Dzz)+Dxx*0.5, camera_Vscale*(Dzz+Dxx)+Dyy*0.5, camera_Vscale*(Dxx+Dyy)+Dzz*0.5);
-	//camera.position.set(Dxx*0.5, camera_Vscale*Dyy, Dzz*0.5);
-
+	trackballControl.target = new THREE.Vector3((Dxx)*0.5, (Dyy)*0.5, (Dzz)*0.5);
+	
 	var plate = new Plate();
 	arrow_plates[0] = new THREE.LineSegments( new THREE.Geometry(), new THREE.LineBasicMaterial( { color: 0x000000, opacity: 1, linewidth: 1 } ) );
 	arrow_plates[0].position.z=0;
@@ -560,33 +633,41 @@ container_elem=document.getElementById("container");
 	setArrows('xy');
 	setArrows('yz');
 	setArrows('zx');
+	
+	
+	//for(var i=0; i<N_Iso; i++) IsoGeo_EP[i] = new THREE.Geometry();	
+	
 
 	}
 	
-	drawBox();
+	drawBox(); //<----don't delete 
 
 	document.removeEventListener( 'click', onDocumentMouseMove, false );
 	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-
 	document.addEventListener( 'mouseover', onDocumentMouseOver, false );
-
 	window.addEventListener( 'resize', onWindowResize, false );
-
+	
+//	document.addEventListener( 'mouseup'  , onDocumentMouseUp, false );
+	//document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+	
 	animate();
 }
 
 function load_AtomCoor(data)
 {
-	console.log("[YEJIN]Test Viewer load ", data);
+	camera = new THREE.PerspectiveCamera(45, scene_width / scene_height, 0.01, 10000);
+	trackballControl = new THREE.TrackballControls(camera, renderer.domElement);
+		
+	fdf_text = data;
+	
 	removeAllObjects();
 
 	data=data.replace(/\t/g, " ");
 	data=data.replace(/ +/g, " "); // several space -> one space
 	
-	
-
 	var lines = data.split('\n');
-
+	
+	AtomicCoordinatesFormat='';
 
 	for ( var index=0; index<lines.length; index++ )
 	{
@@ -598,16 +679,17 @@ function load_AtomCoor(data)
 
 		if ( keyVal[0] === 'NumberOfAtoms') {N_Atoms = Number(keyVal[1]); }
 		if ( keyVal[0] === 'NumberOfSpecies'){N_Species = Number(keyVal[1]); T_N_Species=N_Species; }
-
+		
+		if ( keyVal[0] === 'AtomicCoordinatesFormat'){ AtomicCoordinatesFormat = keyVal[1];  }
+		
 		if ( keyVal[0] === '%block' && (keyVal[1] === 'ChemicalSpeciesLabel' || keyVal[1] === 'Chemical_Species_Label') )
 		{
 
 			var start = index+1; var end = start + Number(N_Species);
 			parseSpecies( lines.slice(start, end));
-
 		}
 
-		if ( keyVal[0] === 'LatticeConstant') { Lattice_C = Number(keyVal[1]); mmx=Lattice_C/R_Bohr; unit = keyVal[2]; }
+		if ( keyVal[0] === 'LatticeConstant') { Lattice_C = Number(keyVal[1]); unit = keyVal[2]; }
 
 		if ( keyVal[0] === '%block' && keyVal[1] === 'LatticeVectors')
 		{
@@ -623,8 +705,13 @@ function load_AtomCoor(data)
 
 	}
 	
-	//alert("mmm---Species_Order[i]"+Species_Order[1]+" "+Species_Name[Species_Order[1]]+" "+Species_Order[2]+" "+Species_Name[Species_Order[2]]+" "+Species_Order[3]+" "+Species_Name[Species_Order[3]]+Species_Order[4]+" "+Species_Name[Species_Order[4]]);
-
+	
+	     if(AtomicCoordinatesFormat==='Bohr'        || AtomicCoordinatesFormat==='NotScaledCartesianBohr') scale_fac = R_Bohr;
+	else if(AtomicCoordinatesFormat==='Ang'         || AtomicCoordinatesFormat==='NotScaledCartesianAng')  scale_fac = 1.0;
+	else if(AtomicCoordinatesFormat==='ScaledCartesian')                                                   scale_fac = Lattice_C;
+	else if(AtomicCoordinatesFormat==='Fractional'  || AtomicCoordinatesFormat==='ScaledByLatticeVectors') scale_fac = Lattice_C;
+	else scale_fac=1.0;
+	
 
 	for ( var index=0; index<lines.length; index++ )
 	{
@@ -644,9 +731,23 @@ function load_AtomCoor(data)
 
 
 	xi=1; yi=1; zi=1;
+	
+	var Dirtext;
+	var F_Dirtext=0;
+	F_exi_Dirtext=1;
+	
+	if (document.getElementById("Views") ==null) F_exi_Dirtext = 0; 
+	
+	if ( F_exi_Dirtext == 1 && document.getElementById("Views").value !="") 
+	{
+		F_Dirtext = 1; Dirtext = document.getElementById("Views").value; 		
+	
+	}
 
 	Write_input();
-
+	
+	if (F_Dirtext == 1 ) {document.getElementById("Views").value = Dirtext ;   }
+	
 	addition_x=document.getElementById('Addition_atom_x');
 	addition_y=document.getElementById('Addition_atom_y');
 	addition_z=document.getElementById('Addition_atom_z');
@@ -662,7 +763,6 @@ function load_AtomCoor(data)
 	text_Addition_atom_y=document.getElementById("Addition_atom_y");
 	text_Addition_atom_z=document.getElementById("Addition_atom_z");
 
-
 	text_Addition_atom_x.value = 0;
 	text_Addition_atom_y.value = 0;
 	text_Addition_atom_z.value = 0;
@@ -672,6 +772,41 @@ function load_AtomCoor(data)
 	container_elem=document.getElementById("container");
 
 	canvas = new Canvas( container_elem );
+	
+	trackballControl.rotateSpeed = 1.0;
+	trackballControl.zoomSpeed = 1.0;
+	trackballControl.panSpeed = 1.0;
+
+	camera.up = new THREE.Vector3(0.0,0.0,1.0);
+	//camera.rotation.z=Math.PI*0.5;
+	
+	if ( F_exi_Dirtext == 0 ) 
+	{
+		Find_max();		
+		
+		camera.position.x = camera_Vscale*(Dyy+Dzz)+Dxx*0.5;
+		camera.position.y = camera_Vscale*(Dzz+Dxx)+Dyy*0.5;
+		camera.position.z = camera_Vscale*(Dxx+Dyy)+Dzz*0.5;
+		trackballControl.target = new THREE.Vector3(Dxx*0.5, Dyy*0.5, Dzz*0.5);
+
+		document.getElementById("Views").value = getViews();
+		
+	}
+	else 
+	{		
+		var dummy0 = document.getElementById("Views").value;
+		var dummy1 = dummy0.split(' ');
+
+		camera_x=Number(dummy1[1]);	camera_y=Number(dummy1[2]);	camera_z=Number(dummy1[3]) ;		
+		target_x=Number(dummy1[4]); target_y=Number(dummy1[5]); target_z=Number(dummy1[6]);
+		
+		camera.position.set(camera_x, camera_y, camera_z);
+		
+		trackballControl.target = new THREE.Vector3(target_x, target_y, target_z);
+		
+	}
+		
+		
 	drawBox();
 	F_ini_Box=0;
 
@@ -680,27 +815,18 @@ function load_AtomCoor(data)
 	directionalLight.position.set(3*xmx, 3*ymx, 3*zmx).normalize();
 	directionalLight2.position.set(-3*xmx, -3*ymx, -3*zmx).normalize();
 
-
 	//pointLight.position.set(  3*xmx,  3*ymx,  3*zmx);
 	//pointLight2.position.set(-3*xmx, -3*ymx, -3*zmx);
-
-	trackballControl = new THREE.TrackballControls(camera, renderer.domElement);
-	trackballControl.target = new THREE.Vector3(Dxx*0.5, Dyy*0.5, Dzz*0.5);
-
-	trackballControl.rotateSpeed = 1.0;
-	trackballControl.zoomSpeed = 1.0;
-	trackballControl.panSpeed = 1.0;
-
-	camera.up = new THREE.Vector3(0.0,0.0,1.0);
-	camera.rotation.z=Math.PI*0.5;
-
-	camera.position.set(camera_Vscale*(Dyy+Dzz)+Dxx*0.5, camera_Vscale*(Dzz+Dxx)+Dyy*0.5, camera_Vscale*(Dxx+Dyy)+Dzz*0.5);
-	//camera.position.set(Dxx*0.5, camera_Vscale*Dyy, Dzz*0.5);
 
 	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 	document.addEventListener( 'click', onDocumentMouseClick, false );
 	window.addEventListener( 'resize', onWindowResize, false );
+	
+//	document.addEventListener( 'mouseup'  , onDocumentMouseUp, false );
+//	document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+	
 
+	
 	animate();
 
 }
@@ -872,6 +998,7 @@ function setPlateMode( plateId, mode )
 
 	if (Draw_VR[0].checked) { var vertices = Vertices['0']; }
 	if (Draw_VR[1].checked) { var vertices = Rhos['0']; }
+//	if (Draw_VR[2].checked) { var vertices = Rhos['0']; }
 
 	//var vertices = Vertices['0'];
 
@@ -1131,7 +1258,6 @@ function setArrows( plateId )
 
 		Mx_Species_Number=0;
 		
-		//alert(dataLines);
 
 
 		for ( var i=1; i<=N_Species; i++ ) {
@@ -1141,9 +1267,7 @@ function setArrows( plateId )
 			Species_Order[i] = Number(avalue[0]);
 			Species_Number[Species_Order[i]] = Number(avalue[1]);
 			Species_Name[Species_Order[i]] = avalue[2];
-			
-			//alert("Species_Order[i]"+Species_Order[i]+" "+Species_Name[Species_Order[i]]);
-
+						
 			if (Species_Number[Species_Order[i]] > Mx_Species_Number ) Mx_Species_Number = Species_Number[Species_Order[i]];
 
 			
@@ -1163,6 +1287,7 @@ function setArrows( plateId )
 			LatticeVector[i] = Number(avalue[i]);		
 		}
 	};
+	
 	function parseAtomCoor( dataLines )
 	{
 		Define_P_Atoms(N_Atoms);
@@ -1174,9 +1299,9 @@ function setArrows( plateId )
 			P_Atoms[0][i][0]=avalue[0];
 			P_Atoms[0][i][1]=avalue[1]; 
 			P_Atoms[0][i][2]=avalue[0];
-			P_Atoms[0][i][3]=Number(avalue[3]);
-			P_Atoms[0][i][4]=Number(avalue[4]);
-			P_Atoms[0][i][5]=Number(avalue[5]);
+			P_Atoms[0][i][3]=Number(avalue[3])*scale_fac;
+			P_Atoms[0][i][4]=Number(avalue[4])*scale_fac;
+			P_Atoms[0][i][5]=Number(avalue[5])*scale_fac;
 			P_Atoms[0][i][6]=Number(avalue[6]);
 
 			for (var j=0; j<5;j++)
@@ -1185,41 +1310,53 @@ function setArrows( plateId )
 			}
 
 			P_Atoms[0][i][2]=P_Atoms[0][i][2].substring(j-1);
+			
+			
 
 		}
+		
+		
 	};
 	function parseAtomCoor_input ( dataLines )
 	{
+		
+	//	console.log(dataLines);
+	
+	//alert("viewer "+scale_fac);
+		
 		var N_Atoms_u=dataLines.length;
+		
+		var isName;
 
 		var ai=0;
 
-		var Lp_x=mmx*LatticeVector[0], Lp_y=mmx*LatticeVector[1], Lp_z=mmx*LatticeVector[2];
+		var Lp_x=Lattice_C*LatticeVector[0], Lp_y=Lattice_C*LatticeVector[1], Lp_z=Lattice_C*LatticeVector[2];
 		
-	//	alert(dataLines);
-		//alert(N_Atoms_u);
-
 		N_Atoms=N_Atoms*Extend[0]*Extend[1]*Extend[2];
 		
 		Real_N_Atoms=N_Atoms;
 
 		Define_P_Atoms(N_Atoms+N_Addition_max);
-
+		
 		for ( var i=0; i<119; i++ ) Is_N_spe[i]=0;
 
 		for ( var i=0; i<N_Atoms_u; i++ )
 		{
 			//dataLines[i]=dataLines[i].replace(/ +/g, " ");
 			var avalue = dataLines[i].trim().split(' ');
-			var spe=Number(avalue[3]);
+			var spe;
 			
-		//	alert(avalue[0]+" "+avalue[1]+" "+avalue[2]+" "+avalue[3]+" ");
-
-			P_Atoms[0][ai][0]=spe;
+			if (isNaN( Number(avalue[0])) ==false ) isName=0; else isName=1;
+				
+			spe=Number(avalue[3+isName]); 
+			
+		//	console.log("----- ", P_Atoms[0][ai][2], Species_Name[spe], spe, avalue);
+			
+			//console.log('spe=',spe);
+			P_Atoms[0][ai][0]=spe;  			
 			P_Atoms[0][ai][2]=Species_Name[spe];
+		
 			
-		//	alert(spe+" "+Species_Name[spe]);
-
 			var msign = P_Atoms[0][ai][2].indexOf("-");
 
 			if (msign==-1)
@@ -1232,9 +1369,9 @@ function setArrows( plateId )
 				for (var j=1; j<119; j++) { if (T_Atom_name===Atom_Name[j]) { P_Atoms[0][ai][1]=j; break;} }
 			}
 
-			P_Atoms[0][ai][3]=Number(avalue[0])*mmx;
-			P_Atoms[0][ai][4]=Number(avalue[1])*mmx;
-			P_Atoms[0][ai][5]=Number(avalue[2])*mmx;
+			P_Atoms[0][ai][3]=Number(avalue[0+isName])*scale_fac;
+			P_Atoms[0][ai][4]=Number(avalue[1+isName])*scale_fac;
+			P_Atoms[0][ai][5]=Number(avalue[2+isName])*scale_fac;
 			P_Atoms[0][ai][6]=0;
 
 	     	Is_N_spe[spe] ++;
@@ -1308,9 +1445,9 @@ function setArrows( plateId )
 			var line = dataLines[i];
 		//	var values = line.split(',');
 
-			xi_L = i/Nzy; md = i%Nzy ;
-			yi_L = md/Nz;
-			zi_L = md%Nz;
+			xi_L = parseInt(i/Nzy); md = parseInt(i%Nzy) ;
+			yi_L = parseInt(md/Nz);
+			zi_L = parseInt(md%Nz);
 
 			func[i]=parseFloat(line);
 
@@ -1411,12 +1548,51 @@ function setArrows( plateId )
 
 	};
 
+	/*
+	function parseEPIso ( dataLines ) {
+
+		//--------------- to get V field  --------------
+
+				if (ON_save_P===0) return;
+
+				var time = '0';
+				var xi_L, yi_L, zi_L, md;
+				var c1=0.25, c2=0.50, c3=0.75;
+				var R_col, G_col, B_col;
+				var i=0;
+				
+				//var func= new Array(dataLines.length);
+				//---------------------------------------------------------------------
+				
+				N01_P = dataLines.length;
+				
+				Iso_vertices_EP = new Array(100);
+				Iso_vertices_EP[0] = new Array(N01_P);
+				
+				for(i=0; i<N01_P; i++) Iso_vertices_EP[0][i] = new Array(3);
+				
+				for ( i=0; i<N01_P; i++ ) {
+					
+					var line = dataLines[i];					
+					var values = line.split(',');
+					
+					Iso_vertices_EP[0][i][0]=values[0]*R_Bohr;
+					Iso_vertices_EP[0][i][1]=values[1]*R_Bohr;
+					Iso_vertices_EP[0][i][2]=values[2]*R_Bohr;					
+									
+				}
+								
+
+			};
+
+			*/
+			
 	 function parseRhoData ( dataLines ) {
 
 		 if (ON_save_R===0) return;
 
 		var time = '0';
-		var xi, yi, zi, md;
+		var xi_L, yi_L, zi_L, md;
 		var c1=0.25, c2=0.50, c3=0.75;
 		var R_col, G_col, B_col;
 		var func;
@@ -1425,10 +1601,6 @@ function setArrows( plateId )
 
 		for ( var i=0; i<dataLines.length; i++ ) {
 			var line = dataLines[i];
-
-			xi = i/Nzy; md = i%Nzy ;
-			yi = md/Nz;
-			zi = md%Nz;
 
 			func=parseFloat(line);
 
@@ -1439,15 +1611,15 @@ function setArrows( plateId )
 
 			//var rhos = line.split(',');
 
-			xi = i/Nzy; md = i%Nzy ;
-			yi = md/Nz;
-			zi = md%Nz;
-			//XYZ[i][0]=xi*dx; XYZ[i][1]=yi*dy; XYZ[i][2]=zi*dz;
+			xi_L = parseInt(i/Nzy); md = parseInt(i%Nzy) ;
+			yi_L = parseInt(md/Nz);
+			zi_L = parseInt(md%Nz);
+			//XYZ[i][0]=xi_L*dx; XYZ[i][1]=yi_L*dy; XYZ[i][2]=zi_L*dz;
 
 			var vertex = {};
-			vertex.x = xi*dx_g;
-			vertex.y = yi*dy_g;
-			vertex.z = zi*dz_g;
+			vertex.x = xi_L*dx_g;
+			vertex.y = yi_L*dy_g;
+			vertex.z = zi_L*dz_g;
 
 			vertex.cr = R_col;
 			vertex.cg = G_col;
@@ -1459,6 +1631,50 @@ function setArrows( plateId )
 
 
 	};
+	
+	/*
+	function parseERIso ( dataLines ) {
+
+		//--------------- to get V field  --------------
+	
+				if (ON_save_R===0) return;
+
+				var time = '0';
+				var xi_L, yi_L, zi_L, md;
+				var c1=0.25, c2=0.50, c3=0.75;
+				var R_col, G_col, B_col;
+				var i=0;
+				
+				//var func= new Array(dataLines.length);
+				//---------------------------------------------------------------------
+				//Iso_vertices_EP = new Array(100);
+				//Iso_vertices_EP[0] = new Array(N01_P);
+				
+				N01_R = dataLines.length;
+				
+			//	alert("ER--- "+N01_R);
+							
+				Iso_vertices_ER = new Array(100);
+				Iso_vertices_ER[0] = new Array(N01_P);
+				
+				for(i=0; i<N01_R; i++) Iso_vertices_ER[0][i] = new Array(3);
+				
+				for ( i=0; i<N01_R; i++ ) {
+					
+					var line = dataLines[i];					
+					var values = line.split(',');
+					
+					Iso_vertices_ER[0][i][0]=values[0]*R_Bohr;
+					Iso_vertices_ER[0][i][1]=values[1]*R_Bohr;
+					Iso_vertices_ER[0][i][2]=values[2]*R_Bohr;				
+					
+				//	console.log(Iso_vertices_ER[0][i][0], Iso_vertices_ER[0][i][1], Iso_vertices_ER[0][i][2]);
+									
+				}
+
+			};
+			*/
+			
 	function parseParams ( dataLines ) {
 
 		for ( var i=0; i<dataLines.length; i++ ) {
@@ -1478,9 +1694,9 @@ function setArrows( plateId )
 				case 'xmn' :xmn =Number(values[1]); break;
 				case 'ymn' :ymn =Number(values[1]); break;
 				case 'zmn' :zmn =Number(values[1]); break;
-				case 'dx' :dx_g =Number(values[1]); break;
-				case 'dy' :dy_g =Number(values[1]); break;
-				case 'dz' :dz_g =Number(values[1]); break;
+				case 'dx' :dx_g =Number(values[1]); dx_g *=scale_fac ;break;
+				case 'dy' :dy_g =Number(values[1]); dy_g *=scale_fac ;break;
+				case 'dz' :dz_g =Number(values[1]); dz_g *=scale_fac ;break;
 				case 'P_max' :P_max =Number(values[1]); break;
 				case 'P_min' :P_min =Number(values[1]); break;
 				case 'R_max' :R_max =Number(values[1]); break;
@@ -1491,18 +1707,20 @@ function setArrows( plateId )
 
 		Nzy=Nz*Ny;
 
-		for (var i=0;i<11;i++) Pallet_P[i]=P_min + (P_max-P_min)/10*i;
-		for (var i=0;i<11;i++) Pallet_R[i]=R_min + (R_max-R_min)/10*i;
+		for (var i=0;i<11;i++) Pallet_P[i]=new Number(P_min + (P_max-P_min)/10*i);
+		for (var i=0;i<11;i++) Pallet_R[i]=new Number(R_min + (R_max-R_min)/10*i);
 
 	};
 
 	//------------------------
 	function drawBox () {
-
+		
 		var BLines = [];
 
-		var Lp_x=mmx*LatticeVector[0], Lp_y=mmx*LatticeVector[1], Lp_z=mmx*LatticeVector[2];
-
+		//var Lp_x=scale_fac*LatticeVector[0], Lp_y=scale_fac*LatticeVector[1], Lp_z=scale_fac*LatticeVector[2];
+		
+		var Lp_x=LatticeVector[0]*Lattice_C, Lp_y=LatticeVector[1]*Lattice_C, Lp_z=LatticeVector[2]*Lattice_C;
+				
 		var Lines_p = [[0,0,0],[Lp_x,0,0],[Lp_x,Lp_y,0],[0,Lp_y,0],[0,0,Lp_z],[Lp_x,0,Lp_z],[Lp_x,Lp_y,Lp_z],[0,Lp_y,Lp_z]];
 
 		var LL = [[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]];
@@ -1514,7 +1732,6 @@ function setArrows( plateId )
 		if (Extend[0]===0) Extend[0]=1;
 		if (Extend[1]===0) Extend[1]=1;
 		if (Extend[2]===0) Extend[2]=1;
-
 
 		for ( var i=0;i<=N_Lines-1; i++)
 		{
@@ -1530,8 +1747,10 @@ function setArrows( plateId )
 
 			aBoxLine.add(BLines[i].mesh);
 		}
+		
+		//alert("Lx= "+Lp_x);
 
-		                               BoxLines = new Array(Extend[0]);
+		                                BoxLines = new Array(Extend[0]);
 		for (var i=0; i<Extend[0]; i++) BoxLines[i] = new Array(Extend[1]);
 		for (var i=0; i<Extend[0]; i++)
 		for (var j=0; j<Extend[1]; j++) BoxLines[i][j] = new Array(Extend[2]);
@@ -1577,7 +1796,7 @@ function setArrows( plateId )
 				BoxGroup.add( Boxes[i][j][k] );
 			}
 
-			scene.add( BoxGroup );
+		//	scene.add( BoxGroup );
 
 
 
@@ -1601,39 +1820,39 @@ function setArrows( plateId )
 			switch( i ) {
 				case 0:
 					axis[i].geo.vertices.push(new THREE.Vector3( 0, 0, 0));
-					axis[i].geo.vertices.push(new THREE.Vector3( mmx, 0, 0));
+					axis[i].geo.vertices.push(new THREE.Vector3( scale_fac, 0, 0));
 					break;
 				case 1:
 					axis[i].geo.vertices.push(new THREE.Vector3( 0, 0, 0));
-					axis[i].geo.vertices.push(new THREE.Vector3( 0, 0, mmx));
+					axis[i].geo.vertices.push(new THREE.Vector3( 0, 0, scale_fac));
 					break;
 				case 2:
-					axis[i].geo.vertices.push(new THREE.Vector3( 0, 0, mmx));
-					axis[i].geo.vertices.push(new THREE.Vector3( 0, mmx, mmx));
+					axis[i].geo.vertices.push(new THREE.Vector3( 0, 0, scale_fac));
+					axis[i].geo.vertices.push(new THREE.Vector3( 0, scale_fac, scale_fac));
 					break;
 				case 3:
-					axis[i].geo.vertices.push(new THREE.Vector3( 0, mmx, mmx));
-					axis[i].geo.vertices.push(new THREE.Vector3( mmx, mmx, mmx));
+					axis[i].geo.vertices.push(new THREE.Vector3( 0, scale_fac, scale_fac));
+					axis[i].geo.vertices.push(new THREE.Vector3( scale_fac, scale_fac, scale_fac));
 					break;
 				case 4:
-					axis[i].geo.vertices.push(new THREE.Vector3( mmx, mmx, mmx));
-					axis[i].geo.vertices.push(new THREE.Vector3( mmx, mmx, 0));
+					axis[i].geo.vertices.push(new THREE.Vector3( scale_fac, scale_fac, scale_fac));
+					axis[i].geo.vertices.push(new THREE.Vector3( scale_fac, scale_fac, 0));
 					break;
 				case 5:
-					axis[i].geo.vertices.push(new THREE.Vector3( mmx, mmx, 0));
-					axis[i].geo.vertices.push(new THREE.Vector3( mmx, 0, 0));
+					axis[i].geo.vertices.push(new THREE.Vector3( scale_fac, scale_fac, 0));
+					axis[i].geo.vertices.push(new THREE.Vector3( scale_fac, 0, 0));
 					break;
 				case 6:
 					axis[i].geo.vertices.push(new THREE.Vector3( 0, 0, 0));
-					axis[i].geo.vertices.push(new THREE.Vector3( 0, mmx, 0));
+					axis[i].geo.vertices.push(new THREE.Vector3( 0, scale_fac, 0));
 					break;
 				case 7:
-					axis[i].geo.vertices.push(new THREE.Vector3( 0, mmx, 0));
-					axis[i].geo.vertices.push(new THREE.Vector3( mmx, mmx, 0));
+					axis[i].geo.vertices.push(new THREE.Vector3( 0, scale_fac, 0));
+					axis[i].geo.vertices.push(new THREE.Vector3( scale_fac, scale_fac, 0));
 					break;
 				case 8:
-					axis[i].geo.vertices.push(new THREE.Vector3( 0, mmx, 0));
-					axis[i].geo.vertices.push(new THREE.Vector3( 0, mmx, mmx));
+					axis[i].geo.vertices.push(new THREE.Vector3( 0, scale_fac, 0));
+					axis[i].geo.vertices.push(new THREE.Vector3( 0, scale_fac, scale_fac));
 					break;
 
 			}
@@ -1645,6 +1864,42 @@ function setArrows( plateId )
 
 
 	}; // End of drawAxis()
+	
+	
+	function Find_max()
+	{
+	// var Num_loaded_Atoms = P_Atoms[t_i].length;
+
+	var j=0;
+	var i=0;
+
+	xmx= -1e1000; ymx= -1e1000; zmx= -1e1000;
+	xmn=  1e1000; ymn=  1e1000;  zmn= 1e1000;
+
+	for (var i=0; i<N_Atoms; i++)
+	{
+		   if (P_Atoms[0][i][6]==1) continue;
+		   
+		  if (P_Atoms[0][i][3]>xmx) xmx=P_Atoms[0][i][3]; if (P_Atoms[0][i][4]>ymx) ymx=P_Atoms[0][i][4]; if (P_Atoms[0][i][5]>zmx) 
+
+	zmx=P_Atoms[0][i][5];
+		  if (P_Atoms[0][i][3]<xmn) xmn=P_Atoms[0][i][3]; if (P_Atoms[0][i][4]<ymn) ymn=P_Atoms[0][i][4]; if (P_Atoms[0][i][5]<zmn) 
+
+	zmn=P_Atoms[0][i][5];
+
+	}
+
+	Dxx = xmx-xmn;
+	Dyy = ymx-ymn;
+	Dzz = zmx-zmn;
+
+	dx = 1.5*Dxx/(N_Range*Extend[0]); dy = 1.5*Dyy/(N_Range*Extend[1]); dz = 1.5*Dzz/(N_Range*Extend[2]);
+
+	//iid=Number(Atoms.children[0].id);
+
+	}
+	
+	
 	//---------
 function Draw_Atoms()
 {
@@ -1654,7 +1909,7 @@ var j=0;
 var i=0;
 
 xmx= -1e1000; ymx= -1e1000; zmx= -1e1000;
-xmn= 1e1000; ymn= 1e1000; zmn= 1e1000;
+xmn=  1e1000; ymn=  1e1000;  zmn= 1e1000;
 
 for (var i=0; i<N_Atoms; i++)
 {
@@ -1666,21 +1921,18 @@ for (var i=0; i<N_Atoms; i++)
 	  atom[j] = new THREE.Mesh(atom_Geo[i],atom_Mat[i]);
 	  atom[j].position.set(P_Atoms[0][i][3], P_Atoms[0][i][4], P_Atoms[0][i][5]);
 	  atom[j].castShadow = true;
-
-	  
-	  
 	   
 	  if (atom[j].position.x>xmx) xmx=atom[j].position.x; if (atom[j].position.y>ymx) ymx=atom[j].position.y; if (atom[j].position.z>zmx) zmx=atom[j].position.z;
 	  if (atom[j].position.x<xmn) xmn=atom[j].position.x; if (atom[j].position.y<ymn) ymn=atom[j].position.y; if (atom[j].position.z<zmn) zmn=atom[j].position.z;
 
 	  Atoms.add(atom[j]);
-
 	  Atoms.children[j].name=j;
 
 	  nonz_i[j]=i;
 
 	  j++;
-
+	  
+	//  console.log("positions ---",P_Atoms[0][i][3], P_Atoms[0][i][4], P_Atoms[0][i][5]);
 }
 
 Dxx = xmx-xmn;
@@ -1705,7 +1957,7 @@ function Draw_Links()
 		EB_points[0]= new THREE.Vector3(P_Atoms[t_i][Links[t_i][i][0]][3] , P_Atoms[t_i][Links[t_i][i][0]][4] , P_Atoms[t_i][Links[t_i][i][0]][5]) ;
 		EB_points[1]= new THREE.Vector3(P_Atoms[t_i][Links[t_i][i][1]][3] , P_Atoms[t_i][Links[t_i][i][1]][4] , P_Atoms[t_i][Links[t_i][i][1]][5]) ;
 
-		Link[i] = new THREE.Mesh( new THREE.TubeGeometry( new THREE.CatmullRomCurve3(EB_points), 0, 0.1, 6, true ), new THREE.MeshStandardMaterial( { color: EBeam_color, transparent:true, opacity:0.8 } ) );
+		Link[i] = new THREE.Mesh( new THREE.TubeGeometry( new THREE.CatmullRomCurve3(EB_points), 0, 0.06, 6, true ), new THREE.MeshStandardMaterial( { color: Link_color, transparent:true, opacity:0.8 } ) );
 
 		Link_Group.add(Link[i]);
 		//scene.add(Link[i]);
@@ -1956,7 +2208,7 @@ function onDocumentMouseClick()
 		for ( var i=0; i<N_Atoms; i++ )
 		{
 			if (P_Atoms[0][i][6]==1) continue;
-			struc_string+=(P_Atoms[0][i][3]/mmx).toFixed(5) +" "+(P_Atoms[0][i][4]/mmx).toFixed(5)+" "+(P_Atoms[0][i][5]/mmx).toFixed(5)+" "+ P_Atoms[0][i][0] +"\n";
+			struc_string+=(P_Atoms[0][i][3]/scale_fac).toFixed(5) +" "+(P_Atoms[0][i][4]/scale_fac).toFixed(5)+" "+(P_Atoms[0][i][5]/scale_fac).toFixed(5)+" "+ P_Atoms[0][i][0] +"\n";
 		//modify
 		}
 
@@ -1968,8 +2220,10 @@ function onDocumentMouseClick()
 		struc_string+="0 0 1\n";
 		struc_string+="%endblock SuperCell\n";
 
-		console.log("[Atom Analyzer] mouse click event, befre fireSendStrucEvent : ", struc_string);
-		fireSendStrucEvent(struc_string);
+		//console.log("[Atom Analyzer] mouse click event, befre fireDataChangedEvent : ", struc_string);
+		//fireDataChangedEvent(struc_string);
+		
+		fireDataChangedEvent(Struc_2_fdf(struc_string));
 
 
 		//text_Atom_Name.value = Atom_Name[P_Atoms[0][nonz_i[insec_name]][1]];
@@ -1982,7 +2236,17 @@ function onDocumentMouseClick()
 	}
 
 }
-
+//---------------------
+function onDocumentMouseUp( event )
+{	
+}
+//---------------------
+function onDocumentMouseDown( event )
+{	
+	//event.preventDefault();
+	//alert('mouse Down');
+}
+//---------------------
 function get_Struc()
 {
 	
@@ -2012,7 +2276,7 @@ function get_Struc()
 	for ( var i=0; i<N_Atoms; i++ )
 	{
 		if (P_Atoms[0][i][6]==1) continue;
-		struc_string+=(P_Atoms[0][i][3]/mmx).toFixed(5) +" "+(P_Atoms[0][i][4]/mmx).toFixed(5)+" "+(P_Atoms[0][i][5]/mmx).toFixed(5)+" "+ P_Atoms[0][i][0] +"\n";
+		struc_string+=(P_Atoms[0][i][3]/scale_fac).toFixed(5) +" "+(P_Atoms[0][i][4]/scale_fac).toFixed(5)+" "+(P_Atoms[0][i][5]/scale_fac).toFixed(5)+" "+ P_Atoms[0][i][0] +"\n";
 	}
 
 	struc_string+="%endblock AtomicCoordinatesAndAtomicSpecies\n";
@@ -2054,7 +2318,7 @@ function initial_var()
 	N_Atoms=0;
 	
 	P_Atoms=[];
-mmx=0;
+scale_fac=0;
 	
 	
 	
@@ -2161,12 +2425,11 @@ function Button_Addition_Atom()
 
 				add_Species=T_N_Species;
 
-				//alert(Addition_Atom_i+" "+addition_atom_name);
+				
 
 			}
 
-			//alert(Addition_Atom_i);
-
+			
 		var i;
 
 		i = N_Atoms;
@@ -2244,7 +2507,6 @@ function Button_Addition_Atom()
 				if (Species_DelOrder[i]==1) continue;
 				struc_string+=i + " " + Species_Number[i] + " " + Species_Name[i]+"\n";
 
-				//alert(Species_Number[i]+" "+Species_Name[i]+T_N_Species);
 			}
 
 			struc_string+="%endblock ChemicalSpeciesLabel\n";
@@ -2260,7 +2522,7 @@ function Button_Addition_Atom()
 			for ( var i=0; i<N_Atoms; i++ )
 			{
 				if (P_Atoms[0][i][6]==1) continue;
-				struc_string+=(P_Atoms[0][i][3]/mmx).toFixed(5) +" "+(P_Atoms[0][i][4]/mmx).toFixed(5)+" "+(P_Atoms[0][i][5]/mmx).toFixed(5)+" "+P_Atoms[0][i][0]+"\n";	//modify
+				struc_string+=(P_Atoms[0][i][3]/scale_fac).toFixed(5) +" "+(P_Atoms[0][i][4]/scale_fac).toFixed(5)+" "+(P_Atoms[0][i][5]/scale_fac).toFixed(5)+" "+P_Atoms[0][i][0]+"\n";	//modify
 
 			}
 
@@ -2272,24 +2534,150 @@ function Button_Addition_Atom()
 			struc_string+="0 0 1\n";
 			struc_string+="%endblock SuperCell\n";
 
-			console.log("[ATOM ANALYZER] file changed data :", struc_string);
+			//console.log("[ATOM ANALYZER] file changed data :", struc_string);
 
-			fireSendStrucEvent(struc_string);
+			fireDataChangedEvent(Struc_2_fdf(struc_string));
 	}
 
 }
 
+function Struc_2_fdf( data ){
+	//console.log("[Yejin Test]load structure :", data);
+	var replace_string = new Array();
+	var replace_i=0;
+	var N_atoms, N_Species;
+	var lines = data.split('\n');
+	
+	
+     	
+     	for( var index=0; index<lines.length; index++ )
+     	{
+ 			var line = lines[index].trim();				
+ 		 			
+ 			line=line.replace(/ +/g, " "); 			
+ 			var keyVal = line.split(' '); 			
+ 			if(keyVal[0] === 'NumberOfAtoms'  ) { replace_i=0; N_atoms   = Number(keyVal[1]); replace_string[replace_i]=lines[index]+"\n"; }			
+			if(keyVal[0] === 'NumberOfSpecies') { replace_i=1; N_Species = Number(keyVal[1]); replace_string[replace_i]=lines[index]+"\n"; } 			
+ 		}
+     	
+     	for( var index=0; index<lines.length; index++ ){
+ 			var line = lines[index].trim();				
+ 			if( !line )	continue;
+ 			
+ 			line=line.replace(/ +/g, " "); 			
+ 			var keyVal = line.split(' '); 			
+			
+ 			if(keyVal[0] === '%block' && (keyVal[1] === 'ChemicalSpeciesLabel' || keyVal[1] === 'Chemical_Species_Label') ) 
+ 			{ 	
+ 				replace_i=2; replace_string[replace_i]=""; 			
+ 			    for(var i=0; i<N_Species+2 ;i++) {replace_string[replace_i]+=lines[index+i]+"\n"; }
+ 			    
+ 			 
+ 			} 						
+ 			if(keyVal[0] === '%block' && keyVal[1] === 'LatticeVectors')
+ 			{
+ 				replace_i=3; 
+ 				replace_string[replace_i]=""; 			
+ 				for(var i=0; i<5 ;i++)           {replace_string[replace_i]+=lines[index+i]+"\n"; }
+ 			
+ 			}						
+ 			if(keyVal[0] === '%block' && keyVal[1] === 'AtomicCoordinatesAndAtomicSpecies')
+ 			{
+ 				replace_i=4; 				
+ 				replace_string[replace_i]="";
+ 				for(var i=0; i<N_atoms+2 ;i++)   {replace_string[replace_i]+=lines[index+i]+"\n"; }
+ 				
+ 			
+ 			}			
+ 			if(keyVal[0] === '%block' && keyVal[1] === 'SuperCell')
+ 			{
+ 				replace_i=5;
+ 				replace_string[replace_i]="";
+ 				for(var i=0; i<5 ;i++)           {replace_string[replace_i]+=lines[index+i]+"\n"; } 			
+ 			}
+ 			
+ 		}
+     	
+     	     	
+     	var N_atoms_old, N_Species_old;
+     	
+     	//var fdf=document.getElementById('fdf_file').value;
+     	
+     	var modified_fdf="" ;
+    	
+    	lines = fdf_text.split('\n');   
+    	
+    	for( var index=0; index<lines.length; index++ ){
+			var line = lines[index].trim();				
+			//if( !line )	continue;
+			line=line.replace(/ +/g, " ");
+			
+			var keyVal = line.split(' ');
+			
+			     if(keyVal[0] === 'NumberOfAtoms'  ) { N_atoms_old   = Number(keyVal[1]);}			
+			else if(keyVal[0] === 'NumberOfSpecies') { N_Species_old = Number(keyVal[1]);  }
+		}
+    	
+    	    	
+    	for( var index=0; index<lines.length; index++ ){
+			var line = lines[index].trim();				
+			//if( !line )	continue;
+			line=line.replace(/ +/g, " ");
+			
+			var keyVal = line.split(' ');
+			
+			     if(keyVal[0] === 'NumberOfAtoms'  ) { modified_fdf += replace_string[0]; continue;}			
+			else if(keyVal[0] === 'NumberOfSpecies') { modified_fdf += replace_string[1]; continue;}
+			else if(keyVal[0] === '%block' && (keyVal[1] === 'ChemicalSpeciesLabel' || keyVal[1] === 'Chemical_Species_Label')) 
+			{
+				
+				modified_fdf +=replace_string[2];				
+				index +=N_Species_old+1;
+			}					
+			else if(keyVal[0] === '%block' && keyVal[1] === 'LatticeVectors')
+			{
+				modified_fdf +=replace_string[3];				
+				index +=4;								
+			}						
+			else if(keyVal[0] === '%block' && keyVal[1] === 'AtomicCoordinatesAndAtomicSpecies')
+			{
+				modified_fdf +=replace_string[4];				
+				index += N_atoms_old+1; 
+			}			
+			else if(keyVal[0] === '%block' && keyVal[1] === 'SuperCell')
+			{
+				modified_fdf +=replace_string[5];				
+				index +=4;				
+			}
+			else
+			{
+				modified_fdf += lines[index]+"\n";
+			}
+		}
+    	
+    	
+    	fdf_text=modified_fdf;
+    	
+       return modified_fdf;
+    	//document.getElementById('fdf_file').value=modified_fdf;		
+
+}
+
+
 function Sel_Draw_VR(mode)
 {
 	var plateId;
-
 	var plateMesh;
-
 	var valueInput ;
-
 	var posInput ;
 
 	var V_mode = 0;
+	
+	var i;
+	
+	if(mode===0 || mode===1)
+	{
+		
 
 	if (document.getElementById('Pxy_visible').checked)
 	{
@@ -2350,6 +2738,103 @@ function Sel_Draw_VR(mode)
 		plateMesh.geometry.elementsNeedUpdate = true;
 	}
 
+  }
+	else
+	{	
+		//alert("why not");
+		/*
+		
+		if(mode==2)
+		{
+			
+			
+			var i3;
+			i=0;
+			IsoGeo_EP[i] = new THREE.Geometry();
+			IsoMat_EP[i] = new THREE.MeshBasicMaterial({color: 0x2266ff, transparent:true, opacity: 0.3 } );
+			IsoMat_EP[i].side = THREE.DoubleSide;
+			for ( i=0; i<N01_P; i++ ) {	IsoGeo_EP[0].vertices[i]=  new THREE.Vector3(Iso_vertices_EP[0][i][0], Iso_vertices_EP[0][i][1], Iso_vertices_EP[0][i][2]) ;		}
+			for ( i=0; i<N01_P/3; i++ ) {			i3=i*3;	IsoGeo_EP[0].faces[i]= new THREE.Face3(i3, i3+1, i3+2) ; }
+		    //----------------------------------------------------------------------------
+		    i=0;
+		    scene.remove(Iso_EP[i]); // scene.remove(Iso_ER[i]);
+		    Iso_EP[i]    = new THREE.Mesh( IsoGeo_EP[i], IsoMat_EP[i] );
+		    Iso_EP[i].geometry.computeFaceNormals();
+		    scene.add(Iso_EP[i]);
+		    
+		    
+		
+		}
+		else
+		{
+			var i3;
+			i=0;
+			IsoGeo_ER[i] = new THREE.Geometry();
+			IsoMat_ER[i] = new THREE.MeshLambertMaterial({color: 0xff6622, transparent:true, opacity: 0.5 } );
+			IsoMat_ER[i].side = THREE.DoubleSide;
+			for ( i=0; i<N01_R; i++ ) {	IsoGeo_ER[0].vertices[i]=  new THREE.Vector3(Iso_vertices_ER[0][i][0], Iso_vertices_ER[0][i][1], Iso_vertices_ER[0][i][2]) ;		}
+			for ( i=0; i<N01_R/3; i++ ) {			i3=i*3;	IsoGeo_ER[0].faces[i]= new THREE.Face3(i3, i3+1, i3+2) ; }
+		    //----------------------------------------------------------------------------
+		    i=0;
+		      scene.remove(Iso_ER[i]);
+		    Iso_ER[i]    = new THREE.Mesh( IsoGeo_ER[i], IsoMat_ER[i] );
+		    Iso_ER[i].geometry.computeFaceNormals();
+		    scene.add(Iso_ER[i]);
+
+			
+		}
+		*/
+		
+		
+		/*
+		  var ddatom_Geo = new THREE.SphereGeometry(0.5,15,15);
+		  var ddx_atom_Mat = new THREE.MeshStandardMaterial({color: 0xff0000 });
+		  var ddy_atom_Mat = new THREE.MeshStandardMaterial({color: 0x00ff00 });
+		  var ddz_atom_Mat = new THREE.MeshStandardMaterial({color: 0x0000ff });
+
+		  var ddx_atom = new THREE.Mesh(ddatom_Geo, ddx_atom_Mat);
+		  
+		  var ddy_atom = new THREE.Mesh(ddatom_Geo, ddy_atom_Mat);
+		  var ddz_atom = new THREE.Mesh(ddatom_Geo, ddz_atom_Mat);
+		  
+		  ddx_atom.position.set(13,0,0);
+		  ddy_atom.position.set(0,13,0);
+		  ddz_atom.position.set(0,0,13);
+		  		   
+		  scene.add(ddx_atom);
+		  scene.add(ddy_atom);
+		  scene.add(ddz_atom);
+		  */
+		  
+		
+		/*
+		  var ddIsoGeo_EP = new THREE.Geometry();			
+		  var ddIsoMat_EP = new THREE.MeshLambertMaterial({color: 0x0000ff, transparent:false } );				  
+		  ddIsoMat_EP.side = THREE.DoubleSide;								
+		
+		
+		  ddIsoGeo_EP.vertices[0]= new THREE.Vector3(0,0,0);
+		  ddIsoGeo_EP.vertices[1]= new THREE.Vector3(0,1,0);
+		  ddIsoGeo_EP.vertices[2]= new THREE.Vector3(0,0,1);
+		  
+		  ddIsoGeo_EP.faces[0]= new THREE.Face3(0, 1, 2);
+		  
+				
+		//----------------------------------------------------------------------------
+		 i=0;
+
+		 
+		  var ssIso_EP    = new THREE.Mesh( ddIsoGeo_EP, ddIsoMat_EP );
+		  
+		  ssIso_EP.geometry.computeFaceNormals();
+		  
+		scene.add(ssIso_EP);
+		
+		*/
+		
+			
+		//alert(i+" "+xi_L +" "+ yi_L +" "+ zi_L+" "+xi_L*dx_g +" "+ yi_L*dy_g +" "+ zi_L*dz_g+"zmx="+zmx+"zmn="+zmn)
+	}
 
 	//setArrows(plateId);
 
@@ -2367,12 +2852,12 @@ function onWindowResize() {
 
 
 //---------------------------------------------------------------------------------------------------------
-function Write_ouput()
+function Write_output()
 {
 
 	var document_string="";
 
-	document.open();
+	//document.open();
 	document_string +="<table style=\"width:100%;\"> ";
 	document_string +="<tr>";
 	document_string +="<td>";
@@ -2393,8 +2878,8 @@ function Write_ouput()
 	document_string +="<td > <SPAN style='font-size: 10pt'> Viewer </SPAN> </td>";
 	document_string +="<td> <SPAN style='font-size: 10pt'> density </SPAN> </td>";
 	document_string +="<td> <SPAN style='font-size: 10pt'> terrain </SPAN> </td>";
-	document_string +="<td > <SPAN style='font-size: 10pt'> E field </SPAN> </td> ";
-	document_string +="<td > <SPAN style='font-size : 10pt'> position </SPAN> </td> </tr>";
+	document_string +="<td> <SPAN style='font-size: 10pt'> E field </SPAN> </td> ";
+	document_string +="<td> <SPAN style='font-size : 10pt'> position </SPAN> </td> </tr>";
 	document_string +="<tr> ";
 	document_string +="<td > <SPAN style='font-size: 10pt'> Pxy </SPAN> </td>";
 	document_string +="<td> <input id='Pxy_visible' type='checkbox' onclick=\"toggleView( 'xy' )\"> </td>";
@@ -2439,20 +2924,28 @@ function Write_ouput()
 	document_string +="</tr>";
 	document_string +="</table>";
 
-	
-
 	document_string +="<table> ";
 	document_string +="<tr>";
 	document_string +="<td>Color</td>";
-	if (ON_save_P==1)	document_string +="<td><input type='radio' id='Draw_V' name='Draw_VR' checked='checked' onclick=\"Sel_Draw_VR(0)\"> Potential(V)</td>";
+	if (ON_save_P==1)	
+	{
+		document_string +="<td><input type='radio' id='Draw_V' name='Draw_VR' checked='checked' onclick=\"Sel_Draw_VR(0)\"> Potential(V)</td>";
+		//document_string +="<td><input type='radio' id='V_iso' onclick=\"Sel_Draw_VR(2)\"> Iso potential </td>";
+	}
 
 //		document_string +="<td>Potential(V)</td>";
-	if (ON_save_R==1)	document_string +="<td><input type='radio' id='Draw_Rho' name='Draw_VR' onclick=\"Sel_Draw_VR(1)\"> Charge density(C/m^3)</td>";
+	if (ON_save_R==1)	
+	{
+		document_string +="<td><input type='radio' id='Draw_Rho' name='Draw_VR' onclick=\"Sel_Draw_VR(1)\"> Charge density(C/m^3)</td>";
+		//document_string +="<td><input type='radio' id='Rho_iso' onclick=\"Sel_Draw_VR(3)\"> Iso charge</td>";
+
+	}
 
 //		document_string +="<td>Charge density(C/m^3)</td>";
 	document_string +="</tr>";
 	document_string +="<tr>";
 	document_string +="<td rowspan='11'><img src="+imagePath+" width='50' height='231'></td>";
+//	console.log(Pallet_P, Pallet_R);
 	if (ON_save_P==1)	document_string +="<td>"+Pallet_P[0].toExponential(2)+"</td>";
 	if (ON_save_R==1)	document_string +="<td>"+Pallet_R[0].toExponential(2)+"</td>";
 	document_string +="</tr>";
@@ -2473,19 +2966,19 @@ function Write_ouput()
 	document_string +="</tr>";
 	document_string +="</table> ";
 
+	document.body.innerHTML = '';
 	document.write(document_string);
 
-	document.close();
+	//document.close();
 
 
 }
 //---------------------------------------------------------------------------------------------------------
 function Write_input()
 {
-
 	var document_string="";
 
-	document.open();
+	//document.open();
 	document_string +="<table style=\"width:100%; border: 1px solid #444444; \"> ";
 	document_string +="<tr>";
 	document_string +="<td width='80%'>";
@@ -2540,10 +3033,14 @@ function Write_input()
 
 	document_string +="</tr>";
 	document_string +="</table > ";
+	document_string +="<input type=\"textbox\" id=\"Views\" size=\"100\" style=\"display:none\"> ";
+	
+	
+	
 //	<input id='PxyRange' type='range' style='width:90%;' value='0'  min='1' max='"+Nz+"' step='1' oninput=\"movePlate('xy')\" onmouseover=\"OFF_MouseMove()\" onmouseleave=\"ON_MouseMove()\" autocomplete='off'/>
+    
+    document.body.innerHTML = '';
 	document.write(document_string);
-
-	document.close();
 
 }
 
@@ -2576,23 +3073,38 @@ function String_Atom_spe_P()
 	return document_string;
 }
 
-function setNamespace(ns) {
-	atomAnalyzerNamespace = ns;
-	  console.log("[ATOM Analyzer] set namespace ", atomAnalyzerNamespace);
+function getViews()
+{	
+	  var dummy;
+	  var dummy0, dummy1, dummy2, dummy3;
+	  var string="";
+	  
+	
+	  string+= "--Views--: " + camera.position.x +" "+ camera.position.y +" "+camera.position.z + " " + trackballControl.target.x + " " + trackballControl.target.y + " " + trackballControl.target.z ;
+	 
+	  
+    return string;
+    
 }
 
-function fireSendStrucEvent(data) {
 
-	console.log("[ATOM ANALYZER] fire send data in viewer ", data);
+function setNamespace(ns) {
+	atomAnalyzerNamespace = ns;
+	  //console.log("[ATOM Analyzer] set namespace ", atomAnalyzerNamespace);
+}
+
+function fireDataChangedEvent(data) {
+
+	//console.log("[ATOM ANALYZER] fire send data in viewer ", data);
 	setTimeout(
 			function() {
 				if ( atomAnalyzerNamespace ) {
-					console.log("[ATOM EDITOR]Receive_Struc_from_Viewer:" , data);
+					
 					window.parent[atomAnalyzerNamespace+'fireDataChangedEvent']( data );
 
 				}
 				else {
-					fireSendStrucEvent(data);
+					fireDataChangedEvent(data);
 				}
 			},
 			10

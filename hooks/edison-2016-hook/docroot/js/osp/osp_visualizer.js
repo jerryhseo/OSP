@@ -674,6 +674,10 @@
                connector = config.connector = params.connector;
                disabled = params.disabled;
 
+               if( data.dataType_ ){
+                   $(canvas).attr('data-type', JSON.stringify(data.dataType_) );
+               }
+
                 processInitAction(data, false);
                 // console.log('baseFolder: ', baseFolder );
                 

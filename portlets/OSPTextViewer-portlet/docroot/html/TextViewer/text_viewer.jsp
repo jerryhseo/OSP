@@ -82,9 +82,7 @@ function <portlet:namespace/>loadText( jsonData, changeAlert ){
 		break;
 	case OSP.Enumeration.PathType.FOLDER:
 	case OSP.Enumeration.PathType.EXT:
-		/*
 	    <portlet:namespace/>visualizer.readFirstServerFile();
-	    */
 		break;
 	case OSP.Enumeration.PathType.CONTENT:
 	case OSP.Enumeration.PathType.FILE_CONTENT:

@@ -17,7 +17,7 @@ OSPVisualizerConfig visualizerConfig = OSPVisualizerUtil.getVisualizerConfig(ren
 				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 					Menu<span class="caret"></span>
    				</button>
-				<ul class="dropdown-menu dropdown-menu-left">
+				<ul class="dropdown-menu dropdown-menu-right">
                        <li><a href="#" id="<portlet:namespace/>sample"><i class="icon-file"></i>Sample</a></li>
                        <li><a href="#" id="<portlet:namespace/>openLocalFile"><i class="icon-file"></i>Open local file</a></li>
                        <li><a href="#" id="<portlet:namespace/>openServerFile"><i class="icon-file"></i>Open Server file</a></li>
@@ -33,7 +33,7 @@ OSPVisualizerConfig visualizerConfig = OSPVisualizerUtil.getVisualizerConfig(ren
 				class="col-sm-12 osp-iframe-canvas"  
 				style="<%=visualizerConfig.getDisplayStyle()%>" 
 				id="<portlet:namespace/>canvas" 
-				src="<%=request.getContextPath()%>/html/atomtransistoranalyzer/AtomTransistor_Viewer.jsp">
+				src="<%=request.getContextPath()%>/html/atomtransistoreditor/AtomTransistor_Editor.jsp">
 		</iframe>
 	</div>
 </div>
@@ -42,7 +42,7 @@ OSPVisualizerConfig visualizerConfig = OSPVisualizerUtil.getVisualizerConfig(ren
 /***********************************************************************
  * Global variables and initialization section
  ***********************************************************************/
- 
+ var <portlet:namespace/>connector = '<%=visualizerConfig.connector%>';
 var <portlet:namespace/>canvas = document.getElementById('<portlet:namespace/>canvas');
 var <portlet:namespace/>disabled = JSON.parse( '<%=visualizerConfig.disabled%>');
 
@@ -63,7 +63,7 @@ var <portlet:namespace/>config = {
 			loadCanvas: <portlet:namespace/>loadCanvas,
 			procFuncs:{
 				readServerFile: function( jsonData ){
-				//	console.log('Custom function for readServerFile....');
+					//console.log('Custom function for readServerFile....');
 				}
 			},
 			disabled: JSON.parse( '<%=visualizerConfig.disabled%>')
@@ -71,6 +71,7 @@ var <portlet:namespace/>config = {
 
 var <portlet:namespace/>visualizer;
 $('#<portlet:namespace/>canvas').load(function(){
+	//console.log('===================================================');
 	<portlet:namespace/>visualizer = OSP.Visualizer(<portlet:namespace/>config);
 	<portlet:namespace/>processInitAction( JSON.parse( '<%=visualizerConfig.initData%>', false ) );
 });
@@ -79,61 +80,33 @@ $('#<portlet:namespace/>canvas').load(function(){
  * Canvas functions
  ***********************************************************************/
 function <portlet:namespace/>loadCanvas( jsonData, changeAlert ){
-	//console.log( 'jsonData: ', jsonData );
-	
-//	OSP.Debug.eventTrace( 'loadCanvas', 'jsonData: ', jsonData );
-	//jsonData.dataType_.name;
-	//jsonData.dataType_.version;
-	var dataType;
-	if( jsonData.dataType_ ){
-		dataType = jsonData.dataType_.name;
-	};
+		
 	switch( jsonData.type_){
-		case OSP.Enumeration.PathType.FILE:
-			<portlet:namespace/>visualizer.readServerFile( jsonData, changeAlert );
-			break;
-		case OSP.Enumeration.PathType.CONTENT:
-			var dotIndex = jsonData.name_.lastIndexOf('.');
-			var ext = jsonData.name_.slice(dotIndex+1);
-			OSP.Debug.eventTrace('extention', ext);
-			if( ext === 'js' ){
-				dataType = 'siesta_2';
-			}
-			else{
-				dataType = 'SIESTAPlotData';
-			}
-			
-		case OSP.Enumeration.PathType.FILE_CONTENT:
-			if( jsonData.name_ )
-				<portlet:namespace/>setTitle( OSP.Util.mergePath(jsonData.parent_, jsonData.name_) );
-			//	<portlet:namespace/>visualizer.callIframeFunc('loadEPData', null, jsonData.content_ );
-				
-				if(dataType === 'SIESTAPlotData' ){
-					<portlet:namespace/>visualizer.callIframeFunc('load_AtomCoor', null, jsonData.content_ );
-				}
-				else if(dataType === 'siesta_2'){
-					<portlet:namespace/>visualizer.callIframeFunc('loadEPData', null, jsonData.content_ );
-				}
-				else{
-					// Error Message
-					return;
-				}
+	case OSP.Enumeration.PathType.FILE:
+		<portlet:namespace/>visualizer.readServerFile( jsonData, changeAlert );
+		break;
+	case OSP.Enumeration.PathType.CONTENT:
+	case OSP.Enumeration.PathType.FILE_CONTENT:
+		if( jsonData.name_ )
+			<portlet:namespace/>setTitle( OSP.Util.mergePath(jsonData.parent_, jsonData.name_) );
+			<portlet:namespace/>visualizer.callIframeFunc('setParameters', null, jsonData.content_ );
 
-			if( !<portlet:namespace/>disabled && changeAlert )
-				<portlet:namespace/>visualizer.fireDataChangedEvent();
-			break;
-		case OSP.Enumeration.PathType.DLENTRY_ID:
-			<portlet:namespace/>visualizer.readDLFileEntry(changeAlert);
-			break;
-		case OSP.Enumeration.PathType.URL:
-			alert( 'Un-supported yet.');
-			changeAlert = false;
-			break;
-		default:
-		//	console.log('Path Type Error: Cannot display with this path type', jsonData );
-			changeAlert = false;
-			return;
-	}
+		//	<portlet:namespace/>visualizer.callIframeFunc('fireDataChangedEvent', null, jsonData.content_ );
+		//	changeAlert=1;
+		if( !<portlet:namespace/>disabled && changeAlert ) <portlet:namespace/>visualizer.fireDataChangedEvent();
+		break;
+	case OSP.Enumeration.PathType.DLENTRY_ID:
+		<portlet:namespace/>visualizer.readDLFileEntry(changeAlert);
+		break;
+	case OSP.Enumeration.PathType.URL:
+		alert( 'Un-supported yet.');
+		changeAlert = false;
+		break;
+	default:
+		//console.log('Path Type Error: Cannot display with this path type', jsonData );
+		changeAlert = false;
+		return;
+    }
 	
 };
 
@@ -162,13 +135,13 @@ function <portlet:namespace/>processInitAction( jsonInitData, changeAlert ){
   * Functions called by iframe jsp 
   ***********************************************************************/
 function <portlet:namespace/>fireDataChangedEvent( content ){
+		
 	//console.log('fireDataChangedEvent in text editor wrapper...');
 	<portlet:namespace/>visualizer.fireDataChangedEvent({
 		type_: "content",
 		content_: content 
 	});
 };
-
 
 
 /***********************************************************************
@@ -186,21 +159,22 @@ $('#<portlet:namespace/>openLocalFile').click(function(){
 	if( <portlet:namespace/>disabled )
 		return;
 
-	<portlet:namespace/>visualizer.openLocalFile(true);
+	<portlet:namespace/>visualizer.openLocalFile(null, true);
+	
 });
 
 $('#<portlet:namespace/>openServerFile').click(function(){
 	if( <portlet:namespace/>disabled )
 		return;
 
-	<portlet:namespace/>visualizer.openServerFile(true);
+	<portlet:namespace/>visualizer.openServerFile(null, true);
 });
 
 $('#<portlet:namespace/>save').click(function(){
 	if( <portlet:namespace/>disabled )
 		return;
 
-	<portlet:namespace/>visualizer.callIframeFunc('get_Struc', function( content ){
+	<portlet:namespace/>visualizer.callIframeFunc('getParameters', function( content ){
 		<portlet:namespace/>visualizer.saveAtServer(content);
 	});
 });
@@ -208,19 +182,18 @@ $('#<portlet:namespace/>save').click(function(){
 $('#<portlet:namespace/>saveAs').click(function(){
 	if( <portlet:namespace/>disabled )
 		return;
-
-	<portlet:namespace/>visualizer.saveAtServerAs();
+	<portlet:namespace/>visualizer.callIframeFunc('getParameters', function( content ){
+		<portlet:namespace/>visualizer.saveAtServerAs(content);
+	});
 });
 
 $('#<portlet:namespace/>saveAtLocal').click(function(){
-	<portlet:namespace/>visualizer.callIframeFunc('get_Struc', function( content ){
+	<portlet:namespace/>visualizer.callIframeFunc('getParameters', function( content ){
 		<portlet:namespace/>visualizer.saveAtLocal(content, 'text/plain');
 	});
 });
 
-$('#<portlet:namespace/>download').click(function(){
-	<portlet:namespace/>visualizer.downloadCurrentFile();
-});
+
 
 /***********************************************************************
  * Handling OSP Events and event handlers
@@ -228,12 +201,13 @@ $('#<portlet:namespace/>download').click(function(){
 function <portlet:namespace/>loadDataEventHandler( data, params ){
 	//console.log('[<portlet:namespace/>loadDataEventHandler] ', data );
 	
-	<portlet:namespace/>visualizer.loadCanvas( data, params.changeAlert );
+	<portlet:namespace/>visualizer.loadCanvas( data, params.changeAlert );	
+	
 }
 
 function <portlet:namespace/>requestDataEventHandler( data, params ){
 //	console.log('[<portlet:namespace/>requestDataEventHandler]', data, params);
-	<portlet:namespace/>visualizer.callIframeFunc('get_Struc', function(content){
+	<portlet:namespace/>visualizer.callIframeFunc('getParameters', function(content){
 		<portlet:namespace/>visualizer.fireResponseDataEvent({content_: content}, params );
 	});
 }
@@ -246,7 +220,7 @@ function <portlet:namespace/>responseDataEventHandler( data, params ){
 		<portlet:namespace/>visualizer.runProcFuncs( 'readServerFile', data, true );
 		break;
 	case 'saveAtServerAs':
-		<portlet:namespace/>visualizer.callIframeFunc('get_Struc', function(content){
+		<portlet:namespace/>visualizer.callIframeFunc('getParameters', function(content){
 			<portlet:namespace/>visualizer.runProcFuncs( 'saveAtServerAs', data.parent_, data.name_, content );
 			<portlet:namespace/>setTitle( OSP.Util.mergePath( data.parent_, data.name_) );
 		});
@@ -258,8 +232,7 @@ function <portlet:namespace/>initializeEventHandler( data, params ){
 	//console.log('[<portlet:namespace/>initializeEventHandler] ', data, params );
 	
 	<portlet:namespace/>visualizer.processInitAction();
-	
-	<portlet:namespace/>visualizer.callIframeFunc('clear', null, '' );
+	// <portlet:namespace/>visualizer.callIframeFunc('initParameters', null );
 	<portlet:namespace/>setTitle('');
 }
 
@@ -267,9 +240,7 @@ function <portlet:namespace/>disableControlsEventHandler( data, params ){
 	//console.log('[<portlet:namespace/>disableControlsEventHandler] ');
 	<portlet:namespace/>disabled = params.disabled;
 	<portlet:namespace/>visualizer.disabled( params.disabled );
-	<portlet:namespace/>visualizer.callIframeFunc('disable', null, params.disabled);
+	<portlet:namespace/>visualizer.callIframeFunc('disableControls', null, params.disabled);
 }
 </script>
-
-
 

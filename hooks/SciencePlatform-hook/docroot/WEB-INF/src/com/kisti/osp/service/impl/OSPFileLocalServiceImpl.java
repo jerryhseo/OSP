@@ -266,6 +266,8 @@ public class OSPFileLocalServiceImpl extends OSPFileLocalServiceBaseImpl {
 			strCmd += " ";
 			strCmd += target;
 			
+			System.out.println("===================================================");
+			System.out.println("Change File Owner Command: "+strCmd);
 			CommandLine cmdLine = CommandLine.parse( strCmd );
 			
 			//		System.out.println("chown Command: "+cmdLine.toString());
@@ -1190,10 +1192,13 @@ public class OSPFileLocalServiceImpl extends OSPFileLocalServiceBaseImpl {
 		Path targetPath = targetFolderPath.resolve(fileName);
 		copyFile(uploadFile.toPath(), targetPath, true);
 		
+		System.out.println("---------------------------------------------------------------------");
+		System.out.println("os.name: "+System.getProperty("os.name").toLowerCase());
 		if( !System.getProperty("os.name").toLowerCase().contains("windows") ) {
-			changeFileOwner(targetFolder.toString(), owner);
-			changeFileMode(targetFolder.toString(), "g+w");
+			changeFileOwner(targetPath.toString(), owner);
+			changeFileMode(targetPath.toString(), "g+w");
 		}
+		System.out.println("---------------------------------------------------------------------");
 		
 		JSONObject result = JSONFactoryUtil.createJSONObject();
 		result.put("user_", screenName);
