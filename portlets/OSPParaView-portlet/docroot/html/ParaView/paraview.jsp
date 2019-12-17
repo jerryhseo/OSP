@@ -21,14 +21,14 @@ function setNamespace( ns ){
 	namespace = ns;
 } 
 
-function cleanParaView(){
-	document.getElementById('canvas').removeAtribute('src');
+function cleanParaview(){
+	document.getElementById('canvas').removeAttribute('src');
 }
 
 function connectParaview( launcherURL, dataDir, fileName ){
 	var fileToLoad;
-	 if( fileName ){
-			fileToLoad = dataDirectory+ '/' + fileName ;
+	if( fileName ){
+		fileToLoad = dataDir+ '/' + fileName ;
 	}
 	
 	var paraViewSrc = '<%=request.getContextPath()%>/html/pv5/start.jsp?';

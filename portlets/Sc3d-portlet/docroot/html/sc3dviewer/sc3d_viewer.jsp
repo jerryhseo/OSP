@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
-<html style="height:95%">
+<html style="height:100%">
 
 <head>
 	<script src="<%= request.getContextPath() %>/js/three/libs/Three_R86.js" type="text/javascript"></script>	
@@ -32,9 +32,6 @@
 </head>
 
 <body style="height:100%; width:100%;">
-<div id="sizeDiv">
-
-</div>
 
 <script type="text/javascript">
 
@@ -1382,11 +1379,11 @@ function Find_max(data)
 			else if(dummy[1]=="gate_type"   ) { Gate_Type=dummy[2] ; N_deve++;}
 			   //  alert("L_channel "+L_channel);
 		}
-		else if(dummy[0]=="DEV_Mat")
-		{
-			     if(dummy[1]=="src_drn_doping") { DopType_source = DopType_drain = dummy[2] ; Dop_source = Dop_drain = Number(dummy[3]); N_deve++;}
-			else if(dummy[1]=="chn_doping")     { DopType_channel= dummy[2]                 ; Dop_channel= Number(dummy[3]) ; N_deve++;  }
-		}
+	//	else if(dummy[0]=="DEV_Mat")
+	//	{
+	//		     if(dummy[1]=="src_drn_doping") { DopType_source = DopType_drain = dummy[2] ; Dop_source = Dop_drain = Number(dummy[3]); N_deve++;}
+	//		else if(dummy[1]=="chn_doping")     { DopType_channel= dummy[2]                 ; Dop_channel= Number(dummy[3]) ; N_deve++;  }
+	//	}
 
 	}
 	
@@ -1428,7 +1425,6 @@ function Draw_Device_file(data)
 	{
 		var line = lines[i].trim();
 		var dummy = line.split(' ');
-		
 				
 		if(dummy[0]=="DEV_Dimen")
 		{
@@ -1441,8 +1437,13 @@ function Draw_Device_file(data)
 		}
 		else if(dummy[0]=="DEV_Mat")
 		{
-			     if(dummy[1]=="src_drn_doping") { DopType_source = DopType_drain = dummy[2] ; Dop_source = Dop_drain = Number(dummy[3]); N_deve++;}
+			if(dummy[1]=="src_drn_doping") { DopType_source = DopType_drain = dummy[2] ; Dop_source = Dop_drain = Number(dummy[3]); N_deve++;}
+			else if(dummy[1]=="src_doping")     { DopType_source= dummy[2]                 ; Dop_source= Number(dummy[3]) ; N_deve++;  }
+			else if(dummy[1]=="drn_doping")     { DopType_drain= dummy[2]                 ; Dop_drain= Number(dummy[3]) ; N_deve++;  }
 			else if(dummy[1]=="chn_doping")     { DopType_channel= dummy[2]                 ; Dop_channel= Number(dummy[3]) ; N_deve++;  }
+
+			console.log('-----------Dummy --------------------', dummy);
+			console.log('======== DEV_Mat =====', DopType_source, Dop_source);
 		}
 		
 		//if(N_deve==7) break;
@@ -1483,7 +1484,9 @@ var Compo = new Array();
 	  var Color_semi;
 	  //var Color_semi= 0x333333+ (1-Dop_ratio)*(0x00ff00)+ (1-Dop_ratio)*(0x0000ff) ;
 
+	  console.log('========Determin Colors=========', DopType_source, Dop_source );
 	  Determine_color(DopType_source, Dop_source);
+	  console.log('========Colors=========', R_col, G_col, B_col );
 	  Color_semi= new THREE.Color( R_col, G_col, B_col );
 
 	   Geo[0] = new THREE.BoxGeometry( L_source, W_channel, T_channel );
