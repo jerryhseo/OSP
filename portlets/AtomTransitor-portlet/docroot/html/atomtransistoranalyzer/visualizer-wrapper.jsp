@@ -45,6 +45,7 @@ OSPVisualizerConfig visualizerConfig = OSPVisualizerUtil.getVisualizerConfig(ren
  
 var <portlet:namespace/>canvas = document.getElementById('<portlet:namespace/>canvas');
 var <portlet:namespace/>disabled = JSON.parse( '<%=visualizerConfig.disabled%>');
+var atomTransitorAnalyzerImagePath = "<%=request.getContextPath()%>/html/atomtransistoranalyzer/pallet.png";
 
 var <portlet:namespace/>config = {
 			namespace: '<portlet:namespace/>',

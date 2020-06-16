@@ -1910,7 +1910,7 @@ public class OSPFileLocalServiceImpl extends OSPFileLocalServiceBaseImpl {
     			targetPath = Paths.get( OSPPropsUtil.SPYGLASS_ROOT_DIR_PATH() ).resolve(path);
     			break;
     		default:
-    			targetPath = Paths.get("/");
+    			throw new PortalException("Un-identified Repogitory Type: " + repoType);
     	}
     	
     	return targetPath;
@@ -1940,7 +1940,7 @@ public class OSPFileLocalServiceImpl extends OSPFileLocalServiceBaseImpl {
                 targetPath = Paths.get(OSPPropsUtil.SPYGLASS_APPS_DIR_PATH()).resolve(path);
                 break;
             default:
-                targetPath = Paths.get("/");
+            	throw new PortalException("Un-identified Repogitory Type: " + repoType);
         }
         return targetPath;
     }

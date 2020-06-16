@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+<service-builder package-path="com.liferay.sample">
+	<author>Jerry H. Seo</author>
+
+	<namespace>SSW</namespace>
+	<entity name="Workflow" local-service="true">
+
+		<!-- PK fields -->
+
+		<column name="workflowId" primary="true" type="long"></column>
+
+		<!-- Group instance -->
+
+		<column name="groupId" type="long"></column>
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long"></column>
+		<column name="userId" type="long"></column>
+		<column name="userName" type="String"></column>
+		<column name="createDate" type="Date"></column>
+		<column name="modifiedDate" type="Date"></column>
+        <column name="title" type="String"></column>
+        <column name="description" type="String"></column>
+        <column name="status" type="int"></column>
+        <column name="originId" type="long"></column>
+        <column name="manualUrl" type="String"></column>
+	</entity>
+	<entity name="Simulation" local-service="true">
+
+		<!-- PK fields -->
+
+		<column name="simulationId" primary="true" type="long"></column>
+
+		<!-- Group instance -->
+
+		<column name="groupId" type="long"></column>
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long"></column>
+		<column name="userId" type="long"></column>
+		<column name="userName" type="String"></column>
+		<column name="createDate" type="Date"></column>
+		<column name="modifiedDate" type="Date"></column>
+        <column name="status" type="int"></column>
+        <column name="title" type="String"></column>
+        <column name="startTime" type="Date"></column>
+        <column name="endTime" type="Date"></column>
+	</entity>
+
+
+
+</service-builder>
